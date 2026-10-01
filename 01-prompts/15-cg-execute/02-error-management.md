@@ -27,6 +27,16 @@ WAVES = ceil(subtasks / (A x H))
 
 ---
 
+## Phase 0: Antigravity Skill Bootstrap (Memory Optimization)
+
+Before executing the tasks below, check if this prompt is already installed as a native Antigravity Skill.
+
+1. If `.agents/skills/<slug>/skill.md` does not exist in the workspace, create it now.
+2. Extract the core instructions of this prompt and save it into that `skill.md` using the standard YAML frontmatter (with `name` and `description`).
+3. Once installed, rely on progressive disclosure for future runs. Do not keep the entire prompt in active memory if not needed.
+
+---
+
 ## The Unified Master Pipeline (Atomic Numbered Steps)
 
 Execute this task via a strict 3-Phase pipeline. Do not skip steps.
@@ -295,398 +305,67 @@ Confirm scripts exist via harmless workspace call before invoking (R4). Run on c
 
 ---
 
-## 11. Discovery Toolchain (GitMap Primary)
+## 11. AI Fix Scripts Memory (Reusable Tooling)
 
-Use Section 3 GitMap table as primary. Python fallbacks (`03-ai-scripts/11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py`) apply only if GitMap is unavailable.
+- [ ] [/goal](slashCommand;goal) Reuse First: Scanned and learned `03-ai-scripts/readme.md` before writing temporary code.
+- [ ] Strict In-Repository Execution: All Python scripts executed strictly within the codebase repository root.
+- [ ] Strict .ai-memory/ Folder Storage: All helper scripts, local runners, and linters stored in `03-ai-scripts/`.
+- [ ] Native File Manipulator: Use `python 03-ai-scripts/03-file-manipulator.py <command>` for mass file operations.
+- [ ] Go Generate Sync: If Go constants or enums are modified, run `go generate ./...` in the relevant package and commit generated files.
+
+---
+
+## 12. Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
+
+- [ ] TOP-INSTRUCTION PRIORITY MANDATE: Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
+- [ ] MANDATORY SUBAGENT SPAWNING GATE (ZERO SOLO EXECUTION): Verified that `invoke_subagent` (`A = 2, H = 2`) was explicitly called in Phase 1 (parallel discovery/spec modules) and Phase 2 (`TypeName: "self"` parallel subtask execution). Executing all reads or code modifications solo without calling `invoke_subagent` is an immediate auto-reject failure.
+- [ ] ISSUE & RCA DESTINATION ROUTING: Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/readme.md).
+- [ ] NO TEST RUNNING (TOTAL BAN): Never run any tests using Python scripts (`06-cicd-local-runner.py`, `pytest`, runner scripts), Go (`go test ./...`), or any test runner during routine execution turns. Testing is strictly checked later on in CI/CD.
+- [ ] NO BUILD CHECKING (TOTAL BAN): Never run build commands (`go build`, `npm run build`, compiler checks) to verify compilation. Build verification is checked later on in CI/CD.
+- [ ] NO RUNNER SCRIPTS (TOTAL BAN): Never launch background test runners, worker pools, or test inventory loops during routine execution.
+- [ ] NO AUTOMATIC RELEASES (TOTAL BAN): Never bump versions, update changelogs, or trigger releases unless explicitly commanded by the user.
+- [ ] NO PER-FILE COMMITTING (TOTAL BAN): Never commit each file individually as you work (e.g. running `git commit` after editing File 1, then another commit after File 2). Committing file-by-file pollutes git history, creates subagent lock collisions, and breaks atomic changes. All modified files across the turn must be accumulated and committed together in a single atomic commit at the final step.
+- [ ] NO RAPID CI/CD POLLING (TOTAL BAN): Never query or loop rapidly (`gh run view` in tight loops) when inspecting remote CI/CD pipelines. Agents must query pipeline state using GitMap Pipeline-AI (`gitmap pipeline-ai status --json` or `gitmap pl-ai status -t <sec>`) and strictly wait or sleep based on `etaSeconds` to eliminate credit waste.
+- [ ] NO PREMATURE TURN CLOSING BEFORE EXECUTION (TOTAL BAN): Never halt execution, conclude the turn, or ask the user for permission after generating specs or subtasks. Planning constitutes only 50% of the task budget; you must proceed unconditionally to Phase 2 code execution. (Note: When dispatching asynchronous background subagents via `invoke_subagent`, yielding control to allow platform reactive wakeup is mandatory and is exempt from this ban).
+- [ ] NO HORIZONTAL TASK CONCATENATION (TOTAL BAN): Never concatenate tasks horizontally in the Task Completion Summary (e.g. NEVER `✅ #1... ✅ #2...` run-on). Every completed task MUST be rendered on its OWN SEPARATE LINE starting with an individual markdown list bullet (`- ✅`).
+- [ ] INDEPENDENT AI VERIFICATION PROMPT MANDATE: Emitted the self-contained independent AI verification and audit prompt linking to the canonical spec, consolidated plan, and modified files with verbatim score audit criteria.
+- [ ] GITMAP HEAVY USAGE & ROUTINE PULL BAN: Heavily leveraged GitMap commands (`cpf`, `cpb`, `cpr`, `search`, `find`, `pwsh`) for discovery, execution, and commits. Never ran `pull-all` (`gitmap pa` or `gitmap pae`) unconditionally during routine turns; only ran `gitmap pae --json` when explicitly commanded by the user.
 
 ---
 
-## 12. Issue Destination & RCA Routing
+## 13. Non-Negotiable Coding Guidelines Checklist (Auto-Reject on Violation)
 
-- **CI/CD & Workflow Failures:** `.ai-memory/cicd-issues/NN-<slug>.md`, indexed in `.ai-memory/cicd-index.md`.
-- **Application Bugs:** `02-spec/22-app-issues/NN-<slug>.md` with 4-part RCA (Reproduction, Cause, Fix, Prevention), indexed in `02-spec/22-app-issues/readme.md`.
-- **Failed Subtasks (R13):** Log RCA in `.ai-memory/memory/issues/` and link from `ledger.md`.
+[/goal](slashCommand;goal) You must verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
+
+- [ ] Master Guidelines: Fully enforced every file in `02-spec/02-coding-guidelines/` and `.ai-memory/coding-guidelines.md`.
+- [ ] Concrete Types Centralization (`types.go`): Extracted domain structs, raw generic instantiations, and Result wrappers into dedicated `types.go` files as single reusable named types with follow-through comments (never leak raw generics like `result.Result[*Config]`).
+- [ ] Error Management: Enforced `02-spec/03-error-manage/` using domain-specific `*appfault.AppError`, never generic error.
+- [ ] Boolean Conventions: All booleans begin with is or has only (all other prefixes like can, should, was, will, did, must are banned). No negatives (`!isSuccess` is banned; use `isFail`).
+- [ ] Semantic Naming: Zero generic garbage names (`temp`, `data`, `obj`). Behavior-driven unit test names.
+- [ ] Multi-Line Arguments (Rule 9a/9b): Signatures and call sites with >2 arguments formatted one argument per line with trailing commas.
+- [ ] Line Endings & Encoding: Strictly Unix LF (`\n`) and UTF-8 without BOM.
+- [ ] Function Sizing: Functions <= 8 lines preferred (hard cap 15 lines).
+- [ ] Strict Relative Git Paths: Zero absolute paths (`/absolute/path/to/...`) or `file:///` URIs.
 
 ---
+
+## 14. Anti-Hallucination & Blast Radius Checklist
+
+- [ ] Echo Back the Spec: Verified Acceptance Criteria from the Spec file verbatim.
+- [ ] Pre-Commit Diff Proof: Verified `git status` shows actual modified files before committing.
+- [ ] No Placeholder Search: Confirmed zero `TODO` or `\[.*\]` placeholders remain in modified files.
+- [ ] Index Sync Deadman Switch: Every new file is explicitly linked in `readme.md` and enqueued in `.ai-memory/what-to-read.md`.
+- [ ] Blast Radius Acknowledgment: Global search across codebase performed to update all callers of modified symbols.
+- [ ] Continuous Loop Maintained: Continuous self-loop executed until 100% complete without running banned test/build commands.
+- [ ] Final Step Commit & Push Verified: Staged all changes (`git add -A`), committed everything in a single grouped atomic commit, and pushed to git before ending the turn (no per-file commits).
+
+---
+
+## 15. Final Step Git Commit & Push Mandate (Strict Checklist)
+
+- [ ] MANDATORY FINAL COMMIT & PUSH VIA GITMAP (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, use GitMap semantic commit commands: `gitmap cpf "<summary>"` (features), `gitmap cpb "<summary>"` (bugs), or `gitmap cpr "<summary>"` (releases) which automatically stage, commit with standardized prefixes, and push directly to the remote repository. (Fallback to `git add -A && git commit && git push` only if GitMap CLI is unavailable). Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
+- [ ] TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY): You must not create separate git commits for each individual file as you edit them (e.g. running `git commit` or `gitmap cpf` after editing File 1, then committing again after File 2 is strictly forbidden). Committing file-by-file pollutes git log history, creates subagent lock collisions, and breaks atomic rollback. All modified files, test change caches, and plan records across the turn must be accumulated in the working tree and committed together in a single grouped atomic commit at the final step before pushing.
 
 ## MUST FOLLOW NON-NEGOTIABLE
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.ai-memory/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run the targeted checks (builds and full unit tests stay in CI per R1), and execute the final atomic GitMap commit and push before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
-
----
-
-## Phase 0: Antigravity Skill Bootstrap (Memory Optimization)
-
-Before executing the tasks below, check if this prompt is already installed as a native Antigravity Skill.
-
-1. If `.agents/skills/cg-error-management/skill.md` does not exist in the workspace, create it now.
-2. Extract the core instructions of this prompt and save it into that `skill.md` using the standard YAML frontmatter (with `name` and `description`).
-3. Once installed, rely on progressive disclosure for future runs. Do not keep the entire prompt in active memory if not needed.
-
----
-
-### Master Task Checklist (Atomic Numbered Steps)
-
-1. [ ] [/goal](slashCommand;goal) Phase 1A (Step 0 - Verbatim Prompt Recording & Task Extraction Gate): Immediately capture the user prompt verbatim into `.ai-memory/plans/pending/xx-<slug>.md` under `## User Request (Verbatim)`, extract actionable deliverables with traceable IDs (`Task-01`, `Task-02`), and output this confirmed task breakdown directly in chat in cleanly indented markdown with vertical blank lines, task state (`State: [PENDING]`), and understanding indicator bracket (`Understood: [YES — ...]`) before any file exploration, scanning, or spec writing.
-2. [ ] [/goal](slashCommand;goal) Phase 1B (Step 1 - Master Spec Generation): Write the master architectural plan in `.ai-memory/plans/pending/xx-<slug>.md`, documenting an exhaustive Violation Ledger tracking every bare error return, swallowed error, and missing fault wrapper.
-3. [ ] [/goal](slashCommand;goal) Phase 1B (Step 2 - Scan & Discover): Use GitMap AUM discovery (`gitmap find`, `gitmap lf`, `gitmap cat`, `gitmap search`) as primary, with fast Python discovery scripts (`11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py`) as fallback, to inventory all architectural violations and anti-patterns without truncation.
-4. [ ] [/goal](slashCommand;goal) Phase 1B (Step 3 - Lean Subtask Decomposition): Decompose the master plan into granular, lean subtasks in `.ai-memory/plans/subtasks/xx-<slug>/01-<subslug>.md`. Subtasks must focus purely on unique task deliverables without repeating common repository boilerplate.
-5. [ ] [/goal](slashCommand;goal) Phase 1B (Step 4 - Readiness Audit Gate): Confirm all `Task-xx` deliverables are mapped to subtasks and disjoint files before execution.
-6. [ ] [/goal](slashCommand;goal) Phase 1B (Zero-Stop Transition): Immediately upon completing Phase 1, self-loop and transition directly into Phase 2 execution mode without pausing or asking for permission.
-7. [ ] [/goal](slashCommand;goal) Phase 2 (Step A - Active Execution & Refactoring): Open each target file and perform surgical refactoring following authoritative guidelines: wrap all received Go errors in `*appfault.AppError`, enforce monadic `result.Wrap[T]`, eliminate bare returns, and remove all swallowed errors.
-8. [ ] [/goal](slashCommand;goal) Phase 2 (Step B - Size Tier & Formatting Enforcement): Enforce <= 8–15 line function decomposition, single return types, guard clause flattening, and clean formatting.
-9. [ ] [/goal](slashCommand;goal) Phase 2 (Step C - Failure Memory & Error Recovery): If a subagent fails, record the failure log in `.ai-memory/plan.md` and `.ai-memory/memory/issues/`; subsequent agents must read the failure log first to remediate root causes.
-10. [ ] [/goal](slashCommand;goal) Phase 2 (Step D - Change Recording & Quality Linting): Record all modified files into `.ai-memory/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`) and run targeted file-level linters on specifically modified files (`exit 0`). DO NOT run the full CI/CD pipeline runner (`06-cicd-local-runner.py`), unit tests, or build checks during routine turns.
-11. [ ] [/goal](slashCommand;goal) Phase 3 (Step A - Consolidation & Atomic Push): Consolidate completed subtasks into `.ai-memory/plans/completed/xx-<slug>.md`, delete granular subtasks and pending plan, stage all changes, and push in a single grouped commit.
-12. [ ] [/goal](slashCommand;goal) Phase 3 (Step B - Completion & Confidence Reporting): Emit the final Task Completion Summary with green check mark emojis, modified files summary, and implementation confidence score.
-13. [ ] [/learn](slashCommand;learn) Ingest `.ai-memory/memory/readme.md` for project memory index and past learnings.
-14. [ ] [/learn](slashCommand;learn) Ingest `.ai-memory/strictly-avoid.md` for banned anti-patterns and strict constraints.
-15. [ ] [/learn](slashCommand;learn) Ingest `02-spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
-16. [ ] [/learn](slashCommand;learn) Ingest `02-spec/02-coding-guidelines/01-cross-language/readme.md` for hallucination prevention and micro-tasking.
-17. [ ] [/learn](slashCommand;learn) Ingest `02-spec/02-coding-guidelines/01-cross-language/readme.md` for strict relative path citation requirements.
-18. [ ] [/learn](slashCommand;learn) Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
-19. [ ] [/learn](slashCommand;learn) Ingest `02-spec/03-error-manage/` for error handling architectures and AppError.
-20. [ ] [/learn](slashCommand;learn) Ingest `.ai-memory/coding-guidelines.md` for master consolidated coding guidelines.
-21. [ ] [/goal](slashCommand;goal) Create or update agent rules in the repository if missing from agent memory.
-
-```text
-PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Scan Codebase, Write .ai-memory/plans/pending/ Spec, Create .ai-memory/plans/subtasks/, Verify/Create Linter Hook)
-PHASE_2_STEPS = N / 2   (Steps N/2+1 .. N: Actively Edit Code, AppError Refactoring, Linter Verification, Local CI Runner Verification, Plan Completion)
-```
-
-N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never modify them mid-execution.
-
----
-
----
-
-## 1. Zero Swallowed Errors Policy (TOTAL BAN — Non-Negotiable)
-
-> [!CAUTION]
-> **SWALLOWING ERRORS IS AN AUTO-REJECT FAILURE TIER 0 VIOLATION.**
-> Under NO circumstances may an error be discarded, suppressed, silenced, or silently ignored.
-> Every error encountered MUST either be completely resolved with structured context logging (operation name, input parameters) or embedded/wrapped into `*appfault.AppError` and returned to the caller.
-
-### Strict Prohibitions
-
-1. **NO Empty Catch/Except Blocks:**
-   - ❌ **BANNED:** `try { ... } catch (e) {}` or `except Exception: pass`
-   - ✅ **REQUIRED:** Catch blocks must log operation name, key inputs, and rethrow or return a wrapped `AppError`.
-2. **NO Blank Identifier Error Discards:**
-   - ❌ **BANNED:** `_ = err` or `val, _ := fn()` in Go.
-   - ✅ **REQUIRED:** Check every error explicitly: `if err != nil { return appfault.Wrap(...) }`.
-3. **NO Silent Fallback Defaults:**
-   - ❌ **BANNED:** Returning dummy values (`return nil`, `return ""`, `return false`, `return 0`) to mask an underlying error without caller notification.
-   - ✅ **REQUIRED:** Return failure status via `*appfault.AppError` or monadic `result.WrapFailure[T]`.
-4. **NO Silent Nil Return in Dual Handling:**
-   - ❌ **BANNED:** Calling an internal exit handler or printing an error, then returning `nil` to deceive the caller into believing execution succeeded.
-   - ✅ **REQUIRED:** Leaf functions MUST return the error directly (`return err`).
-
----
-
----
-
-## 2. Strict Golang Error Wrapping Mandate (`*appfault.AppError` & `appfault.Fault`)
-
-> [!IMPORTANT]
-> **ALL GOLANG ERRORS MUST BE EMBEDDED IN FAULT WRAPPERS.**
-> Whenever ANY Go function encounters, intercepts, or receives an error (from the standard library `os`, `io`, `json`, `sql`, `net`, or downstream services), it MUST be immediately embedded and wrapped into `*appfault.AppError` (`appfault.Fault`).
-
-### Core Rules for Go Error Handling
-
-1. **Standard Error Return Type:** All domain functions returning failure metadata MUST use `*appfault.AppError` (or `appfault.Fault`).
-2. **Deterministic Enum Taxonomy:** Classify errors using `errtype.Variation uint16` (`errtype.Validation`, `errtype.NotFound`, `errtype.Database`, `errtype.Network`, `errtype.Timeout`, `errtype.IO`, `errtype.Internal`). Redundant string error codes are banned.
-3. **Always Wrap Standard Library Errors:**
-   - Standard library `error` instances (`err != nil`) must NEVER be returned raw.
-   - Use `appfault.Wrap(errType, err, "ContextMessage")` or `appfault.WrapFile(errType, err, relativePath, "ContextMessage")`.
-4. **Monadic Result Wrapper Mandate (`pkg/result`):**
-   - Functions returning a value along with possible failure MUST return `result.Wrap[T]` (`appfault.Result[T]`).
-   - Bare tuples `(T, error)` across public domain boundaries are strictly prohibited.
-   - Return success using `result.WrapSuccess(val)` and failure using `result.WrapFailure[T](fault)`.
-5. **Context Enrichment:**
-   - Chain contextual metadata: `.WithOp("Package.Function")`, `.WithVar("key", val)`, `.WithSiteId(siteId)`.
-   - Use relative repository paths only (TOTAL BAN on absolute paths or `file:///` URIs).
-6. **Zero Redundant Re-Wrapping:**
-   - If a downstream function already returns `*appfault.AppError` or `result.Wrap[T]`, propagate the existing fault directly using `result.WrapFailureFromWrap[T](downstreamRes)` rather than wrapping it again.
-7. **Mandatory Concrete Types in `types.go` (Total Ban on Leaking Raw Generics Across Signatures):**
-   - **No Leaked Raw Generics:** NEVER leak raw generic Result wrappers (`result.Wrap[*Config]`, `result.Wrap[User]`, `result.ResultSlice[T]`) across function signatures, service boundaries, or public packages.
-   - **Convert Reused Types to Concrete Named Types:** Rather than scattering raw generics everywhere, if a result type is used or reused across functions or layers, define a single reusable concrete type alias in `types.go` (e.g. `type ConfigResult = result.Wrap[*Config]`, `type UserResult = result.Wrap[User]`) for Golang (and equivalent leaf type definitions for other languages, e.g. `export type UserResult = Result<User>;`).
-   - **Explanatory Code Comments:** Code examples and implementation files MUST include comments showing how the concrete type is declared in `types.go` and follows through into the function signatures.
-
----
-
----
-
-## 3. Production Go Code Samples (Refer to `04-code/golang/examples/`)
-
-> Real-world implementations are maintained in [`04-code/golang/examples/database_query.go`](04-code/golang/examples/database_query.go), [`04-code/golang/examples/workflow_service.go`](04-code/golang/examples/workflow_service.go), and [`04-code/golang/examples/types.go`](04-code/golang/examples/types.go).
-> Always inspect those source files as the canonical ground truth.
-
-### Sample 1: Standard Library File & JSON Handling (Concrete `ConfigResult` in `types.go`)
-
-```go
-// -----------------------------------------------------------------------------
-// Step 1: Declare Concrete Types in `types.go` (Mandatory Rule)
-// -----------------------------------------------------------------------------
-// In types.go:
-// type (
-//     // Config contains application configuration fields.
-//     Config struct {
-//         Port int    `json:"port"`
-//         Host string `json:"host"`
-//     }
-//
-//     // ConfigResult is the single reusable concrete result envelope for *Config.
-//     // RULE: Convert raw generic result.Wrap[*Config] to an explicit concrete type
-//     // in types.go so all signatures and callers share the exact same definition!
-//     ConfigResult = result.Wrap[*Config]
-// )
-// -----------------------------------------------------------------------------
-
-// ❌ FORBIDDEN: Bare error returns, uninformative errors.New, swallowed errors, missing blank lines
-func LoadConfig(path string) (*Config, error) {
-    data, err := os.ReadFile(path)
-    if err != nil {
-        _ = err // ❌ SWALLOWED ERROR
-        return nil, err // ❌ Missing blank line before return, bare error return
-    }
-
-    var cfg Config
-    if err := json.Unmarshal(data, &cfg); err != nil { // ❌ Semicolon in if
-        return nil, errors.New("invalid json") // ❌ BARE ERROR WITHOUT CAUSE
-    }
-
-    return &cfg, nil
-}
-
-// ✅ REQUIRED: Strict appfault wrapping with errtype, concrete ConfigResult from types.go, mandatory blank lines, flat ifs
-func LoadConfig(path string) ConfigResult {
-    if path == "" {
-        fault := appfault.New(errtype.Validation, "config path cannot be empty").
-            WithOp("config.LoadConfig")
-
-        return result.WrapFailure[*Config](fault)
-    }
-
-    data, err := os.ReadFile(path)
-
-    if err != nil {
-        fault := appfault.WrapFile(errtype.IO, err, path, "failed to read configuration file").
-            WithOp("config.LoadConfig")
-
-        return result.WrapFailure[*Config](fault)
-    }
-
-    var cfg Config
-    err = json.Unmarshal(data, &cfg)
-
-    if err != nil {
-        fault := appfault.Wrap(errtype.Validation, err, "failed to parse configuration json").
-            WithOp("config.LoadConfig").
-            WithVar("path", path)
-
-        return result.WrapFailure[*Config](fault)
-    }
-
-    return result.WrapSuccess(&cfg)
-}
-```
-
-### Sample 2: Database Query with Result Monad (Concrete `UserResult` in `types.go`)
-
-```go
-// -----------------------------------------------------------------------------
-// Step 1: Declare Concrete Types in `types.go` (Mandatory Rule)
-// -----------------------------------------------------------------------------
-// In types.go:
-// type (
-//     // User represents the persistent user entity model.
-//     User struct {
-//         Id    int64  `json:"id"`
-//         Name  string `json:"name"`
-//         Email string `json:"email"`
-//     }
-//
-//     // UserResult is the canonical single reusable result envelope for User.
-//     // RULE: Convert raw generic result.Wrap[User] to a concrete named type in types.go.
-//     // Never leak raw generic parameters across package boundaries and service signatures.
-//     UserResult = result.Wrap[User]
-// )
-// -----------------------------------------------------------------------------
-
-// ❌ FORBIDDEN: Combined if with semicolon, nested if, error-type branching, missing blank lines
-func (r *UserRepository) FindUser(ctx context.Context, id int64) (*User, error) {
-    row := r.db.QueryRowContext(ctx, "SELECT name, email FROM users WHERE id = ?", id)
-    var user User
-
-    if err := row.Scan(&user.Name, &user.Email); err != nil { // ❌ Combined semicolon if
-        if errors.Is(err, sql.ErrNoRows) { // ❌ FORBIDDEN: Nested if and error-type branching
-            return nil, nil // ❌ Deceptive swallowed error
-        }
-        return nil, err // ❌ Missing blank line before return
-    }
-
-    user.Id = id
-    return &user, nil // ❌ Missing blank line before return
-}
-
-// ✅ REQUIRED: Flat if guard, direct error typing without branching, concrete UserResult from types.go, blank lines before return
-func (r *UserRepository) FindUser(ctx context.Context, id int64) UserResult {
-    if id <= 0 {
-        fault := appfault.New(errtype.Validation, "user id must be positive").
-            WithOp("UserRepository.FindUser").
-            WithVar("id", id)
-
-        return result.WrapFailure[User](fault)
-    }
-
-    row := r.db.QueryRowContext(ctx, "SELECT name, email FROM users WHERE id = ?", id)
-    var user User
-
-    err := row.Scan(&user.Name, &user.Email)
-
-    if err != nil {
-        // Direct error typing: select the error type reflecting this layer (errtype.Database)
-        // Attach the ID and variables directly. Never branch on error types or nest ifs!
-        fault := appfault.Wrap(errtype.Database, err, "failed to scan user row from database").
-            WithOp("UserRepository.FindUser").
-            WithVar("id", id)
-
-        return result.WrapFailure[User](fault)
-    }
-
-    user.Id = id
-
-    return result.WrapSuccess(user)
-}
-```
-
-### Sample 3: Propagating Errors Across Boundaries (Concrete `UserResult` Across Services)
-
-```go
-// ✅ REQUIRED: Propagate downstream Fault directly without redundant nested wrapping, using concrete UserResult
-func (s *UserService) ActivateUser(ctx context.Context, userId int64) UserResult {
-    userRes := s.repo.FindUser(ctx, userId)
-
-    if userRes.IsFailed() {
-        s.log.LogError(userRes.Fault())
-
-        // Propagate existing Fault directly with zero re-wrapping
-        return result.WrapFailureFromWrap[User](userRes)
-    }
-
-    user := userRes.Value()
-    user.IsActive = true
-
-    updateRes := s.repo.UpdateUser(ctx, user)
-
-    if updateRes.IsFailed() {
-        s.log.LogError(updateRes.Fault())
-
-        return result.WrapFailureFromWrap[User](updateRes)
-    }
-
-    return result.WrapSuccess(user)
-}
-```
-
----
-
----
-
-## 4. Dedicated Section: Error Return Contract & Outer Handling Principle (Zero Dual-Handling)
-
-A function that declares an error or result return type MUST return the actual error instance directly to the caller. It MUST NEVER invoke an exit handler, terminate the process, or panic internally and then return `nil`.
-
-### Why Dual-Handling & Internal Exit Is Forbidden
-
-1. **Broken Caller Sovereignty:** When a leaf function handles its own exit internally and returns `nil`, the caller is deceived into believing the operation succeeded.
-2. **Impossible Testability:** Unit tests cannot assert returned error types or values if the helper function kills the process or handles errors internally.
-3. **Dual Execution Hazards:** Calling an exit handler inside a helper while returning a result creates race conditions, partial database mutations, and skipped resource cleanups.
-
-### Mandatory Outer Handling Pattern
-
-- **Leaf/Service Functions:** Construct or wrap `*appfault.AppError` and return it.
-- **Top-Level Root Dispatcher / HTTP Router:** Only the outer controller handles the error, decides the exit code via `ExitCodeType` enum, and writes the Universal Response Envelope:
-
-```go
-// ✅ REQUIRED: Top-level caller handles the error and exit
-func MainCommandDispatcher(args []string) {
-    res := ExecuteOperation(args)
-    if res.IsFailed() {
-        exitHandler.HandleValidationError(res.Fault())
-        return
-    }
-
-    exitHandler.HandleSuccess()
-}
-```
-
----
-
----
-
-## 6. Authoritative Spec Files Checklist (Non-Negotiable Action Items)
-
-You MUST read, follow, and mechanically verify every single specification file below before and during execution:
-
-- [ ] **`02-spec/02-coding-guidelines/02-canonical-size-tier.md`**
-  - **Why:** Universal size limits across all languages.
-  - **How:** Functions <= 8 lines preferred (hard cap 15 lines). Files <= 100 lines coding max (recommended <= 80 lines). Zero line-compression cheating.
-- [ ] **`02-spec/02-coding-guidelines/06-ai-optimization/readme.md`**
-  - **Why:** Comprehensive catalog of forbidden vs required generation patterns.
-  - **How:** Strictly follow AH-N1 to AH-T2 rules. Zero ghost diffs, zero truncation stubs (`// ...`), zero unverified claims.
-- [ ] **`02-spec/02-coding-guidelines/06-ai-optimization/06-citation-requirement.md`**
-  - **Why:** Grounded rule enforcement and traceability.
-  - **How:** Cite authoritative spec files for every code modification made.
-- [ ] **`02-spec/02-coding-guidelines/01-cross-language/04-code-style/02-braces-and-nesting.md`**
-  - **Why:** Absolute zero tolerance for nested conditionals.
-  - **How:** Flatten all nested `if` statements with guard clauses and early returns.
-- [ ] **`02-spec/03-error-manage/readme.md`**
-  - **Why:** Authoritative error management foundation across all services.
-  - **How:** Never swallow errors; every `catch` logs with operation name and key inputs, then rethrows or returns a typed error.
-- [ ] **`02-spec/03-error-manage/02-error-architecture/02-error-handling-reference.md`**
-  - **Why:** Universal cross-stack `AppError` and `AppException` structure.
-  - **How:** Implement `appfault.Wrap(errType, err, "OpName")` in Go, `throw new AppError(cause, { op, ctx })` in TS, and `AppException` in C#/PHP; preserve the root cause and causal stack.
-- [ ] **`02-spec/03-error-manage/02-error-architecture/03-go-delegation-fix.md`**
-  - **Why:** Prevents nil pointer panics and raw error leaks in Go routines.
-  - **How:** Never delegate errors to uninitialized handlers; use explicit, typed error delegation channels with mutex guards.
-- [ ] **`02-spec/03-error-manage/02-error-architecture/readme.md`**
-  - **Why:** Standardized error severity and UI feedback mapping.
-  - **How:** Map log levels strictly: `debug` (trace), `info` (lifecycle), `warn` (recoverable/amber), `error` (user-visible failure/red), `fatal` (process exit).
-- [ ] **`02-spec/03-error-manage/02-error-architecture/05-response-envelope/readme.md`**
-  - **Why:** Universal API response contract across all endpoints.
-  - **How:** Every HTTP/RPC response MUST return the standard envelope: `{ "data": T, "errors": [AppError], "meta": Meta }`. Never return raw un-enveloped error text.
-- [ ] **`02-spec/03-error-manage/03-error-code-registry/readme.md`**
-  - **Why:** Stable error code registry and catalog.
-  - **How:** All error codes must be registered constants (`errtype.Variation`). No ad-hoc string literals invented at the throw site.
-
----
-
----
-
-## 7. Mandatory Linter & Targeted Verification Checklist
-
-Code standards must be mechanically enforced by automated linters. You MUST verify or create the linter and connect it to CI:
-
-- [ ] **Linter Script Identification:** Check if `linter-scripts/check-error-management.py` exists in the repository.
-- [ ] **Auto-Create Linter if Missing:** If no dedicated error linter exists, create `linter-scripts/check-error-management.py` that AST-scans for:
-  1. Internal exit handler invocations in non-main functions.
-  2. Empty `catch` or `except` blocks (swallowed errors).
-  3. Bare un-wrapped error returns (`return err` instead of `appfault.Wrap`).
-  4. Bare panics/hard exits (`panic()`, `process.exit()`, `os.Exit()`).
-  5. Non-standard API responses lacking the `{ data, errors, meta }` envelope.
-- [ ] **Local Linter Command:** Execute and verify the linter locally on modified files:
-  ```bash
-  python linter-scripts/check-error-management.py
-  ```
-
----
-
----
-
-## Metadata
-
-- slug: cg-error-management
-- priority: high
-- status: active
+Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.ai-memory/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `02-spec/` and `.ai-memory/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.

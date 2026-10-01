@@ -27,6 +27,16 @@ WAVES = ceil(subtasks / (A x H))
 
 ---
 
+## Phase 0: Antigravity Skill Bootstrap (Memory Optimization)
+
+Before executing the tasks below, check if this prompt is already installed as a native Antigravity Skill.
+
+1. If `.agents/skills/<slug>/skill.md` does not exist in the workspace, create it now.
+2. Extract the core instructions of this prompt and save it into that `skill.md` using the standard YAML frontmatter (with `name` and `description`).
+3. Once installed, rely on progressive disclosure for future runs. Do not keep the entire prompt in active memory if not needed.
+
+---
+
 ## The Unified Master Pipeline (Atomic Numbered Steps)
 
 Execute this task via a strict 3-Phase pipeline. Do not skip steps.
@@ -295,263 +305,67 @@ Confirm scripts exist via harmless workspace call before invoking (R4). Run on c
 
 ---
 
-## 11. Discovery Toolchain (GitMap Primary)
+## 11. AI Fix Scripts Memory (Reusable Tooling)
 
-Use Section 3 GitMap table as primary. Python fallbacks (`03-ai-scripts/11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py`) apply only if GitMap is unavailable.
+- [ ] [/goal](slashCommand;goal) Reuse First: Scanned and learned `03-ai-scripts/readme.md` before writing temporary code.
+- [ ] Strict In-Repository Execution: All Python scripts executed strictly within the codebase repository root.
+- [ ] Strict .ai-memory/ Folder Storage: All helper scripts, local runners, and linters stored in `03-ai-scripts/`.
+- [ ] Native File Manipulator: Use `python 03-ai-scripts/03-file-manipulator.py <command>` for mass file operations.
+- [ ] Go Generate Sync: If Go constants or enums are modified, run `go generate ./...` in the relevant package and commit generated files.
+
+---
+
+## 12. Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
+
+- [ ] TOP-INSTRUCTION PRIORITY MANDATE: Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
+- [ ] MANDATORY SUBAGENT SPAWNING GATE (ZERO SOLO EXECUTION): Verified that `invoke_subagent` (`A = 2, H = 2`) was explicitly called in Phase 1 (parallel discovery/spec modules) and Phase 2 (`TypeName: "self"` parallel subtask execution). Executing all reads or code modifications solo without calling `invoke_subagent` is an immediate auto-reject failure.
+- [ ] ISSUE & RCA DESTINATION ROUTING: Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/readme.md).
+- [ ] NO TEST RUNNING (TOTAL BAN): Never run any tests using Python scripts (`06-cicd-local-runner.py`, `pytest`, runner scripts), Go (`go test ./...`), or any test runner during routine execution turns. Testing is strictly checked later on in CI/CD.
+- [ ] NO BUILD CHECKING (TOTAL BAN): Never run build commands (`go build`, `npm run build`, compiler checks) to verify compilation. Build verification is checked later on in CI/CD.
+- [ ] NO RUNNER SCRIPTS (TOTAL BAN): Never launch background test runners, worker pools, or test inventory loops during routine execution.
+- [ ] NO AUTOMATIC RELEASES (TOTAL BAN): Never bump versions, update changelogs, or trigger releases unless explicitly commanded by the user.
+- [ ] NO PER-FILE COMMITTING (TOTAL BAN): Never commit each file individually as you work (e.g. running `git commit` after editing File 1, then another commit after File 2). Committing file-by-file pollutes git history, creates subagent lock collisions, and breaks atomic changes. All modified files across the turn must be accumulated and committed together in a single atomic commit at the final step.
+- [ ] NO RAPID CI/CD POLLING (TOTAL BAN): Never query or loop rapidly (`gh run view` in tight loops) when inspecting remote CI/CD pipelines. Agents must query pipeline state using GitMap Pipeline-AI (`gitmap pipeline-ai status --json` or `gitmap pl-ai status -t <sec>`) and strictly wait or sleep based on `etaSeconds` to eliminate credit waste.
+- [ ] NO PREMATURE TURN CLOSING BEFORE EXECUTION (TOTAL BAN): Never halt execution, conclude the turn, or ask the user for permission after generating specs or subtasks. Planning constitutes only 50% of the task budget; you must proceed unconditionally to Phase 2 code execution. (Note: When dispatching asynchronous background subagents via `invoke_subagent`, yielding control to allow platform reactive wakeup is mandatory and is exempt from this ban).
+- [ ] NO HORIZONTAL TASK CONCATENATION (TOTAL BAN): Never concatenate tasks horizontally in the Task Completion Summary (e.g. NEVER `✅ #1... ✅ #2...` run-on). Every completed task MUST be rendered on its OWN SEPARATE LINE starting with an individual markdown list bullet (`- ✅`).
+- [ ] INDEPENDENT AI VERIFICATION PROMPT MANDATE: Emitted the self-contained independent AI verification and audit prompt linking to the canonical spec, consolidated plan, and modified files with verbatim score audit criteria.
+- [ ] GITMAP HEAVY USAGE & ROUTINE PULL BAN: Heavily leveraged GitMap commands (`cpf`, `cpb`, `cpr`, `search`, `find`, `pwsh`) for discovery, execution, and commits. Never ran `pull-all` (`gitmap pa` or `gitmap pae`) unconditionally during routine turns; only ran `gitmap pae --json` when explicitly commanded by the user.
 
 ---
 
-## 12. Issue Destination & RCA Routing
+## 13. Non-Negotiable Coding Guidelines Checklist (Auto-Reject on Violation)
 
-- **CI/CD & Workflow Failures:** `.ai-memory/cicd-issues/NN-<slug>.md`, indexed in `.ai-memory/cicd-index.md`.
-- **Application Bugs:** `02-spec/22-app-issues/NN-<slug>.md` with 4-part RCA (Reproduction, Cause, Fix, Prevention), indexed in `02-spec/22-app-issues/readme.md`.
-- **Failed Subtasks (R13):** Log RCA in `.ai-memory/memory/issues/` and link from `ledger.md`.
+[/goal](slashCommand;goal) You must verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
+
+- [ ] Master Guidelines: Fully enforced every file in `02-spec/02-coding-guidelines/` and `.ai-memory/coding-guidelines.md`.
+- [ ] Concrete Types Centralization (`types.go`): Extracted domain structs, raw generic instantiations, and Result wrappers into dedicated `types.go` files as single reusable named types with follow-through comments (never leak raw generics like `result.Result[*Config]`).
+- [ ] Error Management: Enforced `02-spec/03-error-manage/` using domain-specific `*appfault.AppError`, never generic error.
+- [ ] Boolean Conventions: All booleans begin with is or has only (all other prefixes like can, should, was, will, did, must are banned). No negatives (`!isSuccess` is banned; use `isFail`).
+- [ ] Semantic Naming: Zero generic garbage names (`temp`, `data`, `obj`). Behavior-driven unit test names.
+- [ ] Multi-Line Arguments (Rule 9a/9b): Signatures and call sites with >2 arguments formatted one argument per line with trailing commas.
+- [ ] Line Endings & Encoding: Strictly Unix LF (`\n`) and UTF-8 without BOM.
+- [ ] Function Sizing: Functions <= 8 lines preferred (hard cap 15 lines).
+- [ ] Strict Relative Git Paths: Zero absolute paths (`/absolute/path/to/...`) or `file:///` URIs.
 
 ---
+
+## 14. Anti-Hallucination & Blast Radius Checklist
+
+- [ ] Echo Back the Spec: Verified Acceptance Criteria from the Spec file verbatim.
+- [ ] Pre-Commit Diff Proof: Verified `git status` shows actual modified files before committing.
+- [ ] No Placeholder Search: Confirmed zero `TODO` or `\[.*\]` placeholders remain in modified files.
+- [ ] Index Sync Deadman Switch: Every new file is explicitly linked in `readme.md` and enqueued in `.ai-memory/what-to-read.md`.
+- [ ] Blast Radius Acknowledgment: Global search across codebase performed to update all callers of modified symbols.
+- [ ] Continuous Loop Maintained: Continuous self-loop executed until 100% complete without running banned test/build commands.
+- [ ] Final Step Commit & Push Verified: Staged all changes (`git add -A`), committed everything in a single grouped atomic commit, and pushed to git before ending the turn (no per-file commits).
+
+---
+
+## 15. Final Step Git Commit & Push Mandate (Strict Checklist)
+
+- [ ] MANDATORY FINAL COMMIT & PUSH VIA GITMAP (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, use GitMap semantic commit commands: `gitmap cpf "<summary>"` (features), `gitmap cpb "<summary>"` (bugs), or `gitmap cpr "<summary>"` (releases) which automatically stage, commit with standardized prefixes, and push directly to the remote repository. (Fallback to `git add -A && git commit && git push` only if GitMap CLI is unavailable). Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
+- [ ] TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY): You must not create separate git commits for each individual file as you edit them (e.g. running `git commit` or `gitmap cpf` after editing File 1, then committing again after File 2 is strictly forbidden). Committing file-by-file pollutes git log history, creates subagent lock collisions, and breaks atomic rollback. All modified files, test change caches, and plan records across the turn must be accumulated in the working tree and committed together in a single grouped atomic commit at the final step before pushing.
 
 ## MUST FOLLOW NON-NEGOTIABLE
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.ai-memory/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run the targeted checks (builds and full unit tests stay in CI per R1), and execute the final atomic GitMap commit and push before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
-
----
-
-## Dedicated Section: Variable & Boolean Naming Architecture (Zero Tolerance)
-
-Naming clarity is the backbone of robust code. Vague identifiers, bare `ok` variables, and negative boolean flags cause cognitive fatigue and obscure critical edge-case bugs.
-
-### 1. Mandatory Boolean Prefix Rule (Strict is/has ONLY)
-
-Every boolean variable, parameter, struct field, or property MUST begin with `is` or `has` ONLY (PascalCase `Is` / `Has` for exported symbols; e.g. `isValid`, `hasPermission`, `isReady`, `hasData`); all other prefixes (`can`, `should`, `was`, `will`, `did`, `must`, etc. like `canExecute`, `shouldRetry`) and negative names are **strictly BANNED**.
-
-- Go: `isValid`, `hasPermission`, `isExecutable`, `isRetryRequired` (or `IsValid`, `HasPermission`).
-- TypeScript/JavaScript: `isLoaded`, `hasColors`, `hasPayload`, `isSubmittable`.
-- Python: `is_valid`, `has_permission`, `is_ready_to_proceed`.
-- C#: `IsValid`, `HasAccess`, `IsExecutable`.
-
----
-
-### 2. TOTAL BAN on Bare `ok` (The `ok` Anti-Pattern)
-
-In Go type assertions, map lookups, channel receives, and comma-ok idioms, the bare identifier `ok` is **strictly forbidden**. It carries zero domain semantics and violates the mandatory boolean prefix rule.
-
-You MUST replace bare `ok` with a domain-specific boolean starting with `is` or `has`:
-
-| Context | ❌ FORBIDDEN (Bare `ok`) | ✅ REQUIRED (Affirmative Semantic Boolean) |
-|---|---|---|
-| **Type Assertion** | `appErr, ok := err.(*appfault.AppError)` | `appErr, isAppErr := err.(*appfault.AppError)` |
-| **Map Lookup** | `val, ok := userMap[id]` | `val, isFound := userMap[id]` or `val, isUserExist := userMap[id]` |
-| **Map Key Check** | `_, ok := headers["Authorization"]` | `_, hasAuthHeader := headers["Authorization"]` |
-| **Channel Receive** | `msg, ok := <-msgChan` | `msg, hasMessage := <-msgChan` or `msg, isChannelOpen := <-msgChan` |
-| **Type Switch / Cast** | `str, ok := val.(string)` | `str, isString := val.(string)` |
-| **Status Tuples** | `data, ok := fetch()` | `data, isSuccess := fetch()` |
-
-### 2.1 Mandatory Standard: Use `IsDefined` Instead of `!isEmpty` (Total Ban on `!isEmpty`)
-
-- **Inverted Negation Ban:** Never check whether a collection, string, slice, or data structure is populated using `!isEmpty` or `!res.IsEmpty()`. Negating an empty check (`!isEmpty`) forces mental double-negation and violates Affirmative Boolean Principles and Positive Framing.
-- **Affirmative Replacement:** Always use `isDefined` (or `res.IsDefined()`) instead of `!isEmpty`:
-  - ❌ **FORBIDDEN:** `if !isEmpty { ... }`, `if !res.IsEmpty() { ... }`, `if !state.IsEmpty { ... }`
-  - ✅ **REQUIRED:** `if isDefined { ... }`, `if res.IsDefined() { ... }`, `if state.IsDefined { ... }`
-- **When `isEmpty` is Allowed:** `isEmpty` is ONLY evaluated positively when explicitly handling the empty or missing path: `if isEmpty { return ErrEmpty }`. When handling the populated, valid data path, ALWAYS use affirmative `isDefined`.
-
-### 2.2 Multi-Line Statement Separation & Simple If Condition (No Inline Compound Cramming)
-
-- **Total Ban on Inline Compound Assignments (`if init; cond`):** While replacing bare `ok` with affirmative names (`isString`, `isFound`), NEVER cram the type assertion and compound conditions into a single `if` line (e.g. `if v, isString := rawMap[key].(string); isString && len(v) > 0 {`).
-- **Separation onto Distinct Lines:**
-  1. Execute the type assertion / map lookup on its own dedicated line.
-  2. Evaluate and name the boolean condition affirmatively (`hasContent`, `isFound`) on its own dedicated line *before* the `if` statement.
-  3. Keep a blank line before the `if` statement.
-  4. Keep the `if` condition dead simple, checking exactly ONE variable.
-  5. Define named constants for all lookup keys and fallback defaults (`versionKeyUpper`, `versionKeyLower`, `VersionUnknown`) and collect them into reusable slices (`versionKeys`), eliminating magic strings and raw string returns.
-
-```go
-// ❌ BANNED ANTI-PATTERN:
-// 1. Cramming type assertion assignment and compound condition into one line.
-// 2. Hardcoding magic strings ("Version", "version", "unknown") inline.
-// 3. Returning raw fallback literal instead of a defined constant.
-func extractVersionValue(rawMap map[string]interface{}) string {
-    for _, key := range []string{"Version", "version"} {
-        if v, isString := rawMap[key].(string); isString && len(v) > 0 {
-            return v
-        }
-    }
-
-    return "unknown"
-}
-
-// ✅ MANDATORY CLEAN PATTERN:
-// 1. Zero magic strings: extract lookup keys and defaults into constants.
-// 2. Merge repeated/related strings into reusable collections (versionKeys).
-// 3. Assignment on its own dedicated line.
-// 4. Affirmative boolean (hasContent) pre-evaluated BEFORE the if statement.
-// 5. Clean vertical breathing room (blank line before if).
-// 6. Dead-simple if statement evaluating exactly ONE variable.
-// 7. Return defined constant (VersionUnknown) instead of raw magic string literal.
-const (
-    VersionUnknown  = "unknown"
-    versionKeyUpper = "Version"
-    versionKeyLower = "version"
-)
-
-var versionKeys = []string{versionKeyUpper, versionKeyLower}
-
-func extractVersionValue(rawMap map[string]interface{}) string {
-    for _, key := range versionKeys {
-        v, isString := rawMap[key].(string)
-        hasContent := isString && len(v) > 0
-
-        if hasContent {
-            return v
-        }
-    }
-
-    return VersionUnknown
-}
-```
-
----
-
-### 3. TOTAL BAN on Negative Boolean Identifiers & Awkward `isExists` (Anti-`hasNo*`, Anti-`isNot*`, Anti-`isExists`, Anti-`isUndefined`)
-
-Never name a boolean variable or property with negative prefixes, inverted words, or awkward verb pairings. **Always try `isDefined` / `IsDefined` instead of negatives:**
-
-- ❌ **FORBIDDEN:** `isExists`, `isUndefined`, `isNotDefined`, `isNotSet`, `hasNoColors`, `hasNoPayload`, `isNotReady`, `isNotDisabled`, `hasNoAccess`, `isNoOp`, `disallowGuest`, `unauthorized`.
-- ✅ **REQUIRED:** `isDefined` / `IsDefined`, `isFound`, `isSet`, `hasColors`, `hasPayload`, `isReady`, `isEnabled`, `hasAccess`, `isOp`, `allowGuest`, `isAuthorized`.
-- **Presence / Missing Inversion:** To check if an element, config, or property is missing or undefined, define the boolean positively (`isDefined := len(val) > 0`) and invert only in the guard condition: `if !isDefined { return ErrUndefined }`.
-
----
-
-### 4. The Clean Solution: Positive Framing with Inverted `if` Guard Clauses
-
-When you need to handle the absence, empty state, or failure condition of a resource, **ALWAYS declare the variable positively** and perform the negative check inside the `if` guard clause:
-
-#### Go Example: Type Assertion & Guard Inversion
-
-```go
-// ❌ FORBIDDEN: Nested if with bare ok and else branch
-if appErr, ok := err.(*appfault.AppError); ok {
-    if appErr.Code != "E_INTERNAL_ERROR" {
-        t.Errorf("expected E_INTERNAL_ERROR, got %s", appErr.Code)
-    }
-} else {
-    t.Errorf("expected AppError, got %T", err)
-}
-
-// ✅ REQUIRED: Semantic isAppErr boolean + inverted guard clause
-appErr, isAppErr := err.(*appfault.AppError)
-if !isAppErr {
-    t.Fatalf("expected AppError, got %T", err)
-}
-
-if appErr.Code != "E_INTERNAL_ERROR" {
-    t.Errorf("expected E_INTERNAL_ERROR, got %s", appErr.Code)
-}
-```
-
-#### Go Example: Discrete Test Assertions vs Compound Negative Chains (`execute_idempotent_test.go`)
-
-```go
-// ❌ FORBIDDEN: Compound negative chain and awkward isExists in test assertions
-if !state.IsExists || !state.IsEmpty || state.IsRepo {
-    t.Errorf("expected empty non-repo directory: %+v", state)
-}
-
-// ✅ REQUIRED: Affirmative IsDefined field + discrete individual assertions
-if !state.IsDefined {
-    t.Errorf("expected directory to be defined: %+v", state)
-}
-
-if !state.IsEmpty {
-    t.Errorf("expected directory to be empty: %+v", state)
-}
-
-if state.IsRepo {
-    t.Errorf("expected non-repo directory: %+v", state)
-}
-```
-
-#### TypeScript / React Example: Positive Framing with Inverted Guard
-
-```tsx
-// ❌ FORBIDDEN: Negative boolean variables (hasNoColors, hasNoPayload)
-const hasNoColors = !colorConfig.length;
-if (hasNoColors) {
-    return null;
-}
-
-const hasNoPayload = !payload?.length;
-if (hideLabel || hasNoPayload) {
-    return null;
-}
-
-// ✅ REQUIRED: Positive boolean variables + inverted guard conditions
-const hasColors = colorConfig.length > 0;
-if (!hasColors) {
-    return null;
-}
-
-const hasPayload = Boolean(payload?.length);
-if (hideLabel || !hasPayload) {
-    return null;
-}
-```
-
-#### Python Example: Dictionary Lookup & Guard Inversion
-
-```python
-# ❌ FORBIDDEN: Negative boolean flag
-is_not_authorized = user.role != "admin"
-if is_not_authorized:
-    raise PermissionDenied()
-
-# ✅ REQUIRED: Positive boolean + inverted condition
-is_authorized = user.role == "admin"
-if not is_authorized:
-    raise PermissionDenied()
-```
-
----
-
-### 5. Pros vs Cons: Why Positive Naming + Inverted Guards Is Superior
-
-| Dimension | ❌ Negative Naming (`hasNoColors = !len`) | ✅ Positive Framing (`hasColors = len > 0; if (!hasColors)`) |
-|---|---|---|
-| **Cognitive Load** | **High:** Requires mental inversion on every read. | **Low:** Matches natural human language and domain models. |
-| **Double Negative Risk** | **Severe:** Leads to monstrosities like `if (!hasNoColors)`. | **Zero:** Negation is always single and explicit: `if (!hasColors)`. |
-| **Boolean Algebra** | **Confusing:** Combining `hasNoColors && hasNoPayload` obscures truth tables. | **Intuitive:** De Morgan's laws and logical OR/AND remain obvious. |
-| **Single Source of Truth** | **Fragmented:** Some files use `hasColors`, others use `hasNoColors`. | **Standardized:** All components evaluate the presence of state uniformly. |
-| **Guard Clause Flow** | **Awkward:** Hides happy-path invariants inside inverted branches. | **Clean:** Early returns eliminate nesting depth to level 0. |
-
----
-
-### 6. General Variable & File Naming Conventions
-
-1. **Strict Lowercase Filenames:** All files, scripts, documentation, and system files MUST use strictly lowercase naming (e.g., `readme.md`, `01-file-manipulator.py`, `agents.md`, `skill.md`).
-2. **Anti-Garbage Variable Naming:** Absolutely NO generic garbage variable names (`comp_100.go`, `temp`, `data`, `obj`, `val1`, `item_01`, `TestHandleComp100`). All names must be semantic and domain-specific.
-3. **PascalCase Acronyms:** Acronyms are formatted as regular words: first letter capitalized, remaining letters lowercase (`UserId`, `ApiUrl`, `HttpServer`, `IpAddress`, `JsonData` — NOT `UserID`, `APIURL`, `HTTPServer`).
-
----
-
----
-
----
-
-## Mandatory Linter & CI/CD Integration
-
-1. **Linter Script:** `linter-scripts/check-enum-and-boolean.mjs` (or `linter-scripts/validate-guidelines.py`)
-2. **Local Run Command:** `python linter-scripts/validate-guidelines.py`
-3. **Autofixer Command:** `python 03-ai-scripts/05-guideline-autofixer.py <file>`
-4. **CI/CD Integration (`.github/workflows/ci.yml`):**
-   ```yaml
-   - name: Validate Naming & Boolean Conventions
-     run: python linter-scripts/validate-guidelines.py
-   ```
-5. **Runner Registration (`03-ai-scripts/06-cicd-local-runner.py`):**
-   ```python
-   JOBS = {
-       "Naming & Boolean Check": [sys.executable, "linter-scripts/validate-guidelines.py"],
-   }
-   ```
-
----
-
----
+Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.ai-memory/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `02-spec/` and `.ai-memory/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.

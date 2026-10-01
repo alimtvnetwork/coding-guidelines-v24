@@ -27,6 +27,16 @@ WAVES = ceil(subtasks / (A x H))
 
 ---
 
+## Phase 0: Antigravity Skill Bootstrap (Memory Optimization)
+
+Before executing the tasks below, check if this prompt is already installed as a native Antigravity Skill.
+
+1. If `.agents/skills/<slug>/skill.md` does not exist in the workspace, create it now.
+2. Extract the core instructions of this prompt and save it into that `skill.md` using the standard YAML frontmatter (with `name` and `description`).
+3. Once installed, rely on progressive disclosure for future runs. Do not keep the entire prompt in active memory if not needed.
+
+---
+
 ## The Unified Master Pipeline (Atomic Numbered Steps)
 
 Execute this task via a strict 3-Phase pipeline. Do not skip steps.
@@ -295,299 +305,67 @@ Confirm scripts exist via harmless workspace call before invoking (R4). Run on c
 
 ---
 
-## 11. Discovery Toolchain (GitMap Primary)
+## 11. AI Fix Scripts Memory (Reusable Tooling)
 
-Use Section 3 GitMap table as primary. Python fallbacks (`03-ai-scripts/11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py`) apply only if GitMap is unavailable.
+- [ ] [/goal](slashCommand;goal) Reuse First: Scanned and learned `03-ai-scripts/readme.md` before writing temporary code.
+- [ ] Strict In-Repository Execution: All Python scripts executed strictly within the codebase repository root.
+- [ ] Strict .ai-memory/ Folder Storage: All helper scripts, local runners, and linters stored in `03-ai-scripts/`.
+- [ ] Native File Manipulator: Use `python 03-ai-scripts/03-file-manipulator.py <command>` for mass file operations.
+- [ ] Go Generate Sync: If Go constants or enums are modified, run `go generate ./...` in the relevant package and commit generated files.
+
+---
+
+## 12. Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
+
+- [ ] TOP-INSTRUCTION PRIORITY MANDATE: Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
+- [ ] MANDATORY SUBAGENT SPAWNING GATE (ZERO SOLO EXECUTION): Verified that `invoke_subagent` (`A = 2, H = 2`) was explicitly called in Phase 1 (parallel discovery/spec modules) and Phase 2 (`TypeName: "self"` parallel subtask execution). Executing all reads or code modifications solo without calling `invoke_subagent` is an immediate auto-reject failure.
+- [ ] ISSUE & RCA DESTINATION ROUTING: Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/readme.md).
+- [ ] NO TEST RUNNING (TOTAL BAN): Never run any tests using Python scripts (`06-cicd-local-runner.py`, `pytest`, runner scripts), Go (`go test ./...`), or any test runner during routine execution turns. Testing is strictly checked later on in CI/CD.
+- [ ] NO BUILD CHECKING (TOTAL BAN): Never run build commands (`go build`, `npm run build`, compiler checks) to verify compilation. Build verification is checked later on in CI/CD.
+- [ ] NO RUNNER SCRIPTS (TOTAL BAN): Never launch background test runners, worker pools, or test inventory loops during routine execution.
+- [ ] NO AUTOMATIC RELEASES (TOTAL BAN): Never bump versions, update changelogs, or trigger releases unless explicitly commanded by the user.
+- [ ] NO PER-FILE COMMITTING (TOTAL BAN): Never commit each file individually as you work (e.g. running `git commit` after editing File 1, then another commit after File 2). Committing file-by-file pollutes git history, creates subagent lock collisions, and breaks atomic changes. All modified files across the turn must be accumulated and committed together in a single atomic commit at the final step.
+- [ ] NO RAPID CI/CD POLLING (TOTAL BAN): Never query or loop rapidly (`gh run view` in tight loops) when inspecting remote CI/CD pipelines. Agents must query pipeline state using GitMap Pipeline-AI (`gitmap pipeline-ai status --json` or `gitmap pl-ai status -t <sec>`) and strictly wait or sleep based on `etaSeconds` to eliminate credit waste.
+- [ ] NO PREMATURE TURN CLOSING BEFORE EXECUTION (TOTAL BAN): Never halt execution, conclude the turn, or ask the user for permission after generating specs or subtasks. Planning constitutes only 50% of the task budget; you must proceed unconditionally to Phase 2 code execution. (Note: When dispatching asynchronous background subagents via `invoke_subagent`, yielding control to allow platform reactive wakeup is mandatory and is exempt from this ban).
+- [ ] NO HORIZONTAL TASK CONCATENATION (TOTAL BAN): Never concatenate tasks horizontally in the Task Completion Summary (e.g. NEVER `✅ #1... ✅ #2...` run-on). Every completed task MUST be rendered on its OWN SEPARATE LINE starting with an individual markdown list bullet (`- ✅`).
+- [ ] INDEPENDENT AI VERIFICATION PROMPT MANDATE: Emitted the self-contained independent AI verification and audit prompt linking to the canonical spec, consolidated plan, and modified files with verbatim score audit criteria.
+- [ ] GITMAP HEAVY USAGE & ROUTINE PULL BAN: Heavily leveraged GitMap commands (`cpf`, `cpb`, `cpr`, `search`, `find`, `pwsh`) for discovery, execution, and commits. Never ran `pull-all` (`gitmap pa` or `gitmap pae`) unconditionally during routine turns; only ran `gitmap pae --json` when explicitly commanded by the user.
 
 ---
 
-## 12. Issue Destination & RCA Routing
+## 13. Non-Negotiable Coding Guidelines Checklist (Auto-Reject on Violation)
 
-- **CI/CD & Workflow Failures:** `.ai-memory/cicd-issues/NN-<slug>.md`, indexed in `.ai-memory/cicd-index.md`.
-- **Application Bugs:** `02-spec/22-app-issues/NN-<slug>.md` with 4-part RCA (Reproduction, Cause, Fix, Prevention), indexed in `02-spec/22-app-issues/readme.md`.
-- **Failed Subtasks (R13):** Log RCA in `.ai-memory/memory/issues/` and link from `ledger.md`.
+[/goal](slashCommand;goal) You must verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
+
+- [ ] Master Guidelines: Fully enforced every file in `02-spec/02-coding-guidelines/` and `.ai-memory/coding-guidelines.md`.
+- [ ] Concrete Types Centralization (`types.go`): Extracted domain structs, raw generic instantiations, and Result wrappers into dedicated `types.go` files as single reusable named types with follow-through comments (never leak raw generics like `result.Result[*Config]`).
+- [ ] Error Management: Enforced `02-spec/03-error-manage/` using domain-specific `*appfault.AppError`, never generic error.
+- [ ] Boolean Conventions: All booleans begin with is or has only (all other prefixes like can, should, was, will, did, must are banned). No negatives (`!isSuccess` is banned; use `isFail`).
+- [ ] Semantic Naming: Zero generic garbage names (`temp`, `data`, `obj`). Behavior-driven unit test names.
+- [ ] Multi-Line Arguments (Rule 9a/9b): Signatures and call sites with >2 arguments formatted one argument per line with trailing commas.
+- [ ] Line Endings & Encoding: Strictly Unix LF (`\n`) and UTF-8 without BOM.
+- [ ] Function Sizing: Functions <= 8 lines preferred (hard cap 15 lines).
+- [ ] Strict Relative Git Paths: Zero absolute paths (`/absolute/path/to/...`) or `file:///` URIs.
 
 ---
+
+## 14. Anti-Hallucination & Blast Radius Checklist
+
+- [ ] Echo Back the Spec: Verified Acceptance Criteria from the Spec file verbatim.
+- [ ] Pre-Commit Diff Proof: Verified `git status` shows actual modified files before committing.
+- [ ] No Placeholder Search: Confirmed zero `TODO` or `\[.*\]` placeholders remain in modified files.
+- [ ] Index Sync Deadman Switch: Every new file is explicitly linked in `readme.md` and enqueued in `.ai-memory/what-to-read.md`.
+- [ ] Blast Radius Acknowledgment: Global search across codebase performed to update all callers of modified symbols.
+- [ ] Continuous Loop Maintained: Continuous self-loop executed until 100% complete without running banned test/build commands.
+- [ ] Final Step Commit & Push Verified: Staged all changes (`git add -A`), committed everything in a single grouped atomic commit, and pushed to git before ending the turn (no per-file commits).
+
+---
+
+## 15. Final Step Git Commit & Push Mandate (Strict Checklist)
+
+- [ ] MANDATORY FINAL COMMIT & PUSH VIA GITMAP (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, use GitMap semantic commit commands: `gitmap cpf "<summary>"` (features), `gitmap cpb "<summary>"` (bugs), or `gitmap cpr "<summary>"` (releases) which automatically stage, commit with standardized prefixes, and push directly to the remote repository. (Fallback to `git add -A && git commit && git push` only if GitMap CLI is unavailable). Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
+- [ ] TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY): You must not create separate git commits for each individual file as you edit them (e.g. running `git commit` or `gitmap cpf` after editing File 1, then committing again after File 2 is strictly forbidden). Committing file-by-file pollutes git log history, creates subagent lock collisions, and breaks atomic rollback. All modified files, test change caches, and plan records across the turn must be accumulated in the working tree and committed together in a single grouped atomic commit at the final step before pushing.
 
 ## MUST FOLLOW NON-NEGOTIABLE
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.ai-memory/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run the targeted checks (builds and full unit tests stay in CI per R1), and execute the final atomic GitMap commit and push before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
-
----
-
-## Dedicated Section: Python Constants, Meaningful Arithmetic & Function Length
-
-Hardcoded numbers, repeated literal tuples, and cryptic calculations obscure intent, increase cognitive load, and introduce bugs during layout or styling changes. Functions combining multiple steps into long routines (> 15 lines) become difficult to test, verify, and understand.
-
----
-
-### 1. Mandatory Python Constant Standards
-
-1. **Typed `Final` Annotations:**
-   All module constants MUST use `typing.Final` along with explicit type annotations:
-   ```python
-   from typing import Final, Tuple
-
-   RGBAColor = Tuple[int, int, int, int]
-   COLOR_RED: Final[RGBAColor] = (255, 0, 0, 255)
-   COLOR_WHITE: Final[RGBAColor] = (255, 255, 255, 255)
-   ```
-
-2. **Semantic Domain Aliases:**
-   Primitive color or dimension constants must be aliased to semantic purpose rather than used raw at callsites:
-   ```python
-   # ✅ REQUIRED: Semantic aliases convey domain intent
-   BOX_BORDER_COLOR: Final[RGBAColor] = COLOR_RED
-   LABEL_BACKGROUND_COLOR: Final[RGBAColor] = COLOR_WHITE
-   ```
-
-3. **Total Ban on Repeated Tuples & Magic Numbers:**
-   Never write inline tuples like `(255, 0, 0, 255)` across multiple loop iterations or function bodies. A single constant MUST define the value.
-
----
-
-### 2. Meaningful Arithmetic & Self-Documenting Variables
-
-Every mathematical operation (multiplication, division, padding addition, boundary subtraction) MUST have a concrete, unambiguous explanation reflected in variable names and constant definitions:
-
-1. **Explain Every Multiplier:**
-   - ❌ `len(text) * 4`: Why `4`? What does `4` represent?
-   - ✅ `DIGIT_GLYPH_WIDTH: Final[int] = 4` (Width allocated per digit: glyph raster + kerning spacing).
-   - ✅ `glyph_block_width = len(text) * DIGIT_GLYPH_WIDTH`
-
-2. **Explain Every Margin / Padding Addition:**
-   - ❌ `+ 2`: Why `2`?
-   - ✅ `LABEL_PADDING_X: Final[int] = 1` (1px margin on left and right)
-   - ✅ `LABEL_TOTAL_PADDING_X: Final[int] = LABEL_PADDING_X * 2` (Combined horizontal padding)
-   - ✅ `label_width = (len(text) * DIGIT_GLYPH_WIDTH) + LABEL_TOTAL_PADDING_X`
-
-3. **Concrete Coordinate Naming (Total Ban on `x2`, `y2`, `t`, `val`):**
-   - ❌ `x2 = box.x + box.width - 1`: Cryptic variable names obscure coordinate semantics.
-   - ✅ `right_x = box.x + box.width - 1` (Inclusive 0-indexed rightmost pixel column).
-   - ✅ `bottom_y = box.y + box.height - 1` (Inclusive 0-indexed bottommost pixel row).
-
----
-
-### 3. Function Length Limit & Purposeful Extraction
-
-- **Target Function Length:** Target <= 8 lines of body logic.
-- **Hard Cap:** <= 15 lines of body logic.
-- **Mandatory Purposeful Extraction:** If a function exceeds 15 lines, or performs more than one distinct responsibility (e.g. background bounding calculation, border stroke rendering, and glyph rasterization), extract sub-operations into dedicated, meaningfully named helper functions.
-- **Never Compress Lines to Cheat the Cap:** Never cram multiple statements onto a single line, delete required line-gaps, or omit docstrings to fit under the line cap. Decompose with clean helper functions.
-
----
-
----
-
-## 4. Code Review Reference: Before, Intermediate, and Advanced Enhanced Architectures
-
-### 4.1 Before: Anti-Pattern with Magic Numbers & Cryptic Logic
-
-```python
-# ❌ ANTI-PATTERN: Repeated magic tuples, magic calculations (* 4 + 2, 7), cryptic coordinates (x2, y2)
-def _draw_rect_before(rgba: bytearray, width: int, height: int, box: MarkedBox) -> None:
-    x2 = box.x + box.width - 1
-    y2 = box.y + box.height - 1
-    for x in range(box.x, x2 + 1):
-        _set_pixel(rgba, width, height, x, box.y, (255, 0, 0, 255))      # <-- Repeated magic tuple
-        _set_pixel(rgba, width, height, x, y2, (255, 0, 0, 255))         # <-- Repeated magic tuple
-    for y in range(box.y, y2 + 1):
-        _set_pixel(rgba, width, height, box.x, y, (255, 0, 0, 255))      # <-- Repeated magic tuple
-        _set_pixel(rgba, width, height, x2, y, (255, 0, 0, 255))         # <-- Repeated magic tuple
-
-def _draw_label_before(rgba: bytearray, width: int, height: int, box: MarkedBox) -> None:
-    text = str(box.number)
-    # Magic numbers: * 4, + 2, 7, and (255, 255, 255, 255)
-    _fill_rect(rgba, width, height, box.x, box.y, len(text) * 4 + 2, 7, (255, 255, 255, 255))
-    for offset, digit in enumerate(text):
-        _draw_digit(rgba, width, height, box.x + 1 + offset * 4, box.y + 1, digit)
-```
-
----
-
-### 4.2 Centralized Constants Definition (`constants.py`)
-
-```python
-"""Constants and typography definitions for image markup rendering."""
-
-from typing import Final, Tuple
-
-# Color definitions (R, G, B, A)
-RGBAColor = Tuple[int, int, int, int]
-
-COLOR_RED: Final[RGBAColor] = (255, 0, 0, 255)
-COLOR_WHITE: Final[RGBAColor] = (255, 255, 255, 255)
-
-# Semantic domain colors
-BOX_BORDER_COLOR: Final[RGBAColor] = COLOR_RED
-LABEL_BACKGROUND_COLOR: Final[RGBAColor] = COLOR_WHITE
-
-# Typography and badge layout dimensions (in pixels)
-DIGIT_GLYPH_WIDTH: Final[int] = 4     # Width allocated per digit (glyph + kerning)
-LABEL_PADDING_X: Final[int] = 1        # 1px margin on left and right
-LABEL_PADDING_Y: Final[int] = 1        # 1px margin on top
-LABEL_TOTAL_PADDING_X: Final[int] = LABEL_PADDING_X * 2  # Total horizontal padding (+2px)
-LABEL_BACKGROUND_HEIGHT: Final[int] = 7  # Fixed height for badge background
-```
-
----
-
-### 4.3 Stage 1 Refactor: Clean, Self-Documenting Constants
-
-```python
-def _draw_rect(rgba: bytearray, width: int, height: int, box: MarkedBox) -> None:
-    """Draws a 1px border around the marked bounding box using BOX_BORDER_COLOR."""
-    right_x = box.x + box.width - 1
-    bottom_y = box.y + box.height - 1
-
-    # Draw horizontal top and bottom borders
-    for x in range(box.x, right_x + 1):
-        _set_pixel(rgba, width, height, x, box.y, BOX_BORDER_COLOR)
-        _set_pixel(rgba, width, height, x, bottom_y, BOX_BORDER_COLOR)
-
-    # Draw vertical left and right borders
-    for y in range(box.y, bottom_y + 1):
-        _set_pixel(rgba, width, height, box.x, y, BOX_BORDER_COLOR)
-        _set_pixel(rgba, width, height, right_x, y, BOX_BORDER_COLOR)
-
-def _draw_label(rgba: bytearray, width: int, height: int, box: MarkedBox) -> None:
-    """Draws the box number badge with a solid background and padded text."""
-    text = str(box.number)
-
-    # Compute dynamic badge dimensions based on number of digits
-    label_width = (len(text) * DIGIT_GLYPH_WIDTH) + LABEL_TOTAL_PADDING_X
-
-    # Draw label badge background
-    _fill_rect(
-        rgba,
-        width,
-        height,
-        box.x,
-        box.y,
-        label_width,
-        LABEL_BACKGROUND_HEIGHT,
-        LABEL_BACKGROUND_COLOR,
-    )
-
-    # Draw each digit glyph with proper offset and padding
-    digit_y = box.y + LABEL_PADDING_Y
-    for offset, digit in enumerate(text):
-        digit_x = box.x + LABEL_PADDING_X + (offset * DIGIT_GLYPH_WIDTH)
-        _draw_digit(rgba, width, height, digit_x, digit_y, digit)
-```
-
----
-
-### 4.4 Stage 2 Advanced Refactor: Purposeful Semantic Decomposition (Strict <= 8–15 Lines)
-
-To maximize readability for AI agents and human reviewers, each discrete responsibility is decomposed into focused helper functions with <= 8 lines of body logic:
-
-```python
-def _calculate_label_width(digit_count: int) -> int:
-    """Calculates the total pixel width of the label badge including horizontal padding."""
-    return (digit_count * DIGIT_GLYPH_WIDTH) + LABEL_TOTAL_PADDING_X
-
-def _draw_horizontal_borders(
-    rgba: bytearray, width: int, height: int, start_x: int, end_x: int, top_y: int, bottom_y: int
-) -> None:
-    """Renders the top and bottom horizontal borders of a bounding box."""
-    for x in range(start_x, end_x + 1):
-        _set_pixel(rgba, width, height, x, top_y, BOX_BORDER_COLOR)
-        _set_pixel(rgba, width, height, x, bottom_y, BOX_BORDER_COLOR)
-
-def _draw_vertical_borders(
-    rgba: bytearray, width: int, height: int, start_y: int, end_y: int, left_x: int, right_x: int
-) -> None:
-    """Renders the left and right vertical borders of a bounding box."""
-    for y in range(start_y, end_y + 1):
-        _set_pixel(rgba, width, height, left_x, y, BOX_BORDER_COLOR)
-        _set_pixel(rgba, width, height, right_x, y, BOX_BORDER_COLOR)
-
-def _draw_rect_modular(rgba: bytearray, width: int, height: int, box: MarkedBox) -> None:
-    """Draws a 1px border around the marked bounding box using modular boundary helpers."""
-    right_x = box.x + box.width - 1
-    bottom_y = box.y + box.height - 1
-
-    _draw_horizontal_borders(rgba, width, height, box.x, right_x, box.y, bottom_y)
-    _draw_vertical_borders(rgba, width, height, box.y, bottom_y, box.x, right_x)
-
-def _render_label_digits(
-    rgba: bytearray, width: int, height: int, base_x: int, base_y: int, text: str
-) -> None:
-    """Draws individual digit glyphs with horizontal offset kerning."""
-    digit_y = base_y + LABEL_PADDING_Y
-
-    for offset, digit in enumerate(text):
-        digit_x = base_x + LABEL_PADDING_X + (offset * DIGIT_GLYPH_WIDTH)
-        _draw_digit(rgba, width, height, digit_x, digit_y, digit)
-
-def _draw_label_modular(rgba: bytearray, width: int, height: int, box: MarkedBox) -> None:
-    """Draws the box number badge by coordinating background fill and digit rendering."""
-    text = str(box.number)
-    label_width = _calculate_label_width(len(text))
-
-    _fill_rect(
-        rgba, width, height, box.x, box.y, label_width, LABEL_BACKGROUND_HEIGHT, LABEL_BACKGROUND_COLOR
-    )
-    _render_label_digits(rgba, width, height, box.x, box.y, text)
-```
-
----
-
----
-
-## 5. Canonical Golang Equivalent Architecture
-
-For cross-language consistency, here is the exact equivalent Go implementation adhering to repository Go coding guidelines (typed constants, parameter structs when needed, $\le 8$ lines per function, vertical line gaps before `if`, after `}`, and before `return`):
-
-```go
-package markup
-
-// RGBAColor defines a 4-channel byte color tuple.
-type RGBAColor struct {
-	R byte
-	G byte
-	B byte
-	A byte
-}
-
-var (
-	// ColorRed defines standard solid red.
-	ColorRed = RGBAColor{R: 255, G: 0, B: 0, A: 255}
-
-	// ColorWhite defines standard solid white.
-	ColorWhite = RGBAColor{R: 255, G: 255, B: 255, A: 255}
-
-	// BoxBorderColor specifies the default color for marked box borders.
-	BoxBorderColor = ColorRed
-
-	// LabelBackgroundColor specifies the badge background fill color.
-	LabelBackgroundColor = ColorWhite
-)
-
-const (
-	// DigitGlyphWidth defines horizontal space allocated per digit (glyph + kerning).
-	DigitGlyphWidth int = 4
-
-	// LabelPaddingX defines horizontal margin padding on each side.
-	LabelPaddingX int = 1
-
-	// LabelPaddingY defines vertical margin padding on top.
-	LabelPaddingY int = 1
-
-	// LabelTotalPaddingX defines combined horizontal padding (left + right).
-	LabelTotalPaddingX int = LabelPaddingX * 2
-
-	// LabelBackgroundHeight defines the fixed height of the badge background.
-	LabelBackgroundHeight int = 7
-)
-
-// CalculateLabelWidth computes total badge pixel width including horizontal padding.
-func CalculateLabelWidth(digitCount int) int {
-	return (digitCount * DigitGlyphWidth) + LabelTotalPaddingX
-}
-```
-
----
-
----
+Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.ai-memory/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `02-spec/` and `.ai-memory/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.

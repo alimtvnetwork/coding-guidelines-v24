@@ -27,6 +27,16 @@ WAVES = ceil(subtasks / (A x H))
 
 ---
 
+## Phase 0: Antigravity Skill Bootstrap (Memory Optimization)
+
+Before executing the tasks below, check if this prompt is already installed as a native Antigravity Skill.
+
+1. If `.agents/skills/<slug>/skill.md` does not exist in the workspace, create it now.
+2. Extract the core instructions of this prompt and save it into that `skill.md` using the standard YAML frontmatter (with `name` and `description`).
+3. Once installed, rely on progressive disclosure for future runs. Do not keep the entire prompt in active memory if not needed.
+
+---
+
 ## The Unified Master Pipeline (Atomic Numbered Steps)
 
 Execute this task via a strict 3-Phase pipeline. Do not skip steps.
@@ -295,140 +305,67 @@ Confirm scripts exist via harmless workspace call before invoking (R4). Run on c
 
 ---
 
-## 11. Discovery Toolchain (GitMap Primary)
+## 11. AI Fix Scripts Memory (Reusable Tooling)
 
-Use Section 3 GitMap table as primary. Python fallbacks (`03-ai-scripts/11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py`) apply only if GitMap is unavailable.
+- [ ] [/goal](slashCommand;goal) Reuse First: Scanned and learned `03-ai-scripts/readme.md` before writing temporary code.
+- [ ] Strict In-Repository Execution: All Python scripts executed strictly within the codebase repository root.
+- [ ] Strict .ai-memory/ Folder Storage: All helper scripts, local runners, and linters stored in `03-ai-scripts/`.
+- [ ] Native File Manipulator: Use `python 03-ai-scripts/03-file-manipulator.py <command>` for mass file operations.
+- [ ] Go Generate Sync: If Go constants or enums are modified, run `go generate ./...` in the relevant package and commit generated files.
+
+---
+
+## 12. Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
+
+- [ ] TOP-INSTRUCTION PRIORITY MANDATE: Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
+- [ ] MANDATORY SUBAGENT SPAWNING GATE (ZERO SOLO EXECUTION): Verified that `invoke_subagent` (`A = 2, H = 2`) was explicitly called in Phase 1 (parallel discovery/spec modules) and Phase 2 (`TypeName: "self"` parallel subtask execution). Executing all reads or code modifications solo without calling `invoke_subagent` is an immediate auto-reject failure.
+- [ ] ISSUE & RCA DESTINATION ROUTING: Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/readme.md).
+- [ ] NO TEST RUNNING (TOTAL BAN): Never run any tests using Python scripts (`06-cicd-local-runner.py`, `pytest`, runner scripts), Go (`go test ./...`), or any test runner during routine execution turns. Testing is strictly checked later on in CI/CD.
+- [ ] NO BUILD CHECKING (TOTAL BAN): Never run build commands (`go build`, `npm run build`, compiler checks) to verify compilation. Build verification is checked later on in CI/CD.
+- [ ] NO RUNNER SCRIPTS (TOTAL BAN): Never launch background test runners, worker pools, or test inventory loops during routine execution.
+- [ ] NO AUTOMATIC RELEASES (TOTAL BAN): Never bump versions, update changelogs, or trigger releases unless explicitly commanded by the user.
+- [ ] NO PER-FILE COMMITTING (TOTAL BAN): Never commit each file individually as you work (e.g. running `git commit` after editing File 1, then another commit after File 2). Committing file-by-file pollutes git history, creates subagent lock collisions, and breaks atomic changes. All modified files across the turn must be accumulated and committed together in a single atomic commit at the final step.
+- [ ] NO RAPID CI/CD POLLING (TOTAL BAN): Never query or loop rapidly (`gh run view` in tight loops) when inspecting remote CI/CD pipelines. Agents must query pipeline state using GitMap Pipeline-AI (`gitmap pipeline-ai status --json` or `gitmap pl-ai status -t <sec>`) and strictly wait or sleep based on `etaSeconds` to eliminate credit waste.
+- [ ] NO PREMATURE TURN CLOSING BEFORE EXECUTION (TOTAL BAN): Never halt execution, conclude the turn, or ask the user for permission after generating specs or subtasks. Planning constitutes only 50% of the task budget; you must proceed unconditionally to Phase 2 code execution. (Note: When dispatching asynchronous background subagents via `invoke_subagent`, yielding control to allow platform reactive wakeup is mandatory and is exempt from this ban).
+- [ ] NO HORIZONTAL TASK CONCATENATION (TOTAL BAN): Never concatenate tasks horizontally in the Task Completion Summary (e.g. NEVER `✅ #1... ✅ #2...` run-on). Every completed task MUST be rendered on its OWN SEPARATE LINE starting with an individual markdown list bullet (`- ✅`).
+- [ ] INDEPENDENT AI VERIFICATION PROMPT MANDATE: Emitted the self-contained independent AI verification and audit prompt linking to the canonical spec, consolidated plan, and modified files with verbatim score audit criteria.
+- [ ] GITMAP HEAVY USAGE & ROUTINE PULL BAN: Heavily leveraged GitMap commands (`cpf`, `cpb`, `cpr`, `search`, `find`, `pwsh`) for discovery, execution, and commits. Never ran `pull-all` (`gitmap pa` or `gitmap pae`) unconditionally during routine turns; only ran `gitmap pae --json` when explicitly commanded by the user.
 
 ---
 
-## 12. Issue Destination & RCA Routing
+## 13. Non-Negotiable Coding Guidelines Checklist (Auto-Reject on Violation)
 
-- **CI/CD & Workflow Failures:** `.ai-memory/cicd-issues/NN-<slug>.md`, indexed in `.ai-memory/cicd-index.md`.
-- **Application Bugs:** `02-spec/22-app-issues/NN-<slug>.md` with 4-part RCA (Reproduction, Cause, Fix, Prevention), indexed in `02-spec/22-app-issues/readme.md`.
-- **Failed Subtasks (R13):** Log RCA in `.ai-memory/memory/issues/` and link from `ledger.md`.
+[/goal](slashCommand;goal) You must verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
+
+- [ ] Master Guidelines: Fully enforced every file in `02-spec/02-coding-guidelines/` and `.ai-memory/coding-guidelines.md`.
+- [ ] Concrete Types Centralization (`types.go`): Extracted domain structs, raw generic instantiations, and Result wrappers into dedicated `types.go` files as single reusable named types with follow-through comments (never leak raw generics like `result.Result[*Config]`).
+- [ ] Error Management: Enforced `02-spec/03-error-manage/` using domain-specific `*appfault.AppError`, never generic error.
+- [ ] Boolean Conventions: All booleans begin with is or has only (all other prefixes like can, should, was, will, did, must are banned). No negatives (`!isSuccess` is banned; use `isFail`).
+- [ ] Semantic Naming: Zero generic garbage names (`temp`, `data`, `obj`). Behavior-driven unit test names.
+- [ ] Multi-Line Arguments (Rule 9a/9b): Signatures and call sites with >2 arguments formatted one argument per line with trailing commas.
+- [ ] Line Endings & Encoding: Strictly Unix LF (`\n`) and UTF-8 without BOM.
+- [ ] Function Sizing: Functions <= 8 lines preferred (hard cap 15 lines).
+- [ ] Strict Relative Git Paths: Zero absolute paths (`/absolute/path/to/...`) or `file:///` URIs.
 
 ---
+
+## 14. Anti-Hallucination & Blast Radius Checklist
+
+- [ ] Echo Back the Spec: Verified Acceptance Criteria from the Spec file verbatim.
+- [ ] Pre-Commit Diff Proof: Verified `git status` shows actual modified files before committing.
+- [ ] No Placeholder Search: Confirmed zero `TODO` or `\[.*\]` placeholders remain in modified files.
+- [ ] Index Sync Deadman Switch: Every new file is explicitly linked in `readme.md` and enqueued in `.ai-memory/what-to-read.md`.
+- [ ] Blast Radius Acknowledgment: Global search across codebase performed to update all callers of modified symbols.
+- [ ] Continuous Loop Maintained: Continuous self-loop executed until 100% complete without running banned test/build commands.
+- [ ] Final Step Commit & Push Verified: Staged all changes (`git add -A`), committed everything in a single grouped atomic commit, and pushed to git before ending the turn (no per-file commits).
+
+---
+
+## 15. Final Step Git Commit & Push Mandate (Strict Checklist)
+
+- [ ] MANDATORY FINAL COMMIT & PUSH VIA GITMAP (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, use GitMap semantic commit commands: `gitmap cpf "<summary>"` (features), `gitmap cpb "<summary>"` (bugs), or `gitmap cpr "<summary>"` (releases) which automatically stage, commit with standardized prefixes, and push directly to the remote repository. (Fallback to `git add -A && git commit && git push` only if GitMap CLI is unavailable). Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
+- [ ] TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY): You must not create separate git commits for each individual file as you edit them (e.g. running `git commit` or `gitmap cpf` after editing File 1, then committing again after File 2 is strictly forbidden). Committing file-by-file pollutes git log history, creates subagent lock collisions, and breaks atomic rollback. All modified files, test change caches, and plan records across the turn must be accumulated in the working tree and committed together in a single grouped atomic commit at the final step before pushing.
 
 ## MUST FOLLOW NON-NEGOTIABLE
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.ai-memory/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run the targeted checks (builds and full unit tests stay in CI per R1), and execute the final atomic GitMap commit and push before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
-
----
-
-## Dedicated Section: Lazy Regex Architecture & Rich Test Diagnostics
-
-Regular expressions are expensive to compile and prone to backtracking. Uncached compilation wastes CPU cycles, while opaque boolean test assertions (`if !re.MatchString(output)`) hide failure context from developers and autonomous AI agents.
-
-### Mandatory Rules (Non-Negotiable)
-
-1. **Total Ban on Raw `regexp.MustCompile` & `regexp.Compile` Across Domain Code:**
-   - NEVER call `regexp.MustCompile()` or `regexp.Compile()` inside package functions, methods, or loops.
-   - ALWAYS use `lazyregex.New(pattern)` or `lazyregex.NewLock(pattern)` from `cli/lazyregex`.
-   - Patterns are compiled on demand (lazy) at most once, and cached in a global deduplicated thread-safe registry.
-
-2. **Mandatory `MatchResult` Envelope for Test Matching:**
-   - In unit tests and integration tests comparing output or parsing tokens, NEVER write opaque boolean checks:
-     ```go
-     // ❌ BANNED: Blind regex test assertion with no diagnostic context
-     if !re.MatchString(content) {
-         t.Error("expected output to match pattern")
-     }
-     ```
-   - ALWAYS execute matching via `lazyregex.MatchResult(content)`:
-     ```go
-     // ✅ REQUIRED: Wrapped Result with affirmative evaluation and rich diagnostics
-     var rsLazyRegex = lazyRegex.MatchResult(comparing)
-     if rsLazyRegex.IsFailed() {
-         t.Error(rsLazyRegex.AppError())
-     }
-     ```
-
-3. **Rich Diagnostic Error Contract:**
-   - On matching failure, `rsLazyRegex.AppError()` generates a fully contextualized diagnostic report containing:
-     1. The regular expression pattern that failed to match.
-     2. The actual content being compared (with safe preview truncation for very large buffers).
-     3. The exact length of the compared string in bytes.
-     4. Context fields: `pattern`, `comparing_preview`, `comparing_len`.
-     5. Structured AppError code `[E1000:VALIDATION]` with file and line origin.
-
-4. **Fluent MatchGroup (`ResultGroup`) Accessors:**
-   - When a match succeeds, extract submatches and named capture groups using fluent helper methods:
-     - `rs.Group()`: Accesses the underlying `*MatchGroup` (alias `ResultGroup`).
-     - `rs.Items()`: Returns `[]string` of all captured submatches (`[0]` = full match, `[1..N]` = groups).
-     - `rs.Map()`: Returns `GroupMap` containing named capture groups (`(?P<name>...)`).
-     - `rs.First()`: Returns the full match string or empty string.
-     - `rs.Last()`: Returns the last captured group.
-     - `rs.FirstOrDefault(defaultValue)`: Returns the first match or fallback default if empty.
-     - `rs.At(index)`: Safely accesses submatch at index without slice out-of-bounds panic.
-     - `rs.Count()` / `rs.Len()`: Returns the number of captured submatches.
-
-5. **Multi-Match Evaluation (`MatchAllResults`):**
-   - For extracting multiple non-overlapping occurrences across text:
-     ```go
-     all := lazyRegex.MatchAllResults(content)
-     if all.IsFailed() {
-         t.Error(all.AppError())
-     }
-     for _, group := range all.Groups() {
-         role := group.GetNamed("role")
-         ip := group.GetNamed("ip")
-     }
-     ```
-
----
-
----
-
-## Code Pattern Comparison
-
-### Pattern A: Test Pattern Matching
-
-```go
-// -----------------------------------------------------------------------------
-// ❌ ANTI-PATTERN: Opaque regex boolean check hiding pattern and compared text
-// -----------------------------------------------------------------------------
-func TestLegacySubcommandMatching(t *testing.T) {
-    re := regexp.MustCompile(`^(add|join|nodes)$`)
-    output := getCommandOutput()
-
-    if !re.MatchString(output) {
-        t.Error("expected valid subcommand output") // Tells AI nothing about what failed!
-    }
-}
-
-// -----------------------------------------------------------------------------
-// ✅ REQUIRED: Wrapped Result with rich diagnostic error reporting
-// -----------------------------------------------------------------------------
-func TestModernSubcommandMatching(t *testing.T) {
-    re := lazyregex.New(`^(?P<action>add|join|nodes)$`)
-    output := getCommandOutput()
-
-    var rsLazyRegex = re.MatchResult(output)
-    if rsLazyRegex.IsFailed() {
-        t.Error(rsLazyRegex.AppError())
-    }
-
-    if rsLazyRegex.Map().Get("action") != "nodes" {
-        t.Errorf("expected action 'nodes', got: %q", rsLazyRegex.Map().Get("action"))
-    }
-}
-```
-
-### Pattern B: What the Diagnostic Error Looks Like on Failure
-
-When a test using `t.Error(rsLazyRegex.AppError())` fails, it outputs:
-
-```text
-[E1000:VALIDATION] validation: regex pattern does not match content
-  Pattern:   "^(?P<action>add|join|nodes)$"
-  Comparing: "gitmap cluster unknown-command"
-  Length:    29 bytes (at=lazyregex/match_error.go:32) (ctx=map[comparing_len:29 comparing_preview:gitmap cluster unknown-command pattern:^(?P<action>add|join|nodes)$])
-```
-
-Autonomous AI agents and engineers can immediately diagnose:
-1. **What was expected**: `^(?P<action>add|join|nodes)$`
-2. **What was received**: `"gitmap cluster unknown-command"`
-3. **Exact failure point**: File and line number in `match_error.go`
-4. **Error classification**: `[E1000:VALIDATION]`
-
----
+Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.ai-memory/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `02-spec/` and `.ai-memory/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.

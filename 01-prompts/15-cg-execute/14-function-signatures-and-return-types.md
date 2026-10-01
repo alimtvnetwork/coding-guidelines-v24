@@ -27,6 +27,16 @@ WAVES = ceil(subtasks / (A x H))
 
 ---
 
+## Phase 0: Antigravity Skill Bootstrap (Memory Optimization)
+
+Before executing the tasks below, check if this prompt is already installed as a native Antigravity Skill.
+
+1. If `.agents/skills/<slug>/skill.md` does not exist in the workspace, create it now.
+2. Extract the core instructions of this prompt and save it into that `skill.md` using the standard YAML frontmatter (with `name` and `description`).
+3. Once installed, rely on progressive disclosure for future runs. Do not keep the entire prompt in active memory if not needed.
+
+---
+
 ## The Unified Master Pipeline (Atomic Numbered Steps)
 
 Execute this task via a strict 3-Phase pipeline. Do not skip steps.
@@ -295,568 +305,67 @@ Confirm scripts exist via harmless workspace call before invoking (R4). Run on c
 
 ---
 
-## 11. Discovery Toolchain (GitMap Primary)
+## 11. AI Fix Scripts Memory (Reusable Tooling)
 
-Use Section 3 GitMap table as primary. Python fallbacks (`03-ai-scripts/11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py`) apply only if GitMap is unavailable.
+- [ ] [/goal](slashCommand;goal) Reuse First: Scanned and learned `03-ai-scripts/readme.md` before writing temporary code.
+- [ ] Strict In-Repository Execution: All Python scripts executed strictly within the codebase repository root.
+- [ ] Strict .ai-memory/ Folder Storage: All helper scripts, local runners, and linters stored in `03-ai-scripts/`.
+- [ ] Native File Manipulator: Use `python 03-ai-scripts/03-file-manipulator.py <command>` for mass file operations.
+- [ ] Go Generate Sync: If Go constants or enums are modified, run `go generate ./...` in the relevant package and commit generated files.
+
+---
+
+## 12. Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
+
+- [ ] TOP-INSTRUCTION PRIORITY MANDATE: Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
+- [ ] MANDATORY SUBAGENT SPAWNING GATE (ZERO SOLO EXECUTION): Verified that `invoke_subagent` (`A = 2, H = 2`) was explicitly called in Phase 1 (parallel discovery/spec modules) and Phase 2 (`TypeName: "self"` parallel subtask execution). Executing all reads or code modifications solo without calling `invoke_subagent` is an immediate auto-reject failure.
+- [ ] ISSUE & RCA DESTINATION ROUTING: Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/readme.md).
+- [ ] NO TEST RUNNING (TOTAL BAN): Never run any tests using Python scripts (`06-cicd-local-runner.py`, `pytest`, runner scripts), Go (`go test ./...`), or any test runner during routine execution turns. Testing is strictly checked later on in CI/CD.
+- [ ] NO BUILD CHECKING (TOTAL BAN): Never run build commands (`go build`, `npm run build`, compiler checks) to verify compilation. Build verification is checked later on in CI/CD.
+- [ ] NO RUNNER SCRIPTS (TOTAL BAN): Never launch background test runners, worker pools, or test inventory loops during routine execution.
+- [ ] NO AUTOMATIC RELEASES (TOTAL BAN): Never bump versions, update changelogs, or trigger releases unless explicitly commanded by the user.
+- [ ] NO PER-FILE COMMITTING (TOTAL BAN): Never commit each file individually as you work (e.g. running `git commit` after editing File 1, then another commit after File 2). Committing file-by-file pollutes git history, creates subagent lock collisions, and breaks atomic changes. All modified files across the turn must be accumulated and committed together in a single atomic commit at the final step.
+- [ ] NO RAPID CI/CD POLLING (TOTAL BAN): Never query or loop rapidly (`gh run view` in tight loops) when inspecting remote CI/CD pipelines. Agents must query pipeline state using GitMap Pipeline-AI (`gitmap pipeline-ai status --json` or `gitmap pl-ai status -t <sec>`) and strictly wait or sleep based on `etaSeconds` to eliminate credit waste.
+- [ ] NO PREMATURE TURN CLOSING BEFORE EXECUTION (TOTAL BAN): Never halt execution, conclude the turn, or ask the user for permission after generating specs or subtasks. Planning constitutes only 50% of the task budget; you must proceed unconditionally to Phase 2 code execution. (Note: When dispatching asynchronous background subagents via `invoke_subagent`, yielding control to allow platform reactive wakeup is mandatory and is exempt from this ban).
+- [ ] NO HORIZONTAL TASK CONCATENATION (TOTAL BAN): Never concatenate tasks horizontally in the Task Completion Summary (e.g. NEVER `✅ #1... ✅ #2...` run-on). Every completed task MUST be rendered on its OWN SEPARATE LINE starting with an individual markdown list bullet (`- ✅`).
+- [ ] INDEPENDENT AI VERIFICATION PROMPT MANDATE: Emitted the self-contained independent AI verification and audit prompt linking to the canonical spec, consolidated plan, and modified files with verbatim score audit criteria.
+- [ ] GITMAP HEAVY USAGE & ROUTINE PULL BAN: Heavily leveraged GitMap commands (`cpf`, `cpb`, `cpr`, `search`, `find`, `pwsh`) for discovery, execution, and commits. Never ran `pull-all` (`gitmap pa` or `gitmap pae`) unconditionally during routine turns; only ran `gitmap pae --json` when explicitly commanded by the user.
 
 ---
 
-## 12. Issue Destination & RCA Routing
+## 13. Non-Negotiable Coding Guidelines Checklist (Auto-Reject on Violation)
 
-- **CI/CD & Workflow Failures:** `.ai-memory/cicd-issues/NN-<slug>.md`, indexed in `.ai-memory/cicd-index.md`.
-- **Application Bugs:** `02-spec/22-app-issues/NN-<slug>.md` with 4-part RCA (Reproduction, Cause, Fix, Prevention), indexed in `02-spec/22-app-issues/readme.md`.
-- **Failed Subtasks (R13):** Log RCA in `.ai-memory/memory/issues/` and link from `ledger.md`.
+[/goal](slashCommand;goal) You must verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
+
+- [ ] Master Guidelines: Fully enforced every file in `02-spec/02-coding-guidelines/` and `.ai-memory/coding-guidelines.md`.
+- [ ] Concrete Types Centralization (`types.go`): Extracted domain structs, raw generic instantiations, and Result wrappers into dedicated `types.go` files as single reusable named types with follow-through comments (never leak raw generics like `result.Result[*Config]`).
+- [ ] Error Management: Enforced `02-spec/03-error-manage/` using domain-specific `*appfault.AppError`, never generic error.
+- [ ] Boolean Conventions: All booleans begin with is or has only (all other prefixes like can, should, was, will, did, must are banned). No negatives (`!isSuccess` is banned; use `isFail`).
+- [ ] Semantic Naming: Zero generic garbage names (`temp`, `data`, `obj`). Behavior-driven unit test names.
+- [ ] Multi-Line Arguments (Rule 9a/9b): Signatures and call sites with >2 arguments formatted one argument per line with trailing commas.
+- [ ] Line Endings & Encoding: Strictly Unix LF (`\n`) and UTF-8 without BOM.
+- [ ] Function Sizing: Functions <= 8 lines preferred (hard cap 15 lines).
+- [ ] Strict Relative Git Paths: Zero absolute paths (`/absolute/path/to/...`) or `file:///` URIs.
 
 ---
+
+## 14. Anti-Hallucination & Blast Radius Checklist
+
+- [ ] Echo Back the Spec: Verified Acceptance Criteria from the Spec file verbatim.
+- [ ] Pre-Commit Diff Proof: Verified `git status` shows actual modified files before committing.
+- [ ] No Placeholder Search: Confirmed zero `TODO` or `\[.*\]` placeholders remain in modified files.
+- [ ] Index Sync Deadman Switch: Every new file is explicitly linked in `readme.md` and enqueued in `.ai-memory/what-to-read.md`.
+- [ ] Blast Radius Acknowledgment: Global search across codebase performed to update all callers of modified symbols.
+- [ ] Continuous Loop Maintained: Continuous self-loop executed until 100% complete without running banned test/build commands.
+- [ ] Final Step Commit & Push Verified: Staged all changes (`git add -A`), committed everything in a single grouped atomic commit, and pushed to git before ending the turn (no per-file commits).
+
+---
+
+## 15. Final Step Git Commit & Push Mandate (Strict Checklist)
+
+- [ ] MANDATORY FINAL COMMIT & PUSH VIA GITMAP (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, use GitMap semantic commit commands: `gitmap cpf "<summary>"` (features), `gitmap cpb "<summary>"` (bugs), or `gitmap cpr "<summary>"` (releases) which automatically stage, commit with standardized prefixes, and push directly to the remote repository. (Fallback to `git add -A && git commit && git push` only if GitMap CLI is unavailable). Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
+- [ ] TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY): You must not create separate git commits for each individual file as you edit them (e.g. running `git commit` or `gitmap cpf` after editing File 1, then committing again after File 2 is strictly forbidden). Committing file-by-file pollutes git log history, creates subagent lock collisions, and breaks atomic rollback. All modified files, test change caches, and plan records across the turn must be accumulated in the working tree and committed together in a single grouped atomic commit at the final step before pushing.
 
 ## MUST FOLLOW NON-NEGOTIABLE
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.ai-memory/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run the targeted checks (builds and full unit tests stay in CI per R1), and execute the final atomic GitMap commit and push before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
-
----
-
-## Dedicated Section: Function Definitions, Invocations & Multi-Line Standards
-
-A clean codebase relies on deterministic function contracts and clean, scannable call sites. Squeezing long argument lists onto a single line destroys git diff readability and introduces merge conflicts.
-
----
-
-### 1. Multi-Line Parameter Declarations (>2 Parameters)
-
-When a function, method, or constructor definition has **more than two parameters** (i.e. 3 or more), or exceeds 100 characters in length, **each parameter MUST be placed on its own line** with consistent indentation and a trailing comma (where syntax permits).
-
-#### ❌ FORBIDDEN (>2 parameters on a single line):
-
-```go
-// Go
-func SaveRecord(label string, path string, isSuccess bool, errMsg string) error { ... }
-
-// TypeScript
-function saveRecord(label: string, path: string, isSuccess: boolean, error?: string): void { ... }
-
-// PHP
-function saveRecord(string $label, string $path, bool $isSuccess, ?string $error): void { ... }
-
-// Python
-def save_record(label: str, path: str, is_success: bool, error: Optional[str] = None) -> None: ...
-```
-
-#### ✅ REQUIRED (One parameter per line with trailing comma):
-
-```go
-// In types.go:
-// type BoolResult = result.Result[bool]
-
-// Go
-func SaveRecord(
-    label string,
-    path string,
-    isSuccess bool,
-    errMsg string,
-) BoolResult {
-    // ...
-}
-```
-
-```typescript
-// In types.ts:
-// export type VoidResult = Result<void>;
-
-// TypeScript
-function saveRecord(
-    label: string,
-    path: string,
-    isSuccess: boolean,
-    error?: string,
-): VoidResult {
-    // ...
-}
-```
-
-```php
-// PHP
-function saveRecord(
-    string $label,
-    string $path,
-    bool $isSuccess,
-    ?string $error,
-): Result {
-    // ...
-}
-```
-
-```python
-# Python
-def save_record(
-    label: str,
-    path: str,
-    is_success: bool,
-    error: Optional[str] = None,
-) -> Result[bool]:
-    # ...
-```
-
-```rust
-// Rust
-pub fn save_record(
-    label: &str,
-    path: &Path,
-    is_success: bool,
-    error: Option<&str>,
-) -> Result<bool, AppError> {
-    // ...
-}
-```
-
----
-
-### 2. Multi-Line Function Invocations & Call Sites (>2 Arguments)
-
-When calling any function, method, or constructor with **more than two arguments**, or when the call site exceeds 100 characters, **each argument MUST be placed on its own line** with consistent indentation and a trailing comma.
-
-#### ❌ FORBIDDEN (>2 arguments on a single line):
-
-```go
-// Go
-res := executeQuery(ctx, "SELECT * FROM users WHERE status = ?", statusVal, 50, 0)
-
-// TypeScript
-const res = logAction(userId, ActionType.Login, null, StatusType.Success, null, clientIp);
-
-// PHP
-$this->logAction($agentId, ActionType::AgentTest->value, null, StatusType::Failed->value, $error->getMessage());
-```
-
-#### ✅ REQUIRED (One argument per line with trailing comma):
-
-```go
-// Go
-res := executeQuery(
-    ctx,
-    "SELECT * FROM users WHERE status = ?",
-    statusVal,
-    50,
-    0,
-)
-```
-
-```typescript
-// TypeScript
-const res = logAction(
-    userId,
-    ActionType.Login,
-    null,
-    StatusType.Success,
-    null,
-    clientIp,
-);
-```
-
-```php
-// PHP
-$this->logAction(
-    $agentId,
-    ActionType::AgentTest->value,
-    null,
-    StatusType::Failed->value,
-    $error->getMessage(),
-);
-```
-
-```python
-# Python
-response = dispatch_event(
-    event_name=EventNameType.USER_CREATED,
-    payload=user_payload,
-    retry_count=3,
-    timeout_seconds=30,
-)
-```
-
----
-
-### 3. No Boolean Flag Parameters (Split Intent-Driven Methods)
-
-When a boolean parameter changes the fundamental **behavior or meaning** of an operation, **NEVER pass a bare boolean flag**. Split the behavior into two explicitly named, self-documenting functions.
-
-```typescript
-// ❌ FORBIDDEN: Boolean flag hides caller intent
-function logMessage(message: string, isWithStack: boolean): void { ... }
-logMessage("Payment failed", true); // What does 'true' do?
-
-// ✅ REQUIRED: Explicitly named functions
-function logMessage(message: string): void { ... }
-function logMessageWithStack(message: string): void { ... }
-
-logMessage("User saved");
-logMessageWithStack("Payment failed");
-```
-
----
-
-### 4. The Single Return Type Principle & Universal `Result[T]` Envelope Architecture
-
-In domain services, handlers, and internal business logic, functions MUST return a single encapsulated result envelope rather than raw multi-value tuples `(T, error)` or unhandled exceptions.
-
-#### 4a. Production-Ready Go `Result[T]` Architecture & Concrete `types.go` Mapping
-
-```go
-package result
-
-import (
-    "coding-guidelines/common/pkg/appfault"
-    "coding-guidelines/common/pkg/errtype"
-)
-
-// -----------------------------------------------------------------------------
-// Step 1: Declare Concrete Types in `types.go` (Mandatory Rule)
-// -----------------------------------------------------------------------------
-// In types.go:
-// type (
-//     // UserResult is the canonical single reusable concrete result envelope for User.
-//     // RULE: Define concrete type alias in types.go rather than repeating raw generic instantiations!
-//     UserResult = result.Result[User]
-//
-//     // UserSliceResult is the single reusable concrete result envelope for User slices.
-//     UserSliceResult = result.ResultSlice[User]
-// )
-// -----------------------------------------------------------------------------
-
-// Result encapsulates a computation outcome with typed value or *appfault.AppError.
-type Result[T any] struct {
-    Value    T
-    Err      *appfault.AppError
-    Data     T
-    AppError error
-}
-
-// IsSuccess reports whether the result represents a successful operation.
-func (r Result[T]) IsSuccess() bool {
-    return r.Err == nil && r.AppError == nil
-}
-
-// IsFailed reports whether the result represents a failed operation.
-func (r Result[T]) IsFailed() bool {
-    return r.Err != nil || r.AppError != nil
-}
-
-// IsFailure reports whether the result represents a failed operation (alias).
-func (r Result[T]) IsFailure() bool {
-    return r.IsFailed()
-}
-
-// IsInvalid reports whether the result is invalid or failed.
-func (r Result[T]) IsInvalid() bool {
-    return r.IsFailed()
-}
-
-// HasError reports whether an error is present.
-func (r Result[T]) HasError() bool {
-    return r.Err != nil || r.AppError != nil
-}
-
-// HasNoError reports whether no error exists.
-func (r Result[T]) HasNoError() bool {
-    return r.Err == nil && r.AppError == nil
-}
-
-// HasValidError reports whether an AppError exists and is properly structured.
-func (r Result[T]) HasValidError() bool {
-    if r.Err != nil {
-        return r.Err.IsValid()
-    }
-
-    return r.AppError != nil
-}
-
-// Unwrap returns the value and error tuple.
-func (r Result[T]) Unwrap() (T, *appfault.AppError) {
-    if r.Err != nil {
-        return r.Value, r.Err
-    }
-
-    if r.AppError != nil {
-        if appErr, isAppErr := r.AppError.(*appfault.AppError); isAppErr {
-            return r.Value, appErr
-        }
-
-        return r.Value, appfault.Wrap(errtype.Internal, r.AppError, "result.Unwrap")
-    }
-
-    return r.Value, nil
-}
-
-// UnwrapOr returns the value if success, or defaultVal if failed.
-func (r Result[T]) UnwrapOr(defaultVal T) T {
-    if r.IsSuccess() {
-        return r.Value
-    }
-
-    return defaultVal
-}
-
-// ValueOrPanic returns the value if success, or panics with the error.
-func (r Result[T]) ValueOrPanic() T {
-    if r.IsSuccess() {
-        return r.Value
-    }
-
-    if r.Err != nil {
-        panic(r.Err.Error())
-    }
-
-    panic(r.AppError.Error())
-}
-
-// SuccessResult constructs a successful Result envelope with Value and Data.
-func SuccessResult[T any](val T) Result[T] {
-    return Result[T]{
-        Value: val,
-        Data:  val,
-    }
-}
-
-// FailureResult constructs a failed Result envelope with *appfault.AppError.
-func FailureResult[T any](err *appfault.AppError) Result[T] {
-    return Result[T]{
-        Err:      err,
-        AppError: err,
-    }
-}
-
-// NewSuccess constructs a successful Result envelope with Data.
-func NewSuccess[T any](data T) Result[T] {
-    return SuccessResult(data)
-}
-
-// NewFailure constructs a failed Result envelope from any error.
-func NewFailure[T any](err error) Result[T] {
-    if appErr, isAppErr := err.(*appfault.AppError); isAppErr {
-        return FailureResult[T](appErr)
-    }
-
-    if err == nil {
-        return Result[T]{}
-    }
-
-    appErr := appfault.Wrap(errtype.Internal, err, "result.NewFailure")
-
-    return FailureResult[T](appErr)
-}
-
-// NewFailureWithType constructs a typed failed Result with code, message, and caller.
-func NewFailureWithType[T any](
-    errType errtype.Variation,
-    msg string,
-    caller string,
-) Result[T] {
-    appErr := appfault.New(errType, msg).WithOp(caller)
-    return FailureResult[T](appErr)
-}
-```
-
----
-
-#### 4b. `AppError` Methods & Error Code Comparison
-
-```go
-package appfault
-
-// HasError reports whether an error exists.
-func (e *AppError) HasError() bool {
-    return e != nil
-}
-
-// HasNoError reports whether no error exists.
-func (e *AppError) HasNoError() bool {
-    return e == nil
-}
-
-// HasValidError reports whether the AppError is non-nil and has a valid code.
-func (e *AppError) HasValidError() bool {
-    return e != nil && e.Code != ""
-}
-
-// IsErrorCode reports whether the AppError matches the specified Variation.
-func (e *AppError) IsErrorCode(errType errtype.Variation) bool {
-    return e != nil && e.Type() == errType
-}
-
-// IsCode alias for IsErrorCode.
-func (e *AppError) IsCode(errType errtype.Variation) bool {
-    return e.IsErrorCode(errType)
-}
-```
-
----
-
-#### 4c. TypeScript `Result<T>` Envelope Architecture
-
-```typescript
-import { AppError, ErrorCodeType } from "./appfault";
-
-export type Result<T> = {
-    readonly isSuccess: boolean;
-    readonly isFailed: boolean;
-    readonly hasError: boolean;
-    readonly hasNoError: boolean;
-    readonly value: T | null;
-    readonly data: T | null;
-    readonly error: AppError | null;
-    unwrap(): [T | null, AppError | null];
-    unwrapOr(defaultVal: T): T;
-};
-
-export function successResult<T>(val: T): Result<T> {
-    return {
-        isSuccess: true,
-        isFailed: false,
-        hasError: false,
-        hasNoError: true,
-        value: val,
-        data: val,
-        error: null,
-        unwrap: () => [val, null],
-        unwrapOr: () => val,
-    };
-}
-
-export function failureResult<T>(err: AppError): Result<T> {
-    return {
-        isSuccess: false,
-        isFailed: true,
-        hasError: true,
-        hasNoError: false,
-        value: null,
-        data: null,
-        error: err,
-        unwrap: () => [null, err],
-        unwrapOr: (defaultVal: T) => defaultVal,
-    };
-}
-
-export function newFailure<T>(
-    code: ErrorCodeType,
-    message: string,
-    caller: string,
-): Result<T> {
-    const appErr = new AppError(code, message, caller);
-    return failureResult<T>(appErr);
-}
-```
-
----
-
-#### 4d. PHP 8.1+ `Result<T>` Class Architecture
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Common;
-
-use App\Common\Exceptions\AppException;
-
-final class Result
-{
-    public function __construct(
-        public readonly mixed $value = null,
-        public readonly ?AppException $error = null,
-    ) {}
-
-    public function isSuccess(): bool
-    {
-        return $this->error === null;
-    }
-
-    public function isFailed(): bool
-    {
-        return $this->error !== null;
-    }
-
-    public function isInvalid(): bool
-    {
-        return $this->isFailed();
-    }
-
-    public function hasError(): bool
-    {
-        return $this->error !== null;
-    }
-
-    public function hasNoError(): bool
-    {
-        return $this->error === null;
-    }
-
-    public function unwrap(): mixed
-    {
-        if ($this->error !== null) {
-            throw $this->error;
-        }
-
-        return $this->value;
-    }
-
-    public function unwrapOr(mixed $defaultVal): mixed
-    {
-        if ($this->isSuccess()) {
-            return $this->value;
-        }
-
-        return $defaultVal;
-    }
-
-    public static function success(mixed $value): self
-    {
-        return new self(value: $value);
-    }
-
-    public static function failure(AppException $error): self
-    {
-        return new self(error: $error);
-    }
-}
-```
-
----
-
-### 5. Semantic Function Naming & Predicate Prefixes
-
-1. **Action Functions (Verb + Noun):**
-   - Every function performing an action MUST start with a clear, active verb: `fetchUser()`, `calculateTax()`, `renderHelpRow()`, `validatePayload()`.
-   - Ban vague garbage names: `handle()`, `process()`, `doStuff()`, `manage()`, `temp()`.
-2. **Boolean Predicate Functions (`is` and `has` ONLY):**
-   - Every function returning a boolean MUST begin with `is` or `has` ONLY: `isValid()`, `hasPermissions()`, `isExecutable()`, `isRetryRequired()`. All other prefixes (`can...`, `should...`, `was...`, `will...`, `did...`, `must...`) are **strictly BANNED**.
-   - Negative prefixes (`isNotReady()`, `hasNoData()`) are **strictly prohibited**. Frame positively (`isReady()`, `hasData()`) and invert at the call site (`if !isReady { ... }`).
-
----
-
----
-
-## Mandatory Linter & CI/CD Integration
-
-1. **Linter Scripts:** `linter-scripts/check-function-lengths.py`, `linter-scripts/check-mws-error-codes.py`, `linter-scripts/check-newline-styling.py`
-2. **Local Run Command:** `python linter-scripts/check-function-lengths.py`
-3. **Autofixer Command:** `python 03-ai-scripts/05-guideline-autofixer.py <file>`
-4. **CI/CD Integration (`.github/workflows/ci.yml`):**
-   ```yaml
-   - name: Validate Function Signatures & Error Envelopes
-     run: |
-       python linter-scripts/check-function-lengths.py
-       python linter-scripts/check-mws-error-codes.py
-       python linter-scripts/check-newline-styling.py
-   ```
-5. **Runner Registration (`03-ai-scripts/06-cicd-local-runner.py`):**
-   ```python
-   JOBS = {
-       "Function Signatures Check": [sys.executable, "linter-scripts/check-function-lengths.py"],
-       "Error Codes Check": [sys.executable, "linter-scripts/check-mws-error-codes.py"],
-       "Newline Styling Check": [sys.executable, "linter-scripts/check-newline-styling.py"],
-   }
-   ```
-
----
-
----
+Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.ai-memory/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `02-spec/` and `.ai-memory/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.

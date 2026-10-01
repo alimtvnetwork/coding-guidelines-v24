@@ -27,6 +27,16 @@ WAVES = ceil(subtasks / (A x H))
 
 ---
 
+## Phase 0: Antigravity Skill Bootstrap (Memory Optimization)
+
+Before executing the tasks below, check if this prompt is already installed as a native Antigravity Skill.
+
+1. If `.agents/skills/<slug>/skill.md` does not exist in the workspace, create it now.
+2. Extract the core instructions of this prompt and save it into that `skill.md` using the standard YAML frontmatter (with `name` and `description`).
+3. Once installed, rely on progressive disclosure for future runs. Do not keep the entire prompt in active memory if not needed.
+
+---
+
 ## The Unified Master Pipeline (Atomic Numbered Steps)
 
 Execute this task via a strict 3-Phase pipeline. Do not skip steps.
@@ -295,567 +305,67 @@ Confirm scripts exist via harmless workspace call before invoking (R4). Run on c
 
 ---
 
-## 11. Discovery Toolchain (GitMap Primary)
+## 11. AI Fix Scripts Memory (Reusable Tooling)
 
-Use Section 3 GitMap table as primary. Python fallbacks (`03-ai-scripts/11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py`) apply only if GitMap is unavailable.
+- [ ] [/goal](slashCommand;goal) Reuse First: Scanned and learned `03-ai-scripts/readme.md` before writing temporary code.
+- [ ] Strict In-Repository Execution: All Python scripts executed strictly within the codebase repository root.
+- [ ] Strict .ai-memory/ Folder Storage: All helper scripts, local runners, and linters stored in `03-ai-scripts/`.
+- [ ] Native File Manipulator: Use `python 03-ai-scripts/03-file-manipulator.py <command>` for mass file operations.
+- [ ] Go Generate Sync: If Go constants or enums are modified, run `go generate ./...` in the relevant package and commit generated files.
+
+---
+
+## 12. Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
+
+- [ ] TOP-INSTRUCTION PRIORITY MANDATE: Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
+- [ ] MANDATORY SUBAGENT SPAWNING GATE (ZERO SOLO EXECUTION): Verified that `invoke_subagent` (`A = 2, H = 2`) was explicitly called in Phase 1 (parallel discovery/spec modules) and Phase 2 (`TypeName: "self"` parallel subtask execution). Executing all reads or code modifications solo without calling `invoke_subagent` is an immediate auto-reject failure.
+- [ ] ISSUE & RCA DESTINATION ROUTING: Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/readme.md).
+- [ ] NO TEST RUNNING (TOTAL BAN): Never run any tests using Python scripts (`06-cicd-local-runner.py`, `pytest`, runner scripts), Go (`go test ./...`), or any test runner during routine execution turns. Testing is strictly checked later on in CI/CD.
+- [ ] NO BUILD CHECKING (TOTAL BAN): Never run build commands (`go build`, `npm run build`, compiler checks) to verify compilation. Build verification is checked later on in CI/CD.
+- [ ] NO RUNNER SCRIPTS (TOTAL BAN): Never launch background test runners, worker pools, or test inventory loops during routine execution.
+- [ ] NO AUTOMATIC RELEASES (TOTAL BAN): Never bump versions, update changelogs, or trigger releases unless explicitly commanded by the user.
+- [ ] NO PER-FILE COMMITTING (TOTAL BAN): Never commit each file individually as you work (e.g. running `git commit` after editing File 1, then another commit after File 2). Committing file-by-file pollutes git history, creates subagent lock collisions, and breaks atomic changes. All modified files across the turn must be accumulated and committed together in a single atomic commit at the final step.
+- [ ] NO RAPID CI/CD POLLING (TOTAL BAN): Never query or loop rapidly (`gh run view` in tight loops) when inspecting remote CI/CD pipelines. Agents must query pipeline state using GitMap Pipeline-AI (`gitmap pipeline-ai status --json` or `gitmap pl-ai status -t <sec>`) and strictly wait or sleep based on `etaSeconds` to eliminate credit waste.
+- [ ] NO PREMATURE TURN CLOSING BEFORE EXECUTION (TOTAL BAN): Never halt execution, conclude the turn, or ask the user for permission after generating specs or subtasks. Planning constitutes only 50% of the task budget; you must proceed unconditionally to Phase 2 code execution. (Note: When dispatching asynchronous background subagents via `invoke_subagent`, yielding control to allow platform reactive wakeup is mandatory and is exempt from this ban).
+- [ ] NO HORIZONTAL TASK CONCATENATION (TOTAL BAN): Never concatenate tasks horizontally in the Task Completion Summary (e.g. NEVER `✅ #1... ✅ #2...` run-on). Every completed task MUST be rendered on its OWN SEPARATE LINE starting with an individual markdown list bullet (`- ✅`).
+- [ ] INDEPENDENT AI VERIFICATION PROMPT MANDATE: Emitted the self-contained independent AI verification and audit prompt linking to the canonical spec, consolidated plan, and modified files with verbatim score audit criteria.
+- [ ] GITMAP HEAVY USAGE & ROUTINE PULL BAN: Heavily leveraged GitMap commands (`cpf`, `cpb`, `cpr`, `search`, `find`, `pwsh`) for discovery, execution, and commits. Never ran `pull-all` (`gitmap pa` or `gitmap pae`) unconditionally during routine turns; only ran `gitmap pae --json` when explicitly commanded by the user.
 
 ---
 
-## 12. Issue Destination & RCA Routing
+## 13. Non-Negotiable Coding Guidelines Checklist (Auto-Reject on Violation)
 
-- **CI/CD & Workflow Failures:** `.ai-memory/cicd-issues/NN-<slug>.md`, indexed in `.ai-memory/cicd-index.md`.
-- **Application Bugs:** `02-spec/22-app-issues/NN-<slug>.md` with 4-part RCA (Reproduction, Cause, Fix, Prevention), indexed in `02-spec/22-app-issues/readme.md`.
-- **Failed Subtasks (R13):** Log RCA in `.ai-memory/memory/issues/` and link from `ledger.md`.
+[/goal](slashCommand;goal) You must verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
+
+- [ ] Master Guidelines: Fully enforced every file in `02-spec/02-coding-guidelines/` and `.ai-memory/coding-guidelines.md`.
+- [ ] Concrete Types Centralization (`types.go`): Extracted domain structs, raw generic instantiations, and Result wrappers into dedicated `types.go` files as single reusable named types with follow-through comments (never leak raw generics like `result.Result[*Config]`).
+- [ ] Error Management: Enforced `02-spec/03-error-manage/` using domain-specific `*appfault.AppError`, never generic error.
+- [ ] Boolean Conventions: All booleans begin with is or has only (all other prefixes like can, should, was, will, did, must are banned). No negatives (`!isSuccess` is banned; use `isFail`).
+- [ ] Semantic Naming: Zero generic garbage names (`temp`, `data`, `obj`). Behavior-driven unit test names.
+- [ ] Multi-Line Arguments (Rule 9a/9b): Signatures and call sites with >2 arguments formatted one argument per line with trailing commas.
+- [ ] Line Endings & Encoding: Strictly Unix LF (`\n`) and UTF-8 without BOM.
+- [ ] Function Sizing: Functions <= 8 lines preferred (hard cap 15 lines).
+- [ ] Strict Relative Git Paths: Zero absolute paths (`/absolute/path/to/...`) or `file:///` URIs.
 
 ---
+
+## 14. Anti-Hallucination & Blast Radius Checklist
+
+- [ ] Echo Back the Spec: Verified Acceptance Criteria from the Spec file verbatim.
+- [ ] Pre-Commit Diff Proof: Verified `git status` shows actual modified files before committing.
+- [ ] No Placeholder Search: Confirmed zero `TODO` or `\[.*\]` placeholders remain in modified files.
+- [ ] Index Sync Deadman Switch: Every new file is explicitly linked in `readme.md` and enqueued in `.ai-memory/what-to-read.md`.
+- [ ] Blast Radius Acknowledgment: Global search across codebase performed to update all callers of modified symbols.
+- [ ] Continuous Loop Maintained: Continuous self-loop executed until 100% complete without running banned test/build commands.
+- [ ] Final Step Commit & Push Verified: Staged all changes (`git add -A`), committed everything in a single grouped atomic commit, and pushed to git before ending the turn (no per-file commits).
+
+---
+
+## 15. Final Step Git Commit & Push Mandate (Strict Checklist)
+
+- [ ] MANDATORY FINAL COMMIT & PUSH VIA GITMAP (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, use GitMap semantic commit commands: `gitmap cpf "<summary>"` (features), `gitmap cpb "<summary>"` (bugs), or `gitmap cpr "<summary>"` (releases) which automatically stage, commit with standardized prefixes, and push directly to the remote repository. (Fallback to `git add -A && git commit && git push` only if GitMap CLI is unavailable). Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
+- [ ] TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY): You must not create separate git commits for each individual file as you edit them (e.g. running `git commit` or `gitmap cpf` after editing File 1, then committing again after File 2 is strictly forbidden). Committing file-by-file pollutes git log history, creates subagent lock collisions, and breaks atomic rollback. All modified files, test change caches, and plan records across the turn must be accumulated in the working tree and committed together in a single grouped atomic commit at the final step before pushing.
 
 ## MUST FOLLOW NON-NEGOTIABLE
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.ai-memory/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run the targeted checks (builds and full unit tests stay in CI per R1), and execute the final atomic GitMap commit and push before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
-
----
-
-## AI Diagnostic Guide: Why Newline Violations are Missed in Functions & How to Fix Them
-
-> [!IMPORTANT]
-> **CRITICAL FAILURE ROOT CAUSE (PREVENTING PREMATURE COMPLETION):**
->
-> In past runs, AI agents failed to fix function newlines because they:
->
-> 1. **Only ran surface linters** (e.g. checking file-level EOF newlines) without opening individual function bodies.
-> 2. **Wrote a planning markdown file and immediately declared completion** without editing a single `.go` or `.ts` file.
-> 3. **Attempted to process the entire codebase in one prompt**, causing context exhaustion and truncated file edits.
->
-> **THE MANDATORY REMEDY:**
->
-> - You MUST partition the full list of codebase files into **batches of 5–8 files each**.
-> - Subagents MUST open and edit every single file in their assigned batch line-by-line.
-> - The master orchestrator MUST continuously self-loop across all batches until every single batch in `.ai-memory/plans/subtasks/` is completed.
-
----
-
----
-
-## Dedicated Section: Comprehensive Coding Style, Line-Gaps & Anti-Pattern Gallery (Zero Tolerance)
-
-Proper vertical spacing and code hygiene are essential for readability and automated analysis. Dense, squeezed code without blank lines around control flow statements leads to missed edge cases, obscured invariants, and severe cognitive fatigue.
-
----
-
-### Rule 1: Mandatory Blank Line BEFORE Control Structures (`if`, `for`, `switch`, `while`, `try`)
-
-Whenever a control structure (`if`, `for`, `switch`, `while`, `try`) is preceded by **any statement** (variable declaration, assignment, method call, channel receive, or loop), there **MUST be exactly one blank line before the control structure**.
-
-*Exception:* If the control structure is the **very first line** of a function body or immediately follows an opening brace `{`, no blank line is required before it.
-
-#### 1a. Go: Blank Line Before `if`
-
-```go
-// ❌ WRONG: Squeezed variable declaration / map lookup directly against if
-func ProcessUser(id string) error {
-    user, isFound := userCache.Get(id)
-    if !isFound {
-        return ErrUserNotFound
-    }
-    config, isLoaded := loadConfig()
-    if !isLoaded {
-        return ErrConfigMissing
-    }
-    return executeUser(user, config)
-}
-
-// ✅ CORRECT: Clean blank line before each if statement, after each closing brace, and before return
-func ProcessUser(id string) error {
-    user, isFound := userCache.Get(id)
-
-    if !isFound {
-        return ErrUserNotFound
-    }
-
-    config, isLoaded := loadConfig()
-
-    if !isLoaded {
-        return ErrConfigMissing
-    }
-
-    return executeUser(user, config)
-}
-```
-
----
-
-#### 1b. TypeScript / React: Blank Line Before `if`
-
-```typescript
-// ❌ WRONG: Squeezed variable declarations and function calls against if
-function getFormattedPrice(item: Item): string {
-    const rawPrice = calculateBasePrice(item);
-    const hasDiscount = item.discountPercent > 0;
-    if (hasDiscount) {
-        return applyDiscount(rawPrice, item.discountPercent);
-    }
-    const formatted = formatCurrency(rawPrice);
-    return formatted;
-}
-
-// ✅ CORRECT: Clean blank line before if and before final return
-function getFormattedPrice(item: Item): string {
-    const rawPrice = calculateBasePrice(item);
-    const hasDiscount = item.discountPercent > 0;
-
-    if (hasDiscount) {
-        return applyDiscount(rawPrice, item.discountPercent);
-    }
-
-    const formatted = formatCurrency(rawPrice);
-
-    return formatted;
-}
-```
-
----
-
-#### 1c. Python: Blank Line Before `if`
-
-```python
-# ❌ WRONG: Assignment directly followed by if without blank line
-def fetch_user_profile(user_id: str) -> Profile:
-    auth_token = get_session_token()
-    is_valid_token = verify_token(auth_token)
-    if not is_valid_token:
-        raise UnauthorizedError()
-    user_record = db.find_user(user_id)
-    if user_record is None:
-        raise NotFoundError()
-    return Profile.from_record(user_record)
-
-# ✅ CORRECT: Clean blank line before if and before returns
-def fetch_user_profile(user_id: str) -> Profile:
-    auth_token = get_session_token()
-    is_valid_token = verify_token(auth_token)
-
-    if not is_valid_token:
-        raise UnauthorizedError()
-
-    user_record = db.find_user(user_id)
-
-    if user_record is None:
-        raise NotFoundError()
-
-    return Profile.from_record(user_record)
-```
-
----
-
-#### 1d. PHP: Blank Line Before `if` and `foreach`
-
-```php
-// ❌ WRONG: Squeezed statements before if and foreach
-$result = $this->apiRequest($agentId, HttpMethodType::Post->value, $endpoint);
-if (is_wp_error($result)) {
-    return $result;
-}
-$items = $this->fetchItems();
-foreach ($items as $item) {
-    $this->process($item);
-}
-
-// ✅ CORRECT: Separated with blank lines before control structures
-$result = $this->apiRequest($agentId, HttpMethodType::Post->value, $endpoint);
-
-if (is_wp_error($result)) {
-    return $result;
-}
-
-$items = $this->fetchItems();
-
-foreach ($items as $item) {
-    $this->process($item);
-}
-```
-
----
-
-### Rule 2: Mandatory Blank Line AFTER Closing Brace `}` When Followed by Code
-
-Whenever a closing brace `}` (from an `if`, `for`, `switch`, `while`, or `try/catch` block) is followed by further executable code or another statement, there **MUST be exactly one blank line after `}`**.
-
-*Exception:* No blank line is needed when `}` is followed by another closing `}`, `else`, `catch`, `finally`, or the end of a function body.
-
-#### 2a. Go: Blank Line After `}` Following Control Flow
-
-```go
-// ❌ WRONG: Closing brace squeezed against next statement
-func ExecuteStep(step Step) error {
-    if err := step.Validate(); err != nil {
-        return err
-    }
-    result, err := step.Run()
-    if err != nil {
-        return err
-    }
-    return saveResult(result)
-}
-
-// ✅ CORRECT: Clean blank line after every closing brace
-func ExecuteStep(step Step) error {
-    if err := step.Validate(); err != nil {
-        return err
-    }
-
-    result, err := step.Run()
-    if err != nil {
-        return err
-    }
-
-    return saveResult(result)
-}
-```
-
----
-
-#### 2b. TypeScript: Blank Line After Loops & Try/Catch
-
-```typescript
-// ❌ WRONG: Loop and try/catch squeezed against subsequent logic
-for (const item of items) {
-    processed.push(transform(item));
-}
-const result = merge(processed);
-
-try {
-    saveToStorage(result);
-} catch (error) {
-    logger.error(error);
-}
-cleanup();
-
-// ✅ CORRECT: Blank line after each closing brace
-for (const item of items) {
-    processed.push(transform(item));
-}
-
-const result = merge(processed);
-
-try {
-    saveToStorage(result);
-} catch (error) {
-    logger.error(error);
-}
-
-cleanup();
-```
-
----
-
-#### 2c. Go: Blank Line After Multiline Map/Slice Literals & Loops with Boolean Extraction
-
-```go
-// ❌ FORBIDDEN (Unacceptable): Squeezed loops against map literals, inline conditional assignments, and missing blank lines between if blocks
-func ValidateDoubleExtensionFormats(targetPath string) *appfault.AppError {
-    cases := map[string]Format{
-        "archive.tar.gz":  FormatTarGz,
-        "archive.tgz":     FormatTarGz,
-        "archive.tar.bz2": FormatTarBz2,
-        "archive.tbz2":    FormatTarBz2,
-        "archive.tar.xz":  FormatTarXz,
-        "archive.txz":     FormatTarXz,
-        "archive.tar.zst": FormatTarZst,
-        "archive.tzst":    FormatTarZst,
-    }
-    for path, expectedFormat := range cases {
-        if got := FormatFromPath(path); got != expectedFormat {
-            return appfault.New(errtype.Validation, "mismatch")
-        }
-    }
-    return nil
-}
-
-func ValidateExtensionRoundTrip(formats []Format) *appfault.AppError {
-    for _, f := range formats {
-        ext := f.Extension()
-        if len(ext) == 0 {
-            return appfault.New(errtype.Validation, "empty extension")
-        }
-        if got := FormatFromPath("sample" + ext); got != f {
-            return appfault.New(errtype.Validation, "unmatched format")
-        }
-    }
-    return nil
-}
-
-// ✅ REQUIRED (Right Practice): Blank line after map literal closing brace, blank line before loops, blank line before if, blank line after closing brace, and extracted affirmative booleans
-func ValidateDoubleExtensionFormats(targetPath string) *appfault.AppError {
-    cases := map[string]Format{
-        "archive.tar.gz":  FormatTarGz,
-        "archive.tgz":     FormatTarGz,
-        "archive.tar.bz2": FormatTarBz2,
-        "archive.tbz2":    FormatTarBz2,
-        "archive.tar.xz":  FormatTarXz,
-        "archive.txz":     FormatTarXz,
-        "archive.tar.zst": FormatTarZst,
-        "archive.tzst":    FormatTarZst,
-    }
-
-    for path, expectedFormat := range cases {
-        resolvedFormat := FormatFromPath(path)
-        isFormatMismatch := resolvedFormat != expectedFormat
-
-        if isFormatMismatch {
-            return appfault.New(
-                errtype.Validation,
-                "format mismatch detected",
-            ).WithOp("ValidateDoubleExtensionFormats")
-        }
-    }
-
-    return nil
-}
-
-func ValidateExtensionRoundTrip(formats []Format) *appfault.AppError {
-    for _, f := range formats {
-        ext := f.Extension()
-        isEmptyExtension := len(ext) == 0
-
-        if isEmptyExtension {
-            return appfault.New(
-                errtype.Validation,
-                "extension returned empty string",
-            ).WithOp("ValidateExtensionRoundTrip")
-        }
-
-        got := FormatFromPath("sample" + ext)
-        isSampleUnmatchFile := got != f
-
-        if isSampleUnmatchFile {
-            return appfault.New(
-                errtype.Validation,
-                "unmatched sample file format",
-            ).WithOp("ValidateExtensionRoundTrip")
-        }
-    }
-
-    return nil
-}
-```
-
----
-
-#### 2d. Go: Blank Lines Around Struct Instantiations & Sequential Function Invocations
-
-When instantiating a parameter struct or invoking a multi-line function, there **MUST be a blank line before the invocation** (if preceded by assignments or statements) and **MUST be a blank line after the invocation closing brace `}`** before subsequent statements, `if` conditions, or other function calls.
-
-```go
-// ❌ FORBIDDEN (Unacceptable): Squeezing variable assignments, multiline struct invocations, and following if statements without vertical line gaps
-func PrintIdentityBlock(cwd string) {
-    fmt.Println(" " + constants.ColorCyan + "Identity Block" + constants.ColorReset)
-    src := getSourceDirectory()
-    emitIdentityRows(IdentityRowParams{
-        Dir:            src,
-        RepoOverride:   buildRepo,
-        BranchOverride: buildBranch,
-        ShaOverride:    buildCommit,
-    })
-    if len(buildDate) > 0 {
-        fmt.Printf(" Built: %s\n", buildDate)
-    }
-    emitIdentityRows(IdentityRowParams{
-        Dir: cwd,
-    })
-    fmt.Println()
-}
-
-// ✅ REQUIRED (Right Practice): Clean blank lines before and after multiline struct calls, separating discrete execution stages
-func PrintIdentityBlock(cwd string) {
-    fmt.Println(" " + constants.ColorCyan + "Identity Block" + constants.ColorReset)
-
-    src := getSourceDirectory()
-
-    emitIdentityRows(IdentityRowParams{
-        Dir:            src,
-        RepoOverride:   buildRepo,
-        BranchOverride: buildBranch,
-        ShaOverride:    buildCommit,
-    })
-
-    if len(buildDate) > 0 {
-        fmt.Printf(" Built: %s\n", buildDate)
-    }
-
-    emitIdentityRows(IdentityRowParams{
-        Dir: cwd,
-    })
-
-    fmt.Println()
-}
-```
-
----
-
-### Rule 3: Mandatory Blank Line BEFORE `return`, `throw`, `raise`, `yield`
-
-In multi-line functions and blocks, there **MUST be a blank line before `return` / `throw` / `raise` / `yield`**.
-
-*Exception:* Single-statement function body (`func GetId() string { return c.Id }`) or when `return` is the immediate first statement inside a block.
-
-```go
-// ❌ WRONG: Return squeezed directly under statements
-func CalculateTotal(items []Item, taxRate float64) float64 {
-    subtotal := computeSubtotal(items)
-    tax := subtotal * taxRate
-    total := subtotal + tax
-    return total
-}
-
-// ✅ CORRECT: Blank line before final return
-func CalculateTotal(items []Item, taxRate float64) float64 {
-    subtotal := computeSubtotal(items)
-    tax := subtotal * taxRate
-    total := subtotal + tax
-
-    return total
-}
-```
-
----
-
-### Rule 4: Zero Clumping of Consecutive Guard Clauses
-
-When multiple guard clauses follow one another sequentially, **each guard clause MUST be separated by a blank line** after its closing brace `}`. Never clump or stack guard clauses together without vertical breathing room.
-
-```go
-// ❌ WRONG: Clumped guard clauses with zero spacing
-func ValidateOrder(order *Order) error {
-    if order == nil {
-        return ErrNilOrder
-    }
-    if !order.HasItems() {
-        return ErrEmptyOrder
-    }
-    if order.TotalAmount <= 0 {
-        return ErrInvalidAmount
-    }
-    return nil
-}
-
-// ✅ CORRECT: Vertical breathing room between discrete guard clauses
-func ValidateOrder(order *Order) error {
-    if order == nil {
-        return ErrNilOrder
-    }
-
-    if !order.HasItems() {
-        return ErrEmptyOrder
-    }
-
-    if order.TotalAmount <= 0 {
-        return ErrInvalidAmount
-    }
-
-    return nil
-}
-```
-
----
-
-### Rule 5: Zero Nested `if` Statements (Mandatory Flattening to Depth 0)
-
-Conditionals MUST NEVER exceed depth 1 (i.e., **no nested `if` statements inside another `if` block**). Flatten all branching logic using early guard returns or discrete helper functions.
-
----
-
-### Rule 6: No Multi-Statement Lines & No Inline Compound Condition Cramming (Multi-Line Separation)
-
-1. **No Semicolon Packing:** Never compress multiple statements onto a single line using semicolons (`a = 1; b = 2; return a + b`). Each statement MUST occupy its own line.
-2. **Total Ban on Inline Compound Assignments (`if init; cond`):** NEVER cram variable declarations, type assertions, or multi-part boolean checks into the `if` header (e.g. `if v, isString := rawMap[key].(string); isString && len(v) > 0 {`).
-3. **Multi-Line Statement Separation:**
-   - Execute variable assignments / lookups on their own dedicated line.
-   - Evaluate and assign the boolean condition to an affirmative variable (`is*` or `has*`) on its own dedicated line *before* the `if` statement.
-   - Maintain vertical breathing room (blank line before `if`).
-   - The `if` condition itself must be dead simple, checking **one single variable**.
-4. **Zero Magic Strings & Constant Returns:** Never use raw string literals (`"unknown"`, `"pending"`, `"failed"`) as return or fallback values. Define named constants (`VersionUnknown = "unknown"`) and return constants directly. Merge related lookup strings into constants and package-level slices (`versionKeys`), eliminating inline slice allocations.
-
-#### Canonical Example: What NOT to Do vs What to Do
-
-```go
-// ❌ BANNED ANTI-PATTERN:
-// 1. Cramming type assertion assignment and compound condition into one line.
-// 2. Hardcoding magic strings ("Version", "version", "unknown") inline.
-// 3. Returning raw fallback literal instead of a defined constant.
-func extractVersionValue(rawMap map[string]interface{}) string {
-    for _, key := range []string{"Version", "version"} {
-        if v, isString := rawMap[key].(string); isString && len(v) > 0 {
-            return v
-        }
-    }
-
-    return "unknown"
-}
-
-// ✅ MANDATORY CLEAN PATTERN:
-// 1. Zero magic strings: extract lookup keys and defaults into constants.
-// 2. Merge repeated/related strings into reusable collections (versionKeys).
-// 3. Assignment on its own dedicated line.
-// 4. Affirmative boolean (hasContent) pre-evaluated BEFORE the if statement.
-// 5. Clean vertical breathing room (blank line before if).
-// 6. Dead-simple if statement evaluating exactly ONE variable.
-// 7. Return defined constant (VersionUnknown) instead of raw magic string literal.
-const (
-    VersionUnknown  = "unknown"
-    versionKeyUpper = "Version"
-    versionKeyLower = "version"
-)
-
-var versionKeys = []string{versionKeyUpper, versionKeyLower}
-
-func extractVersionValue(rawMap map[string]interface{}) string {
-    for _, key := range versionKeys {
-        v, isString := rawMap[key].(string)
-        hasContent := isString && len(v) > 0
-
-        if hasContent {
-            return v
-        }
-    }
-
-    return VersionUnknown
-}
-```
-
----
-
-### Rule 7: Universal File Hygiene, Line Endings (LF `\n` Only) & Encoding (UTF-8 No BOM)
-
-1. **Unix LF (`\n`) Line Endings Only:** Every file MUST use Unix LF (`\n`). Total ban on Windows CRLF (`\r\n`).
-2. **Strict UTF-8 Encoding (NO BOM):** Save all files in UTF-8 without BOM.
-3. **Mandatory Single Trailing Newline at EOF:** Exactly one newline at the end of every file.
-
----
-
----
-
-## Mandatory Linter & CI/CD Integration
-
-1. **Linter Scripts:** `linter-scripts/check-function-lengths.py`, `linter-scripts/check-mws-error-codes.py`, `linter-scripts/check-newline-styling.py`
-2. **Local Run Command:** `python linter-scripts/check-function-lengths.py`
-3. **Autofixer Command:** `python 03-ai-scripts/05-guideline-autofixer.py <file>`
-4. **CI/CD Integration (`.github/workflows/ci.yml`):**
-   ```yaml
-   - name: Validate Newline Styling & Function Lengths
-     run: |
-       python linter-scripts/check-function-lengths.py
-       python linter-scripts/check-mws-error-codes.py
-       python linter-scripts/check-newline-styling.py
-   ```
-5. **Runner Registration (`03-ai-scripts/06-cicd-local-runner.py`):**
-   ```python
-   JOBS = {
-       "Newline Styling Check": [sys.executable, "linter-scripts/check-newline-styling.py"],
-       "Function Lengths Check": [sys.executable, "linter-scripts/check-function-lengths.py"],
-       "Error Codes Check": [sys.executable, "linter-scripts/check-mws-error-codes.py"],
-   }
-   ```
-
----
-
----
+Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.ai-memory/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `02-spec/` and `.ai-memory/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
