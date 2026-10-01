@@ -540,8 +540,15 @@ def main() -> None:
         help="Check and audit git divergence status without performing merge or push",
     )
     parser.add_argument(
-        "--no-push",
+        "--push",
         action="store_true",
+        default=True,
+        help="Push synchronized branch to remote (enabled by default)",
+    )
+    parser.add_argument(
+        "--no-push",
+        action="store_false",
+        dest="push",
         help="Perform reconciliation and merge without pushing to remote",
     )
     parser.add_argument(
@@ -593,7 +600,7 @@ def main() -> None:
         sys.exit(0 if is_ok else 1)
 
     is_dry_run = args.check
-    is_push = not args.no_push
+    is_push = args.push
 
     outcome = reconcile_repository(
         repo_root=repo_root,
