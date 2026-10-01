@@ -1,5 +1,3 @@
-# [V6] Parent Task N-Step Loop: Antigravity-Native Ultra-Orchestrator — Workflow (must follow)
-
 ```text
 N = 300   step ceiling
 A = 2     workers per wave
@@ -10,13 +8,6 @@ PHASE_1_BUDGET = N / 2
 PHASE_2_BUDGET = N / 2
 WAVES = ceil(subtasks / (A x H))
 ```
-
-> [!IMPORTANT]
-> Prompt Version: 6.0.0
-> Runtime: Google Antigravity 2.0 (IDE & CLI).
-> Invoke: paste this prompt below your task, or run `/execute-parent-task-with-n-steps-v6 <task>`.
-> Parameters are read-only after Step 0. N is a hard ceiling, not a quota: finishing early is success, and padding steps is failure.
-> One step is one round of tool calls by the lead agent. The lead records the real step count in the ledger after every round.
 
 [/goal](slashCommand:goal) Autonomously orchestrate and execute the parent task end-to-end: capture it verbatim, plan it in the repo, run it through A workers in disjoint file boxes using GitMap high-speed commands as primary, prove every single claim with concrete evidence, enforce coding guidelines to 100%, and finish with one atomic GitMap commit that holds strictly this task's files.
 
