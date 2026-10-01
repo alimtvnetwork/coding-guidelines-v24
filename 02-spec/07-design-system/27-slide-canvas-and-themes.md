@@ -59,10 +59,11 @@ A theme sets color and font only. Layout is per slide (`28-slide-layouts.md`). A
 | `paper` | `#f5f0e6` | `#1a1a1a` | `#615a4f` | `#1d4ed8` | `#f5f0e6` |
 | `sunset` | `#1b0d1f` | `#ffeaf0` | `#c89aa6` | `#ff7a59` | `#1b0d1f` |
 | `print` | `#ffffff` | `#000000` | `#444444` | `#000000` | `#ffffff` |
+| `playbook` | `#faf7f3` | `#141414` | `#6b6b6b` | `#e8701a` | `#1a1a1a` |
 
 Fonts for every row: heading and display `"Ubuntu", system-ui, sans-serif`. Body `"Poppins", system-ui, sans-serif`.
 
-Pick one id per deck. Do not mix `hl` from one id with `bg` from another.
+Pick one id per deck. Default is `midnight`. Do not mix `hl` from one id with `bg` from another. Pill presets and the nine-cell `align` grid are in `32-slide-color-options.md`. The dark amber shell (type scale, spotlight, controller colors) is `30-slide-palette-type-and-shell.md`.
 
 ---
 

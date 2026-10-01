@@ -16,17 +16,13 @@ Do not invent a key, a transition, or a chrome size. Website editing (wording, i
 
 ## 1. HUD
 
-Top controller pill:
+Button geometry, the `40×40` hit targets, share, fullscreen, the `4px` progress bar, and the dot row are `31-slide-controller-buttons.md`. Do not restyle them here.
 
-- Canonical offset: `top: 32px` and `right: 32px`
-- A scripted deck may already use the class `fixed top-6 right-6 z-50`. On a default `4px` scale that class is `24px`, not `32px`. New decks use `32px`. Do not invent a third offset.
-- Height `56px`
-- `border-radius: 9999px`
-- `z-index` above the stage (`z-50` on the scripted deck)
+Position shared by that file: `top: 32px`, `right: 32px`, height `56px`, radius `9999px`, `z-index: 50`. A class `top-6 right-6` is `24px` on a default `4px` scale. New decks use `32px`.
 
-Bottom progress: the active mark is `32px` wide and `8px` tall, filled with the deck accent (`--pres-accent` or the active theme `hl`). Inactive marks are smaller dots. Do not invent their resting size.
+Active dot is `28×8px`. Inactive dot is `8×8px`. The older `32×8` mark is not this controller.
 
-The HUD must stay outside the scaled stage, or it scales with the slide and becomes unreadably small. Mount it on the viewport, not inside the `1920×1080` transform.
+Mount the HUD on the viewport, not inside the `1920×1080` transform.
 
 ---
 

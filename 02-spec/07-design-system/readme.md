@@ -32,8 +32,11 @@ Before authoring components or generating code, AI agents MUST read and master t
   - Read [`27-slide-canvas-and-themes.md`](./27-slide-canvas-and-themes.md) — `1920×1080` scale, amber and JSON themes.
   - Read [`28-slide-layouts.md`](./28-slide-layouts.md) — closed layout union.
   - Read [`29-slide-navigation-and-builder.md`](./29-slide-navigation-and-builder.md) — HUD, transitions, keys, slide builder.
+  - Read [`30-slide-palette-type-and-shell.md`](./30-slide-palette-type-and-shell.md) — dark amber palette, type scale, shell layers.
+  - Read [`31-slide-controller-buttons.md`](./31-slide-controller-buttons.md) — controller buttons, dots, crossfade.
+  - Read [`32-slide-color-options.md`](./32-slide-color-options.md) — pill presets and nine-cell align.
 - [ ] `/learn` **Phase 6b: White Blue pages and the visual builder**
-  - Read [`25-page-assembly.md`](./25-page-assembly.md) — site and blog shells. Menu motion stays in [`04-white-blue-theme/02-header-mega-menu-and-footer.md`](./04-white-blue-theme/02-header-mega-menu-and-footer.md).
+  - Read [`25-page-assembly.md`](./25-page-assembly.md) — site and blog shells. Menu components are [`33-mega-menu-components.md`](./33-mega-menu-components.md). Color tokens stay in [`04-white-blue-theme/02-header-mega-menu-and-footer.md`](./04-white-blue-theme/02-header-mega-menu-and-footer.md).
   - Read [`26-visual-builder.md`](./26-visual-builder.md) — review overlay for wording, images, and menu labels. Not the slide builder.
 - [ ] `/learn` **Phase 7: AI-Adaptable Modern SaaS Design System**
   - Read [`02-ai-system-design/readme.md`](./02-ai-system-design/readme.md) — Variable-driven theme swapping (Pink to Green), sticky nav, search module, "Join Us" CSS3 text-slide animation, "Climate AI" highlight, and "Team Greenhouse" section.
@@ -303,6 +306,10 @@ All animations and transitions prioritize **GPU-composited CSS3 transforms and o
 | 25 | [27-slide-canvas-and-themes.md](./27-slide-canvas-and-themes.md) | Presentation | `1920×1080` canvas, amber tokens, JSON themes, noir-gold |
 | 26 | [28-slide-layouts.md](./28-slide-layouts.md) | Presentation | Closed slide layout union |
 | 27 | [29-slide-navigation-and-builder.md](./29-slide-navigation-and-builder.md) | Presentation | HUD, transition families, keys, slide builder |
+| 31 | [30-slide-palette-type-and-shell.md](./30-slide-palette-type-and-shell.md) | Presentation | Dark amber palette, type scale, spotlight, shell layers |
+| 32 | [31-slide-controller-buttons.md](./31-slide-controller-buttons.md) | Presentation | Controller buttons, share, fullscreen, dots, crossfade |
+| 33 | [32-slide-color-options.md](./32-slide-color-options.md) | Presentation | Pill presets, highlight chips, nine-cell align |
+| 34 | [33-mega-menu-components.md](./33-mega-menu-components.md) | Navigation | Mega panel, promo flip, shine button, page motion primitives |
 | 28 | [02-ai-system-design/readme.md](./02-ai-system-design/readme.md) | Sub-System | AI-adaptable modern SaaS theme swapping and section blueprints |
 | 29 | [03-sweet-digs-design-system/readme.md](./03-sweet-digs-design-system/readme.md) | Sub-System | Sweet Digs HSL multi-theme architecture and zoom-free interaction suite |
 | 30 | [04-white-blue-theme/readme.md](./04-white-blue-theme/readme.md) | Sub-System | White Blue Theme 3-format color architecture (`HEX`, `RGB`/`RGBA`, `HSL` + `OKLCH`), 3D flip Mega-Menu, `WhiteBlueButton`, and enterprise section library |

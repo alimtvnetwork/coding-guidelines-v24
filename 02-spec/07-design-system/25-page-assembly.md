@@ -20,7 +20,9 @@ Read, in order, before drawing a page:
 4. `02-spec/07-design-system/04-white-blue-theme/03-buttons-motion-and-interactions.md`
 5. `02-spec/07-design-system/04-white-blue-theme/04-cards-heroes-and-section-library.md`
 
-The only headline length already stated in this design system is in `02-spec/07-design-system/20-ai-training-and-checklist-guide.md` and `02-spec/07-design-system/13-section-patterns.md`: the H1 is at most 9 words. No other word cap is defined here. Do not add one.
+Copy caps for a body section: eyebrow at most 3 words, H2 at most 8 words, lead at most 28 words, card body at most 32 words. The H1 is at most 9 words (`20-ai-training-and-checklist-guide.md`, `13-section-patterns.md`). Do not add a cap beyond these.
+
+Menu components and their entrance timings are `33-mega-menu-components.md`. Buttons are `04-white-blue-theme/03-buttons-motion-and-interactions.md` plus `HeaderShineButton` in file 33.
 
 ---
 
@@ -57,6 +59,21 @@ Use only these patterns. The anatomy and colors stay in the cited file.
 | `capability-tabs` | Tabbed capability board on `.band-soft` | same file, section 7.1 |
 | `pricing` | Scope-builder pricing | same file, section 7.2 |
 | `lead-form` | Lead form card | same file, section 7.3 |
+| `hero-page` | Breadcrumb, eyebrow, one accent word, lead, two CTAs, optional 3-item proof | same hero type scale |
+| `hero-split` | Copy column plus one media card (`TiltCard`) | file 33, max tilt `8deg` |
+| `hero-form` | Value copy plus a form card. Do not animate the form | `card-premium` |
+| `hero-editorial` | Category pill, title, byline, cover. No mask on a long title | type scale in the color file |
+| `rail-tech` | Mono label plus a bordered logo grid | soft, tight |
+| `band-stats` | Copy, CTA, `CountUp` grid | file 33 |
+| `rail-testimonial` | One quote, portrait, arrows | soft |
+| `grid-clients` | Logo tiles, grayscale until hover | soft |
+| `band-certs` | Mono label plus a badge row | light |
+| `list-values` | Numbered rows, mono index | light |
+| `grid-cards` | 2 or 3 columns, icon, title, body | `card-premium` |
+| `grid-industry` | Dense tiles, hover reveals one blurb | soft |
+| `accordion-faq` | Accordion plus one question card | light |
+| `prose-body` | Long form on a `720px` measure | blog article |
+| `cta-band` | Closing band, always `soft`. The band before it is `light` | one H2, proof, one primary and two secondary actions |
 
 Card primitives allowed inside those sections: `SurfaceCard`, `GlassCard`, `NeuCard`, `Pill`, `card-premium`, `row-premium`. Hover on `card-premium` grows a `2px` left rule with `scaleY(0)` to `scaleY(1)` over `--dur-base` and `--ease-out`. It does not translate the card. `SurfaceCard` is the only card that uses `hover:-translate-y-1`.
 
@@ -66,7 +83,7 @@ Card primitives allowed inside those sections: `SurfaceCard`, `GlassCard`, `NeuC
 
 ### 4.1 Marketing page
 
-`SiteHeader`, `capability-stack`, then three to seven rows from `solutions-grid`, `workflow-board`, `scroll-stack`, `capability-tabs`, `pricing`. Close with `lead-form`, then the footer.
+`SiteHeader` built from `33-mega-menu-components.md`, one hero (`capability-stack`, `hero-page`, `hero-split`, or `hero-form`), then three to seven rows from section 3. Close with `cta-band` or `lead-form`, then the footer. The band before `cta-band` is `light`.
 
 ### 4.2 Blog index
 
@@ -101,6 +118,7 @@ Column templates stay as specified there:
 ## 6. Refusal list
 
 - Do not add a section id that is not in section 3.
+- Menu parts that are not in `33-mega-menu-components.md` do not exist.
 - Do not introduce Inter, a third accent, or a slide amber (`#ffae00`, `#F5A623`, `#FFD83A`) on a marketing page.
 - Do not change header height (`72px`), scroll threshold (`12px`), or menu motion.
 - Do not name a client, a vendor, or a private repository in generated copy or comments.

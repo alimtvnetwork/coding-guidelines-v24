@@ -187,8 +187,11 @@ Do not duplicate those rules in this file.
 
 | Topic | File |
 |---|---|
-| Canvas scale, amber tokens, JSON themes, noir-gold | `27-slide-canvas-and-themes.md` |
-| Closed layout union | `28-slide-layouts.md` |
-| HUD, transitions, keys, slide builder | `29-slide-navigation-and-builder.md` |
+| Canvas scale, JSON themes, noir-gold | `27-slide-canvas-and-themes.md` |
+| Closed layout union and real slots | `28-slide-layouts.md` |
+| HUD, keys, slide builder | `29-slide-navigation-and-builder.md` |
+| Dark amber palette, type scale, shell layers | `30-slide-palette-type-and-shell.md` |
+| Controller buttons, dots, crossfade | `31-slide-controller-buttons.md` |
+| Pill colors and nine-cell align | `32-slide-color-options.md` |
 
 A marketing page or a blog uses `25-page-assembly.md` and `04-white-blue-theme/`. It does not use this canvas.

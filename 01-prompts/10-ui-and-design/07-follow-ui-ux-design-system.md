@@ -10,6 +10,7 @@ Before you draw a website, a blog, a menu, or a CSS animation, read these files 
 4. `02-spec/07-design-system/04-white-blue-theme/03-buttons-motion-and-interactions.md`
 5. `02-spec/07-design-system/04-white-blue-theme/04-cards-heroes-and-section-library.md`
 6. `02-spec/07-design-system/25-page-assembly.md`
+7. `02-spec/07-design-system/33-mega-menu-components.md`
 
 When the task is the on-page editor, also read `02-spec/07-design-system/26-visual-builder.md`. Do not use that file for slides.
 
@@ -23,10 +24,12 @@ From `02-header-mega-menu-and-footer.md`:
 - Underline grows `scale-x-0` to `scale-x-100` over `--dur-fast`.
 - Mega menu safe region `pad = 14`. Close delay `110ms` to `220ms`. Chevron rotates `180deg`.
 - Promo card flips `rotateY(180deg)` over `820ms` at `perspective: 1400px`.
+- Panel open is `0.26s` from `translateY(-8px)` and `scale(0.985)`. Link accent rule uses `--dur-base` (`420ms`). Those numbers are in `33-mega-menu-components.md`.
+- Header CTA pair is `WhiteBlueButton` outline `sm` plus primary `sm`. The shine pill is `HeaderShineButton` and is a different control.
 
 ## Pages
 
-Compose only the shell and section ids in `25-page-assembly.md`. The H1 is at most 9 words (`20-ai-training-and-checklist-guide.md`). Do not add another word cap.
+Compose only the shell and section ids in `25-page-assembly.md`. Eyebrow at most 3 words, H2 at most 8 words, lead at most 28 words, card body at most 32 words, H1 at most 9 words.
 
 Marketing colors stay navy `#0D2975`, cobalt `#2563EB`, violet `#822EE8`. Do not put slide amber (`#ffae00`, `#F5A623`, `#FFD83A`) on a page.
 

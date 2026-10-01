@@ -37,6 +37,10 @@
 | 25 | 27-slide-canvas-and-themes.md | ✅ | ✅ |
 | 26 | 28-slide-layouts.md | ✅ | ✅ |
 | 27 | 29-slide-navigation-and-builder.md | ✅ | ✅ |
+| 31 | 30-slide-palette-type-and-shell.md | ✅ | ✅ |
+| 32 | 31-slide-controller-buttons.md | ✅ | ✅ |
+| 33 | 32-slide-color-options.md | ✅ | ✅ |
+| 34 | 33-mega-menu-components.md | ✅ | ✅ |
 | 28 | 02-ai-system-design/readme.md | ✅ | ✅ |
 | 29 | 03-sweet-digs-design-system/readme.md | ✅ | ✅ |
 | 30 | 04-white-blue-theme/readme.md | ✅ | ✅ |
@@ -72,6 +76,10 @@
 | `./27-slide-canvas-and-themes.md` | Slide canvas and themes | ✅ |
 | `./28-slide-layouts.md` | Closed slide layouts | ✅ |
 | `./29-slide-navigation-and-builder.md` | HUD and slide builder | ✅ |
+| `./30-slide-palette-type-and-shell.md` | Dark amber palette and type | ✅ |
+| `./31-slide-controller-buttons.md` | Controller buttons and dots | ✅ |
+| `./32-slide-color-options.md` | Pill colors | ✅ |
+| `./33-mega-menu-components.md` | Mega menu components | ✅ |
 | `./03-sweet-digs-design-system/readme.md` | Sweet Digs Theme suite (`01`..`04`) | ✅ |
 | `src/index.css` | Project source | ✅ |
 | `tailwind.config.ts` | Project source | ✅ |
