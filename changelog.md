@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.54.0] - 2026-10-01
+
+### Added
+- remove deprecated fix-repo and fix-except scripts from root
+
+---
+
 ## [v6.53.0] - 2026-10-01
 
 ### Added

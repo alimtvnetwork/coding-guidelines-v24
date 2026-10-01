@@ -1,3 +1,9 @@
+## v6.54.0 — 2026-10-01 (remove deprecated fix-repo and fix-except scripts from root)
+
+**Scope:** Version bump. remove deprecated fix-repo and fix-except scripts from root.
+
+---
+
 ## v6.53.0 — 2026-10-01 (add V6 execute-parent-task prompt with parameter-driven orchestration)
 
 **Scope:** Version bump. add V6 execute-parent-task prompt with parameter-driven orchestration.
