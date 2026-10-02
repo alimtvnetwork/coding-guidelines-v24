@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.65.0] - 2026-10-02
+
+### Added
+- Bright gold slide spec, logo construction, and design confidence report
+
+---
+
 ## [v6.64.0] - 2026-10-01
 
 ### Added

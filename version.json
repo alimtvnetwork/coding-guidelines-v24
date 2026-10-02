@@ -7,11 +7,11 @@
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.64.0",
+  "Version": "6.65.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "a5732203dca026d115659fc263f433a6652319d3",
+  "LastCommitSha": "9fbbc392291c6ae1ac5aca060d51e61e7025e6b1",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -56,20 +56,20 @@
     "${TARGET_PREFIX}/19-plan-spec-steps-v2.md",
     "${TARGET_PREFIX}/20-audit-app-spec.md"
   ],
-  "version": "6.64.0",
-  "updated": "2026-10-01",
+  "version": "6.65.0",
+  "updated": "2026-10-02",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "a5732203dca026d115659fc263f433a6652319d3",
-    "shortSha": "a573220",
-    "branch": "release/v6.64.0"
+    "sha": "9fbbc392291c6ae1ac5aca060d51e61e7025e6b1",
+    "shortSha": "9fbbc39",
+    "branch": "release/v6.65.0"
   },
   "stats": {
-    "totalFiles": 734,
-    "totalLines": 157859,
-    "totalFolders": 23,
-    "totalBytes": 5747029,
+    "totalFiles": 757,
+    "totalLines": 160113,
+    "totalFolders": 24,
+    "totalBytes": 5893113,
     "rootFiles": 6
   },
   "folders": [
@@ -155,14 +155,14 @@
       "path": "07-design-system",
       "name": "Design System",
       "title": "AI-Adaptable Design System",
-      "version": "4.1.0",
-      "updated": "2026-09-24",
+      "version": "4.3.0",
+      "updated": "2026-10-02",
       "status": "Active",
-      "aiConfidence": "Production-Ready",
-      "ambiguity": "None",
-      "fileCount": 42,
-      "lineCount": 9458,
-      "byteCount": 392887
+      "aiConfidence": "See [`98-confidence-report.md`](./98-confidence-report.md). Bright gold tech is the deck an agent can build today.",
+      "ambiguity": "The website builder is file 26 only. Slide types `usp-strike` and `bullets` have no component. A black slide catalog is not in this folder.",
+      "fileCount": 61,
+      "lineCount": 11438,
+      "byteCount": 517337
     },
     {
       "path": "08-docs-viewer-ui",
@@ -317,8 +317,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 35,
-      "lineCount": 8482,
-      "byteCount": 511274
+      "lineCount": 8488,
+      "byteCount": 511479
     },
     {
       "path": "21-app",
@@ -371,6 +371,19 @@
       "fileCount": 1,
       "lineCount": 85,
       "byteCount": 2890
+    },
+    {
+      "path": "25-spec-audits",
+      "name": "Spec Audits",
+      "title": "Spec Audits",
+      "version": "4.3.0",
+      "updated": "2026-10-02",
+      "status": "Active",
+      "aiConfidence": null,
+      "ambiguity": "The two prompt notes below are history. They are not a design score.",
+      "fileCount": 4,
+      "lineCount": 267,
+      "byteCount": 21305
     }
   ],
   "prompts": [

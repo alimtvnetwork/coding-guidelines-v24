@@ -1,3 +1,9 @@
+## v6.65.0 — 2026-10-02 (Bright gold slide spec, logo construction, and design confidence report)
+
+**Scope:** Version bump. Bright gold slide spec, logo construction, and design confidence report.
+
+---
+
 ## v6.64.0 — 2026-10-01 (CBF - synchronize all 167 prompts to skills and sync 43 repositories)
 
 **Scope:** Version bump. CBF - synchronize all 167 prompts to skills and sync 43 repositories.
