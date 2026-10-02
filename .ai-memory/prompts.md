@@ -117,6 +117,7 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `15-cg-execute` | [`15-cg-execute/34-golang-pointer-reduction-and-value-semantics.md`](../01-prompts/15-cg-execute/34-golang-pointer-reduction-and-value-semantics.md) | Ledger: NN-<slug> |
 | `15-cg-execute` | [`15-cg-execute/35-clean-work-artifacts-and-os-caches.md`](../01-prompts/15-cg-execute/35-clean-work-artifacts-and-os-caches.md) | Ledger: NN-<slug> |
 | `15-cg-execute` | [`15-cg-execute/36-variadic-and-spread-parameters.md`](../01-prompts/15-cg-execute/36-variadic-and-spread-parameters.md) | Ledger: NN-<slug> |
+| `15-cg-execute` | [`15-cg-execute/37-string-normalization-and-equalfoldany.md`](../01-prompts/15-cg-execute/37-string-normalization-and-equalfoldany.md) | Ledger: NN-<slug> |
 | `15-cg-execute` | [`15-cg-execute/readme.md`](../01-prompts/15-cg-execute/readme.md) | Coding Guideline Execution Suite (`cg-execute`) — Index & Catalog (must follow) |
 | `16-ci-cd` | [`16-ci-cd/01-ci-cd-fix-tweak.md`](../01-prompts/16-ci-cd/01-ci-cd-fix-tweak.md) | CI/CD Fix Tweak with Targeted Smart Testing & RCA — Workflow (must follow) |
 | `16-ci-cd` | [`16-ci-cd/02-ci-cd-fix-with-release-tweak.md`](../01-prompts/16-ci-cd/02-ci-cd-fix-with-release-tweak.md) | Release-Triggered CI/CD Fix Tweak with Targeted Smart Testing — Workflow (must follow) |
