@@ -31,6 +31,17 @@ It is not the white canvas deck. Do not place this background behind a white-can
 
 ---
 
+## Checklist
+
+- [ ] Read file 01, then file 02. Do not open a second palette.
+- [ ] Colors are the HSL tokens. Components use `hsl(var(--token))` inside this theme's own classes, or `var(--canvas)` after `40-theme-switch.md` maps them.
+- [ ] The page type is one of the ten names in file 02. Any other name stops the work.
+- [ ] `definition` uses the type sizes in file 02. Other types use the shell and their slots.
+- [ ] Copy comes from the deck. This folder does not supply a company name or a sample sentence.
+- [ ] A theme change uses `40-theme-switch.md` and does not edit these layout sizes.
+
+---
+
 ## Closed rules
 
 1. Store colors as HSL triplets. Consume them as `hsl(var(--token))`.

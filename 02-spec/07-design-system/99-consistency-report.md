@@ -17,6 +17,8 @@ The design-spec number ledger is removed. `98-confidence-report.md` is the recor
 | `34-slide-layout-catalog.md` | White-canvas slide measurements |
 | `36-website-content-builder-mode.md` | Pointer to file 26 |
 | `39-logo-construction.md` | Logo construction |
+| `40-theme-switch.md` | The only slide color switch. Count is 8 |
+| `29-slide-navigation-and-builder.md` | Scripted transition numbers and still capture |
 | `98-confidence-report.md` | Scores and refusals |
 
 ---

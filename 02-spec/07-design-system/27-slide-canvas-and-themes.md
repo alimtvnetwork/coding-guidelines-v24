@@ -105,7 +105,18 @@ White Blue navy `#0D2975`, cobalt `#2563EB`, and violet `#822EE8` are page token
  
 ---
  
-## 6. Sibling References
+## 6. Switch
+
+The slide color switch, the count of 8, and the shared variables are `40-theme-switch.md`. Do not build a second switcher from this file. The three-token bright-gold row in section 4 is not the switch id `bright-gold-tech`.
+
+- [ ] Read `40-theme-switch.md` before changing a color.
+- [ ] Use one of the 8 ids. Refuse any other id.
+- [ ] Leave the layout file untouched when only the theme changes.
+- [ ] Do not copy the section 4 three-token row into a new theme.
+
+---
+
+## 7. Sibling References
  
 - Standalone marketing images, social cards, and thumbnail specs: [`37-image-specifications.md`](./37-image-specifications.md)
 - Slide layouts and constraints: [`28-slide-layouts.md`](./28-slide-layouts.md)

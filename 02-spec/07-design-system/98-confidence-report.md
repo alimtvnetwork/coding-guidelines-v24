@@ -7,7 +7,7 @@
 **Updated:** 2026-10-02
 **Status:** Active
 
-This report replaces the design-spec number ledger. A number that is not in `05-bright-gold-tech/`, `26-visual-builder.md`, `34-slide-layout-catalog.md`, or `39-logo-construction.md` is not a build license.
+This report replaces the design-spec number ledger. A number that is not in `05-bright-gold-tech/`, `26-visual-builder.md`, `29-slide-navigation-and-builder.md`, `34-slide-layout-catalog.md`, `39-logo-construction.md`, or `40-theme-switch.md` is not a build license.
 
 ---
 
@@ -20,7 +20,7 @@ This report replaces the design-spec number ledger. A number that is not in `05-
 | White slide system | `34-slide-layout-catalog.md` | 62 | The measured types in that file. Not `usp-strike` or `bullets`. |
 | Logo | `39-logo-construction.md` | 70 | A clean SVG mark after name, idea, and colors are supplied. |
 | Noir-gold deck | Tokens below. No page catalog in this repo. | 48 | Colors only. Do not invent its page geometry. |
-| Shared multi-theme deck engine | Same bright-gold tokens as file 05 | 35 | The theme. Not its product-specific pages. |
+| Slide theme switch | `40-theme-switch.md` | 76 | The 8 listed themes. A ninth waits for six supplied colors. |
 | Black slide system | None | 20 | No measured black catalog exists here. Do not invent one. |
 | Blog kit | None in this folder | 20 | That kit is a separate light/dark oklch set. Do not restyle it from this file. |
 

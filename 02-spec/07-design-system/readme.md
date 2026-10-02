@@ -31,6 +31,7 @@ Before authoring components or generating code, AI agents MUST read and master t
 - [ ] `/learn` **Phase 6: Slide Presentation Engine & Canvas Architecture**
   - Read [`24-slide-presentation-system.md`](./24-slide-presentation-system.md) — Fixed 16:9 canvas coordinate scaling (`1920×1080`), webcam PIP, step reveals.
   - Read [`27-slide-canvas-and-themes.md`](./27-slide-canvas-and-themes.md) — Virtual canvas scale math, theme data models, JSON themes.
+  - Read [`40-theme-switch.md`](./40-theme-switch.md) — 8 slide themes and the only color switch.
   - Read [`28-slide-layouts.md`](./28-slide-layouts.md) — Base slot models and closed layout union.
   - Read [`29-slide-navigation-and-builder.md`](./29-slide-navigation-and-builder.md) — HUD, transitions, keys, slide builder.
   - Read [`30-slide-palette-type-and-shell.md`](./30-slide-palette-type-and-shell.md) — Dark amber palette, type scale, shell layers.
@@ -66,7 +67,7 @@ Before authoring components or generating code, AI agents MUST read and master t
 
 ## Offered Design Systems & Multi-Theme Catalog
 
-We offer 9 production-grade theme families available in both light and dark variations. Each theme has a standardized short-form identifier:
+The slide switcher has 8 themes. The procedure, the count, and the CSS are [`40-theme-switch.md`](./40-theme-switch.md). The 9 rows below are reference families. They are not the switcher. Do not add them to `data-theme` unless file 40 is edited with all six colors.
 
 | Short-Form ID | Theme Name | Base Ground | Accent | Mood & Best For |
 |:---|:---|:---|:---|:---|
@@ -199,6 +200,7 @@ All animations and transitions prioritize **GPU-composited CSS3 transforms and o
 | 37 | [37-image-specifications.md](./37-image-specifications.md) | Images | Exact canvas geometries, safe zones, text rules, and closed image palette |
 | 38 | [38-card-and-pricing-components.md](./38-card-and-pricing-components.md) | Components | 3-Tier modular pricing tables and high-trust editorial floating cards |
 | 39 | [39-logo-construction.md](./39-logo-construction.md) | Brand | SVG mark rules. Stops when name, idea, or colors are missing |
+| 40 | [40-theme-switch.md](./40-theme-switch.md) | Theme | 8 slide themes, one switch, shared color variables |
 | 05c | [05-bright-gold-tech/readme.md](./05-bright-gold-tech/readme.md) | Theme | Bright gold tech deck and website bands |
 | 98 | [98-confidence-report.md](./98-confidence-report.md) | Meta | What an agent can build, and what it must refuse |
 | 02b | [02-ai-system-design/readme.md](./02-ai-system-design/readme.md) | Sub-System | AI-adaptable modern SaaS theme swapping and section blueprints |
