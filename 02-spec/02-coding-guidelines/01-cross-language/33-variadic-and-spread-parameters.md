@@ -387,8 +387,8 @@ _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-crit
 
 ### AC-CG-TYPE-033: Variadic & Spread Parameter Conformance
 
-**Given** APIs accepting collections of homogenous elements across Go, TypeScript, and Rust.  
-**When** Codebases and specifications are analyzed by linters or guideline verification suites.  
+**Given** APIs accepting collections of homogenous elements across Go, TypeScript, and Rust.
+**When** Codebases and specifications are analyzed by linters or guideline verification suites.
 **Then** Trailing collection parameters are variadic (`...T`, `...items`, `&[T]`), callers pass single items without artificial wrapper literals, signatures do not exceed 2–3 parameters, and all examples strictly enforce affirmative booleans and relative paths.
 
 - **AC-CG-033-A:** All file paths and cross-references within this document use strictly relative git paths.

@@ -3,11 +3,11 @@
 > **/goal** Provide a consolidated, traceable registry of testable acceptance criteria across all cross-language coding guideline specifications.
 > **/learn** Reference individual criteria by canonical ID (`AC-CG-[CATEGORY]-[NUM]`) and verify compliance using targeted linters.
 
-**Version:** 4.0.0  
-**Last Updated:** 2026-10-02  
-**Status:** Active  
-**AI Confidence:** Production-Ready  
-**Ambiguity:** None  
+**Version:** 4.0.0
+**Last Updated:** 2026-10-02
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Ambiguity:** None
 
 ---
 

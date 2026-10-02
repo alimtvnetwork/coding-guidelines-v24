@@ -381,8 +381,8 @@ _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-crit
 
 ### AC-CG-TYPE-034: String Normalization & EqualFoldAny Conformance
 
-**Given** String equality, case-insensitive comparison, and trimming operations across Go, TypeScript, Rust, and Python.  
-**When** Linters and CI suites scan codebase repositories for string matching patterns.  
+**Given** String equality, case-insensitive comparison, and trimming operations across Go, TypeScript, Rust, and Python.
+**When** Linters and CI suites scan codebase repositories for string matching patterns.
 **Then** Multi-candidate comparisons invoke canonical `EqualFoldAnyTrim` / `EqualFoldAny` without inline OR chaining, preserving zero unnecessary heap allocations, positive booleans, and 100% relative paths.
 
 - **AC-CG-034-A:** Spec file `02-spec/02-coding-guidelines/01-cross-language/34-string-normalization-and-equalfoldany.md` exists and contains 100% relative paths.

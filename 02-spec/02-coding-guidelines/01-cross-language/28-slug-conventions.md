@@ -12,8 +12,8 @@
 
 . **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
 
-**Version:** 3.2.0  
-**Updated:** 2026-04-16  
+**Version:** 3.2.0
+**Updated:** 2026-04-16
 
 ---
 

@@ -1,4 +1,16 @@
-# Generic Return Types — No interface{}/any/object Returns
+# Generic Return Types — No interface{}/any/object Returns (AI Execution Prompt)
+
+> **/goal** Eliminate loose, untyped return values (`interface{}`, `any`, `object`, `unknown`) across all function signatures, enforcing compile-time type safety via parametric generics and monadic Result wrappers.
+> **/learn** Understand how untyped returns force downstream callers into error-prone runtime type assertions; master generic functions, Result wrappers, and reusable named type aliases across Go, TypeScript, C#, and Rust.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Replace all `interface{}`, `any`, and `object` return signatures with generic types (`T`) or concrete domain types.
+- [ ] `/learn` Never use unions or dynamic return types based on runtime flags; split into distinct, explicitly typed methods instead.
+- [ ] `/goal` Create named type aliases (e.g. `type UserResult = apperror.Result[User]`) when generic wrappers appear more than once.
+- [ ] `/learn` Verify zero untyped return violations and 100% type preservation across all packages via automated guideline linters.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
 
 > **Parent:** [Cross-Language Overview](./readme.md)
 > **Version:** 1.0.0
@@ -244,3 +256,19 @@ type OrderResult = Result<Order, AppError>;
 - [AppError Result Types](../../03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/04-result-types.md) — Go Result[T] pattern
 
 ---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-TYPE-025: Generic Return Types and Elimination of Untyped Values
+
+**Given** Function and method signatures returning dynamic or polymorphic values across polyglot codebases.
+**When** Guidelines/linters audit the codebase for loose `interface{}`, `any`, `object`, or `unknown` returns.
+**Then** All functions return strongly-typed generic structures or named Result aliases with zero downcasting requirements, achieving exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only
+```
+**Expected:** exit 0. Zero violations.

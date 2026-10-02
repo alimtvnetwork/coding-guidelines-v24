@@ -52,6 +52,9 @@ learn /learn if you have to learn something and /plan stuff before working pleas
 | **Wave 5** | Task-06A | Worker 01 | `01-cross-language/03`, `06`, `08` | DONE | PASS exit 0, 3 files upgraded with AI checklists and AC-CG-ARCH-006..008 |
 | **Wave 5** | Task-06B | Worker 02 | `01-cross-language/16`, `19`, `20`, `23` | DONE | PASS exit 0, 4 files upgraded with AI checklists and AC-CG-ARCH-016..023 |
 | **Wave 6** | Task-07 | Lead | `01-cross-language/97-acceptance-criteria.md`, `97-acceptance-criteria.md`, readmes | DONE | PASS exit 0, consolidated Acceptance Criteria registry created |
+| **Wave 7A** | Task-08A | Worker 01 | `03-golang/readme.md`, `02-boolean-standards.md`, `03-httpmethod-enum.md`, `05-defer-rules.md` | DONE | PASS exit 0, 4 files upgraded with AI checklists and AC-CG-GO-000..005 |
+| **Wave 7B** | Task-08B | Worker 02 | `03-golang/06-string-slice-internals.md`, `07-code-severity-taxonomy.md`, `08-pathutil-fileutil-spec.md`, `09-wrapped-boolean-results.md` | DONE | PASS exit 0, 4 files upgraded with AI checklists and AC-CG-GO-006..009 |
+| **Wave 7C** | Task-08C | Lead | `03-golang/97-acceptance-criteria.md`, `02-coding-guidelines/97-acceptance-criteria.md` | DONE | PASS exit 0, Go Acceptance Criteria registry and root criteria synchronized |
 
 ---
 
@@ -59,4 +62,6 @@ learn /learn if you have to learn something and /plan stuff before working pleas
 
 1. **Relative Paths:** `python linter-scripts/check-relative-paths.py` -> exit 0 (0 absolute paths or `file:///` URIs across repository).
 2. **Forbidden Strings & Secrets:** `python linter-scripts/check-forbidden-strings.py` -> exit 0 (zero secrets, zero forbidden patterns).
-3. **Guideline Formatting:** `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only` -> exit 0.
+3. **Guideline Formatting (Cross-Language):** `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only` -> exit 0.
+4. **Guideline Formatting (Golang):** `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/03-golang --check-only` -> exit 0.
+

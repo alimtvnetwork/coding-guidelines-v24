@@ -1,4 +1,16 @@
-# Go String & Slice Internals
+# Go String & Slice Internals (AI Execution Prompt)
+
+> **/goal** Master Go string and slice memory representation, eliminate redundant pointers (`*string`, `*[]T`), prevent unintentional mutations across sub-slices, and enforce preallocation and zero-allocation idioms.
+> **/learn** Internal headers (`StringHeader` 16 bytes, `SliceHeader` 24 bytes), value-passing semantics with underlying reference sharing, re-allocation mechanics on `append()`, sub-slice mutation hazards, and compiler copy optimizations.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Pass strings and slices by value for read-only operations; never accept `*string` or `*[]T` unless actively mutating the slice header.
+- [ ] `/learn` Understand that sub-slicing (`s[1:3]`) references the original backing array; copy explicitly when sub-slices must not retain large allocations or mutate shared memory.
+- [ ] `/goal` Preallocate slice capacity via `make([]T, 0, cap)` when the element count is known to avoid incremental heap reallocations.
+- [ ] `/learn` Verify that strings are treated as immutable values and string concatenations in tight loops use `strings.Builder`.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
 
 **Version:** 3.2.0
 **Updated:** 2026-04-16
@@ -69,3 +81,21 @@ type SliceHeader struct {
 ---
 
 *Go string & slice internals — consolidated from pre-code review guides.*
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-GO-006: Go String and Slice Preallocation & Memory Efficiency Standards
+
+**Given** Go source code across packages and CLI modules.
+**When** Guideline linters audit the codebase.
+**Then** String and slice parameters adhere to value semantics without redundant pointers, slice allocations are preallocated where capacities are known, and zero memory corruption occurs.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/03-golang --check-only
+```
+**Expected:** exit 0. Zero violations detected.

@@ -1,9 +1,21 @@
-# Cross-Language Coding Guidelines
+# Cross-Language Coding Guidelines (AI Execution Prompt)
 
-**Version:** 3.2.0
+> **/goal** Master and enforce cross-language coding standards, boolean conventions, naming rules, and clean architecture across TypeScript, Go, PHP, and Rust codebases.
+> **/learn** Internalize affirmative boolean principles, zero-nesting guard clauses, parameter struct limits, error management wrapping, and strict typing.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Enforce affirmative `is` and `has` boolean prefixes; ban explicit `== true` evaluations and mixed polarity conditionals.
+- [ ] `/learn` Apply zero-nesting guard clauses and invert early returns to eliminate nested branching.
+- [ ] `/goal` Enforce struct/method parameter limits (max 2-3 loose parameters; encapsulate in `*Params` structs).
+- [ ] `/learn` Validate compliance across the directory using `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only`.
+
+. **CRITICAL AI INSTRUCTION:** This specification is the primary entry point for all cross-language coding standards. AI agents MUST read this file first before exploring other files in this folder.
+
+**Version:** 3.3.0
 **Status:** Active
-**Updated:** 2026-04-16
-**AI Confidence:** High
+**Updated:** 2026-10-02
+**AI Confidence:** Production-Ready
 **Ambiguity:** None
 
 ---
