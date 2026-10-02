@@ -69,7 +69,7 @@ There is no file `01` in this folder. There is no second `26`–`30` block.
 | Slide types match components | pass | `34-slide-layout-catalog.md` marks `usp-strike` and `bullets` as not in the source. |
 | One version stamp | fail | This file, the readme, file 26, file 34, and file 36 are `4.3.0` / 2026-10-02. Other files in this folder still say `1.0.0`, `1.1.0`, `3.2.0`, or `4.0.0`. |
 | No false `Ambiguity: None` | fail | Files 10, 11, 18, 20, 21, 22, 23, 24, 32, 33, and 35 still say `Ambiguity: None` while section 3 of this report is open. |
-| Every number in files 24–38 has a source row | fail | `.ai-memory/audits/03-design-spec-source-ledger/readme.md` lists the rows. Unverified rows are not measured. |
+| Every number in files 24–38 has a source row | fail | `02-spec/25-spec-audits/03-design-spec-source-ledger/readme.md` lists the rows. Unverified rows are not measured. |
 | Page-copy extracts are not a color source | pass | Prompt `09-write-and-enhance-design-spec.md` says a copy extract contributes no color, type, or motion. |
 
 ---

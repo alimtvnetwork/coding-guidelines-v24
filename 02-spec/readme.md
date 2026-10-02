@@ -49,6 +49,7 @@ Root index for the entire specification tree. Each top-level folder contains a d
 | 22 | [App Issues](./22-app-issues/readme.md) | App bug analysis, root cause analysis, fix documentation |
 | 23 | [App DB](./23-app-db/readme.md) | App-specific data model, table designs, migration strategies |
 | 24 | [App UI — Design System](./24-app-ui-design-system/readme.md) | App-specific UI, design system, theming, component patterns |
+| 25 | [Spec Audits](./25-spec-audits/readme.md) | Audit work lists for specs. A failed row is the next edit. |
 
 ---
 
