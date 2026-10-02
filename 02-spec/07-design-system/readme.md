@@ -45,7 +45,7 @@ Before authoring components or generating code, AI agents MUST read and master t
 - [ ] `/learn` **Phase 6d: Avant-Garde Navigation & Mega Menu System**
   - Read [`10-header-navigation.md`](./10-header-navigation.md) & [`33-mega-menu-components.md`](./33-mega-menu-components.md) — Sticky `72px` glass header, `SlideSwapLabel` CSS keyframes, growing left hairline, 3D flip promo card, and safe-region hover mechanics.
 - [ ] `/learn` **Phase 6e: Website Content Builder Mode & In-Page Visual Editor**
-  - Read [`26-visual-builder.md`](./26-visual-builder.md) — The canonical website-builder contract. Review-only overlay, navigation suppression, Text/Images/Menu/Layout modes, and deterministic `changes.md` ZIP export. [`36-website-content-builder-mode.md`](./36-website-content-builder-mode.md) is a pointer to that file.
+  - Read [`36-website-content-builder-mode.md`](./36-website-content-builder-mode.md) & [`26-visual-builder.md`](./26-visual-builder.md) — Production-grade website visual builder overlay: review-only gate (`?builder=1&email={OWNER_EMAIL}`), in-place `contentEditable` text editing, images/icon replacement modal, menu link editor, floating side panel diff tracking, and deterministic `content-changes--all-pages--*.zip` export.
 - [ ] `/learn` **Phase 6f0: Bright Gold Tech, Logo & Theme Switch**
   - Read [`05-bright-gold-tech/readme.md`](./05-bright-gold-tech/readme.md) — Dark gold tokens, dot-field background, definition page, and page types.
   - Read [`39-logo-construction.md`](./39-logo-construction.md) — One-archetype SVG mark. Missing name, idea, or colors stops the job.
@@ -198,7 +198,7 @@ All animations and transitions prioritize **GPU-composited CSS3 transforms and o
 | 33 | [33-mega-menu-components.md](./33-mega-menu-components.md) | Navigation | Avant-garde mega panel dropdown, 3D flip card, growing left hairline, link staggers |
 | 34 | [34-slide-layout-catalog.md](./34-slide-layout-catalog.md) | Presentation | Pure DOM text mandate and 20 master slide layout models |
 | 35 | [35-slide-builder-canvas-inspector.md](./35-slide-builder-canvas-inspector.md) | Slide Builder | Dual-store architecture, 7 visual layers, selection overlays, hotkeys, acoustic audio cues, headless PDF |
-| 36 | [36-website-content-builder-mode.md](./36-website-content-builder-mode.md) | Web Builder | Pointer to canonical website visual builder contract `26-visual-builder.md` |
+| 36 | [36-website-content-builder-mode.md](./36-website-content-builder-mode.md) | Web Builder | In-page review-only builder overlay, `contentEditable` inline text editing, media modal, and ZIP diff exports |
 | 37 | [37-image-specifications.md](./37-image-specifications.md) | Images | Exact canvas geometries, safe zones, text rules, and closed image palette |
 | 38 | [38-card-and-pricing-components.md](./38-card-and-pricing-components.md) | Components | 3-Tier modular pricing tables, split pricing, What We Do, Ruled Paper workflow, Enterprise Hero |
 | 39 | [39-logo-construction.md](./39-logo-construction.md) | Brand | Reusable SVG mark construction rules, archetypes, and theme variables |

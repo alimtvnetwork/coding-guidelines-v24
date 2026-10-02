@@ -22,7 +22,7 @@ AI agents MUST sequentially ingest these specification files:
 7. `02-spec/07-design-system/21-css3-animations-and-interactions.md` — Hardware-accelerated CSS3 keyframes, marquees, accordions, neon borders.
 8. `02-spec/07-design-system/25-page-assembly.md` — Site and blog shells, copy length constraints.
 9. `02-spec/07-design-system/33-mega-menu-components.md` — Avant-garde mega panel dropdown: 260ms entrance, multi-column grid, growing left hairline over 420ms, 3D promotional flip card (`perspective: 1400px`, `rotateY(180deg)` over 820ms).
-10. `02-spec/07-design-system/26-visual-builder.md` — The only website-builder contract. `36-website-content-builder-mode.md` is a pointer and defines no second gate or id scheme.
+10. `02-spec/07-design-system/36-website-content-builder-mode.md` — Comprehensive website visual builder overlay: review-only gate (`?builder=1&email={OWNER_EMAIL}`), in-place `contentEditable` text editor, images/icon replacement modal, menu link editor, floating side panel diff tracking, and deterministic `content-changes--all-pages--*.zip` export.
 11. `02-spec/07-design-system/37-image-specifications.md` — Infographics, social banners, YouTube thumbnails, safe zones, and aspect ratio standards.
 12. `02-spec/07-design-system/38-card-and-pricing-components.md` — 3-tier pricing table matrix, featured badges, floating editorial sections.
 13. `02-spec/07-design-system/41-homepage-and-blog-sections.md` — 15 Flagship homepage sections and complete blog editorial templates.
@@ -116,7 +116,7 @@ When authoring blog pages, follow `41-homepage-and-blog-sections.md`:
 
 ## 6. Client-Side Website Content Builder Readiness
 
-When building marketing or blog pages, follow `02-spec/07-design-system/26-visual-builder.md` only:
+When building marketing or blog pages, follow `02-spec/07-design-system/36-website-content-builder-mode.md` and `26-visual-builder.md`:
 1. Open the editor with `?builder=1&email={OWNER_EMAIL}`. Do not use `?builder=true`.
 2. Id is the content-module source key, else the DJB2 hash in that file. Do not invent `data-edit-id`.
 3. Accent stays a `SPAN` with `class="gradient-text"`. Do not invent `[[accent]]` markers.
