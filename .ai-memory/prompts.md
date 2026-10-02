@@ -51,6 +51,7 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `10-ui-and-design` | [`10-ui-and-design/07-follow-ui-ux-design-system.md`](../01-prompts/10-ui-and-design/07-follow-ui-ux-design-system.md) | Follow UI/UX Design System Specification & Component Assembly |
 | `10-ui-and-design` | [`10-ui-and-design/08-create-slide-deck.md`](../01-prompts/10-ui-and-design/08-create-slide-deck.md) | Create Presentation Slide Deck & Live Builder System |
 | `10-ui-and-design` | [`10-ui-and-design/09-write-and-enhance-design-spec.md`](../01-prompts/10-ui-and-design/09-write-and-enhance-design-spec.md) | Write and Enhance a Design Spec That a Blind AI Can Follow |
+| `10-ui-and-design` | [`10-ui-and-design/readme.md`](../01-prompts/10-ui-and-design/readme.md) | UI and Design Prompts Library |
 | `11-content-and-seo` | [`11-content-and-seo/01-jokes-ideas-generate.md`](../01-prompts/11-content-and-seo/01-jokes-ideas-generate.md) | Humor Generation & Content Ideation — Content Workflow (must follow) |
 | `11-content-and-seo` | [`11-content-and-seo/02-lowercase-readme-and-sequence.md`](../01-prompts/11-content-and-seo/02-lowercase-readme-and-sequence.md) | Lowercase Filename Enforcement & Sequence Re-Ordering — Workflow (must follow) |
 | `11-content-and-seo` | [`11-content-and-seo/03-seo-optimization.md`](../01-prompts/11-content-and-seo/03-seo-optimization.md) | SEO Content Optimization & Meta Tag Auditing — Content Workflow (must follow) |
