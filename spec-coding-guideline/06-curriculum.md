@@ -1,4 +1,18 @@
-# Curriculum — 10 Code-Red Topics
+# Slide Curriculum Mapping (AI Execution Prompt)
+
+> **/goal** Define and maintain the comprehensive 10+ topic curriculum mapping, slide metadata, before/after code transformations, and per-topic GIF preview associations.
+> **/learn** Structure each slide topic around clear before/after contrasts, enforce positively-named guards, AppError wrapping, structured logging, and ensure zero drift between slide definitions and Remotion compositions.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Verify all 10 core code-red curriculum topics map to dedicated slide components in `slides-app/src/slides/`.
+- [ ] `/learn` Enforce concrete before/after code demonstrations for all technical guidelines; avoid abstract explanations.
+- [ ] `/goal` Maintain exact 1:1 parity between curriculum topics and Remotion GIF export targets in `08-gif-generation.md`.
+- [ ] `/learn` Ensure all code samples across slides adhere strictly to repository coding standards and positive boolean rules.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
+
+---
 
 **Version:** 1.0.0
 
@@ -263,5 +277,21 @@ one `.gif` per topic for embedding on the main landing page:
 
 ## Cross-references
 
-- Slide authoring: [02-slide-authoring.md](./02-slide-authoring.md)
-- GIF generation: [07-gif-generation.md](./07-gif-generation.md)
+- Slide authoring: [03-slide-authoring.md](./03-slide-authoring.md)
+- GIF generation: [08-gif-generation.md](./08-gif-generation.md)
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-SLIDE-006: Curriculum Content Mapping and Module Sequencing
+
+**Given** The complete 10+ topic curriculum specification for interactive slide decks.
+**When** Linters and CI/CD pipelines validate curriculum mappings, slide topic structures, and cross-references.
+**Then** All topics map to corresponding slide source files, before/after code examples remain compliant with repository guidelines, and all relative paths conform to zero-storage standards.
+
+**Verification command:**
+```bash
+python linter-scripts/check-relative-paths.py
+```
+**Expected:** exit 0. Zero absolute paths or file:/// URIs.

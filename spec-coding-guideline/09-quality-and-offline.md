@@ -1,4 +1,18 @@
-# Quality, Offline, and Accessibility
+# Offline Quality & Benchmark Standards (AI Execution Prompt)
+
+> **/goal** Establish, enforce, and verify offline operation benchmarks, WCAG AA accessibility, cross-browser compatibility, and performance budgets for slide decks.
+> **/learn** Validate zero external network requests, sub-800ms initial load times under `file://`, full keyboard navigation, screen reader live announcements, and automated visual regression testing.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Enforce strict offline isolation: zero `http://` or `https://` URLs in `dist/` and no remote font preconnects.
+- [ ] `/learn` Verify keyboard navigation (arrows, space, F, G, P, Esc) and focus-visible rings across all interactive controls.
+- [ ] `/goal` Guarantee performance benchmarks: < 800ms initial slide load under `file://` protocol and < 100ms slide transitions.
+- [ ] `/learn` Validate WCAG AA contrast ratios (4.5:1), reduced-motion preferences, and screen reader `aria-live` announcements.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
+
+---
 
 **Version:** 1.0.0
 
@@ -84,9 +98,25 @@ When implementation lands, these files become required:
 - `slides-app/readme.md` — setup, build, package, troubleshoot
 - `slides-app/changelog.md` — semver per the main repo's release cadence
 - `dist/README.txt` — end-user usage (see
-  [06-build-and-zip-pipeline.md](./06-build-and-zip-pipeline.md))
+  [07-build-and-zip-pipeline.md](./07-build-and-zip-pipeline.md))
 
 ## Cross-references
 
-- Build pipeline (where the offline checks run): [06-build-and-zip-pipeline.md](./06-build-and-zip-pipeline.md)
+- Build pipeline (where the offline checks run): [07-build-and-zip-pipeline.md](./07-build-and-zip-pipeline.md)
 - Architecture (Vite `base: './'` + bundled fonts): [02-architecture.md](./02-architecture.md)
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-SLIDE-009: Offline Viewer Quality Benchmarks and Reliability Standards
+
+**Given** The standalone slide deck distribution bundle tested in an isolated, offline environment.
+**When** Quality assurance suites, accessibility audits, and CI/CD validation scripts inspect bundle artifacts.
+**Then** All offline guarantees are verified (zero external URLs, size < 5 MB), keyboard accessibility meets WCAG AA standards, and relative path linters pass with zero violations.
+
+**Verification command:**
+```bash
+python linter-scripts/check-relative-paths.py
+```
+**Expected:** exit 0. Zero absolute paths or file:/// URIs.

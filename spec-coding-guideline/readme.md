@@ -1,4 +1,4 @@
-# Coding Guidelines Internal Specification Index
+# Coding Guidelines Internal Specification Index (AI Execution Prompt)
 
 > **/goal** Master and enforce the internal repository specifications and slide deck presentation system for Coding Guidelines.
 > **/learn** Read the sequentially ordered specification files in this directory when maintaining internal tools, presentation systems, or visual docs.
@@ -20,3 +20,19 @@
 * [07-build-and-zip-pipeline.md](07-build-and-zip-pipeline.md): CI packaging to `dist.zip` for release assets.
 * [08-gif-generation.md](08-gif-generation.md): Automated GIF generation pipeline for slide previews.
 * [09-quality-and-offline.md](09-quality-and-offline.md): Offline viewer support and quality benchmarks.
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-SLIDE-001: Internal Coding Guidelines Specification Index Conformance
+
+**Given** The internal presentation and tooling specifications under `spec-coding-guideline/`.
+**When** Linters and CI/CD checks audit the index and referenced documentation files.
+**Then** Every specification file contains an active AI execution header, actionable agent checklist, and testable acceptance criteria with zero absolute paths.
+
+**Verification command:**
+```bash
+python linter-scripts/check-relative-paths.py
+```
+**Expected:** exit 0. Zero absolute paths or file:/// URIs.

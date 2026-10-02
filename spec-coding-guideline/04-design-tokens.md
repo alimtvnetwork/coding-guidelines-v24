@@ -1,8 +1,20 @@
-# Design Tokens
+# Slide Design Tokens & Typography (AI Execution Prompt)
 
-**Version:** 1.0.0
+> **/goal** Enforce strict visual consistency, theme tokenization, typography rules, and 1920×1080 canvas standards across all presentation slide components.
+> **/learn** Master the Ubuntu font hierarchy, CSS custom properties with HSL color channels, 6-level spacing scale, and Lucide iconography for offline rendering.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Verify Ubuntu Regular, Bold, and Ubuntu Mono fonts are bundled locally in `slides-app/public/fonts/` with zero Google Fonts CDN calls.
+- [ ] `/learn` Enforce HSL component tokens in `tokens.css` for background, foreground, border, brand, and code diff highlighting.
+- [ ] `/goal` Maintain fixed 1920×1080 canvas authoring with `--space-6` (96px) outer padding and transform scaling.
+- [ ] `/learn` Validate that only tree-shaken Lucide SVG icons are imported without loading runtime icon webfonts.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
 
 ---
+
+**Version:** 1.0.0
 
 ## Typography — Ubuntu
 
@@ -123,5 +135,21 @@ specific icons used (tree-shaken). No icon font.
 
 ## Cross-references
 
-- Slide authoring: [02-slide-authoring.md](./02-slide-authoring.md)
-- Animation: [04-animation-primitives.md](./04-animation-primitives.md)
+- Slide authoring: [03-slide-authoring.md](./03-slide-authoring.md)
+- Animation: [05-animation-primitives.md](./05-animation-primitives.md)
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-SLIDE-004: Design Tokens, Typography, and Palette Standards
+
+**Given** Design tokens, font definitions, and layout styles in `slides-app/src/styles/tokens.css`.
+**When** Style linters and relative path auditors validate the styling assets and font bundle references.
+**Then** All font assets resolve locally, color tokens compose via HSL custom properties, and zero absolute paths exist in the spec or style declarations.
+
+**Verification command:**
+```bash
+python linter-scripts/check-relative-paths.py
+```
+**Expected:** exit 0. Zero absolute paths or file:/// URIs.

@@ -1,8 +1,20 @@
-# Architecture & Isolation
+# Slides Architecture & Isolation (AI Execution Prompt)
 
-**Version:** 1.0.0
+> **/goal** Architect and maintain the standalone `slides-app/` Vite + React presentation system strictly isolated from the main application without cross-boundary imports or shared bundle dependencies.
+> **/learn** Enforce the isolated directory boundary, relative asset resolution (`base: './'`), bundled local Ubuntu fonts, and packaging to `dist.zip` for double-clickable offline execution.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Verify `slides-app/` has an independent `package.json`, `tsconfig.json`, and Vite 5 configuration isolated from root dependencies.
+- [ ] `/learn` Ensure zero imports cross the boundary between `slides-app/` and root `/src/`, `/spec/`, or `/linters/`.
+- [ ] `/goal` Guarantee `base: './'` in `slides-app/vite.config.ts` so static HTML and assets resolve correctly under offline viewing.
+- [ ] `/learn` Verify root `.gitignore` excludes `slides-app/node_modules/`, `slides-app/dist/`, and `slides-app/dist.zip`.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
 
 ---
+
+**Version:** 1.0.0
 
 ## Directory layout (repo root)
 
@@ -115,5 +127,21 @@ Decision: **separate app**.
 
 ## Cross-references
 
-- Slide authoring contract: [02-slide-authoring.md](./02-slide-authoring.md)
-- Build pipeline: [06-build-and-zip-pipeline.md](./06-build-and-zip-pipeline.md)
+- Slide authoring contract: [03-slide-authoring.md](./03-slide-authoring.md)
+- Build pipeline: [07-build-and-zip-pipeline.md](./07-build-and-zip-pipeline.md)
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-SLIDE-002: Slides Architecture and Isolation Boundary
+
+**Given** The standalone `slides-app/` presentation subsystem within the repository monorepo.
+**When** Codebases and linters verify the architecture boundaries, module imports, and path references.
+**Then** Zero imports cross from `slides-app/` to parent directories, Vite config maintains `base: './'`, and all relative paths conform to zero-storage standards.
+
+**Verification command:**
+```bash
+python linter-scripts/check-relative-paths.py
+```
+**Expected:** exit 0. Zero absolute paths or file:/// URIs.

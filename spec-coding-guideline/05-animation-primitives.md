@@ -1,8 +1,20 @@
-# Animation Primitives
+# Slide Animation Primitives (AI Execution Prompt)
 
-**Version:** 1.0.0
+> **/goal** Define and govern purposeful, comprehension-driven animation primitives, timing budgets, and reduced-motion fallbacks for slide deck transitions.
+> **/learn** Master the 5 animation primitives (entrance stagger, line highlight, before/after morph, strikethrough, bullet stagger), Framer Motion integration, and total auto-motion budgets (≤2.2s).
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Ensure every animation serves instructional comprehension rather than decorative motion.
+- [ ] `/learn` Enforce the 2.2-second maximum auto-revealed motion budget per slide so presenters are never stalled.
+- [ ] `/goal` Verify layout transitions and morph animations maintain parity between Framer Motion and Remotion GIF pipelines.
+- [ ] `/learn` Enforce mandatory `@media (prefers-reduced-motion: reduce)` accessibility overrides to instantly render final states.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
 
 ---
+
+**Version:** 1.0.0
 
 ## Philosophy
 
@@ -100,5 +112,21 @@ appears in its final state instantly. This is mandatory for accessibility.
 
 ## Cross-references
 
-- GIF generation reuses these timings: [07-gif-generation.md](./07-gif-generation.md)
-- Slide authoring: [02-slide-authoring.md](./02-slide-authoring.md)
+- GIF generation reuses these timings: [08-gif-generation.md](./08-gif-generation.md)
+- Slide authoring: [03-slide-authoring.md](./03-slide-authoring.md)
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-SLIDE-005: Frame Animation Primitives and Motion Standards
+
+**Given** Slide animation definitions and transitions implemented using Framer Motion or CSS keyframes.
+**When** Animation parameters, timing budgets, and accessibility queries are audited across slide specs and components.
+**Then** Auto-revealed motion stays within the ≤2.2s budget, reduced motion is respected, and all relative paths conform to repository standards.
+
+**Verification command:**
+```bash
+python linter-scripts/check-relative-paths.py
+```
+**Expected:** exit 0. Zero absolute paths or file:/// URIs.

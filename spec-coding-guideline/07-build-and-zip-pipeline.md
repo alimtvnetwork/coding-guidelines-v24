@@ -1,4 +1,18 @@
-# Build & ZIP Pipeline
+# Build and Zip Distribution Pipeline (AI Execution Prompt)
+
+> **/goal** Build, package, and verify the self-contained offline distribution bundle `slides-app/dist.zip` for zero-install, double-clickable presentation viewing.
+> **/learn** Enforce single JS bundle packaging, relative asset resolution (`base: './'`), bundled local Ubuntu fonts, embedded usage documentation, and strict < 5 MB artifact size ceilings.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Verify Vite builds `slides-app` with single-bundle rollup configuration and relative `./` asset paths.
+- [ ] `/learn` Ensure zero external network URLs, remote CDN font links, or preconnect headers in build outputs.
+- [ ] `/goal` Package `slides-app/dist/` into `dist.zip` root directory layout with bundled `README.txt` and font licenses.
+- [ ] `/learn` Verify total uncompressed output size stays strictly under 5 MB and zip archive under 3 MB.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
+
+---
 
 **Version:** 1.0.0
 
@@ -134,4 +148,20 @@ follow-up.)
 ## Cross-references
 
 - Architecture & Vite config (`base: './'`): [02-architecture.md](./02-architecture.md)
-- Offline guarantees verification: [08-quality-and-offline.md](./08-quality-and-offline.md)
+- Offline guarantees verification: [09-quality-and-offline.md](./09-quality-and-offline.md)
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-SLIDE-007: Packaging, Dist Zip and Release Distribution Pipeline
+
+**Given** The standalone build and distribution pipeline for the presentation slide deck.
+**When** Packaging scripts execute verification passes for relative path resolution, external URL absence, and asset bundle sizing.
+**Then** The packaging process yields a compliant, double-clickable `dist.zip` containing all offline assets with zero external dependencies and 100% relative paths.
+
+**Verification command:**
+```bash
+python linter-scripts/check-relative-paths.py
+```
+**Expected:** exit 0. Zero absolute paths or file:/// URIs.

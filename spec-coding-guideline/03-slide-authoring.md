@@ -1,8 +1,20 @@
-# Slide Authoring Contract
+# Slide Authoring Guidelines (AI Execution Prompt)
 
-**Version:** 1.0.0
+> **/goal** Standardize the authoring of interactive presentation slides with component contracts, mandatory before/after visual contrast, strict code sizing limits, and offline-safe local assets.
+> **/learn** Enforce the one-file-per-slide model, `<SlideLayout>` and `<CodeDiff>` component usage, 12-line code sample maximums, and zero external CDN dependencies.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Verify each slide is authored as an isolated component under `slides-app/src/slides/NN-topic-name.tsx` and registered in `deck.ts`.
+- [ ] `/learn` Enforce visual contrast (before vs. after) on every technical slide; pure-text training slides are strictly forbidden.
+- [ ] `/goal` Cap code blocks at a maximum of 12 lines per `before` or `after` block to guarantee readability on 1920×1080 canvas.
+- [ ] `/learn` Verify zero external CDN URLs or remote asset calls; all images, fonts, and dependencies must resolve locally from `public/`.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
 
 ---
+
+**Version:** 1.0.0
 
 ## One file = one slide
 
@@ -140,5 +152,21 @@ For non-code comparisons (e.g. error trace before/after AppError wrapping).
 
 ## Cross-references
 
-- Animation primitives: [04-animation-primitives.md](./04-animation-primitives.md)
-- Curriculum: [05-curriculum.md](./05-curriculum.md)
+- Animation primitives: [05-animation-primitives.md](./05-animation-primitives.md)
+- Curriculum: [06-curriculum.md](./06-curriculum.md)
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-SLIDE-003: Slide Authoring Standards and Component Contracts
+
+**Given** Interactive presentation slides created for the coding guideline curriculum in `slides-app/src/slides/`.
+**When** Linters and component authoring checks inspect slide implementations, prop definitions, and asset links.
+**Then** All slides adhere to the one-file-per-slide convention, utilize valid `<SlideLayout>` contracts, embed local assets, and maintain 100% relative repository paths.
+
+**Verification command:**
+```bash
+python linter-scripts/check-relative-paths.py
+```
+**Expected:** exit 0. Zero absolute paths or file:/// URIs.

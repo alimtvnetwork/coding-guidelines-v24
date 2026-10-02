@@ -1,4 +1,18 @@
-# Per-Topic GIF Generation
+# Automated GIF Generation Pipeline (AI Execution Prompt)
+
+> **/goal** Automate high-fidelity animated GIF preview generation for all curriculum topics using Remotion compositions and gifski palette optimization.
+> **/learn** Eliminate slide-to-preview visual drift by sharing design tokens and content constants between React slides and Remotion frames, enforcing 1280x720@24fps, infinite looping, and 400 KB per-GIF size ceilings.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Maintain Remotion compositions under `slides-app/src/remotion/` importing canonical tokens and slide components.
+- [ ] `/learn` Enforce deterministic frame-by-frame rendering with exact 1280×720 resolution and 24 FPS target.
+- [ ] `/goal` Execute `scripts/render-gifs.mjs` to output high-quality GIFs via `gifski` into `public/gifs/`.
+- [ ] `/learn` Verify every generated GIF remains strictly under the 400 KB budget with infinite looping configured.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
+
+---
 
 **Version:** 1.0.0
 
@@ -121,7 +135,23 @@ stale — by hashing the source slide files and comparing to a `gifs.lock.json`)
 ## Cross-references
 
 - Animation primitives (must match between Framer and Remotion):
-  [04-animation-primitives.md](./04-animation-primitives.md)
-- Curriculum (source of topic IDs): [05-curriculum.md](./05-curriculum.md)
+  [05-animation-primitives.md](./05-animation-primitives.md)
+- Curriculum (source of topic IDs): [06-curriculum.md](./06-curriculum.md)
 - Lovable's bundled Remotion skill (used to set up the render env): see the
   `skill/remotion-video` context block.
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-SLIDE-008: Automated GIF Preview and Animation Generation Pipeline
+
+**Given** Remotion compositions and automated GIF rendering scripts for slide curriculum previews.
+**When** The rendering pipeline processes topic compositions to export animated GIFs into `public/gifs/`.
+**Then** All topic GIFs meet resolution, framerate, and 400 KB size requirements with zero visual drift from the canonical slides and full compliance with relative path standards.
+
+**Verification command:**
+```bash
+python linter-scripts/check-relative-paths.py
+```
+**Expected:** exit 0. Zero absolute paths or file:/// URIs.
