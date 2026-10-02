@@ -48,8 +48,8 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `10-ui-and-design` | [`10-ui-and-design/04-youtube-thumbnail-create.md`](../01-prompts/10-ui-and-design/04-youtube-thumbnail-create.md) | YouTube Thumbnail & Banner Design — Visual Identity & Typography Workflow |
 | `10-ui-and-design` | [`10-ui-and-design/05-linkedin-profile-banner.md`](../01-prompts/10-ui-and-design/05-linkedin-profile-banner.md) | LinkedIn Profile Banner Design — Visual Identity & Authority Workflow |
 | `10-ui-and-design` | [`10-ui-and-design/06-linkedin-company-banner.md`](../01-prompts/10-ui-and-design/06-linkedin-company-banner.md) | LinkedIn Company Page Banner Design — Corporate Branding & Conversion Workflow |
-| `10-ui-and-design` | [`10-ui-and-design/07-follow-ui-ux-design-system.md`](../01-prompts/10-ui-and-design/07-follow-ui-ux-design-system.md) | Follow the UI and UX design system |
-| `10-ui-and-design` | [`10-ui-and-design/08-create-slide-deck.md`](../01-prompts/10-ui-and-design/08-create-slide-deck.md) | Create a slide deck from the design system |
+| `10-ui-and-design` | [`10-ui-and-design/07-follow-ui-ux-design-system.md`](../01-prompts/10-ui-and-design/07-follow-ui-ux-design-system.md) | Follow UI/UX Design System Specification & Component Assembly |
+| `10-ui-and-design` | [`10-ui-and-design/08-create-slide-deck.md`](../01-prompts/10-ui-and-design/08-create-slide-deck.md) | Create Presentation Slide Deck & Live Builder System |
 | `10-ui-and-design` | [`10-ui-and-design/09-write-and-enhance-design-spec.md`](../01-prompts/10-ui-and-design/09-write-and-enhance-design-spec.md) | Write and Enhance a Design Spec That a Blind AI Can Follow |
 | `11-content-and-seo` | [`11-content-and-seo/01-jokes-ideas-generate.md`](../01-prompts/11-content-and-seo/01-jokes-ideas-generate.md) | Humor Generation & Content Ideation — Content Workflow (must follow) |
 | `11-content-and-seo` | [`11-content-and-seo/02-lowercase-readme-and-sequence.md`](../01-prompts/11-content-and-seo/02-lowercase-readme-and-sequence.md) | Lowercase Filename Enforcement & Sequence Re-Ordering — Workflow (must follow) |
@@ -115,6 +115,7 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `15-cg-execute` | [`15-cg-execute/33-branch-immutability-and-clean-construction.md`](../01-prompts/15-cg-execute/33-branch-immutability-and-clean-construction.md) | Ledger: NN-<slug> |
 | `15-cg-execute` | [`15-cg-execute/34-golang-pointer-reduction-and-value-semantics.md`](../01-prompts/15-cg-execute/34-golang-pointer-reduction-and-value-semantics.md) | Ledger: NN-<slug> |
 | `15-cg-execute` | [`15-cg-execute/35-clean-work-artifacts-and-os-caches.md`](../01-prompts/15-cg-execute/35-clean-work-artifacts-and-os-caches.md) | Ledger: NN-<slug> |
+| `15-cg-execute` | [`15-cg-execute/36-variadic-and-spread-parameters.md`](../01-prompts/15-cg-execute/36-variadic-and-spread-parameters.md) | Ledger: NN-<slug> |
 | `15-cg-execute` | [`15-cg-execute/readme.md`](../01-prompts/15-cg-execute/readme.md) | Coding Guideline Execution Suite (`cg-execute`) — Index & Catalog (must follow) |
 | `16-ci-cd` | [`16-ci-cd/01-ci-cd-fix-tweak.md`](../01-prompts/16-ci-cd/01-ci-cd-fix-tweak.md) | CI/CD Fix Tweak with Targeted Smart Testing & RCA — Workflow (must follow) |
 | `16-ci-cd` | [`16-ci-cd/02-ci-cd-fix-with-release-tweak.md`](../01-prompts/16-ci-cd/02-ci-cd-fix-with-release-tweak.md) | Release-Triggered CI/CD Fix Tweak with Targeted Smart Testing — Workflow (must follow) |
@@ -175,6 +176,9 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `19-old-execute-prompts/backup-v6.46.0` | [`19-old-execute-prompts/backup-v6.46.0/readme.md`](../01-prompts/19-old-execute-prompts/backup-v6.46.0/readme.md) | Coding Guideline Execution Suite (`cg-execute`) — Index & Catalog (must follow) |
 | `20-ai-fix-script-prompts` | [`20-ai-fix-script-prompts/01-python-file-manipulator.md`](../01-prompts/20-ai-fix-script-prompts/01-python-file-manipulator.md) | Python File Manipulator CLI Specification — Tooling Spec (must follow) |
 | `21-temp-end-to-end-tests` | [`21-temp-end-to-end-tests/01-temp-end-to-end-test.md`](../01-prompts/21-temp-end-to-end-tests/01-temp-end-to-end-test.md) | Temporary End-to-End Tests & Isolated On-Demand Validation — Workflow (must follow) |
+| `22-letterly` | [`22-letterly/01-mobile.md`](../01-prompts/22-letterly/01-mobile.md) | Mobile Mode |
+| `22-letterly` | [`22-letterly/02-desktop.md`](../01-prompts/22-letterly/02-desktop.md) | Desktop |
+| `22-letterly` | [`22-letterly/03-execute-n-steps.md`](../01-prompts/22-letterly/03-execute-n-steps.md) | Execute N Steps |
 | `.` | [`readme.md`](../01-prompts/readme.md) | Prompt Architect: Canonical AI Prompts Library |
 
 ## Maintenance

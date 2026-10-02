@@ -64,3 +64,11 @@ or on Linux/macOS:
 1. **Modify the Source First:** Never edit `01-prompts/*.md` directly without updating the corresponding source file in `01-prompts/`.
 2. **Compile After Edits:** Always execute `scripts/update-prompts.ps1` (or `scripts/update-prompts.sh`) to re-sync the flat prompts and run the linter validation.
 3. **No External Clone:** Never attempt to git clone external prompt repositories to update local prompts; this repository is fully self-contained.
+
+## 4. Multi-Repository Downstream Sync Guardrails
+
+When synchronizing downstream repositories via `03-ai-scripts/38-sync-prompts-skills-scripts.py`:
+- **Spec 21 Exclusion:** `02-spec/21-*` (`02-spec/21-app`) is strictly client-repo exclusive and MUST NEVER be synced or overwritten.
+- **AI Scripts Additive-Only:** New AI scripts from upstream are added to target repos, but existing scripts modified by target repos MUST NOT be overwritten.
+- **Bump Script Protection:** Bump scripts (`bump*`, `bump-version.mjs`, `bump_versions.py`) MUST NEVER be overwritten; each repository owns its bump script logic.
+

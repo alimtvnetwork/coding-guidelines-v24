@@ -572,3 +572,17 @@ Allowed work:
 
 **Why:** Architectural specs are canonical contracts. Summarizing or shrinking them destroys domain nuance and leads to hallucinations.
 
+---
+
+## Cross-Repository Synchronization Hard Prohibitions — TOTAL BAN
+
+🔴 **When synchronizing assets across connected repositories via `03-ai-scripts/38-sync-prompts-skills-scripts.py` or any sync process, NEVER violate these four non-negotiable rules:**
+
+1. **NEVER sync `02-spec/21-*` (`02-spec/21-app`):** Spec 21 is target-repo exclusive. If target repositories have updates, leave them completely as-is. Never sync, mirror, or overwrite `02-spec/21-*`.
+2. **NEVER overwrite modified existing AI scripts in target repos:** When syncing AI scripts (`03-ai-scripts/`, `.agents/scripts/`), only add **new** scripts that are missing in the target repository. If a script already exists in the target repository, DO NOT touch or overwrite it, as target repositories may have repo-specific modifications.
+3. **NEVER modify or overwrite version bump scripts:** Bump scripts (`bump*`, `bump-version.mjs`, `bump_versions.py`, `37-bump-version.py`, etc.) are owned and updated by each repository according to its own requirements. Never overwrite a target repository's bump script during synchronization.
+4. **NEVER modify, overwrite, or delete target repository memory or execution plans:** If a target repository contains operational memory, execution plans, pending tasks, or agent tracking files (`.ai-memory/memory/`, `.ai-memory/plans/`, `.ai-memory/temp-agents/`, `.ai-memory/cicd-issues/`, `.ai-memory/ambiguous-questions/`), they must NEVER be overwritten, mirrored, or deleted during sync. Target repositories own their operational memory logs and execution plans.
+
+**Why:** Target repositories have repo-specific app specs (Spec 21), repo-specific AI script enhancements, tailored bump script mechanics, and distinct operational memory and plans that must never be clobbered by upstream sync.
+
+

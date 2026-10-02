@@ -5,6 +5,7 @@
 
 ## Changelog
 
+- 2026-10-02T12:10:00Z, Multi-Repository Sync Guardrails: codified non-negotiable cross-repo sync boundaries forbidding sync of 02-spec/21-* (spec 21), protecting existing modified AI scripts in target repos (additive-only sync), and locking bump scripts from being overwritten (38-sync-prompts-skills-scripts.py, strictly-avoid.md, 18-cross-repository-sync-rules.md).
 - 2026-09-30T16:39:00Z, Release v6.49.0 and Execute-Folder Hardening (plan 16): execute prompts 01 to 09 and their six Antigravity skill copies now stage by explicit path, drop the invalid `"Model"` payload field and the undocumented `<SYSTEM_MESSAGE>` tag, run the autofixer with `--check-only` on folders, and commit `go generate` output only when the repo already tracks it; prompts 02 and 06 point to V4.
 - 2026-09-30T16:18:00Z, Parent Task N-Steps V4 Prompt (`11-execute-parent-task-with-n-steps-v4.md`): Antigravity-native rewrite of V3 with rules R1 to R15, a capability preflight, a resumable ledger, a corrected `invoke_subagent` payload, explicit-path staging, and evidence-gated checks; plan 15 and thin pointer skills for Antigravity and Cursor.
 - 2026-09-30T14:00:00Z, White Blue Theme Design System (`04-white-blue-theme`), Parent Task N-Steps V3 Prompt (`10-execute-parent-task-with-n-steps-v3.md` with `N = 300` top header and mandatory `invoke_subagent` `A = 2, H = 2`), skills sync, and 43-repository backup/release/sync/release orchestration.
@@ -36,6 +37,7 @@
 - `.ai-memory/memory/learned/09-conversation-log-and-context-wrapper-protocol.md`, why: conversation log persistence protocol and prompt staging boundary
 - `.ai-memory/memory/learned/13-regex-centralization-dbengine-and-isdefined-standard.md`, why: canonical regex harvesting from 03-aukgo/core, redistributable dbengine package, isDefined standard, and zero-storage GitHub Actions mandate
 - `.ai-memory/memory/learned/14-write-prompts-git-audit-and-recent-tasks-register.md`, why: mandatory 30-commit git history audit before memory authoring, compact 20-task recent completion register in plans index, and standardized 19-box verification checklist
+- `.ai-memory/memory/learned/18-cross-repository-sync-rules.md`, why: cross-repo sync boundaries: spec 21 exclusion, additive-only AI scripts, and bump script protection
 - `.ai-memory/memory/standards/version-source-of-truth.md`, why: mandatory standard for version.json single source of truth, 'inherit' keyword for sub-packages, and release sync workflow
 - `.ai-memory/memory/readme.md`, why: architectural map of version propagation, sync pipeline, and release ceremony
 - `.ai-memory/coding-guidelines.md`, why: baseline rules and coding standards

@@ -82,12 +82,12 @@ TARGET_REPOS = [
 ]
 
 SYNC_DIRS = [
-    ("01-prompts", "01-prompts"),
-    (".agents/skills", ".agents/skills"),
-    (".cursor/skills", ".cursor/skills"),
-    ("03-ai-scripts", "03-ai-scripts"),
-    (".agents/scripts", ".agents/scripts"),
-    ("02-spec/02-coding-guidelines", "02-spec/02-coding-guidelines"),
+    ("01-prompts", "01-prompts", False),
+    (".agents/skills", ".agents/skills", False),
+    (".cursor/skills", ".cursor/skills", False),
+    ("03-ai-scripts", "03-ai-scripts", True),
+    (".agents/scripts", ".agents/scripts", True),
+    ("02-spec/02-coding-guidelines", "02-spec/02-coding-guidelines", False),
 ]
 
 CONDITIONAL_SPEC_DIRS = [
@@ -107,6 +107,14 @@ EXCLUDE_NAMES = {
     ".mypy_cache",
     ".DS_Store",
     "06-old-prompts",
+    "21-app",
+    "21-app-issues",
+    "21-app-db",
+    "21-app-ui-design-system",
+    "plans",
+    "temp-agents",
+    "cicd-issues",
+    "ambiguous-questions",
 }
 
 EXCLUDE_EXTS = {
@@ -114,6 +122,72 @@ EXCLUDE_EXTS = {
     ".pyo",
     ".tmp",
 }
+
+
+def is_spec_21(path: Path) -> bool:
+    """Check if directory/file belongs to 02-spec/21-* which must NEVER be synced."""
+    norm = str(path).replace("\\", "/").lower()
+
+    if "/21-" in norm:
+        return True
+
+    if "spec/21" in norm:
+        return True
+
+    for part in path.parts:
+        if part.startswith("21-"):
+            return True
+
+    return False
+
+
+def is_bump_script(path: Path) -> bool:
+    """Check if file is a version bump script that must not be overwritten."""
+    name = path.name.lower()
+    is_bump = "bump" in name
+    is_version = "version" in name or name.startswith("bump")
+
+    if is_bump:
+        if is_version:
+            return True
+
+    return False
+
+
+def is_protected_memory_or_plan(path: Path) -> bool:
+    """Check if file or directory belongs to protected .ai-memory areas.
+
+    Protects plans/, temp-agents/, cicd-issues/, memory/, ambiguous-questions/,
+    and operational memory files in target repositories.
+    Target repositories own their operational memory logs and execution plans.
+    These files must NEVER be overwritten, mirrored, or deleted during sync.
+    """
+    norm = str(path).replace("\\", "/").lower()
+
+    if ".ai-memory/memory" in norm:
+        return True
+
+    if ".ai-memory/plans" in norm:
+        return True
+
+    if ".ai-memory/temp-agents" in norm:
+        return True
+
+    if ".ai-memory/cicd-issues" in norm:
+        return True
+
+    if ".ai-memory/ambiguous-questions" in norm:
+        return True
+
+    for part in path.parts:
+        norm_part = part.lower()
+
+        if norm_part in ("memory", "plans", "temp-agents", "cicd-issues", "ambiguous-questions"):
+            if ".ai-memory" in norm:
+                return True
+
+    return False
+
 
 
 def run_cmd(cmd: str | list[str], cwd: Path) -> tuple[int, str, str]:
@@ -200,10 +274,45 @@ def bump_patch_version(ver_str: str) -> str:
     return f"{ver_str}.1"
 
 
-def copy_single_file(src_file: Path, dst_file: Path, is_dry_run: bool = False) -> int:
-    """Copy a single file if missing or changed. Returns 1 if copied, 0 otherwise."""
+def copy_single_file(
+    src_file: Path,
+    dst_file: Path,
+    is_dry_run: bool = False,
+    is_additive_only: bool = False,
+) -> int:
+    """Copy a single file respecting the 4 non-negotiable boundaries.
+
+    Boundary 1: Spec 21 Exclusion (never sync 02-spec/21-*).
+    Boundary 2: Additive-Only AI Scripts (never overwrite existing target scripts).
+    Boundary 3: Bump Script Protection (never overwrite target bump scripts).
+    Boundary 4: Memory & Plans Protection (never overwrite or delete target memory/plans).
+    """
     if not src_file.exists():
         return 0
+
+    # Boundary 1: Spec 21 Exclusion
+    if is_spec_21(src_file):
+        return 0
+
+    if is_spec_21(dst_file):
+        return 0
+
+    # Boundary 4: Memory & Plans Protection
+    if is_protected_memory_or_plan(dst_file):
+        if dst_file.exists():
+            return 0
+
+    # Boundary 3: Bump Script Protection
+    is_bump = is_bump_script(dst_file)
+
+    if is_bump:
+        if dst_file.exists():
+            return 0
+
+    # Boundary 2: Additive-Only AI Scripts
+    if is_additive_only:
+        if dst_file.exists():
+            return 0
 
     is_copy_needed = False
 
@@ -228,45 +337,108 @@ def copy_single_file(src_file: Path, dst_file: Path, is_dry_run: bool = False) -
     return 0
 
 
-def mirror_directory(src: Path, dst: Path, is_dry_run: bool = False) -> tuple[int, int]:
-    """Mirror src into dst, removing stale files and copying new/updated ones."""
+def mirror_directory(
+    src: Path,
+    dst: Path,
+    is_dry_run: bool = False,
+    is_additive_only: bool = False,
+) -> tuple[int, int]:
+    """Mirror src into dst, removing stale files and copying new/updated ones.
+
+    If is_additive_only is True (used for AI scripts):
+      - Stale files in dst are NEVER deleted.
+      - Existing scripts in dst are NEVER overwritten.
+      - Only new scripts from src are added.
+
+    Memory & plans protection (Boundary 4):
+      - Never delete or overwrite target repo memory or plans.
+    """
     copied = 0
     removed = 0
 
     if not src.exists():
         return 0, 0
 
+    if is_spec_21(src):
+        return 0, 0
+
+    if is_spec_21(dst):
+        return 0, 0
+
+    if is_protected_memory_or_plan(dst):
+        if dst.exists():
+            return 0, 0
+
     if not is_dry_run:
         dst.mkdir(parents=True, exist_ok=True)
 
-    # 1. Clean stale files/dirs in dst that are no longer in src
-    if dst.exists():
-        for root, dirs, files in os.walk(dst, topdown=False):
-            rel_root = Path(root).relative_to(dst)
-            src_root = src / rel_root
+    # 1. Clean stale files/dirs in dst that are no longer in src (SKIPPED in additive mode)
+    if not is_additive_only:
+        if dst.exists():
+            for root, dirs, files in os.walk(dst, topdown=False):
+                rel_root = Path(root).relative_to(dst)
+                src_root = src / rel_root
 
-            for f in files:
-                dst_file = Path(root) / f
-                src_file = src_root / f
-                is_excluded = f in EXCLUDE_NAMES or dst_file.suffix.lower() in EXCLUDE_EXTS
+                for f in files:
+                    dst_file = Path(root) / f
+                    src_file = src_root / f
 
-                if is_excluded or not src_file.exists():
-                    if not is_dry_run:
-                        dst_file.unlink(missing_ok=True)
-                    removed += 1
+                    if f in EXCLUDE_NAMES:
+                        continue
 
-            for d in dirs:
-                dst_dir = Path(root) / d
-                src_dir = src_root / d
+                    if dst_file.suffix.lower() in EXCLUDE_EXTS:
+                        continue
 
-                if d in EXCLUDE_NAMES or not src_dir.exists():
-                    if not is_dry_run:
-                        shutil.rmtree(dst_dir, ignore_errors=True)
-                    removed += 1
+                    if is_spec_21(dst_file):
+                        continue
+
+                    if is_protected_memory_or_plan(dst_file):
+                        continue
+
+                    if not src_file.exists():
+                        if not is_dry_run:
+                            dst_file.unlink(missing_ok=True)
+
+                        removed += 1
+
+                for d in dirs:
+                    dst_dir = Path(root) / d
+                    src_dir = src_root / d
+
+                    if d in EXCLUDE_NAMES:
+                        continue
+
+                    if is_spec_21(dst_dir):
+                        continue
+
+                    if is_protected_memory_or_plan(dst_dir):
+                        continue
+
+                    if not src_dir.exists():
+                        if not is_dry_run:
+                            shutil.rmtree(dst_dir, ignore_errors=True)
+
+                        removed += 1
 
     # 2. Copy files from src to dst
     for root, dirs, files in os.walk(src):
-        dirs[:] = [d for d in dirs if d not in EXCLUDE_NAMES]
+        valid_dirs = []
+
+        for d in dirs:
+            if d in EXCLUDE_NAMES:
+                continue
+
+            child_src = Path(root) / d
+
+            if is_spec_21(child_src):
+                continue
+
+            if is_protected_memory_or_plan(child_src):
+                continue
+
+            valid_dirs.append(d)
+
+        dirs[:] = valid_dirs
 
         rel_root = Path(root).relative_to(src)
         target_dir = dst / rel_root
@@ -275,14 +447,35 @@ def mirror_directory(src: Path, dst: Path, is_dry_run: bool = False) -> tuple[in
             target_dir.mkdir(parents=True, exist_ok=True)
 
         for f in files:
-            is_excluded = f in EXCLUDE_NAMES or Path(f).suffix.lower() in EXCLUDE_EXTS
-
-            if is_excluded:
-                continue
-
             src_file = Path(root) / f
             dst_file = target_dir / f
-            copied += copy_single_file(src_file, dst_file, is_dry_run=is_dry_run)
+
+            if f in EXCLUDE_NAMES:
+                continue
+
+            if Path(f).suffix.lower() in EXCLUDE_EXTS:
+                continue
+
+            if is_spec_21(src_file):
+                continue
+
+            if is_protected_memory_or_plan(src_file):
+                continue
+
+            if is_protected_memory_or_plan(dst_file):
+                if dst_file.exists():
+                    continue
+
+            if is_bump_script(dst_file):
+                if dst_file.exists():
+                    continue
+
+            copied += copy_single_file(
+                src_file,
+                dst_file,
+                is_dry_run=is_dry_run,
+                is_additive_only=is_additive_only,
+            )
 
     return copied, removed
 
@@ -377,10 +570,6 @@ def sync_repo(target: Path, is_dry_run: bool = False, is_no_push: bool = False) 
     # 1. Checkout base branch and pull latest
     if not is_dry_run:
         run_cmd(f"git checkout {base_branch}", target)
-
-    is_live_push = not is_dry_run and not is_no_push
-
-    if is_live_push:
         run_cmd(f"git pull origin {base_branch} --no-rebase", target)
 
     # 2. Create and push pre-change backup branch from HEAD, then return to base branch
@@ -417,10 +606,15 @@ def sync_repo(target: Path, is_dry_run: bool = False, is_no_push: bool = False) 
     total_copied = 0
     total_removed = 0
 
-    for src_rel, dst_rel in SYNC_DIRS:
+    for src_rel, dst_rel, is_additive in SYNC_DIRS:
         src_path = SOURCE_ROOT / src_rel
         dst_path = target / dst_rel
-        c, r = mirror_directory(src_path, dst_path, is_dry_run=is_dry_run)
+        c, r = mirror_directory(
+            src_path,
+            dst_path,
+            is_dry_run=is_dry_run,
+            is_additive_only=is_additive,
+        )
         total_copied += c
         total_removed += r
 
