@@ -37,8 +37,21 @@ To guarantee safe concurrent execution without file lock collisions, work is par
 | **Wave 5** | Task-06A | Worker 01 | `01-cross-language/03-casting-elimination-patterns.md`<br>`01-cross-language/06-cyclomatic-complexity.md`<br>`01-cross-language/08-dry-principles.md` | Casting, Complexity & DRY |
 | **Wave 5** | Task-06B | Worker 02 | `01-cross-language/16-lazy-evaluation-patterns.md`<br>`01-cross-language/19-null-pointer-safety.md`<br>`01-cross-language/20-nesting-resolution-patterns.md`<br>`01-cross-language/23-solid-principles.md` | Patterns, Safety & SOLID |
 | **Wave 6** | Task-07 | Lead | `01-cross-language/97-acceptance-criteria.md`<br>`97-acceptance-criteria.md`<br>`01-cross-language/readme.md`<br>`02-coding-guidelines/readme.md` | Central Registries & Push Gate |
+| **Wave 7** | Task-08A/B | Workers 01 & 02 | `03-golang/readme.md`, `02`, `03`, `05`, `06`, `07`, `08`, `09` | Go Core Coding Standards |
+| **Wave 8** | Task-11A/B | Workers 01 & 02 | Root Guidelines (`02`, `03`, `04`, `05`) & `03-golang/01-enum-specification/*` | Root Style Guidelines & Go Enum Specs |
+| **Wave 9** | Task-12A/B | Workers 01 & 02 | `03-golang/04-golang-standards-reference/*` & `02-typescript/readme.md`, `02..07`, `11` | Go Reference Specs & TS Status Enums |
+| **Wave 10** | Task-13A/B | Workers 01 & 02 | `02-typescript/08..10`, `12..15` & `02-typescript/97-acceptance-criteria.md` | TypeScript Advanced Specs & TS Registry |
+| **Wave 11** | Task-14A/B | Workers 01 & 02 | `04-php/*` & `04-php/07-php-standards-reference/*` | PHP Core Standards & Reference Specs |
+| **Wave 12** | Task-15A/B | Workers 01 & 02 | `05-rust/*` & `07-csharp/*` | Rust & C# Coding Guidelines |
+| **Wave 13** | Task-16A/B | Workers 01 & 02 | `06-ai-optimization/*` | AI Optimization Guidelines & Memory Lifecycles |
+| **Wave 14** | Task-17A/B | Workers 01 & 02 | `06-cicd-integration/*` & `08-fix-repo-and-installers/*` | CI/CD Integration & Automated Fix Installers |
+| **Wave 15** | Task-18A/B | Workers 01 & 02 | `08-file-folder-naming/*` & Polyglot Guidelines (`09`, `10`, `12`, `13`) | File Naming & Polyglot Guidelines |
+| **Wave 16** | Task-19A/B | Workers 01 & 02 | `11-security/*` & `21-app/`..`24-app-ui/` Module Readmes | Security Standards & Module Readmes |
+| **Wave 17** | Task-20A/B | Workers 01 & 02 | `11-security/97-acceptance-criteria.md`, CI/CD FAQ/Troubleshoot, Cross-Language Readme | Security AC Registry & Documentation |
+| **Wave 18** | Task-21 | Lead | Master Acceptance Criteria Registry & Repository Gates | Master 97-acceptance-criteria.md & Final Verification |
 
 ---
+
 
 ## 2. Verification & Acceptance Criteria
 

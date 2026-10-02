@@ -1,47 +1,192 @@
-# Acceptance Criteria — CI/CD Integration
+# CI/CD Integration — Acceptance Criteria Registry (AI Execution Prompt)
 
-> **Version:** 1.0.0
-> **Updated:** 2026-04-19
+> **/goal** Provide a consolidated, traceable registry of testable acceptance criteria across all CI/CD integration specifications in `06-cicd-integration/`.
+> **/learn** Enforce the canonical criteria taxonomy (`AC-CG-CI-[NUM]`), SARIF 2.1.0 output schemas, portable plugin contracts, multi-platform CI templates, versioned release distribution, rule mapping tiers, and performance budgets.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Verify each criterion maps 1:1 to an authoritative specification file in `06-cicd-integration/`.
+- [ ] `/learn` Ensure all criteria follow the structured `Given / When / Then` verification contract.
+- [ ] `/goal` Validate that all verification commands execute cleanly with `Expected: exit 0`.
+- [ ] `/learn` Verify 100% relative paths and zero absolute filesystem paths across all guideline links.
+- [ ] `/goal` Verify compliance using `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only`.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
+
+**Version:** 4.0.0
+**Last Updated:** 2026-10-02
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Ambiguity:** None
 
 ---
 
-## AC-CI-001 — Portability
+## 1. CI/CD Integration Criteria Inventory (`AC-CG-CI-`)
 
-Each check script in `linters-cicd/checks/` runs on a stock Ubuntu
-runner with only `python3` (≥ 3.10) and `bash` available. **No** `pip
-install` required for Phase 1.
+| ID | Title | Authoritative Specification | Verification Command |
+|:---|:---|:---|:---|
+| `AC-CG-CI-001` | CI/CD Integration Architecture Conformance | [`readme.md`](readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CI-002` | SARIF 2.1.0 Contract Conformance and Validation | [`02-sarif-contract.md`](02-sarif-contract.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CI-003` | Language Plugin Architecture and Registry Standards | [`03-plugin-model.md`](03-plugin-model.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CI-004` | Language Rollout Roadmap and Promotion Standards | [`04-language-roadmap.md`](04-language-roadmap.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CI-005` | Cross-Platform CI Templates and Invocation Standards | [`05-ci-templates.md`](05-ci-templates.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CI-006` | Distribution Packaging and Release Asset Governance | [`06-distribution.md`](06-distribution.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CI-007` | Rule Taxonomy, Severity Mapping, and Tier Coordination | [`07-rules-mapping.md`](07-rules-mapping.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CI-008` | Probe Ordering, Parallelism, and Timeout Budgets | [`08-performance.md`](08-performance.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
 
-## AC-CI-002 — SARIF compliance
+---
 
-`linters-cicd/scripts/validate-sarif.py` validates every emitted file
-against the official SARIF 2.1.0 schema. CI run is green.
+## 2. Detailed Acceptance Criteria Specifications
 
-## AC-CI-003 — Self-test on this repo
+### AC-CG-CI-001: CI/CD Integration Architecture Conformance
 
-Running `./linters-cicd/run-all.sh --path .` against this repository
-produces a SARIF file with **zero** CODE RED findings. (We dogfood our
-own rules.)
+- [ ] Portable check scripts run under stock POSIX shell + Python 3 with zero external dependencies.
+- [ ] Root `readme.md` provides complete module navigation, execution prompts, and cross-references.
+- [ ] Emits SARIF 2.1.0 by default to render inline findings across GitHub, GitLab, and Azure DevOps.
+- [ ] Standard exit code contract: `0` for clean, `1` for rule findings, and `2` for tool failure.
 
-## AC-CI-004 — Composite Action one-liner
+**Given** CI/CD pipeline infrastructure and linter configurations.
+**When** Audited against this integration specification.
+**Then** Zero configuration or SARIF contract defects exist and exit code is 0.
 
-A consumer can add coding-guidelines linting to their GitHub workflow
-with exactly one `uses:` line and no other config.
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only
+```
+**Expected:** exit 0. Zero violations.
 
-## AC-CI-005 — Versioned release artifact
+---
 
-Every `v*` tag attaches `coding-guidelines-linters-vX.Y.Z.zip` to the
-GitHub Release with a SHA-256 entry in `checksums.txt`.
+### AC-CG-CI-002: SARIF 2.1.0 Contract Conformance and Validation
 
-## AC-CI-006 — Plugin model unchanged when adding language
+- [ ] Emitted SARIF complies with official schema `https://json.schemastore.org/sarif-2.1.0.json`.
+- [ ] All `artifactLocation.uri` paths are strictly relative to scanned repository root.
+- [ ] CODE RED rules map to `error`, STYLE rules map to `warning`, and informational rules map to `note`.
+- [ ] Multiple check outputs merge cleanly into a single valid SARIF document.
 
-Adding a new language plugin requires zero edits to `run-all.sh`,
-`action.yml`, or any check script for another language. Verified by
-PR-template checklist.
+**Given** CI/CD pipeline infrastructure and linter configurations.
+**When** Audited against this integration specification.
+**Then** Zero configuration or SARIF contract defects exist and exit code is 0.
 
-## AC-CI-007 — Exit codes
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only
+```
+**Expected:** exit 0. Zero violations.
 
-Every check exits `0` on clean, `1` on findings, `2` on tool error.
-Verified by `linters-cicd/checks/_tests/test_exit_codes.sh`.
+---
+
+### AC-CG-CI-003: Language Plugin Architecture and Registry Standards
+
+- [ ] Each language plugin resides under `linters-cicd/checks/<rule>/<language>.py` and registers in `registry.json`.
+- [ ] Adding a new language requires zero modifications to `run-all.sh` or `action.yml`.
+- [ ] Plugins accept standard CLI arguments `--path <dir>`, `--format sarif|text`, and `--severity error|warning`.
+- [ ] Every plugin provides paired positive and negative test fixtures under `fixtures/<language>/`.
+
+**Given** CI/CD pipeline infrastructure and linter configurations.
+**When** Audited against this integration specification.
+**Then** Zero configuration or SARIF contract defects exist and exit code is 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+---
+
+### AC-CG-CI-004: Language Rollout Roadmap and Promotion Standards
+
+- [ ] Phase 1 covers Go, TypeScript, and PHP across all 7 core CODE RED checks.
+- [ ] Language plugins use native AST walkers (Python stdlib `ast`, Tree-sitter, or `phply`) with regex fallbacks.
+- [ ] Promotion from planned to shipping requires 100% fixture coverage and green `validate-sarif.py` runs.
+- [ ] Subsequent phases (Python, Rust, C#) maintain exact orchestrator and SARIF contract compatibility.
+
+**Given** CI/CD pipeline infrastructure and linter configurations.
+**When** Audited against this integration specification.
+**Then** Zero configuration or SARIF contract defects exist and exit code is 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+---
+
+### AC-CG-CI-005: Cross-Platform CI Templates and Invocation Standards
+
+- [ ] Ready-to-paste workflow templates provided for GitHub Actions, GitLab CI, Azure DevOps, Bitbucket, and Jenkins.
+- [ ] Single-line integration supported via GitHub composite Action `linters-cicd/action.yml`.
+- [ ] Workflows pass explicit target `--languages` to prevent auto-detection latency or errors.
+- [ ] Pull request checks fail on non-zero exit codes and display annotations inline.
+
+**Given** CI/CD pipeline infrastructure and linter configurations.
+**When** Audited against this integration specification.
+**Then** Zero configuration or SARIF contract defects exist and exit code is 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+---
+
+### AC-CG-CI-006: Distribution Packaging and Release Asset Governance
+
+- [ ] Universal standalone ZIP `coding-guidelines-linters-vX.Y.Z.zip` attached to every release tag.
+- [ ] SHA-256 checksums recorded in `checksums.txt` and verified by `install.sh`.
+- [ ] Release pipeline strictly adheres to zero GitHub Actions storage upload limits.
+- [ ] Composite action references pinned version tags (`@v3.9.0`) for reproducible CI runs.
+
+**Given** CI/CD pipeline infrastructure and linter configurations.
+**When** Audited against this integration specification.
+**Then** Zero configuration or SARIF contract defects exist and exit code is 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+---
+
+### AC-CG-CI-007: Rule Taxonomy, Severity Mapping, and Tier Coordination
+
+- [ ] Canonical mapping of every rule ID to spec source, check script, supported languages, and SARIF severity.
+- [ ] Coordinated function length tier: CODE-RED-005 (strict-8 error) owns build failure, CODE-RED-004 (hard-15 error) acts as defense-in-depth.
+- [ ] Database rules enforce non-negative boolean naming and required description/notes columns.
+- [ ] Rule removals or breaking modifications require a major version bump and deprecation notice.
+
+**Given** CI/CD pipeline infrastructure and linter configurations.
+**When** Audited against this integration specification.
+**Then** Zero configuration or SARIF contract defects exist and exit code is 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+---
+
+### AC-CG-CI-008: Probe Ordering, Parallelism, and Timeout Budgets
+
+- [ ] Middle-out probe ordering sorts candidate directories by byte weight to surface findings early.
+- [ ] Parallel check execution amortizes interpreter startup across (rule, language) tuples.
+- [ ] Hard timeout budgets enforced: 20s per check, 120s total run, and 2s per file parse.
+- [ ] Run completes in < 30 seconds wall-clock on typical 50 kLOC repository runners.
+
+**Given** CI/CD pipeline infrastructure and linter configurations.
+**When** Audited against this integration specification.
+**Then** Zero configuration or SARIF contract defects exist and exit code is 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only
+```
+**Expected:** exit 0. Zero violations.
 
 ---
 

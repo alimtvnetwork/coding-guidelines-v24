@@ -1,6 +1,16 @@
-# AI Coding Style Checklist (Root Rule)
+# AI Coding Style Checklist (Root Rule) (AI Execution Prompt)
 
-> **CRITICAL AI INSTRUCTION:** Apply these stylistic rules to every single file you generate or modify.
+> **/goal** Enforce strict parameter limits (max 3 parameters or ≤100 chars), PascalCase acronyms, zero magic strings/numbers, isolated temporary scripts, and Unix LF UTF-8 encoding.
+> **/learn** Master the refactoring of multi-argument methods into options structs/classes, constant extraction for magic values, and strict git cleanliness for scratchpads.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Refactor any method requiring 4+ parameters or exceeding 100 characters into an options struct or class.
+- [ ] `/learn` Never use uppercase abbreviations or raw magic values; enforce PascalCase (`UserId`, `HttpServer`) and extracted constants.
+- [ ] `/goal` Keep all temporary debugging scripts confined to `.ai-memory/temp-scripts/` and never commit them to git.
+- [ ] `/learn` Ensure all files are strictly UTF-8 encoded with Unix LF (`\n`) line endings and a terminating newline.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
 
 ## 1. Method Arguments & Signatures (The "3 Parameter" Rule)
 
@@ -57,3 +67,21 @@ func ProcessTransaction(
 - **Encoding:** All files MUST be encoded in **UTF-8 without BOM**.
 - **Line Endings:** All files MUST use strictly **Unix-style Line Feeds (LF / \n)**. Carriage returns (\r\n) are strictly prohibited.
 - **EOF Newline:** All source files, markdown, and config files MUST end with a single empty newline (\n). This should be handled by .editorconfig (insert_final_newline = true).
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-STYLE-003: Core Coding Style and Parameter Rules
+
+**Given** Source files in the repository.
+**When** Codebases are audited by coding guideline scanners and lint rules.
+**Then** Function signatures (≤3 params), acronym casing (PascalCase), magic constant isolation, temporary script isolation, and Unix LF line endings are strictly satisfied with zero violations and exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --check-only
+```
+**Expected:** exit 0. Zero violations.

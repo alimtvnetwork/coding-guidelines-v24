@@ -1,4 +1,16 @@
-# Consistency Report — Coding Guidelines
+# Consistency Report — Coding Guidelines (AI Execution Prompt)
+
+> **/goal** Maintain and verify structural consistency, file inventory completeness, and cross-reference validity across all coding guidelines specifications.
+> **/learn** Audit repository specifications, ensure zero broken relative links, validate naming conventions, and verify actionable checklists and acceptance criteria.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Audit all specification modules under `02-spec/02-coding-guidelines/` for structural health and complete inventories.
+- [ ] `/learn` Verify all cross-references and relative links resolve with zero broken paths.
+- [ ] `/goal` Ensure every category overview and specification includes actionable checklists and verification criteria.
+- [ ] `/learn` Run automated verification using `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --check-only`.
+
+. **CRITICAL AI INSTRUCTION:** This consistency report tracks structural compliance across coding guidelines. AI agents MUST verify zero broken references and consistent formatting across all modules.
 
 **Version:** 3.2.0
 **Last Updated:** 2026-04-16
@@ -75,3 +87,21 @@
 ---
 
 *Consistency report — coding guidelines v1.1.0 — 2026-04-16*
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-CONSISTENCY-001: Guideline Consistency & Structure Conformance
+
+**Given** Coding guidelines repository specifications.
+**When** Repository health checks and consistency validators inspect all specification documents.
+**Then** Zero orphaned specifications, broken relative paths, or missing checklists are identified.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --check-only
+```
+**Expected:** exit 0. Zero violations.

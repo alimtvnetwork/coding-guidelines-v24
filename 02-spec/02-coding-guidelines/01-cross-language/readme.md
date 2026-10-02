@@ -204,3 +204,21 @@ Consolidated reference, audit logs, contradiction checks.
 - [Parent Overview](../readme.md) — Broader coding guidelines context
 - [AI Quick-Reference Checklist](../06-ai-optimization/03-ai-quick-reference-checklist.md) — Condensed checklist for AI code generation
 - [Condensed Master Guidelines](../06-ai-optimization/05-condensed-master-guidelines.md) — AI-optimized single-file reference
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-CROSS-000: Cross-Language Standards Directory Index & Conformance
+
+**Given** Cross-language standards root directory `02-spec/02-coding-guidelines/01-cross-language/`.
+**When** Linters and CI/CD pipelines audit the cross-language specification documents for actionable checklists and criteria.
+**Then** All documents pass automated checks with zero dead links and zero guideline violations.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only
+```
+**Expected:** exit 0. Zero violations.
