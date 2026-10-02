@@ -50,7 +50,8 @@ Before beginning analysis or writing, establish these parameters:
    - **Sections:** Hero layouts, feature grids, drag rails, process stacks, pricing tables, FAQ accordions.
    - **Motion:** Keyframe definitions, reveal thresholds, stagger intervals, reduced-motion fallbacks.
    - **Slides:** 16:9 canvas (`1920×1080`), scale math, 10-step ramps ($S_0$–$S_9$), 10 master layouts, controller HUD, dots, hotkeys, step reveals.
-   - **Builders:** Live Slide Builder (`useDeckStore` vs `useEditStore`, 7 layers, bounding boxes) and Website Content Builder (Browse/Edit/Preview, `data-edit-id`, contenteditable, ZIP export).
+   - **Builders:** Slide builder (`useDeckStore` and `useEditStore`) and the website builder in `26-visual-builder.md` only. `36-website-content-builder-mode.md` is a pointer.
+   - **Content extracts:** A folder of page-copy changes is content only. Do not take colors, type, or motion from it.
    - **Images:** Canvas dimensions, safe zones, text caps, aspect ratios.
 
 ### Phase 2: Gap & Fidelity Audit
@@ -75,77 +76,40 @@ Execute the automated lint checks and review against the Completion Gate (Sectio
 
 ---
 
-## 4. Domain Completion Standards
+## 4. Domain Field Checklist
 
-A specification domain is considered complete ONLY when all required parameters are explicitly documented:
+This section names the fields to fill. It does not supply the values. The source wins. If the source is silent, write `Not specified in source. Do not invent.` If the slide source and the website source disagree, write two palettes and name the domain of each. Do not merge them. Do not copy a number from this prompt into a spec.
 
-### 4.1 Colors & 10-Step Gradient Precision System
-- Every semantic token name, HEX code, RGB coordinate, and HSL value.
-- Mathematical 10-step gradient tables ($S_0$ through $S_9$) for each flagship theme:
-  - Linear perceptually uniform lightness formula ($t_i = i/9$).
-  - Character-by-character color stepping engine (leading glyph accent, intermediate glyph tint, terminal glyphs primary ink).
-- 7 Semantic pill presets (`yellow`, `white`, `purple`, `green`, `blue`, `pink`, `red`) with semantic mappings.
-- Relative luminance formula for custom pill ink calculation ($0.299R + 0.587G + 0.114B > 0.6 \implies$ `#0b0b12`, else `#ffffff`).
+### 4.1 Color
+- Token name, and HEX, RGB, and HSL only when the source states them.
+- A gradient ramp only when the source states the stops.
+- Pill names only when the source lists them.
 
-### 4.2 Typography & Type Scales
-- Heading font family (`Ubuntu`), body/UI font family (`Poppins`), and micro-label/eyebrow font family (`JetBrains Mono`).
-- Complete fluid type scale with `clamp()` formulas: `text-mega`, `text-h1`, `text-h2`, `text-h3`, `text-h4`, `text-lead`, `text-eyebrow`, `text-stat`, `text-numeral`.
-- Line-height ratios, negative tracking on large headings, uppercase tracking on mono eyebrows.
-- Prohibition on `@import` in CSS (fonts must load via `<link>` in root).
+### 4.2 Type
+- Family, weight, size, line height, and tracking, each only when the source states it.
+- A fluid `clamp()` scale only when the source states the formula.
 
-### 4.3 Button System
-- 6 Variants: `primary` (shine-sweep on gradient accent), `solid` (shine-sweep on brand primary), `outline` (pointer-fill on hover), `glass` (gradient-ring, frosted acrylic), `ghost`, `link`.
-- 4 Sizing scales: `sm` (36px), `md` (44px), `lg` (52px), `icon` (44×44px).
-- Magnetic cursor pull physics (`strength: 0.22`).
-- Hardware-accelerated CSS3 interactions: `.shine-sweep` keyframes, `.pointer-fill` radial fills, `.gradient-ring` border masks.
-- Presentation controller buttons: 40×40px round action triggers, counter with tabular numbers, deep link share, fullscreen toggle.
-- Header shine pill button (`HeaderShineButton` for dynamic shrinking headers).
+### 4.3 Buttons
+- The variant names the source implements.
+- The sizes the source implements.
+- Motion only when the source states duration, easing, or strength.
 
-### 4.4 Avant-Garde Navigation & Mega Menu System
-- Header bar: `72px` height, sticky `top-0 z-50`, `bg-background/90`, `backdrop-blur-xl`.
-- Scroll threshold: Viewport scroll > `12px` activates `border-b border-border shadow-[var(--shadow-card)]` easing over `420ms [0.16, 1, 0.3, 1]`.
-- Alternative shrinking pill header: `1240px` transparent container to `900px` white pill after scroll.
-- `SlideSwapLabel` nav links: Per-character vertical slide swap on hover with `stagger: 0.04s` for nav (`0.018s` for buttons), top glyph `-110%`, duplicate bottom glyph `0%` over `520ms var(--ease-out)`. Collapses to plain span under reduced motion.
-- Underline indicator: `1px` rule, `origin-left scale-x-0 group-hover:scale-x-100` over `240ms`.
-- Chevron indicator: `14px` (`size-3.5`), rotates `180deg` on panel open over `240ms`.
-- Pointer Safe Region: `pad = 14px` buffer around header and panel rects; pointer within cancels close; pointer leaving schedules close with `220ms` debounce. Esc key closes immediately.
-- MegaPanel dropdown: `top-full pt-3 z-40`, enters from `y: -8, scale: 0.985` over `260ms [0.16, 1, 0.3, 1]`. Multi-column grid templates (3+ groups, 2 groups, 1 group). Group entrance `y: 8 -> 0` (`0.05s + gi*0.05s`). Link entrance `x: -6 -> 0` (`0.08s + gi*0.05s + li*0.03s`).
-- Growing left hairline: `1px`, `scaleY(0) -> scaleY(1)` with gradient accent over `420ms`. Trailing arrow `size-3.5` transitions `-translate-x-1 opacity-0 -> translate-x-0 opacity-100`.
-- 3D Flip Promo Card: `min-h-[220px]`, `perspective: 1400px`, `transform-style: preserve-3d`, flips `rotateY(180deg)` over `820ms`.
-- Sticky-safe mobile drawer: Wheel and touchmove suppression on window **without** setting `overflow: hidden` on `body`.
+### 4.4 Navigation
+- Header height, scroll threshold, panel motion, and drawer behavior, each only when the source states it.
 
-### 4.5 Slide Presentation Engine & 10 Master Layouts
-- Pure DOM text mandate: Absolute ban on baked-in raster text.
-- Virtual canvas: `1920 × 1080` (16:9), vector scale $\min(\text{w}/1920, \text{h}/1080)$, `transform-origin: center center`.
-- Floating Controller HUD: Fixed `top: 32px, right: 32px`, height `56px`, radius `9999px`, 3 divided groups, top 4px progress bar, bottom dot row (active `28×8px`, inactive `8×8px`).
-- 10 Master Layout Models:
-  1. `title`: 78px headline, category pill, subtitle, presenter bio card (64×64 avatar), bottom organic SVG dual wave ribbon.
-  2. `executive-persona`: Asymmetric portrait staging, halftone matrix, character-shaded hero name (104px), LinkedIn card, location tag.
-  3. `key-player`: 3–4 member grid, 380×380 portraits, roles, bios, social badges.
-  4. `before-after`: Rose-200 negative card vs Violet/Emerald positive card, pain points vs metrics, image wipe.
-  5. `usp-strike`: 124px statement with 6px strikethrough rejecting industry practice, paired with 3-point proof cluster.
-  6. `pricing`: 3-tier card grid, featured Hot tier with `scale: 1.03` and gradient border, price figures 48px, full-width CTA.
-  7. `steps-chain`: 4-phase horizontal roadmap, numbered 48×48px step badges, progress horizon line, duration pills.
-  8. `testimonials`: Dual quote cards in 26px italic Poppins, author avatars, bottom partner logo bar with grayscale hover.
-  9. `talent-funnel`: 4 progressively narrowing capability bands (1640px down to 860px).
-  10. `bullets`: Ground-truth 3 bullet cards with 48×48px icon containers paired with right-side photographic plate.
+### 4.5 Slides
+- Canvas size from the slide store.
+- One row per component that exists, with the type string that component's renderer uses.
+- A catalog type with no component is marked missing. It is not filled with a sample layout.
 
-### 4.6 Slide Builder Mode & Canvas Inspector
-- Dual-store separation: `useDeckStore` (persisted to localStorage `deck-v1`) vs `useEditStore` (ephemeral editor state: selected element, undo/redo stacks).
-- 7 Visual layers: Base -> Watermarks -> Media -> DOM Typography -> Ink Annotations -> Selection Overlays -> Inspector HUD.
-- Hotkeys: `B`/`E` toggle builder mode, `Tab` cycle elements, `Cmd/Ctrl+Z` undo, `Cmd/Ctrl+Shift+Z` redo, `Escape` deselect, `1`–`4` theme switch.
-- Bounding box overrides: `boxes: Record<string, EditBox>`.
-- Audio cue engine: Swoosh (120ms debounce), click (80ms debounce), tap (45ms debounce).
-- Headless Chromium print-ready PDF export.
+### 4.6 Slide builder
+- Store names and which one is persisted, from the slide app.
+- Hotkeys only when a shortcut file binds them.
 
-### 4.7 Website Content Builder Mode
-- Zero-server, client-side visual editor.
-- 3 Operating modes: Browse, Edit, Preview.
-- Element tagging: `data-edit-id="[page]-[section]-[element]"` and `data-source-file="path/to/content.ts"`.
-- Text editing: `contenteditable` with caret preservation, HTML sanitization, floating `[[accent]]` gradient toolbar.
-- Media replacement: Upload/drop modal, alt text editor, SEO filename slugification, IndexedDB blob storage.
-- Navigation editing: Edit nav labels, URLs, and dropdown descriptions inline.
-- Deterministic export: Downloadable ZIP archive containing `changes.md` and `assets/` subfolder.
+### 4.7 Website builder
+- The only contract is `02-spec/07-design-system/26-visual-builder.md`.
+- Fields: gate query, id rule, sanitizer allow-list, image limit, save delays, store version, export names.
+- Do not add `data-edit-id`, `?builder=true`, or `[[accent]]` unless that file states them.
 
 ---
 
@@ -159,10 +123,10 @@ Every newly created or enhanced specification file MUST follow this structure:
 > **/goal** One sentence defining what an AI or human engineer can build using this specification.
 > **/learn** One sentence summarizing key tokens, formulas, and references to sibling specifications.
 
-**Version:** 4.0.0
+**Version:** 4.3.0
 **Status:** Active
-**AI Confidence:** High
-**Ambiguity:** None
+**AI Confidence:** High only when every number has a source row
+**Ambiguity:** State it. Do not write None while another file disagrees.
 
 ---
 
@@ -222,10 +186,10 @@ An AI agent MUST NOT report completion until every gate is verified:
 - [ ] Every inventory row from the source has been mapped to an exact specification with concrete numbers.
 - [ ] NO `pointer-only` stubs remain; all referenced values are fully declared.
 - [ ] Zero baked-in text: Pure DOM typography mandate is enforced across websites and slide decks.
-- [ ] The Avant-Garde navigation system includes 72px sticky header, 12px scroll threshold, safe-region math, `SlideSwapLabel`, growing left hairlines, and 3D flip card.
-- [ ] Universal button system includes 6 variants, 4 sizes, magnetic cursor physics, `.shine-sweep`, `.pointer-fill`, and controller buttons.
-- [ ] Slide presentation engine includes 16:9 canvas scaling, 10-step gradient tables ($S_0$–$S_9$), 10 master layout models, and Live Slide Builder Mode.
-- [ ] Website Content Builder Mode includes 3 modes, `data-edit-id`, contenteditable caret preservation, and Markdown+ZIP export.
+- [ ] Navigation, buttons, and slides contain only numbers that appear in the source. A missing field says `Not specified in source. Do not invent.`
+- [ ] Slide types match renderer `case` labels. A type with no component is not given sample pixels.
+- [ ] The website builder matches `26-visual-builder.md`. It does not add `data-edit-id` or `?builder=true`.
+- [ ] Page-copy extracts contributed no color, type, or motion value.
 - [ ] No banned or private company names exist in public specification files.
 - [ ] All file paths are strictly relative paths from the git root.
 - [ ] All new files are indexed in `02-spec/07-design-system/readme.md`.

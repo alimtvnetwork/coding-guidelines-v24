@@ -43,7 +43,7 @@ Before authoring components or generating code, AI agents MUST read and master t
 - [ ] `/learn` **Phase 6d: Avant-Garde Navigation & Mega Menu System**
   - Read [`10-header-navigation.md`](./10-header-navigation.md) & [`33-mega-menu-components.md`](./33-mega-menu-components.md) — Sticky `72px` glass header and full dropdown component architecture.
 - [ ] `/learn` **Phase 6e: Website Content Builder Mode & In-Page Visual Editor**
-  - Read [`26-visual-builder.md`](./26-visual-builder.md) & [`36-website-content-builder-mode.md`](./36-website-content-builder-mode.md) — Review overlay and client-side editor.
+  - Read [`26-visual-builder.md`](./26-visual-builder.md) — The only website-builder contract. [`36-website-content-builder-mode.md`](./36-website-content-builder-mode.md) is a pointer to that file.
 - [ ] `/learn` **Phase 6f: Standalone Image & Banner Specifications**
   - Read [`37-image-specifications.md`](./37-image-specifications.md) — Canvas geometries, safe zones, text rules, and image palette.
   - Follow [`01-prompts/10-ui-and-design/09-write-and-enhance-design-spec.md`](../../01-prompts/10-ui-and-design/09-write-and-enhance-design-spec.md) to author/enhance specs.
@@ -107,11 +107,11 @@ All animations are hardware-accelerated (`transform` and `opacity`) and include 
 > [!IMPORTANT]
 > **CRITICAL AI INSTRUCTION:** This `readme.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
-**Version:** 4.1.0
-**Updated:** 2026-09-24
+**Version:** 4.3.0
+**Updated:** 2026-10-02
 **Status:** Active
-**AI Confidence:** Production-Ready
-**Ambiguity:** None
+**AI Confidence:** Open. See `99-consistency-report.md`.
+**Ambiguity:** The website builder is file 26 only. Slide types `usp-strike` and `bullets` have no component.
 
 ---
 
@@ -195,18 +195,18 @@ All animations and transitions prioritize **GPU-composited CSS3 transforms and o
 | 25 | [27-slide-canvas-and-themes.md](./27-slide-canvas-and-themes.md) | Presentation | `1920×1080` canvas, amber tokens, JSON themes, noir-gold |
 | 26 | [28-slide-layouts.md](./28-slide-layouts.md) | Presentation | Closed slide layout union |
 | 27 | [29-slide-navigation-and-builder.md](./29-slide-navigation-and-builder.md) | Presentation | HUD, transition families, keys, slide builder |
-| 31 | [30-slide-palette-type-and-shell.md](./30-slide-palette-type-and-shell.md) | Presentation | Dark amber palette, type scale, spotlight, shell layers |
-| 32 | [31-slide-controller-buttons.md](./31-slide-controller-buttons.md) | Presentation | Controller buttons, share, fullscreen, dots, crossfade |
-| 33 | [32-slide-color-options.md](./32-slide-color-options.md) | Presentation | 10-step gradient precision system ($S_0$–$S_9$), pill presets, relative luminance formula, 9-cell align |
-| 34 | [33-mega-menu-components.md](./33-mega-menu-components.md) | Navigation | Avant-garde mega panel dropdown, 3D flip card, growing left hairline, link staggers |
-| 35 | [34-slide-layout-catalog.md](./34-slide-layout-catalog.md) | Presentation | Pure DOM text mandate and 10 flagship slide layout models (Title, CEO persona, Before/After, Pricing, Roadmap) |
-| 36 | [35-slide-builder-canvas-inspector.md](./35-slide-builder-canvas-inspector.md) | Slide Builder | Dual-store architecture, 7 visual layers, selection overlays, hotkeys, acoustic audio cues, headless PDF |
-| 37 | [36-website-content-builder-mode.md](./36-website-content-builder-mode.md) | Web Builder | Client-side website editor, Browse/Edit/Preview modes, data-edit-id tagging, [[accent]] toolbar, ZIP export |
-| 38 | [37-image-specifications.md](./37-image-specifications.md) | Images | Exact canvas geometries, safe zones, text rules, and closed image palette |
-| 39 | [38-card-and-pricing-components.md](./38-card-and-pricing-components.md) | Components | 3-Tier modular pricing tables and high-trust editorial floating cards |
-| 28 | [02-ai-system-design/readme.md](./02-ai-system-design/readme.md) | Sub-System | AI-adaptable modern SaaS theme swapping and section blueprints |
-| 29 | [03-sweet-digs-design-system/readme.md](./03-sweet-digs-design-system/readme.md) | Sub-System | Sweet Digs HSL multi-theme architecture and zoom-free interaction suite |
-| 30 | [04-white-blue-theme/readme.md](./04-white-blue-theme/readme.md) | Sub-System | White Blue Theme 3-format color architecture (`HEX`, `RGB`/`RGBA`, `HSL` + `OKLCH`), 3D flip Mega-Menu, `WhiteBlueButton`, and enterprise section library |
+| 30 | [30-slide-palette-type-and-shell.md](./30-slide-palette-type-and-shell.md) | Presentation | Dark amber palette, type scale, spotlight, shell layers |
+| 31 | [31-slide-controller-buttons.md](./31-slide-controller-buttons.md) | Presentation | Controller buttons, share, fullscreen, dots, crossfade |
+| 32 | [32-slide-color-options.md](./32-slide-color-options.md) | Presentation | 10-step gradient precision system ($S_0$–$S_9$), pill presets, relative luminance formula, 9-cell align |
+| 33 | [33-mega-menu-components.md](./33-mega-menu-components.md) | Navigation | Avant-garde mega panel dropdown, 3D flip card, growing left hairline, link staggers |
+| 34 | [34-slide-layout-catalog.md](./34-slide-layout-catalog.md) | Presentation | Measurements copied from slide components. `usp-strike` and `bullets` have no component |
+| 35 | [35-slide-builder-canvas-inspector.md](./35-slide-builder-canvas-inspector.md) | Slide Builder | Dual-store architecture, 7 visual layers, selection overlays, hotkeys, acoustic audio cues, headless PDF |
+| 36 | [36-website-content-builder-mode.md](./36-website-content-builder-mode.md) | Web Builder | Pointer only. The contract is `26-visual-builder.md` |
+| 37 | [37-image-specifications.md](./37-image-specifications.md) | Images | Exact canvas geometries, safe zones, text rules, and closed image palette |
+| 38 | [38-card-and-pricing-components.md](./38-card-and-pricing-components.md) | Components | 3-Tier modular pricing tables and high-trust editorial floating cards |
+| 02b | [02-ai-system-design/readme.md](./02-ai-system-design/readme.md) | Sub-System | AI-adaptable modern SaaS theme swapping and section blueprints |
+| 03b | [03-sweet-digs-design-system/readme.md](./03-sweet-digs-design-system/readme.md) | Sub-System | Sweet Digs HSL multi-theme architecture and zoom-free interaction suite |
+| 04b | [04-white-blue-theme/readme.md](./04-white-blue-theme/readme.md) | Sub-System | White Blue Theme 3-format color architecture (`HEX`, `RGB`/`RGBA`, `HSL` + `OKLCH`), 3D flip Mega-Menu, `WhiteBlueButton`, and enterprise section library |
 | 97 | [97-acceptance-criteria.md](./97-acceptance-criteria.md) | Testing | Testable criteria for design system compliance |
 | 99 | [99-consistency-report.md](./99-consistency-report.md) | Meta | Consistency validation report |
 

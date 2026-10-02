@@ -94,20 +94,13 @@ The presenter HUD is mounted on the global viewport above all slides (`z-index: 
 
 ---
 
-## 6. The 10 Master Slide Layouts
+## 6. Slide layouts
 
-Every slide MUST implement one of the closed layout types from `34-slide-layout-catalog.md`:
+Use `02-spec/07-design-system/34-slide-layout-catalog.md` for every size. Do not copy a size from an older list in this prompt.
 
-1. **`title`:** 78px headline, category pill kicker, subtitle, presenter bio card (avatar 64×64), bottom organic SVG dual wave ribbon.
-2. **`executive-persona`:** Asymmetric portrait staging, halftone dot matrix, character gradient hero name (104px), interactive LinkedIn preview card, location tag.
-3. **`key-player`:** 3–4 member grid, 380×380px portraits, roles, bios, social links.
-4. **`before-after`:** High-contrast split cards: Left ("Before" negative, Rose-200 border, pain points) vs Right ("After" positive, Violet/Emerald border, proof metrics, image wipe).
-5. **`usp-strike`:** 124px statement with 6px editorial strikethrough rejecting industry malpractice, paired with horizontal 3-point proof cluster.
-6. **`pricing`:** 3-tier card grid, featured "Hot" tier with `scale: 1.03` and gradient border, price figures 48px, full-width CTA buttons.
-7. **`steps-chain`:** 4-phase horizontal roadmap, numbered 48×48px step badges, connecting horizon progress line, duration pills, deliverable lists.
-8. **`testimonials`:** Dual quote cards in 26px italic Poppins, author avatars, bottom partner logo bar with grayscale hover reveal.
-9. **`talent-funnel`:** 4 progressively narrowing capability bands (1640px down to 860px).
-10. **`bullets`:** Ground-truth 3-point bullet cards with 48×48px icon containers paired with right-side photographic plate.
+Build only types that file marks measured: `title`, `persona`, `key-player`, `before-after`, `pricing`, `steps-chain`, `testimonials`, `talent-funnel`, plus the source types it names (`white-master`, `competitive-edge`, `tech-stack`, `steps`).
+
+`usp-strike` and `bullets` are not in the source. Do not build them.
 
 ---
 
@@ -131,7 +124,7 @@ Before outputting code or completing your task, verify every item:
 - [ ] Controller HUD is anchored to fixed `top-8 right-8` on the viewport with 3 divided groups.
 - [ ] Counter displays `{current} / {total}` with tabular figures.
 - [ ] Dot pagination expands the active dot to `28×8px` and inactive to `8×8px`.
-- [ ] Slide layout strictly matches one of the 10 models in `34-slide-layout-catalog.md`.
+- [ ] Slide layout matches a measured type in `34-slide-layout-catalog.md`. `usp-strike` and `bullets` are not used.
 - [ ] Gradients adhere strictly to the 10-step tables ($S_0$ through $S_9$) in `32-slide-color-options.md`.
 - [ ] Character-by-character color shading applies to hero names and title keywords.
 - [ ] Builder mode maintains dual-store separation (`useDeckStore` vs `useEditStore`) and 7 visual layers.

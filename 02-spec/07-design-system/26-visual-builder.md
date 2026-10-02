@@ -3,7 +3,8 @@
 > **/goal** Specify a review-only overlay that edits wording, images, icons, menu labels, and in-group order on the live page.
 > **/learn** Gate, modes, sanitizer, storage bucket, and export. This file is not the slide builder. Slides use `29-slide-navigation-and-builder.md`.
 
-**Version:** 1.0.0
+**Version:** 4.3.0
+**Updated:** 2026-10-02
 **Status:** Active
 
 ---
@@ -127,7 +128,7 @@ Desktop: right rail. Below `768px`: bottom dock, `max-height: 62vh`, collapsed a
 
 Panel shows the mode switch, save status (*Saving…* / *Saved* / *Couldn't save*), change counts, editing on/off, show original, undo, reset this page, history, and export.
 
-Autosave is debounced by about a quarter second (`250ms`). Do not use a different debounce unless this file is revised.
+A normal edit saves after `250ms`. Deleting a record saves after `0ms`. A conflict retries after `40ms`. Backfill of breadcrumb and context waits `1500ms`. Do not use a different delay unless this file is revised.
 
 Each element keeps `before` immutable and a `history` list. Undo pops the latest timestamp across buckets and reloads. Reset page deletes that page bucket after confirm.
 
@@ -145,3 +146,43 @@ content-changes--all-pages--YYYY-MM-DD-HHmm.zip
 ```
 
 Include the time in the file name so two exports on the same day do not overwrite. Sort changes by `data-bm-order`. Each change shows before and after. Do not put colors, fonts, or new sections in the export. The overlay cannot edit those.
+
+---
+
+## 8. Identity
+
+Do not use a positional counter (`text-7`). Do not use `data-edit-id` or `data-source-file`.
+
+1. If the rendered text matches a string in the content modules, the id is that source key (`home.hero.titleLines[1]`). The stored source is the content file and that key.
+2. Otherwise hash the seed `type|section|tagName|text` with DJB2 starting at `5381`, unsigned, base-36. Freeze the algorithm once a draft exists.
+3. Reserve ids already on the page, then de-duplicate with a `-1`, `-2` suffix.
+4. Store the origin text in `data-bm-origin` at tag time. A later scan re-binds a lost id from that text.
+5. Nav ids are seeded from the label. Renaming a nav label starts a fresh history for that link.
+
+`{OWNER_EMAIL}` is compared on the server. It is not shipped in the client bundle.
+
+---
+
+## 9. Session and shared draft
+
+Activation calls `openBuilderSession({ email })` and stores the returned token in `sessionStorage`. A cached token wins over the email in the URL. Tokens shorter than `24` characters are rejected. Lookup hashes the token in application code and compares with a constant-time compare. It is not a SQL filter on the hash.
+
+The store version is `2`. Page buckets use the path with `builder`, `email`, and `draft` removed. Menu changes are one flat bucket.
+
+The default store is one server-only draft table. No `anon` or `authenticated` grant. Deny-all row security. The only doors are `loadBuilderDraft` and `saveBuilderDraft`. A save sends `revision` and writes only when it still matches.
+
+On conflict, merge shallow and let the local copy win, per page for `pages` and once for `menu`. On network failure, keep a recovery copy under `{BRAND}.builder.shared-recovery.v2.{first 12 chars of the token}`.
+
+A browser-only `localStorage` key `{BRAND}.builder.v2` is the single swap for the two server calls. It is not a second product, and it does not change ids, modes, or the export.
+
+Screenshots are session-only. They are not written into the draft.
+
+---
+
+## 10. Screenshots
+
+Photograph the section (`section`, else `header`, else `footer`, else `main`), not the element alone. After: `3px` red outline, `3px` offset. Before: the same treatment in grey.
+
+Before capture: scroll the section to center, wait one frame, `180ms`, then another frame, decode images, and wait for `document.fonts.ready`. Add `.bm-shooting`, which sets `animation`, `transition`, `transform`, and `filter` to none, and `opacity` and `visibility` to visible, including `[data-reveal]`.
+
+Render with `html-to-image` `toPng`, `pixelRatio: 1`, white background, cap `1440 × 2400`. Exclude `[data-bm-root]`. Blank check: scale to `48px` wide; if no channel differs from the first pixel by more than `6`, discard the frame. Restore styles in `finally`.
