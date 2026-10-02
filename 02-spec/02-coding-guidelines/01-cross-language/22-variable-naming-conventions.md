@@ -1,4 +1,16 @@
-# Cross-Language Variable Naming Conventions
+# Cross-Language Variable Naming Conventions (AI Execution Prompt)
+
+> **/goal** Standardize variable, collection, map, and loop variable naming conventions across PHP, TypeScript, and Go to maximize readability and eliminate ambiguity.
+> **/learn** Understand singular-plural distinctions for collections, loop variable derivations, `Map`/`By` suffixes for lookup tables, affirmative boolean naming, and prohibited abbreviations.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Enforce singular nouns for single items and plural nouns for collections (arrays, lists, slices, sets) across all languages.
+- [ ] `/learn` Enforce loop variables using the singular noun of the target collection being iterated.
+- [ ] `/goal` Require `Map` suffix or `By[Key]` naming patterns for dictionary and map lookup variables.
+- [ ] `/learn` Ban arbitrary abbreviations (except universally accepted ones like `id`, `url`, `err`, `ctx`) and verify compliance via CI linters.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
 
 > **Version:** 1.0.0
 > **Updated:** 2026-03-31
@@ -208,6 +220,24 @@ const connectionManager = new ConnectionManager();
 - [Function Naming](./10-function-naming.md) — Function and method naming conventions
 - [Key Naming PascalCase](./11-key-naming-pascalcase.md) — API/database key casing
 - [Database Naming](./07-database-naming.md) — Table and column naming
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-NAME-022: Cross-Language Variable and Collection Naming
+
+**Given** Variable declarations, loop counters, collection identifiers, and map instances in PHP, TypeScript, or Go.
+**When** Codebases are audited by coding guideline scanners and lint rules.
+**Then** Singular/plural rules, loop singular derivations, `Map`/`By` suffixes, and abbreviation bans are strictly satisfied with zero violations and exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only
+```
+**Expected:** exit 0. Zero violations.
 
 ---
 

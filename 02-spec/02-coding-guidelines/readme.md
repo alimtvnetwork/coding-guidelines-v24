@@ -31,10 +31,10 @@ Error handling must be implemented from the **very first line of code**. Never w
 
 ### 3. Boolean Naming (Strict Positive Assertion)
 
-All booleans **MUST** use \is\, \has\, \can\, or \should\ prefixes and are **positively named only**.
+All booleans **MUST** use `is` or `has` prefixes and are **positively named only** (`can`, `should`, `was` are banned).
 
-- ❌ BAD: \!isSuccess\, \isDisabled\
-- ✅ GOOD: \isFail\, \isActive\
+- ❌ BAD: `!isSuccess`, `isDisabled`
+- ✅ GOOD: `isFail`, `isActive`
 Extract multi-part conditions into well-named boolean variables.
 
 ### 4. Nesting and Flow Control

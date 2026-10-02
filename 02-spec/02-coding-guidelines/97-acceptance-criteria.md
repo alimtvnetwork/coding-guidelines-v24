@@ -15,12 +15,13 @@
 
 | # | Criterion | Source |
 |---|-----------|--------|
-| AC-001 | Boolean principles define naming (`isX`, `hasX`, `canX`) and evaluation patterns | `01-cross-language/02-boolean-principles/readme.md` |
-| AC-002 | Casting elimination patterns cover type-safe alternatives to type assertions | `01-cross-language/03-casting-elimination-patterns.md` |
-| AC-003 | Code style defines formatting, naming, and structural conventions | `01-cross-language/04-code-style/readme.md` |
-| AC-004 | All guidelines include ❌ (forbidden) and ✅ (compliant) code examples | `01-cross-language/15-master-coding-guidelines/readme.md` |
-| AC-005 | DRY principles documented with refactoring patterns | `01-cross-language/08-dry-principles.md` |
-| AC-006 | Cyclomatic complexity limits defined with enforcement rules | `01-cross-language/06-cyclomatic-complexity.md` |
+| AC-001 | Boolean principles define naming (`isX`, `hasX`) and affirmative implicit evaluation patterns | [`01-cross-language/02-boolean-principles/readme.md`](./01-cross-language/02-boolean-principles/readme.md) |
+| AC-002 | Casting elimination patterns cover type-safe alternatives to type assertions | [`01-cross-language/04-casting-elimination-patterns.md`](./01-cross-language/04-casting-elimination-patterns.md) |
+| AC-003 | Code style defines formatting, naming, vertical spacing, and structural conventions | [`01-cross-language/04-code-style/readme.md`](./01-cross-language/04-code-style/readme.md) |
+| AC-004 | All guidelines include ❌ (forbidden) and ✅ (compliant) code examples | [`01-cross-language/15-master-coding-guidelines/readme.md`](./01-cross-language/15-master-coding-guidelines/readme.md) |
+| AC-005 | DRY principles documented with refactoring patterns | [`01-cross-language/08-dry-principles.md`](./01-cross-language/08-dry-principles.md) |
+| AC-006 | Cyclomatic complexity limits defined with enforcement rules | [`01-cross-language/06-cyclomatic-complexity.md`](./01-cross-language/06-cyclomatic-complexity.md) |
+| AC-007 | Detailed Cross-Language Criteria Registry (BOOL, STYLE, NAME, TYPE, ARCH) | [`01-cross-language/97-acceptance-criteria.md`](./01-cross-language/97-acceptance-criteria.md) |
 
 ---
 

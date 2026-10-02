@@ -1,6 +1,16 @@
-# Cross-Language Code Style — Braces, Nesting, Spacing & Function Size
+# Cross-Language Code Style — Braces, Nesting, Spacing & Function Size (AI Execution Prompt)
 
-. **CRITICAL AI INSTRUCTION:** This `readme.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
+> **/goal** Standardize cross-language control-flow formatting, mandatory brace enforcement, zero-nesting early return guards, vertical line spacing, and strict function and type size caps across PHP, TypeScript, and Go.
+> **/learn** Master the code style rules (Rules 1-17), guard clause flattening patterns, discrete condition extraction, mandatory vertical blank line spacing rules, and small-function decomposition architectures.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Enforce mandatory braces and ban all nested if statements across control flow via early guard returns.
+- [ ] `/learn` Extract complex multi-part conditions into discrete, positively named intermediate boolean variables.
+- [ ] `/goal` Maintain strict vertical blank line spacing: before if, after }, before return, and around multiline structures.
+- [ ] `/learn` Enforce function length limits (max 15 lines) and type/struct/class caps (max 120 lines) through clean decomposition.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below. This `readme.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 **Version:** 3.2.0
 **Updated:** 2026-04-16
@@ -61,3 +71,21 @@ These rules are the **single source of truth** — language-specific specs refer
 - [Go Enum Specification](../../03-golang/01-enum-specification/readme.md) — Go enum pattern
 - [TypeScript Enums](../../02-typescript/readme.md) — TypeScript string enums
 - [PHP Enum Classes](../../04-php/02-enums.md) — PHP backed enum patterns
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-STYLE-001: Cross-Language Code Style Index & Directory Conformance
+
+**Given** The code style guideline directory `02-spec/02-coding-guidelines/01-cross-language/04-code-style/`.
+**When** Codebases and guideline specifications are audited for control-flow formatting, brace standards, and size caps.
+**Then** All code style rules are deterministically verifiable with zero violations detected.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language/04-code-style --check-only
+```
+**Expected:** exit 0. Zero violations.

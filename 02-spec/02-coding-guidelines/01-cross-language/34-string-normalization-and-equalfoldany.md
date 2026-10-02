@@ -1,4 +1,16 @@
-# String Normalization & EqualFoldAny Specification
+# String Normalization & EqualFoldAny Specification (AI Execution Prompt)
+
+> **/goal** Eliminate ad-hoc chained string comparisons, repeated trimming, and case-transformation allocations by centralizing all candidate matching behind canonical `strutil.EqualFoldAnyTrim` and `strutil.EqualFoldAny` utilities across Go, TypeScript, Rust, and Python.
+> **/learn** Master the Search First protocol to locate existing `strutil` helpers, understand Unicode case folding vs lowercase allocations, short-circuiting candidate iteration, and variadic candidate signatures.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Replace ad-hoc chained equality or `strings.EqualFold()` OR-chains with canonical `strutil.EqualFoldAnyTrim(target, ...candidates)`.
+- [ ] `/learn` Enforce Search First protocol: scan `pkg/strutil` for existing helpers before authoring one-off string comparison functions.
+- [ ] `/goal` Guarantee zero-allocation upfront trimming and short-circuit evaluation for multi-candidate string matching.
+- [ ] `/learn` Verify strict target-first variadic candidate parameter signatures and 100% relative repository paths.
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
 
 **Version:** 1.0.0
 **Updated:** 2026-10-02
@@ -354,7 +366,24 @@ if equal_fold_any_trim(user_input, "y", "yes"):
 
 ---
 
-## 7. Verification & Acceptance Criteria
+## 7. Related Specifications
+
+- [`02-spec/02-coding-guidelines/01-cross-language/02-boolean-principles/readme.md`](02-boolean-principles/readme.md) — Boolean naming and implicit condition standards
+- [`02-spec/02-coding-guidelines/01-cross-language/08-dry-principles.md`](08-dry-principles.md) — Deduplication and DRY principles
+- [`02-spec/02-coding-guidelines/01-cross-language/33-variadic-and-spread-parameters.md`](33-variadic-and-spread-parameters.md) — Variadic and spread parameter standard
+- [`02-spec/21-app/02-string-normalization-and-equalfoldany/01-architecture-spec.md`](../../21-app/02-string-normalization-and-equalfoldany/01-architecture-spec.md) — Parent architecture specification
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-TYPE-034: String Normalization & EqualFoldAny Conformance
+
+**Given** String equality, case-insensitive comparison, and trimming operations across Go, TypeScript, Rust, and Python.  
+**When** Linters and CI suites scan codebase repositories for string matching patterns.  
+**Then** Multi-candidate comparisons invoke canonical `EqualFoldAnyTrim` / `EqualFoldAny` without inline OR chaining, preserving zero unnecessary heap allocations, positive booleans, and 100% relative paths.
 
 - **AC-CG-034-A:** Spec file `02-spec/02-coding-guidelines/01-cross-language/34-string-normalization-and-equalfoldany.md` exists and contains 100% relative paths.
 - **AC-CG-034-B:** Registry in `02-spec/02-coding-guidelines/01-cross-language/readme.md` contains sequence #34 without gap.
@@ -362,11 +391,8 @@ if equal_fold_any_trim(user_input, "y", "yes"):
 - **AC-CG-034-D:** Includes verbatim documentation of the `releaseundo.go` case study.
 - **AC-CG-034-E:** Function signatures across Go, TypeScript, Rust, and Python adhere to the target-first variadic candidate parameter architecture.
 
----
-
-## 8. Related Specifications
-
-- [`02-spec/02-coding-guidelines/01-cross-language/02-boolean-principles/readme.md`](02-boolean-principles/readme.md) — Boolean naming and implicit condition standards
-- [`02-spec/02-coding-guidelines/01-cross-language/08-dry-principles.md`](08-dry-principles.md) — Deduplication and DRY principles
-- [`02-spec/02-coding-guidelines/01-cross-language/33-variadic-and-spread-parameters.md`](33-variadic-and-spread-parameters.md) — Variadic and spread parameter standard
-- [`02-spec/21-app/02-string-normalization-and-equalfoldany/01-architecture-spec.md`](../../21-app/02-string-normalization-and-equalfoldany/01-architecture-spec.md) — Parent architecture specification
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language/34-string-normalization-and-equalfoldany.md --check-only
+```
+**Expected:** exit 0. Zero violations detected.

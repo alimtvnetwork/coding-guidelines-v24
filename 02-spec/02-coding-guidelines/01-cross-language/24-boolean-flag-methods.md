@@ -1,4 +1,16 @@
-# Boolean Flag Method Splitting
+# Boolean Flag Method Splitting (AI Execution Prompt)
+
+> **/goal** Eliminate all boolean flag parameters that alter method behavior by splitting them into dedicated, self-documenting methods that express explicit caller intent.
+> **/learn** Master the single-responsibility principle for functions, identify anti-patterns of hidden branching caused by boolean arguments, extract shared initialization/teardown into private helpers, and understand exemptions (options structs, thin wrappers, state toggles).
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Identify and eliminate all boolean parameters that branch execution paths inside functions and methods.
+- [ ] `/learn` Split flagged methods into two distinct, descriptive methods (e.g. `formatUserSummary` and `formatUserDetailed`).
+- [ ] `/goal` Extract any common setup, validation, or teardown logic into private non-exported helper functions.
+- [ ] `/learn` Restrict boolean parameters strictly to options/config structs, standard library pass-throughs, or explicit state setters (`setEnabled`).
+
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
 
 > **Parent:** [Cross-Language Overview](./readme.md)
 > **Version:** 1.0.0
@@ -194,3 +206,19 @@ func finalizeOrder(order Order) error { /* ... */ }
 - [Nesting Resolution](./20-nesting-resolution-patterns.md) — related pattern: flatten `if/else`
 
 ---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-BOOL-024: Boolean Flag Method Splitting
+
+**Given** Function or method declarations across Go, TypeScript, PHP, Rust, or C#.
+**When** Code guideline linters or CI autofixers inspect function signatures for boolean parameters.
+**Then** Zero boolean flag parameters altering control flow are permitted; behavior-altering branches are split into separate named methods with deterministic compliance.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only
+```
+**Expected:** exit 0. Zero violations.
