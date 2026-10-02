@@ -10,6 +10,7 @@ Master directory of architectural and execution plans.
 - [11-code-red-refactor-remediation.md](pending/11-code-red-refactor-remediation.md): Remediate Code Red enum, boolean, and query wrapper violations across the codebase.
 - [15-execute-parent-task-v4-antigravity.md](pending/15-execute-parent-task-v4-antigravity.md): V4 Antigravity-native rewrite of the execute-parent-task-with-n-steps prompt, with the V3 audit, Approaches A to E, execute-folder options, and follow-ups (live Antigravity run pending).
 - [16-execute-folder-hardening-and-v6-49-release.md](pending/16-execute-folder-hardening-and-v6-49-release.md): Minor release v6.49.0, then the V4 fixes applied to execute prompts 01 to 09 and their Antigravity skill copies.
+- [17-spec-ticket-for-blind-agents.md](pending/17-spec-ticket-for-blind-agents.md): Ticket template, heading checker, and three-file reading path so a weak agent can implement one change. G-Spec's runtime stays out.
 
 ## Completed Plans
 
