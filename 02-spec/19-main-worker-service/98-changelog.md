@@ -1,3 +1,9 @@
+## v6.65.1 — 2026-10-02 (Add 1:1 Cursor skills parity for letterly, slide deck, design spec, and aliases)
+
+**Scope:** Version bump. Add 1:1 Cursor skills parity for letterly, slide deck, design spec, and aliases.
+
+---
+
 ## v6.65.0 — 2026-10-02 (Bright gold slide spec, logo construction, and design confidence report)
 
 **Scope:** Version bump. Bright gold slide spec, logo construction, and design confidence report.

@@ -7,11 +7,11 @@
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.65.0",
+  "Version": "6.65.1",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "9fbbc392291c6ae1ac5aca060d51e61e7025e6b1",
+  "LastCommitSha": "67ac789547f31e6021abc0a5bc4fa8c4965e9622",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -56,20 +56,20 @@
     "${TARGET_PREFIX}/19-plan-spec-steps-v2.md",
     "${TARGET_PREFIX}/20-audit-app-spec.md"
   ],
-  "version": "6.65.0",
+  "version": "6.65.1",
   "updated": "2026-10-02",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "9fbbc392291c6ae1ac5aca060d51e61e7025e6b1",
-    "shortSha": "9fbbc39",
-    "branch": "release/v6.65.0"
+    "sha": "67ac789547f31e6021abc0a5bc4fa8c4965e9622",
+    "shortSha": "67ac789",
+    "branch": "main"
   },
   "stats": {
-    "totalFiles": 757,
-    "totalLines": 160113,
+    "totalFiles": 767,
+    "totalLines": 163954,
     "totalFolders": 24,
-    "totalBytes": 5893113,
+    "totalBytes": 6126570,
     "rootFiles": 6
   },
   "folders": [
@@ -95,9 +95,9 @@
       "status": "Active",
       "aiConfidence": "Production-Ready",
       "ambiguity": null,
-      "fileCount": 219,
-      "lineCount": 34997,
-      "byteCount": 1112709
+      "fileCount": 221,
+      "lineCount": 35755,
+      "byteCount": 1146072
     },
     {
       "path": "03-error-manage",
@@ -160,9 +160,9 @@
       "status": "Active",
       "aiConfidence": "See [`98-confidence-report.md`](./98-confidence-report.md). Bright gold tech is the deck an agent can build today.",
       "ambiguity": "The website builder is file 26 only. Slide types `usp-strike` and `bullets` have no component. A black slide catalog is not in this folder.",
-      "fileCount": 61,
-      "lineCount": 11438,
-      "byteCount": 517337
+      "fileCount": 63,
+      "lineCount": 12125,
+      "byteCount": 582278
     },
     {
       "path": "08-docs-viewer-ui",
@@ -317,8 +317,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 35,
-      "lineCount": 8488,
-      "byteCount": 511479
+      "lineCount": 8494,
+      "byteCount": 511700
     },
     {
       "path": "21-app",
@@ -329,9 +329,9 @@
       "status": null,
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 8,
-      "lineCount": 882,
-      "byteCount": 60787
+      "fileCount": 14,
+      "lineCount": 3245,
+      "byteCount": 193058
     },
     {
       "path": "22-app-issues",

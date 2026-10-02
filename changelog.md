@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.65.1] - 2026-10-02
+
+### Added
+- Add 1:1 Cursor skills parity for letterly, slide deck, design spec, and aliases
+
+---
+
 ## [v6.65.0] - 2026-10-02
 
 ### Added
