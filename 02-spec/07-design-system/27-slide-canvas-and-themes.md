@@ -1,24 +1,18 @@
-# 27 — Slide Canvas and Themes
+# 27 — Slide Canvas, 10 Production Themes & Contrast Inversion
 
-> **/goal** Fix the 16:9 slide stage and the only theme tokens a deck may use.
-> **/learn** Canvas scale, scripted-deck amber, JSON-deck themes, and noir-gold. Marketing pages do not use this file. They use `04-white-blue-theme/`.
+> **/goal** Specify the authoritative 16:9 virtual stage scaling mathematics, the complete 10-theme production catalog, the Light Theme Contrast Inversion contract, and the Theme Menu popover system.
+> **/learn** Master the 1920×1080 stage scale formula, the 10 built-in theme definitions (`bright-gold` default, `noir-gold`, `vscode-dark`, `dracula`, `monokai`, `github-light`, `paper-ink`, `macos-sonoma`, `windows-11`, `navy-blue`), the Light Theme Capsule Contract, and Theme Manifest import/export.
 
-**Version:** 1.0.0
+**Version:** 4.2.0
 **Status:** Active
+**AI Confidence:** High
+**Ambiguity:** None
 
 ---
 
-## 0. Anti-hallucination
+## 1. 16:9 Virtual Canvas & Coordinate Scaling
 
-If a hex, HSL, or size is not in this file, do not invent it. Components read CSS variables. A hardcoded hex in a slide component is a defect, except where this file lists a token's reference hex.
-
-Webcam picture-in-picture and dual-screen notes stay in `24-slide-presentation-system.md`.
-
----
-
-## 1. Canvas
-
-The virtual stage is `1920` by `1080`.
+Every slide in the deck is authored on an authoritative reference canvas of `1920 × 1080` pixels (16:9 aspect ratio):
 
 ```text
 scale = min(viewportWidth / 1920, viewportHeight / 1080)
@@ -26,98 +20,143 @@ transform-origin: center center
 transform: scale(scale)
 ```
 
-Layout is authored in that coordinate space. Do not use viewport units for type or gaps inside the stage.
+- **Runtime Architecture:** `ScaledSlide` detects container dimensions using `ResizeObserver`, applies CSS vector scaling, and centers the stage with letterboxing on non-16:9 viewports.
+- **Stage Container:** `contain: layout paint; isolation: isolate; will-change: transform; width: 1920px; height: 1080px;`.
+- **Absolute Coordinate Mandate:** All typography, margins, paddings, and card dimensions MUST be specified in authoring pixels on the `1920×1080` grid. Never use viewport units (`vw`, `vh`) inside the stage.
 
 ---
 
-## 2. Scripted deck tokens
+## 2. Authoritative 10 Production Presentation Themes
 
-Use these for a deck of fixed slide components (not a JSON theme picker).
+The catalog consists of **10 production themes**:
 
-| Token | HSL | Reference hex | Role |
-|---|---|---|---|
-| `--pres-bg` | `240 20% 4%` | `#0a0a14` | Stage |
-| Stage alt | — | `#0B0B0E` | Allowed alternate ground |
-| `--pres-accent` | `41 100% 50%` | `#ffae00` | Accent |
-| Controller accent | `38 91% 55%` | `#F5A623` | Controller and pill chrome only |
-| `--slide-hl` | — | `#FFD83A` | Inline mark on a dark JSON slide (`midnight`) |
+| ID | Theme Name | Appearance | Primary Accent | Cream / Text | Background | Primary Mood & Application |
+|:---|:---|:---:|:---|:---|:---|:---|
+| **`bright-gold`** *(Default)* | Bright Gold | Dark | Vivid Gold `40 96% 48%` (`#F3A502`) | Cream `42 100% 94%` (`#FFF1D6`) | Obsidian `0 0% 5%` (`#0D0D0D`) | Default keynote authority, executive pitch decks |
+| **`noir-gold`** | Noir & Gold | Dark | Muted Gold `43 56% 54%` (`#C9A84C`) | Warm Cream `40 75% 84%` (`#F0D78C`) | Obsidian `0 0% 5%` (`#0D0D0D`) | Classic high-end luxury, board briefings |
+| **`vscode-dark`** | VS Code Dark+ | Dark | Azure Blue `207 100% 50%` (`#007ACC`) | Crisp Gray `0 0% 83%` (`#D4D4D4`) | Slate `#1E1E1E` | Code-heavy tech talks, developer tooling |
+| **`dracula`** | Dracula Gothic | Dark | Electric Purple `265 89% 78%` (`#BD93F9`) | Pure Cream `60 30% 96%` (`#F8F8F2`) | Charcoal `#282A36` | Aesthetic dev conferences, AI demos |
+| **`monokai`** | Monokai Vibrant| Dark | Neon Green `80 76% 53%` (`#A6E22E`) | Light Cream `60 30% 96%` (`#F8F8F2`) | Deep Ink `#272822` | High-energy technical architecture, CLI keynotes |
+| **`github-light`** | GitHub Light | **Light** | Open Blue `212 92% 45%` (`#0969DA`) | Espresso Ink `210 12% 16%` (`#24292F`) | Pure White `#FFFFFF` | Daytime presentations, public documentation |
+| **`paper-ink`** | Paper & Ink | **Light** | Deep Amber `38 80% 30%` (`#8A5A0E`) | Espresso Ink `36 25% 12%` (`#1F1A12`) | Warm Cream `#FAF6EC` | Academic presentations, print handouts, research |
+| **`macos-sonoma`** | macOS Sonoma | Dark | System Blue `212 100% 50%` (`#007AFF`) | Soft White `240 7% 97%` (`#F5F5F7`) | Dark Glass `#1E1E24` | Product design keynotes, client showcases |
+| **`windows-11`** | Windows Fluent | Dark | Cyan Accent `199 100% 69%` (`#60CDFF`) | Crisp White `0 0% 100%` (`#FFFFFF`) | Mica Dark `#202020` | Enterprise platform migrations, IT briefings |
+| **`navy-blue`** | Deep Navy Tech | Dark | Electric Cyan `188 95% 43%` (`#06B6D4`) | Crisp Slate `210 40% 96%` (`#F1F5F9`) | Deep Navy `#1A2840` | Cloud telemetry, infrastructure, bike showcases |
 
-Do not use `#FFD83A` as a large fill. It is a mark.
-
-Headings: Ubuntu. Body: Poppins. On the `1920×1080` stage, heading size is `88px` to `140px`. Body size is `28px` to `40px`. Do not pick a size outside that range for those roles.
-
----
-
-## 3. JSON theme ids
-
-A theme sets color and font only. Layout is per slide (`28-slide-layouts.md`). Allowed ids:
-
-| Id | `bg` | `fg` | `muted` | `hl` | `hlInk` |
-|---|---|---|---|---|---|
-| `snow` | `#000000` | `#ffffff` | `#b8b8b8` | `#ffffff` | `#000000` |
-| `midnight` | `#101010` | `#ffffff` | `#b8b8b8` | `#ffd83a` | `#1a1100` |
-| `paper` | `#f5f0e6` | `#1a1a1a` | `#615a4f` | `#1d4ed8` | `#f5f0e6` |
-| `sunset` | `#1b0d1f` | `#ffeaf0` | `#c89aa6` | `#ff7a59` | `#1b0d1f` |
-| `print` | `#ffffff` | `#000000` | `#444444` | `#000000` | `#ffffff` |
-| `playbook` | `#faf7f3` | `#141414` | `#6b6b6b` | `#e8701a` | `#1a1a1a` |
-
-Fonts for every row: heading and display `"Ubuntu", system-ui, sans-serif`. Body `"Poppins", system-ui, sans-serif`.
-
-Pick one id per deck. Default is `midnight`. Do not mix `hl` from one id with `bg` from another. Pill presets and the nine-cell `align` grid are in `32-slide-color-options.md`. The dark amber shell (type scale, spotlight, controller colors) is `30-slide-palette-type-and-shell.md`.
+`DEFAULT_THEME` constant across all engines: **`'bright-gold'`**.
 
 ---
 
-## 4. Noir-gold theme
+## 3. Light Theme Contrast Inversion Contract & Capsule Rules
 
-Id: `noir-gold`. Do not write these hex values in components. Map them to variables.
+When switching to light appearance (`github-light` or `paper-ink`), the color contrast budget must invert completely:
 
-| Token | HSL | Reference hex | Use |
-|---|---|---|---|
-| `--background` | `0 0% 5%` | `#0D0D0D` | Stage |
-| `--foreground` | `0 0% 100%` | `#FFFFFF` | Default text |
-| `--gold` | `45 56% 54%` | `#C9A84C` | Accent, eyebrows, connectors |
-| `--gold-glow` | `45 73% 67%` | `#E8C77E` | Hover and glow |
-| `--cream` | `42 79% 75%` | `#F0D78C` | Title when `titleStyle` is `cream` |
-| `--ember` | `13 79% 56%` | `#E85D3A` | Secondary accent, at most one per slide |
-| `--ink` | `0 0% 8%` | `#141414` | Text on cream or gold fills |
-| `--border` | `0 0% 18%` | `#2E2E2E` | Hairline |
-| `--muted-foreground` | `0 0% 65%` | `#A6A6A6` | Secondary text |
+### 3.1 Token Collisions on Light Themes
+Tokens that change meaning between dark and light themes:
 
-`--primary` and `--ring` alias `--gold`.
-
-`--gradient-noir` is `linear-gradient(180deg, #0D0D0D, #1A1A1A)`.
-
-Bright-gold overrides, same id family, only these three:
-
-| Token | `noir-gold` | Bright gold |
+| Token | Dark Themes | Light Themes (`paper-ink`, `github-light`) |
 |---|---|---|
-| `--gold` | `#C9A84C` | `#F3A502` |
-| `--gold-glow` | `#E8C77E` | `#FFC547` |
-| `--cream` | `#F0D78C` | `#FFF1D6` |
+| `--ink` | Dark surface plate (bg) | Dark body text (fg) |
+| `--cream` | Warm light text | **Repurposed → Dark espresso ink** |
+| `--white` | Pure white text | **Repurposed → Dark espresso ink** |
+| `--gold` | Bright accent (L=48%) | Darkened accent (L=30%) for AA contrast on cream |
+| `--ember` | Warm coral (L=57%) | Darkened rust (L=45%) |
 
-Background, ember, foreground, and type stay shared. Titles use Ubuntu Bold. Body on this theme may use Inter only when the deck id is `noir-gold` or bright gold. Every other theme in this file uses Poppins for body. Do not use Inter on a White Blue marketing page.
+### 3.2 The Light-Theme Capsule Contract (Total Ban on Inline Styles)
+> **Capsules MUST be painted via the `.capsule-{tone}` className system.**
+> Inline `style.background` / `style.color` on a chip or capsule is **strictly forbidden** because it bypasses per-theme CSS overrides and causes catastrophic contrast collapse (e.g. brown blob on cream or black pill with invisible text).
+
+```css
+/* Canonical className system with per-theme overrides in index.css */
+.capsule-gold { background: hsl(var(--gold)); color: hsl(var(--ink)); }
+.capsule-ember { background: hsl(var(--ember)); color: white; }
+.capsule-cream { background: hsl(var(--cream)); color: hsl(var(--ink)); }
+.capsule-meta { background: hsl(var(--meta-bg)); color: hsl(var(--meta-fg)); }
+
+/* Light Theme Overrides */
+[data-theme='paper-ink'] .capsule-gold { background: hsl(var(--gold)); color: white; }
+[data-theme='paper-ink'] .capsule-ember { background: hsl(var(--ember)); color: white; }
+[data-theme='paper-ink'] .capsule-cream { background: var(--capsule-cream-bg); color: var(--capsule-cream-fg); }
+```
+
+### 3.3 Audit Grep Command for AI
+Run before shipping slide changes:
+```bash
+rg -n "style=\{\{[^}]*hsl\(var\(--(gold|ember|cream|ink|white)" src/
+```
+Zero matches permitted on pill/chip elements.
 
 ---
 
-## 5. Separation from marketing UI
+## 4. Theme Menu Popover Component & Manifest Import/Export
 
-White Blue navy `#0D2975`, cobalt `#2563EB`, and violet `#822EE8` are page tokens. They are not slide accents. A slide must not import `04-white-blue-theme` color ramps to fill the stage.
- 
+The Theme Menu is anchored to the Palette button in the Controller HUD:
+- **Upward Opening:** Anchored at bottom-right or top-right, opening upward or downward away from viewport edge.
+- **Chrome Isolation:** Uses dedicated `--chrome-bg: 240 10% 6%` and `--chrome-fg: 0 0% 100%` tokens so the popover remains dark glass on all themes, including `paper-ink` and `github-light`.
+- **Live Announcer:** Updates `liveMessage` for screen readers on selection (`setLiveMessage("Theme set to " + label)`).
+
+### 4.1 Theme Manifest Import/Export Format
+Custom themes export and import as portable JSON manifests:
+
+```json
+{
+  "$schema": "https://specs.local/schemas/theme-manifest.v1.json",
+  "id": "custom-emerald",
+  "label": "Custom Emerald",
+  "appearance": "dark",
+  "description": "High-contrast clinical emerald theme",
+  "swatch": ["#063729", "#1CC491", "#F5FEFA", "#2EEBA3"],
+  "vars": {
+    "--primary": "155 75% 44%",
+    "--background": "165 80% 6%",
+    "--foreground": "130 80% 98%",
+    "--border": "158 40% 18%"
+  }
+}
+```
+
+- `buildThemeManifest(id)`: Constructs manifest object from active theme.
+- `downloadThemeManifest(manifest)`: Triggers client-side browser JSON download.
+- `parseThemeManifest(jsonString)`: Validates schema and imports preset into localStorage registry.
+
 ---
- 
-## 6. Switch
+## 5. Theme Swatch Arrays
 
-The slide color switch, the count of 8, and the shared variables are `40-theme-switch.md`. Do not build a second switcher from this file. The three-token bright-gold row in section 4 is not the switch id `bright-gold-tech`.
-
-- [ ] Read `40-theme-switch.md` before changing a color.
-- [ ] Use one of the 8 ids. Refuse any other id.
-- [ ] Leave the layout file untouched when only the theme changes.
-- [ ] Do not copy the section 4 three-token row into a new theme.
+Each theme publishes a 4-color swatch array used by the picker popover:
+- **`bright-gold` Swatch:** `['#0D0D0D', '#F3A502', '#FFF1D6', '#E85D3A']`
+- **`noir-gold` Swatch:** `['#0D0D0D', '#C9A84C', '#F0D78C', '#E85D3A']`
+- **`github-light` Swatch:** `['#FFFFFF', '#0969DA', '#24292F', '#CF222E']`
+- **`paper-ink` Swatch:** `['#FAF6EC', '#8A5A0E', '#1F1A12', '#C04A24']`
+- **`navy-blue` Swatch:** `['#1A2840', '#06B6D4', '#F1F5F9', '#F59E0B']`
+- **`vscode-dark` Swatch:** `['#1E1E1E', '#0A84FF', '#D4D4D4', '#CE9178']`
+- **`dracula` Swatch:** `['#282A36', '#BD93F9', '#F8F8F2', '#FF79C6']`
+- **`monokai` Swatch:** `['#272822', '#A6E22E', '#F8F8F2', '#FD971F']`
 
 ---
 
-## 7. Sibling References
- 
+## 6. Slide Theme Switching & Shared Variables
+
+The runtime theme switch mechanisms, the 8-theme slide switch implementation, and the shared variable contract (`--canvas`, `--ink`, `--ink-muted`, `--accent`, `--accent-ink`, `--card`) are specified in [`40-theme-switch.md`](./40-theme-switch.md).
+
+- Read [`40-theme-switch.md`](./40-theme-switch.md) before changing or switching runtime themes.
+- Presentation themes are strictly scoped to the slide stage. Marketing website colors (navy `#0D2975`, cobalt `#2563EB`, or violet `#822EE8`) must NEVER be imported to color slide canvases, and slide presentation amber `#F3A502` must NEVER be used as the primary action color on marketing homepages.
+
+---
+
+## 7. Anti-Hallucination & Quality Verification Checklist
+
+- [ ] Canvas math strictly enforces `1920×1080` authoring with uniform `min()` scale vector scaling.
+- [ ] Theme binds to the defined production theme IDs (default `'bright-gold'` / `bright-gold-tech`).
+- [ ] Light themes (`github-light`, `paper-ink`, `paper`, `print`) enforce the Light Theme Contract with inverted ink.
+- [ ] Zero inline styles used for capsule/chip background or text colors.
+- [ ] Floating controller HUD and Theme Menu preserve dark chrome tokens across all slide themes.
+- [ ] Theme manifests conform to the JSON schema with 4-swatch definitions and valid HSL vars.
+
+---
+
+## 8. Sibling References
+
 - Standalone marketing images, social cards, and thumbnail specs: [`37-image-specifications.md`](./37-image-specifications.md)
 - Slide layouts and constraints: [`28-slide-layouts.md`](./28-slide-layouts.md)
-- 10 Master slide layouts: [`34-slide-layout-catalog.md`](./34-slide-layout-catalog.md)
+- Master slide layout catalog: [`34-slide-layout-catalog.md`](./34-slide-layout-catalog.md)
+- Runtime 8-theme switcher: [`40-theme-switch.md`](./40-theme-switch.md)

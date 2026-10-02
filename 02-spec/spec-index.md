@@ -1,7 +1,7 @@
 # Spec File Index — Searchable Reference
 
 **Generated:** 2026-04-10
-**Total Files:** 411
+**Total Files:** 434
 **Categories:** 13
 
 > **How to search:** Use `Ctrl+F` / `Cmd+F` to search by keyword, file name, or category.
@@ -16,7 +16,7 @@
 - [🔴 Error Management](#error-management) (116 files)
 - [🗄️ Split DB Architecture](#split-db-architecture) (14 files)
 - [🌱 Seedable Config](#seedable-config) (14 files)
-- [🎨 Design System](#design-system) (16 files)
+- [🎨 Design System](#design-system) (43 files)
 - [📖 Docs Viewer UI](#docs-viewer-ui) (14 files)
 - [💻 Code Block System](#code-block-system) (10 files)
 - [📋 Consolidated Guidelines](#consolidated-guidelines) (17 files)
@@ -425,7 +425,34 @@
 | `02-spec/07-design-system/13-section-patterns.md` | Section Patterns | 1.0.0 |
 | `02-spec/07-design-system/14-page-creation-rules.md` | Page Creation Rules | 1.0.0 |
 | `02-spec/07-design-system/15-wordpress-migration.md` | WordPress Migration Compatibility | 1.0.0 |
+| `02-spec/07-design-system/16-theme-catalogue-and-palettes.md` | Theme Catalogue and Palettes | 4.0.0 |
+| `02-spec/07-design-system/17-theme-tokens.json` | Theme Tokens JSON | 4.0.0 |
+| `02-spec/07-design-system/18-dark-mode-and-materiality.md` | Dark Mode and Materiality | 4.0.0 |
+| `02-spec/07-design-system/19-modern-motion-and-sliding-interactions.md` | Modern Motion and Sliding Interactions | 4.0.0 |
+| `02-spec/07-design-system/20-ai-training-and-checklist-guide.md` | AI Training and Checklist Guide | 4.0.0 |
+| `02-spec/07-design-system/21-css3-animations-and-interactions.md` | CSS3 Animations and Interactions | 4.0.0 |
+| `02-spec/07-design-system/22-native-css-select-and-border-shapes.md` | Native CSS Select and Border Shapes | 4.0.0 |
+| `02-spec/07-design-system/23-building-block-components.md` | Building Block Components | 4.0.0 |
+| `02-spec/07-design-system/24-slide-presentation-system.md` | Slide Presentation System | 4.0.0 |
+| `02-spec/07-design-system/25-page-assembly.md` | Page Assembly | 4.0.0 |
+| `02-spec/07-design-system/26-visual-builder.md` | Visual Builder | 4.0.0 |
+| `02-spec/07-design-system/27-slide-canvas-and-themes.md` | Slide Canvas and Themes | 4.0.0 |
+| `02-spec/07-design-system/28-slide-layouts.md` | Slide Layouts | 4.0.0 |
+| `02-spec/07-design-system/29-slide-navigation-and-builder.md` | Slide Navigation and Builder | 4.0.0 |
+| `02-spec/07-design-system/30-slide-palette-type-and-shell.md` | Slide Palette Type and Shell | 4.0.0 |
+| `02-spec/07-design-system/31-slide-controller-buttons.md` | Slide Controller Buttons and HUD | 4.1.0 |
+| `02-spec/07-design-system/32-slide-color-options.md` | Slide Color Options and 10-Step Gradients | 4.1.0 |
+| `02-spec/07-design-system/33-mega-menu-components.md` | Avant-Garde Mega Menu Components | 4.1.0 |
+| `02-spec/07-design-system/34-slide-layout-catalog.md` | Master Slide Layout Catalog | 4.1.0 |
+| `02-spec/07-design-system/35-slide-builder-canvas-inspector.md` | Slide Builder Mode and Canvas Inspector | 4.1.0 |
+| `02-spec/07-design-system/36-website-content-builder-mode.md` | Website Content Builder Mode | 4.1.0 |
+| `02-spec/07-design-system/37-image-specifications.md` | Image Specifications | 4.0.0 |
+| `02-spec/07-design-system/38-card-and-pricing-components.md` | Card and Pricing Components | 4.0.0 |
+| `02-spec/07-design-system/39-logo-construction.md` | Logo Construction | 4.3.0 |
+| `02-spec/07-design-system/40-theme-switch.md` | Slide Theme Switch | 4.3.0 |
+| `02-spec/07-design-system/41-homepage-and-blog-sections.md` | Homepage and Blog Section Catalog | 4.1.0 |
 | `02-spec/07-design-system/97-acceptance-criteria.md` | Acceptance Criteria | 1.0.0 |
+| `02-spec/07-design-system/98-confidence-report.md` | Confidence Report | 4.3.0 |
 | `02-spec/07-design-system/99-consistency-report.md` | Consistency Report | 1.0.0 |
 
 ## 📖 Docs Viewer UI

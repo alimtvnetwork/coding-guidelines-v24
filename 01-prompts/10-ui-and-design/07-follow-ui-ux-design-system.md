@@ -1,7 +1,7 @@
 # Follow UI/UX Design System Specification & Component Assembly
 
-> **Prompt Version:** 2.0.0
-> **Trigger keywords:** `ui-ux`, `follow-design-system`, `build-website`, `avant-garde-menu`, `design-tokens`, `button-system`
+> **Prompt Version:** 2.1.0
+> **Trigger keywords:** `ui-ux`, `follow-design-system`, `build-website`, `avant-garde-menu`, `design-tokens`, `button-system`, `blog-system`
 
 **/goal** Autonomously construct production-grade marketing websites, blogs, dashboards, navigation systems, avant-garde mega menus, buttons, and responsive sections by strictly following the grounded design specifications without inventing a single value or hallucinating aesthetics.
 
@@ -17,7 +17,7 @@ AI agents MUST sequentially ingest these specification files:
 2. `02-spec/07-design-system/04-typography.md` — Fluid type scale (`clamp()`), Ubuntu headings, Poppins body, JetBrains Mono eyebrows.
 3. `02-spec/07-design-system/05-spacing-layout.md` — Content max width (`1280px`), responsive gutters, vertical section rhythms.
 4. `02-spec/07-design-system/10-header-navigation.md` — 72px sticky glass header, 12px scroll threshold, safe-region pointer physics (`pad = 14px`, 220ms debounce), `SlideSwapLabel` nav links, sticky-safe mobile drawer.
-5. `02-spec/07-design-system/11-button-system.md` — 6 Button variants (`primary`, `solid`, `outline`, `glass`, `ghost`, `link`), 4 sizes (`sm: 36px`, `md: 44px`, `lg: 52px`, `icon: 44px`), magnetic cursor physics (`strength: 0.22`), `.shine-sweep`, `.pointer-fill`.
+5. `02-spec/07-design-system/11-button-system.md` — 6 Button variants (`primary`, `solid`, `outline`, `glass`, `ghost`, `link`), 4 sizes (`sm: 36px`, `md: 44px`, `lg: 52px`, `icon: 44px`), magnetic cursor physics (`strength: 0.22`), `.shine-sweep`, `.pointer-fill`, capsule pills.
 6. `02-spec/07-design-system/16-theme-catalogue-and-palettes.md` — Multi-theme catalog, semantic color token mappings, contrast verification.
 7. `02-spec/07-design-system/21-css3-animations-and-interactions.md` — Hardware-accelerated CSS3 keyframes, marquees, accordions, neon borders.
 8. `02-spec/07-design-system/25-page-assembly.md` — Site and blog shells, copy length constraints.
@@ -25,6 +25,7 @@ AI agents MUST sequentially ingest these specification files:
 10. `02-spec/07-design-system/26-visual-builder.md` — The only website-builder contract. `36-website-content-builder-mode.md` is a pointer and defines no second gate or id scheme.
 11. `02-spec/07-design-system/37-image-specifications.md` — Infographics, social banners, YouTube thumbnails, safe zones, and aspect ratio standards.
 12. `02-spec/07-design-system/38-card-and-pricing-components.md` — 3-tier pricing table matrix, featured badges, floating editorial sections.
+13. `02-spec/07-design-system/41-homepage-and-blog-sections.md` — 15 Flagship homepage sections and complete blog editorial templates.
 
 ---
 
@@ -61,7 +62,7 @@ When authoring header navigation, enforce these exact mechanics:
 
 ## 3. Universal Button System Standards
 
-Every interactive button MUST implement one of the 6 variants from `11-button-system.md`:
+Every interactive button MUST implement one of the specified variants from `11-button-system.md`:
 
 1. **`primary`:** `bg-[image:var(--gradient-accent)] text-white shadow-[var(--shadow-card)]`. Carries active `.shine-sweep` angled 45-degree sheen on hover/focus.
 2. **`solid`:** `bg-brand-primary text-white shadow-[var(--shadow-card)]`. Active `.shine-sweep` on hover.
@@ -69,8 +70,10 @@ Every interactive button MUST implement one of the 6 variants from `11-button-sy
 4. **`glass`:** `bg-[image:var(--gradient-card-dark)] text-on-dark backdrop-blur-md`. Carries active `.gradient-ring` border mask.
 5. **`ghost`:** Zero-chrome utility, `hover:bg-muted`.
 6. **`link`:** Text anchor, `hover:underline underline-offset-4 px-0`.
-7. **Sizing:** Strictly `sm: 36px` (`h-9 px-4 text-[13px]`), `md: 44px` (`h-11 px-5 text-sm`), `lg: 52px` (`h-13 px-7 text-[15px]`), `icon: 44px` (`size-11 px-0`).
-8. **Magnetic Physics:** Primary hero CTAs wrap in `<Magnetic strength={0.22}>`.
+7. **`ShineButton` (Header High-Conversion CTA):** Near-black pill (`bg-night`) with continuous 45-degree linear sheen sweep (`@keyframes shine`) and an orbiting 8-particle floating spark constellation (`hidden md:block`, `@keyframes spark-float`). Inverse variant: white pill on dark imagery.
+8. **Sizing:** Strictly `sm: 36px` (`h-9 px-4 text-[13px]`), `md: 44px` (`h-11 px-5 text-sm`), `lg: 52px` (`h-13 px-7 text-[15px]`), `icon: 44px` (`size-11 px-0`).
+9. **Magnetic Physics:** Primary hero CTAs wrap in `<Magnetic strength={0.22}>`.
+10. **Capsule Pill Buttons:** Follow tokenized `--capsule-gold`, `--capsule-ember`, and near-black gradient text (`0 0% 4%`) for WCAG 2.2 AA contrast.
 
 ---
 
@@ -89,10 +92,29 @@ Every interactive button MUST implement one of the 6 variants from `11-button-sy
    - Lead paragraph: At most 28 words.
    - Card body copy: At most 32 words.
    - Accent phrases: At most ONE gradient accent phrase (`<GradientText>`) per heading.
+4. **High-Conversion Showcase Sections:** Follow `38-card-and-pricing-components.md` and `41-homepage-and-blog-sections.md`:
+   - **Interactive Split Pricing:** Interactive option buttons on left + warm cream price card (`#FDFBF7`) on right.
+   - **Scroll-Driven Services Showcase (`WhatWeDo`):** Dark shell (`#0A0A0A`, radius 32px), sticky left column with `translateY(-active * panelHeight)` filmstrip copy slide, and paired staggered project screenshot blocks.
+   - **Ruled-Paper Process Reassurance (`Workflow`):** `repeating-linear-gradient` paper overlay with 5 alternating tilted sticky notes (`-1.5deg` to `+1.8deg`), glowing pin circle, script numerals, and hover lift.
+   - **Enterprise Ready Hero:** Split hero with gradient headline and 7-card depth-scaled toggle stack over blurred violet halo.
+   - **15 Core Homepage Patterns:** Follow `41-homepage-and-blog-sections.md`.
 
 ---
 
-## 5. Client-Side Website Content Builder Readiness
+## 5. Blog Editorial System Architecture
+
+When authoring blog pages, follow `41-homepage-and-blog-sections.md`:
+1. **Blog Index (`/blog`):** Hero search, category filter pills, featured article card with reading time, 3-column article cards, and pagination.
+2. **Blog Post Detail (`/blog/:slug`):**
+   - Header with category pill, title, author avatar + credential, publication date, calculated reading time (`Math.ceil(words / 200)` min read).
+   - Sticky sidebar (`width: 280px`): Table of Contents with active scroll-spy indicator and social share bar.
+   - Main prose column (`max-w-[760px]`): Poppins 18px body, line-height 1.75, code blocks with dark slate background, language badge, line numbers, and copy button.
+   - Inline callout blocks (`info`, `warning`, `tip`) and pull quotes with left accent border.
+   - Author bio box, related articles 3-card grid, and newsletter card.
+
+---
+
+## 6. Client-Side Website Content Builder Readiness
 
 When building marketing or blog pages, follow `02-spec/07-design-system/26-visual-builder.md` only:
 1. Open the editor with `?builder=1&email={OWNER_EMAIL}`. Do not use `?builder=true`.
@@ -101,7 +123,7 @@ When building marketing or blog pages, follow `02-spec/07-design-system/26-visua
 
 ---
 
-## 6. Blind-AI Execution Checklist
+## 7. Blind-AI Execution Checklist
 
 Before outputting code or completing your task, verify every item:
 
@@ -112,7 +134,7 @@ Before outputting code or completing your task, verify every item:
 - [ ] Growing left hairline in mega links uses `scaleY(0) -> scaleY(1)` over `420ms`.
 - [ ] Promo flip card uses `perspective: 1400px` and flips `rotateY(180deg)` over `820ms`.
 - [ ] Mobile drawer NEVER touches `document.body.style.overflow`.
-- [ ] Buttons strictly use the 6 variants and 4 sizing tiers (`sm: 36px`, `md: 44px`, `lg: 52px`, `icon: 44px`).
+- [ ] Buttons strictly use the 6 variants, 4 sizing tiers, and capsule pill buttons where required.
 - [ ] Typography strictly follows `Ubuntu` (display/headings), `Poppins` (body/UI), `JetBrains Mono` (eyebrows/counters).
 - [ ] Band tones alternate (`light -> soft -> light -> soft`); adjacent sections never share the same tone.
 - [ ] ZERO hardcoded hex colors or inline style overrides are used in component classes; all colors bind to semantic CSS variables.

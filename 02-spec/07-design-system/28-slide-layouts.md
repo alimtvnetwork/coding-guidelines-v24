@@ -1,39 +1,85 @@
-# 28 — Slide Layouts
+# 28 — Slide Layouts & AI Blind-Authoring Contracts
 
-> **/goal** Close the set of slide layouts and name the slots each id actually has.
-> **/learn** One layout per slide. Colors come from `27-slide-canvas-and-themes.md` and `32-slide-color-options.md`. Step dimming stays in `24-slide-presentation-system.md`.
+> **/goal** Codify the closed set of slide layouts, slot definitions, and the 3-axis blind-authoring mental model so any AI can create or fix layouts without rendering errors.
+> **/learn** Master the 3-axis layout rule (vertical section placement vs internal sibling spacing vs runtime brand insets), CSS Grid track packing (`min-content` vs `1fr`), compact card mechanics, and canonical slide templates.
 
-**Version:** 1.1.0
+**Version:** 4.2.0
 **Status:** Active
+**AI Confidence:** High
+**Ambiguity:** None
 
 ---
 
-## 0. Shared fields
+## 1. The 3-Axis Layout Mental Model (Non-Negotiable)
 
-Every layout extends the same base. Do not invent a field.
+Every slide section is a single flex column owning three completely independent axes. **Never confuse them:**
 
-| Field | Rule |
-|---|---|
-| `id` | Stable string |
-| `type` | One id from section 1 |
-| `title` | Required string |
-| `align` | One of the 9 cells in `32-slide-color-options.md`. Omit uses the type default |
-| `padding` | Authoring pixels. Default `120` |
-| `themeId` | Overrides the deck theme for this slide only |
-| `background` | CSS color or image URL. Omit uses the theme |
-| `gradient` | `linear` (default angle `135`) or `radial`, with 2 to 4 stops. Overrides `background` when set |
-| `transition` | Overrides the deck transition for this slide only |
-| `icons` | Floating marks. Center `x`/`y` on the `1920×1080` stage. Default size `120`, default opacity `0.14`. Behaviors: `float`, `drift`, `orbit`, `sway`, `pulse` |
-| `images` | Extra placed images. Distinct from an `image` layout |
-| `enabled` | `false` skips the slide in navigation and the dot count. Default is on |
+| Axis | Lever (CSS Property) | Applied Element | Architectural Job |
+|---|---|---|---|
+| **A. Vertical Placement** | `justify-content` (`justify-center`, `justify-start`) | Outer `<section>` | Positions the entire eyebrow→title→content→caption block on canvas (top / middle / bottom). |
+| **B. Internal Sibling Spacing** | `mb-*` / `mt-*` / `gap-*` | Child components (header, grid, caption) | Controls tightness of the header→content stack. Never tweak to move the whole group. |
+| **C. Horizontal Brand Alignment** | `paddingLeft` / `paddingRight` | Outer `<section>` as **inline style** | Uses `var(--brand-inset-x)` so headlines align with the brand logo. Never use Tailwind `px-*`. |
 
-`RichText` is a list of strings and highlight chips. A chip is `{ text, pill?, plain?, pillColor?, style? }`. `plain` keeps size and color and does not draw a chip. Pill colors are in `32-slide-color-options.md`.
-
-Step reveals: `opacity: 0.15` and `filter: blur(2px)` until `currentStepIndex` reaches that step, then `cubic-bezier(0.16, 1, 0.3, 1)`. That rule stays in file 24.
+### 1.1 Lever Selection Rules
+- **Do NOT** move the content group up/down by tweaking `pt-*` / `pb-*` / `mt-*` on children (Axis B leaking into Axis A). **Use `justify-content` on the section.**
+- **Do NOT** tighten header-to-grid spacing by adding `flex-1` or `content-center` to the grid (Axis A leaking into Axis B). **Use `mb-6` on the header.**
+- **Do NOT** align with the logo using `px-24` or any Tailwind utility. Brand inset is a runtime token that drifts across screen sizes. **Use `style={{ paddingLeft: 'var(--brand-inset-x)', paddingRight: 'var(--brand-inset-x)' }}`.**
 
 ---
 
-## 1. Closed union
+## 2. CSS Grid Track Model & Compact Card Mechanics
+
+When layout slots contain cards, two independent properties determine card height and spacing:
+
+### 2a. Track Sizing (`grid-auto-rows`)
+- `grid-auto-rows: 1fr`: Splits available vertical height evenly among rows. Two compact cards in one column become tall cards taking 50% height each.
+- `grid-auto-rows: min-content`: Each row is **strictly the height of its content**. Two compact cards pack tightly at the top with `row-gap`.
+- Auto-packing rule in `index.css`:
+  ```css
+  .slide-grid-2-equal:has(.slide-card.is-compact),
+  .slide-grid-5-7:has(.slide-card.is-compact),
+  .slide-grid-4-8:has(.slide-card.is-compact),
+  .slide-grid-3-9:has(.slide-card.is-compact) {
+    grid-auto-rows: min-content;
+    align-content: start;
+    row-gap: 1rem;
+  }
+  ```
+
+### 2b. Item Alignment (`align-self`)
+- `align-self: stretch` (default): Card expands to fill its row track. Padding adjustments have zero visible effect on card height.
+- `align-self: start` (applied by `.slide-card.is-compact`): Card hugs content, anchored to top of the row.
+
+### 2c. Decision Matrix: Symptom to Lever
+
+| Symptom in Preview | Diagnosis | Surgical Lever |
+|---|---|---|
+| Compact card is as tall as a hero card | `align-self: stretch` winning | Add `"compact": true` in JSON; remove any `h-*` or `min-h-*` overrides. |
+| Two compact cards spread to top and bottom | `grid-auto-rows: 1fr` splitting space | Ensure container selector `:has(.slide-card.is-compact)` triggers `grid-auto-rows: min-content`. |
+| Content group sits too close to top bar | Outer section `justify-start` without padding | Set `<section className="... justify-center pt-24 pb-40">`. |
+| Headline misaligned with top-left logo | Tailwind `px-*` drifting from brand inset | Apply `style={{ paddingLeft: 'var(--brand-inset-x)', paddingRight: 'var(--brand-inset-x)' }}`. |
+
+---
+
+## 3. Canonical Slide Templates
+
+### 3.1 Cover Slide (Section Opener)
+- **Title:** `display-hero` (Ubuntu 700, `128px`), `hsl(var(--primary))`, centered on both axes.
+- **Subtitle / Kicker:** `body-md` (Poppins 400, `22px`), `hsl(var(--foreground-muted))`, centered, `24px` below title baseline.
+- **Spotlight:** Radial aura centered exactly behind the title text.
+- **Exclusion Zone:** Decorative icons stay outside an inner `900×400px` rectangle around title.
+
+### 3.2 Content Slide (Two-Column Text & Bar Chart)
+- **Geometry:** 1920×1080 stage. Left column starts at `x: 96`, max width `1100px`. Right column chart container at `x: 1180, y: 280, w: 640, h: 520`.
+- **Left Column:** Headline (`display-xl`, 88px) + mini-header (`display-sm`, 28px) + 9 emoji-led bullet items with `40px` vertical rhythm.
+- **Right Column (Growth Chart):** 5 vertical bars (Month 1 → 18%, Month 3 → 38%, Month 6 → 58%, Month 9 → 78%, Month 12 → 100%), widths `72px`, gap `48px`, `border-radius: 8px 8px 0 0`, vertical gradient base to +12% lightness, drop shadow `0 4px 16px rgba(0,0,0,0.35)`.
+
+### 3.3 Stat Slide (Big Number)
+- Centered 200px+ tabular figures number in Ubuntu 700 with label below, radial accent glow centered under digits.
+
+---
+
+## 4. Closed Layout Union & Slot Specifications
 
 ```text
 left | center | steps | timeline | process | quote | bullets | image
@@ -41,84 +87,27 @@ poll | qa | embed | reveal-grid | counter-stat | typewriter
 compare | priority | depth-stack
 ```
 
----
-
-## 2. Slots
-
-### `left`
-
-`heading` (RichText, required), optional `kicker`, optional `body`, optional `media` (`src` + `alt`). Title and body stay on the left. Media, when present, is the right half.
-
-### `center`
-
-`heading` (required), optional `subhead`, optional `display`. Both lines are centered. No side column. No card grid.
-
-### `steps`
-
-`heading` (string) and `steps[]`. Each step has `label`, `detail` (RichText), optional `title`, optional `media` (`src`, `alt`, `caption`, `fit` of `cover` or `contain`). One step is primary. The rest stay in the dimmed step style.
-
-### `timeline`
-
-Optional `heading`. `items[]` with `label`, optional `title`, optional `detail`. One rail. Nodes share one accent.
-
-### `process`
-
-Optional `heading` and `subhead`. `stages[]`. Each stage has `title`, optional `label` (auto-numbered when omitted), optional `bullets` (1 to 3 RichText lines), optional `icon`, optional `color`. Stages sit in one row or one column of circles. No nested cards.
-
-### `quote`
-
-`quote` (RichText) and optional `attribution`. No bullet list.
-
-### `bullets`
-
-`heading` (RichText), optional `kicker`, `bullets` (RichText list). One list. Bullets may step.
-
-### `image`
-
-`src` required. Optional `alt`, `caption`, `heading`. `fit` is `cover`, `contain`, or `split`. `split` places text beside the image. `cover` and `contain` do not add a paragraph column beyond the caption.
-
-### `poll`
-
-`question` (string) and `options` (string list). No open text field.
-
-### `qa`
-
-Optional `prompt`. One question surface. Not a list of many questions.
-
-### `embed`
-
-`url` required. Optional `heading`, `caption`. `allow` defaults to `fullscreen`. The frame stays inside the stage and does not cover the HUD in file 29.
-
-### `reveal-grid`
-
-Optional `heading`. `items` is 2 to 6 cells. Each cell has `title`, optional `detail`, optional `icon`. One cell per step. Cells share one size.
-
-### `counter-stat`
-
-Optional `heading`. `stats` is 1 to 4 figures. Each figure has `value` (number), `label` (RichText), optional `prefix`, optional `suffix`. `durationMs` defaults to `1200`. Numerals use tabular figures.
-
-### `typewriter`
-
-Optional `heading`. `lines` is 1 to 6 strings, one line per step. `richLines`, when set, replaces `lines` for render and step count and may contain pill chips. Optional `lineStyles`. `cps` defaults to `28`. `typingSound` defaults to off.
-
-### `compare`
-
-Optional `heading`. `before` and `after`, each `{ src, alt?, label? }`. This is a before/after image wipe, not two text columns. `durationMs` defaults to `1000`.
-
-### `priority`
-
-`quote` (RichText, contains one pill chip) and optional `attribution`. Not a numbered rank list.
-
-### `depth-stack`
-
-Optional `heading`. `sentences` is 1 to 6 RichText lines, one per step. The newest sentence comes to the front. Older sentences tilt back, shrink, and fade. `perspective` defaults to `1200`. Optional `sentenceStyles`. This is not the marketing `scroll-stack`.
+| Layout Type | Required Slots | Optional Slots | Layout Architecture |
+|---|---|---|---|
+| **`left`** | `heading` (RichText) | `kicker`, `body`, `media` (`src`, `alt`) | Text left half, media right half |
+| **`center`** | `heading` (RichText) | `subhead`, `display` | Centered text, no side column |
+| **`steps`** | `heading`, `steps[]` | `media` (`src`, `alt`, `caption`, `fit`) | Primary active step, remaining dimmed |
+| **`timeline`** | `items[]` | `heading` | Single vertical rail, accent nodes |
+| **`process`** | `stages[]` | `heading`, `subhead` | One row or column of circles with icons |
+| **`quote`** | `quote` (RichText) | `attribution` | Centered editorial quote |
+| **`bullets`** | `heading`, `bullets[]` | `kicker` | Single bullet list with sequential step reveals |
+| **`counter-stat`** | `stats[]` (1–4) | `heading` | Numerical counter with `value`, `prefix`, `suffix`, tabular nums |
+| **`typewriter`** | `lines[]` (1–6) | `heading`, `richLines` | Incremental character typing with sound option |
+| **`compare`** | `before`, `after` | `heading` | Before/after image wipe with `durationMs` |
+| **`depth-stack`** | `sentences[]` (1–6) | `heading` | 3D perspective card stack (`perspective: 1200`) |
 
 ---
 
-## 3. Forbidden on every layout
+## 5. Anti-Hallucination & Quality Verification Checklist
 
-- A second title role besides the slots above.
-- White Blue section ids.
-- A mega menu.
-- A layout id outside section 1.
-- Copy that names a client or a private repository.
+- [ ] Vertical placement uses `justify-content` on outer `<section>`, never margins on child elements.
+- [ ] Horizontal inset strictly binds `style={{ paddingLeft: 'var(--brand-inset-x)', paddingRight: 'var(--brand-inset-x)' }}`.
+- [ ] Compact cards specify `"compact": true` and have `align-self: start` in CSS.
+- [ ] Grid containers with compact cards trigger `grid-auto-rows: min-content` and `align-content: start`.
+- [ ] Layout type strictly belongs to the closed union of 17 layout identifiers.
+- [ ] Zero private company or client names exist in slide content.

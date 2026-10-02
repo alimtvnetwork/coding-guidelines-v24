@@ -28,26 +28,28 @@ Before authoring components or generating code, AI agents MUST read and master t
   - Read [`22-native-css-select-and-border-shapes.md`](./22-native-css-select-and-border-shapes.md) — `base-select`, `::picker(select)`, `border-shape`.
   - Read [`23-building-block-components.md`](./23-building-block-components.md) — Curriculum cards, 4-cell subgrids, standalone SVGs.
   - Read [`38-card-and-pricing-components.md`](./38-card-and-pricing-components.md) — 3-tier pricing tables and floating editorial containers.
+  - Read [`41-homepage-and-blog-sections.md`](./41-homepage-and-blog-sections.md) — The 15 flagship homepage sections and complete blog editorial templates.
 - [ ] `/learn` **Phase 6: Slide Presentation Engine & Canvas Architecture**
-  - Read [`24-slide-presentation-system.md`](./24-slide-presentation-system.md) — Fixed 16:9 canvas coordinate scaling (`1920×1080`), webcam PIP, step reveals.
-  - Read [`27-slide-canvas-and-themes.md`](./27-slide-canvas-and-themes.md) — Virtual canvas scale math, theme data models, JSON themes.
-  - Read [`40-theme-switch.md`](./40-theme-switch.md) — 8 slide themes and the only color switch.
+  - Read [`24-slide-presentation-system.md`](./24-slide-presentation-system.md) — Fixed 16:9 canvas scaling (`1920×1080`), dual-screen presenter console (`/present`), BroadcastChannel sync, webcam PIP, step reveals, overview grid (`G`), top jumper (`J`).
+  - Read [`27-slide-canvas-and-themes.md`](./27-slide-canvas-and-themes.md) — Virtual canvas scale math, 10 production themes (`bright-gold` default, `noir-gold`, `vscode-dark`, `dracula`, `monokai`, `github-light`, `paper-ink`, `macos-sonoma`, `windows-11`, `navy-blue`), and the Light Theme Contract.
+  - Read [`40-theme-switch.md`](./40-theme-switch.md) — 8 slide themes, shared color variables, and the runtime color switch.
   - Read [`28-slide-layouts.md`](./28-slide-layouts.md) — Base slot models and closed layout union.
   - Read [`29-slide-navigation-and-builder.md`](./29-slide-navigation-and-builder.md) — HUD, transitions, keys, slide builder.
   - Read [`30-slide-palette-type-and-shell.md`](./30-slide-palette-type-and-shell.md) — Dark amber palette, type scale, shell layers.
-  - Read [`31-slide-controller-buttons.md`](./31-slide-controller-buttons.md) — Floating HUD controller pill, action buttons, dots.
-  - Read [`32-slide-color-options.md`](./32-slide-color-options.md) — 10-step gradient precision system ($S_0$–$S_9$), pill presets, 9-cell align.
+  - Read [`31-slide-controller-buttons.md`](./31-slide-controller-buttons.md) — Floating HUD controller pill, action buttons, webcam PIP overlay, timer, dots.
+  - Read [`32-slide-color-options.md`](./32-slide-color-options.md) — 10-step gradient precision system ($S_0$–$S_9$) across 7 flagship themes, per-slide gradient editor, pill presets, 9-cell align.
 - [ ] `/learn` **Phase 6b: Master Slide Layout Catalog & Pure DOM Typography**
-  - Read [`34-slide-layout-catalog.md`](./34-slide-layout-catalog.md) — Non-Image Text Mandate and 10 master enterprise slide layouts.
+  - Read [`34-slide-layout-catalog.md`](./34-slide-layout-catalog.md) — Non-Image Text Mandate and 20 master enterprise slide layouts (Title, Executive, Key Player, Split, Pricing, Steps Chain, Funnel, Hardware Tabletop, Tech Stack, etc.).
 - [ ] `/learn` **Phase 6c: Live Slide Builder Mode & Canvas Inspector**
-  - Read [`35-slide-builder-canvas-inspector.md`](./35-slide-builder-canvas-inspector.md) — Decoupled dual-store architecture, 7 visual canvas stacking layers.
+  - Read [`35-slide-builder-canvas-inspector.md`](./35-slide-builder-canvas-inspector.md) — Decoupled dual-store architecture, 7 visual layers, draggable `BuilderPanel`, `convertSlideType` engine across all 20 layouts, multi-format export.
 - [ ] `/learn` **Phase 6d: Avant-Garde Navigation & Mega Menu System**
-  - Read [`10-header-navigation.md`](./10-header-navigation.md) & [`33-mega-menu-components.md`](./33-mega-menu-components.md) — Sticky `72px` glass header and full dropdown component architecture.
+  - Read [`10-header-navigation.md`](./10-header-navigation.md) & [`33-mega-menu-components.md`](./33-mega-menu-components.md) — Sticky `72px` glass header, `SlideSwapLabel` CSS keyframes, growing left hairline, 3D flip promo card, and safe-region hover mechanics.
 - [ ] `/learn` **Phase 6e: Website Content Builder Mode & In-Page Visual Editor**
-  - Read [`26-visual-builder.md`](./26-visual-builder.md) — The only website-builder contract. [`36-website-content-builder-mode.md`](./36-website-content-builder-mode.md) is a pointer to that file.
-- [ ] `/learn` **Phase 6f0: Bright Gold Tech and Logo**
-  - Read [`05-bright-gold-tech/readme.md`](./05-bright-gold-tech/readme.md) — Dark gold tokens, dot-field background, definition page, and the nine other page types.
+  - Read [`26-visual-builder.md`](./26-visual-builder.md) — The canonical website-builder contract. Review-only overlay, navigation suppression, Text/Images/Menu/Layout modes, and deterministic `changes.md` ZIP export. [`36-website-content-builder-mode.md`](./36-website-content-builder-mode.md) is a pointer to that file.
+- [ ] `/learn` **Phase 6f0: Bright Gold Tech, Logo & Theme Switch**
+  - Read [`05-bright-gold-tech/readme.md`](./05-bright-gold-tech/readme.md) — Dark gold tokens, dot-field background, definition page, and page types.
   - Read [`39-logo-construction.md`](./39-logo-construction.md) — One-archetype SVG mark. Missing name, idea, or colors stops the job.
+  - Read [`40-theme-switch.md`](./40-theme-switch.md) — 8 slide themes and runtime color switch.
   - Read [`98-confidence-report.md`](./98-confidence-report.md) — What to build and what to refuse.
 - [ ] `/learn` **Phase 6f: Standalone Image & Banner Specifications**
   - Read [`37-image-specifications.md`](./37-image-specifications.md) — Canvas geometries, safe zones, text rules, and image palette.
@@ -191,16 +193,17 @@ All animations and transitions prioritize **GPU-composited CSS3 transforms and o
 | 26 | [28-slide-layouts.md](./28-slide-layouts.md) | Presentation | Closed slide layout union |
 | 27 | [29-slide-navigation-and-builder.md](./29-slide-navigation-and-builder.md) | Presentation | HUD, transition families, keys, slide builder |
 | 30 | [30-slide-palette-type-and-shell.md](./30-slide-palette-type-and-shell.md) | Presentation | Dark amber palette, type scale, spotlight, shell layers |
-| 31 | [31-slide-controller-buttons.md](./31-slide-controller-buttons.md) | Presentation | Controller buttons, share, fullscreen, dots, crossfade |
+| 31 | [31-slide-controller-buttons.md](./31-slide-controller-buttons.md) | Presentation | Floating HUD controller pill, 8-position mounting, audio synthesis, webcam PIP |
 | 32 | [32-slide-color-options.md](./32-slide-color-options.md) | Presentation | 10-step gradient precision system ($S_0$–$S_9$), pill presets, relative luminance formula, 9-cell align |
 | 33 | [33-mega-menu-components.md](./33-mega-menu-components.md) | Navigation | Avant-garde mega panel dropdown, 3D flip card, growing left hairline, link staggers |
-| 34 | [34-slide-layout-catalog.md](./34-slide-layout-catalog.md) | Presentation | Measurements copied from slide components. `usp-strike` and `bullets` have no component |
+| 34 | [34-slide-layout-catalog.md](./34-slide-layout-catalog.md) | Presentation | Pure DOM text mandate and 20 master slide layout models |
 | 35 | [35-slide-builder-canvas-inspector.md](./35-slide-builder-canvas-inspector.md) | Slide Builder | Dual-store architecture, 7 visual layers, selection overlays, hotkeys, acoustic audio cues, headless PDF |
-| 36 | [36-website-content-builder-mode.md](./36-website-content-builder-mode.md) | Web Builder | Pointer only. The contract is `26-visual-builder.md` |
+| 36 | [36-website-content-builder-mode.md](./36-website-content-builder-mode.md) | Web Builder | Pointer to canonical website visual builder contract `26-visual-builder.md` |
 | 37 | [37-image-specifications.md](./37-image-specifications.md) | Images | Exact canvas geometries, safe zones, text rules, and closed image palette |
-| 38 | [38-card-and-pricing-components.md](./38-card-and-pricing-components.md) | Components | 3-Tier modular pricing tables and high-trust editorial floating cards |
-| 39 | [39-logo-construction.md](./39-logo-construction.md) | Brand | SVG mark rules. Stops when name, idea, or colors are missing |
-| 40 | [40-theme-switch.md](./40-theme-switch.md) | Theme | 8 slide themes, one switch, shared color variables |
+| 38 | [38-card-and-pricing-components.md](./38-card-and-pricing-components.md) | Components | 3-Tier modular pricing tables, split pricing, What We Do, Ruled Paper workflow, Enterprise Hero |
+| 39 | [39-logo-construction.md](./39-logo-construction.md) | Brand | Reusable SVG mark construction rules, archetypes, and theme variables |
+| 40 | [40-theme-switch.md](./40-theme-switch.md) | Theme | 8 slide themes, shared color variables, and runtime color switcher |
+| 41 | [41-homepage-and-blog-sections.md](./41-homepage-and-blog-sections.md) | Homepage & Blog | 15 modular homepage inspiration sections, blog index, reading progress, and editorial layout |
 | 05c | [05-bright-gold-tech/readme.md](./05-bright-gold-tech/readme.md) | Theme | Bright gold tech deck and website bands |
 | 98 | [98-confidence-report.md](./98-confidence-report.md) | Meta | What an agent can build, and what it must refuse |
 | 02b | [02-ai-system-design/readme.md](./02-ai-system-design/readme.md) | Sub-System | AI-adaptable modern SaaS theme swapping and section blueprints |

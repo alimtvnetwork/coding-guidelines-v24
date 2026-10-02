@@ -1,9 +1,9 @@
 # 33 — Avant-Garde Mega Menu Components & Dropdown System
 
-> **/goal** Master and enforce the component architecture, physics parameters, staggered entrance timings, left-border growth rules, and 3D promotional flip cards of the Avant-Garde Mega Menu.
-> **/learn** Master the exact entrance easing `cubic-bezier(0.16, 1, 0.3, 1)`, group stagger delay formula (`0.05s + gi * 0.05s`), link entrance delay formula (`0.08s + gi * 0.05s + li * 0.03s`), left hairline growth (`scaleY(0) -> scaleY(1)` over 420ms), and 3D flip card physics (`perspective: 1400px`, `rotateY(180deg)` over 820ms).
+> **/goal** Master and enforce the component architecture, physics parameters, staggered entrance timings, left-border growth rules, SlideSwapLabel keyframes, and 3D promotional flip cards of the Avant-Garde Mega Menu.
+> **/learn** Master the exact entrance easing `cubic-bezier(0.16, 1, 0.3, 1)`, group stagger delay formula (`0.05s + gi * 0.05s`), link entrance delay formula (`0.08s + gi * 0.05s + li * 0.03s`), left hairline growth (`scaleY(0) -> scaleY(1)` over 420ms), SlideSwapLabel CSS keyframes, and 3D flip card physics (`perspective: 1400px`, `rotateY(180deg)` over 820ms).
 
-**Version:** 4.0.0
+**Version:** 4.1.0
 **Status:** Active
 **AI Confidence:** High
 **Ambiguity:** None
@@ -12,7 +12,7 @@
 
 ## 1. Executive System Overview
 
-The **Avant-Garde Mega Menu** is an ultra-polished, multi-column navigation surface that deploys underneath the 72px sticky glass header. It organizes dense corporate or SaaS solution architectures into intuitive visual hierarchies while maintaining 60fps hardware-accelerated motion:
+The **Avant-Garde Mega Menu** is an ultra-polished, multi-column navigation surface deploying underneath the 72px sticky glass header:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -52,21 +52,17 @@ Link Stagger: 0.08s ───► 0.34s  (Opacity 0 -> 1, X -6 -> 0, Delay: 0.08s
 Promo Entrance:0.14s ──► 0.44s  (Opacity 0 -> 1, Y 10 -> 0, Duration: 0.30s)
 ```
 
-### 3.1 Motion Parameter Registry
-
-| Animation Phase | Target Element | Initial State | Animate State | Exit State | Timing & Easing |
+| Phase | Target Element | Initial State | Animate State | Exit State | Timing & Easing |
 |:---|:---|:---|:---|:---|:---|
-| **Panel Surface** | `MegaPanel` container | `opacity: 0, y: -8, scale: 0.985` | `opacity: 1, y: 0, scale: 1` | `opacity: 0, y: -6, scale: 0.99` | `260ms`, `cubic-bezier(0.16, 1, 0.3, 1)` |
-| **Column Group** | `MegaGroup` wrapper | `opacity: 0, y: 8` | `opacity: 1, y: 0` | — | `280ms`, delay: `0.05s + gi * 0.05s` |
-| **Link Item** | `MegaLink` row | `opacity: 0, x: -6` | `opacity: 1, x: 0` | — | `260ms`, delay: `0.08s + gi*0.05s + li*0.03s` |
+| **Panel Surface** | `MegaPanel` | `opacity: 0, y: -8, scale: 0.985` | `opacity: 1, y: 0, scale: 1` | `opacity: 0, y: -6, scale: 0.99` | `260ms`, `[0.16, 1, 0.3, 1]` |
+| **Column Group** | `MegaGroup` | `opacity: 0, y: 8` | `opacity: 1, y: 0` | — | `280ms`, delay: `0.05s + gi * 0.05s` |
+| **Link Item** | `MegaLink` | `opacity: 0, x: -6` | `opacity: 1, x: 0` | — | `260ms`, delay: `0.08s + gi*0.05s + li*0.03s` |
 | **Feature Promo** | `PromoFlipCard` | `opacity: 0, y: 10` | `opacity: 1, y: 0` | — | `300ms`, delay: `0.14s` |
-| **Reduced Motion**| All Surfaces | `opacity: 0` | `opacity: 1` | `opacity: 0` | `120ms linear` (Zero transforms) |
+| **Reduced Motion**| All Surfaces | `opacity: 0` | `opacity: 1` | `opacity: 0` | `120ms linear` |
 
 ---
 
 ## 4. Multi-Column Grid Responsive Templates
-
-The inner dropdown container adapts dynamically depending on the number of link groups:
 
 ```typescript
 const gridColumnClass =
@@ -83,126 +79,72 @@ const gridColumnClass =
 
 ---
 
-## 5. `MegaLink` Anatomy & Hover Mechanics
-
-Each link row provides rich multi-layered feedback:
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ │  Executive Cloud Architecture                     [→]     │
-│    Sub-millisecond lakehouse queries and distributed cache  │
-└─────────────────────────────────────────────────────────────┘
-  ▲  ▲                                                 ▲
-  │  │                                                 └─ ArrowRight (Translates 4px, Opacity 0 -> 100%)
-  │  └─ SlideSwapLabel (Per-character upward roll)
-  └─ Left Accent Line (scaleY 0 -> 1 over 420ms)
-```
+## 5. `MegaLink` Anatomy, `SlideSwapLabel` & Hover Mechanics
 
 1. **Outer Boundary:** `rounded-[10px] px-3 py-2 block relative overflow-hidden transition-colors hover:bg-[color-mix(in_oklab,var(--primary)_7%,transparent)]`.
-2. **Growing Left Hairline:**
-   - Position: `absolute inset-y-1 left-0 w-px origin-top scale-y-0`.
-   - Fill: `bg-[image:var(--gradient-accent)]`.
-   - Transition: `duration-[var(--dur-base,420ms)] ease-[var(--ease-out)] group-hover:scale-y-100`.
-3. **Typography & Slide Swap:**
-   - Label: `font-display text-sm font-medium text-foreground flex items-center gap-1.5`.
-   - Text Wrapper: `<SlideSwapLabel stagger={0.018}>{link.label}</SlideSwapLabel>`.
-4. **Interactive Trailing Arrow:**
-   - Icon: Lucide `ArrowRight` (`size-3.5` / `14px`).
-   - Resting: `-translate-x-1 opacity-0`.
-   - Hover: `group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-[var(--dur-fast,240ms)]`.
-5. **Secondary Description:**
-   - Style: `mt-0.5 block text-xs leading-relaxed text-muted-foreground`.
+2. **Growing Left Hairline:** `absolute inset-y-1 left-0 w-px origin-top scale-y-0 bg-[image:var(--gradient-accent)] transition-transform duration-[var(--dur-base,420ms)] ease-[var(--ease-out)] group-hover:scale-y-100`.
+3. **Trailing Arrow:** Lucide `ArrowRight` (`size-3.5`), `-translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-[var(--dur-fast,240ms)]`.
+
+### 5.1 `SlideSwapLabel` Component & CSS Keyframes
+
+```tsx
+export function SlideSwapLabel({ children, className, stagger = 0.018 }: { children: string; className?: string; stagger?: number }) {
+  const reduced = useReducedMotion();
+  if (reduced) return <span className={className}>{children}</span>;
+  const chars = children.split("");
+  return (
+    <span className={cn("slide-swap relative inline-flex overflow-hidden align-bottom", className)}>
+      <span className="sr-only">{children}</span>
+      <span aria-hidden className="inline-flex">
+        {chars.map((c, i) => (
+          <span key={`${c}-${i}`} className="relative inline-block overflow-hidden">
+            <span className="slide-swap-top inline-block whitespace-pre" style={{ transitionDelay: `${i * stagger}s` }}>{c}</span>
+            <span aria-hidden className="slide-swap-bottom absolute left-0 top-0 inline-block whitespace-pre" style={{ transitionDelay: `${i * stagger}s` }}>{c}</span>
+          </span>
+        ))}
+      </span>
+    </span>
+  );
+}
+```
+
+```css
+.slide-swap { line-height: 1.15; }
+.slide-swap-top, .slide-swap-bottom { transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1); }
+.slide-swap-bottom { transform: translateY(100%); }
+.slide-swap:hover .slide-swap-top, .group:hover .slide-swap-top, a:hover > .slide-swap .slide-swap-top, button:hover .slide-swap-top { transform: translateY(-110%); }
+.slide-swap:hover .slide-swap-bottom, .group:hover .slide-swap-bottom, a:hover > .slide-swap .slide-swap-bottom, button:hover .slide-swap-bottom { transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) { .slide-swap-top, .slide-swap-bottom { transition: none; } }
+```
 
 ---
 
 ## 6. 3D Promotional Flip Card (`PromoFlipCard`)
 
-The right-hand column showcases high-impact announcements using pure 3D hardware-accelerated card rotation:
+The right-hand column showcases announcements using pure 3D hardware-accelerated card rotation:
 
-```
-         Hover Cursor
-              │
-              ▼
-   ┌────────────────────┐          ┌────────────────────┐
-   │ FRONT:             │  Rotate  │ BACK:              │
-   │ Gradient Accent    │  820ms   │ Muted Card Surface │
-   │ Enterprise AI Deck │ ───────► │ Read Case Study    │
-   │ [Hover to flip →]  │          │ [Launch Demo Pill] │
-   └────────────────────┘          └────────────────────┘
-     perspective: 1400px             rotateY(180deg)
-```
-
-### 6.1 Mechanical Specifications
 - **Perspective Container:** `group/promo relative min-h-[220px] [perspective:1400px]`.
 - **Card Core:** `relative h-full w-full transition-transform duration-[820ms] ease-[var(--ease-out)] [transform-style:preserve-3d] group-hover/promo:[transform:rotateY(180deg)]`.
-- **Front Face:**
-  - Geometry: `absolute inset-0 flex flex-col justify-between gap-4 overflow-hidden rounded-[var(--radius-card,20px)] bg-[image:var(--gradient-accent)] p-6 text-white [backface-visibility:hidden]`.
-  - Headline: `text-base font-bold leading-snug`.
-  - Body: `text-sm text-white/85`.
-  - Cue Tag: `inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-white/80`.
-- **Back Face:**
-  - Geometry: `absolute inset-0 flex flex-col justify-between gap-4 overflow-hidden rounded-[var(--radius-card,20px)] border border-border bg-card p-6 text-foreground [backface-visibility:hidden] [transform:rotateY(180deg)]`.
-  - Headline: `text-base font-bold leading-snug text-foreground`.
-  - Body: `text-sm text-muted-foreground`.
-  - CTA Button: `inline-flex items-center justify-center gap-2 rounded-full bg-[image:var(--gradient-accent)] px-4 py-2.5 text-sm font-semibold text-white shadow-[var(--shadow-lift)] transition-transform duration-[var(--dur-fast)] hover:scale-[1.02]`.
+- **Front Face:** `absolute inset-0 flex flex-col justify-between gap-4 overflow-hidden rounded-[var(--radius-card,20px)] bg-[image:var(--gradient-accent)] p-6 text-white [backface-visibility:hidden]`.
+- **Back Face:** `absolute inset-0 flex flex-col justify-between gap-4 overflow-hidden rounded-[var(--radius-card,20px)] border border-border bg-card p-6 text-foreground [backface-visibility:hidden] [transform:rotateY(180deg)]`.
+- **CTA Button:** `inline-flex items-center justify-center gap-2 rounded-full bg-[image:var(--gradient-accent)] px-4 py-2.5 text-sm font-semibold text-white shadow-[var(--shadow-lift)] transition-transform duration-[var(--dur-fast)] hover:scale-[1.02]`.
 
 ---
 
 ## 7. Complete Reference Implementation (`MegaMenu.tsx`)
 
 ```tsx
-import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ChevronDown, ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { SlideSwapLabel } from "./motion";
-
-export interface NavItemLink {
-  label: string;
-  href: string;
-  description?: string;
-}
-
-export interface NavGroup {
-  title: string;
-  links: NavItemLink[];
-}
-
-export interface PromoCardData {
-  front: { title: string; body: string };
-  back: { title: string; body: string; cta: { label: string; href: string } };
-}
-
-export function MegaPanel({
-  panelKey,
-  groups,
-  promo,
-  panelRef,
-  onNavigate,
-  onMouseEnter,
-  onMouseLeave,
-}: {
-  panelKey: string;
-  groups: NavGroup[];
-  promo?: PromoCardData;
-  panelRef: RefObject<HTMLDivElement | null>;
-  onNavigate: () => void;
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
-}) {
+export function MegaPanel({ panelKey, groups, promo, panelRef, onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
   const reduced = useReducedMotion();
-
   return (
     <motion.div
-      ref={panelRef}
-      key={panelKey}
+      ref={panelRef} key={panelKey}
       initial={reduced ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.985 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={reduced ? { opacity: 0 } : { opacity: 0, y: -6, scale: 0.99 }}
       transition={{ duration: reduced ? 0.12 : 0.26, ease: [0.16, 1, 0.3, 1] }}
       className="absolute left-0 right-0 top-full z-40 pt-3"
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
     >
       <div className="mx-auto max-w-[1280px] px-6">
         <div className="overflow-hidden rounded-[var(--radius-card,20px)] border border-border bg-card shadow-[var(--shadow-lift)]">

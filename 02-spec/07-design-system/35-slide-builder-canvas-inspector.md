@@ -1,9 +1,9 @@
 # 35 — Slide Builder Mode, Interactive Canvas & Inspector Specification
 
-> **/goal** Master and enforce the dual-store architecture, 7 visual layers, interactive selection overlays, bounding box overrides, and audio cue debouncing of the Slide Presentation Builder Engine.
-> **/learn** Master the separation of `useDeckStore` (persisted) and `useEditStore` (ephemeral), the 7 canvas stacking layers, builder hotkeys (`B`/`E`, `Tab`, `Cmd+Z`, `1`–`4`), audio debouncing windows, and headless Chromium print-ready PDF exports.
+> **/goal** Master and enforce the dual-store architecture, 7 visual layers, floating draggable builder panel, slide-type switching engine, interactive selection overlays, bounding box overrides, and multi-format exports of the Slide Presentation Builder Engine.
+> **/learn** Master the separation of `useDeckStore` (persisted) and `useEditStore` (ephemeral), the 7 canvas stacking layers, draggable `BuilderPanel` physics, `convertSlideType` text-preservation mechanics across all 20 slide layouts, builder hotkeys (`B`/`E`, `Tab`, `Cmd+Z`, `1`–`7`), and headless print-ready PDF/handout exports.
 
-**Version:** 4.0.0
+**Version:** 4.1.0
 **Status:** Active
 **AI Confidence:** High
 **Ambiguity:** None
@@ -13,9 +13,9 @@
 ## 1. System Overview & Architectural Role
 
 The **Slide Builder Engine** empowers authors, presenters, and AI agents to visually configure presentations in real-time directly on the scaled `1920×1080` virtual canvas:
-- Move, drag, and resize text blocks, bullet cards, and media plates.
-- Switch layout models and theme palettes on the fly.
-- Reassign pill preset colors and 9-cell alignment coordinates.
+- Move, drag, and resize text blocks, bullet cards, and media plates with live bounding boxes.
+- Instantly switch layout models across all 20 slide types while preserving existing headlines and body text.
+- Reassign 10-step theme gradients, pill presets, and 9-cell alignment coordinates.
 - Maintain a non-destructive undo/redo history stack without polluting presentation playback timers.
 
 ---
@@ -84,7 +84,102 @@ Every element on the `1920×1080` canvas is assigned to one of 7 isolated stacki
 
 ---
 
-## 4. Key Actions & Hotkey Navigation Matrix
+## 4. Floating Draggable Builder Panel (`BuilderPanel`)
+
+The builder settings panel floats above the viewport, draggable via a top grip handle and minimizable:
+
+```
+┌───────────────────────────────────────────────────┐
+│ [:: Grip] Builder Settings   [↶ Undo] [↷ Redo] [−]│
+├───────────────────────────────────────────────────┤
+│ Slide Type: [ 3-Point Bullets                 ▼ ] │
+├───────────────────────────────────────────────────┤
+│ ┌───────────────┐ ┌───────────────┐ ┌───────────┐ │
+│ │ Layout & Opts │ │ Typography    │ │ Gradients │ │
+│ └───────────────┘ └───────────────┘ └───────────┘ │
+│ ┌───────────────┐ ┌───────────────┐ ┌───────────┐ │
+│ │ Insert Icon   │ │ Insert Image  │ │ Camera XY │ │
+│ └───────────────┘ └───────────────┘ └───────────┘ │
+├───────────────────────────────────────────────────┤
+│ Active Selection: "slide-headline-title"          │
+│ Position: X: 140px, Y: 210px, W: 900px            │
+└───────────────────────────────────────────────────┘
+```
+
+- **Panel Dimensions:** Fixed width `264px`, `maxHeight: calc(100vh - 32px)`, default position `left: 16px, top: 16px`.
+- **Grip Drag Physics:** `pointerdown` on header grip records offsets; `pointermove` on window updates coordinates clamped to viewport boundaries (`0 <= x <= window.innerWidth - 264`). Coordinates persist in `useBuilderPanelStore`.
+- **Sub-Panel Modules:**
+  1. **`SlideTypeMenu`:** Dropdown selector to switch between all 20 slide types.
+  2. **`SlideOptionsPanel`:** Manages 9-cell text alignment, slide dark/light theme override, and speaker notes.
+  3. **`FontPanel`:** Visual sliders for font scale, letter tracking, line height, and heading weight.
+  4. **`GradientPanel`:** Toggle gradient fill, switch `linear` / `radial`, angle slider (0–360°), and add/remove color stops.
+  5. **`InsertIconPanel`:** Modal browser containing the entire Lucide vector icon catalog with search and color tinting.
+  6. **`InsertImagePanel` & `ImageLayer`:** File upload, URL input, crop rectangle, scale slider, and alignment grid.
+  7. **`StepCameraPanel` & `XYPad`:** Interactive 2D pad configuring camera focal point pan (`x, y`) and zoom level (`1.0` to `2.5×`) for multi-step reveals.
+  8. **`HistoryPanel`:** Visual audit ledger showing timestamped changes with instant rollback buttons.
+
+---
+
+## 5. Slide-Type Switching Engine (`convertSlideType`)
+
+When an author changes the slide type in the builder, `convertSlideType` seamlessly maps existing content into the target structure without loss of critical narrative copy:
+
+```typescript
+export function convertSlideType(slide: Slide, targetType: SlideType): Slide {
+  const base: BaseSlide = {
+    id: slide.id,
+    type: targetType,
+    title: slide.title,
+    theme: slide.theme,
+    align: slide.align ?? "center-left",
+    notes: slide.notes,
+  };
+
+  const primaryText = slide.title || "Headline";
+  const secondaryText = extractSecondaryText(slide);
+
+  switch (targetType) {
+    case "bullets":
+      return {
+        ...base,
+        subtitle: secondaryText || "Key strategic initiatives",
+        bullets: [
+          { icon: "Check", title: "Primary Objective", body: "Direct impact milestone" },
+          { icon: "Users", title: "Team Alignment", body: "Cross-functional execution" },
+          { icon: "Zap", title: "Velocity Metric", body: "Sub-millisecond performance" },
+        ],
+      };
+    case "center":
+      return {
+        ...base,
+        subhead: secondaryText || "Declarative mission statement",
+      };
+    case "counter-stat":
+      return {
+        ...base,
+        statNumber: "99.9%",
+        statLabel: primaryText,
+        statDelta: "+45% YoY",
+      };
+    default:
+      return { ...base, description: secondaryText };
+  }
+}
+```
+
+---
+
+## 6. Interactive Selection Overlay & Overrides
+
+When an element is selected on the live canvas:
+1. **Overlay Geometry:** `SelectionOverlay` renders a bounding box with `border: 2px solid #0ea5e9`, background tint `rgba(14, 165, 233, 0.05)`.
+2. **Transform Handles:** 4 corner nodes (`8×8px`, white fill, blue border) and 4 edge midpoint handles.
+3. **Floating Metric Tag:** Position pill attached to top-left of the bounding box displaying `x: 140 | y: 210 | w: 900`.
+4. **Coordinate Persistence:** Dragging writes explicit pixel overrides to `slide.boxes[elementId]` (`{ x, y, width, height }`).
+
+---
+
+## 7. Key Actions & Hotkey Navigation Matrix
 
 | Hotkey | Action Payload | Context Guard |
 |:---|:---|:---|
@@ -98,71 +193,30 @@ Every element on the `1920×1080` canvas is assigned to one of 7 isolated stacki
 | **`2`** | Quick-switch to Corporate Gold theme | Applies to current slide or deck |
 | **`3`** | Quick-switch to Enterprise Blue theme | Applies to current slide or deck |
 | **`4`** | Quick-switch to Clinical Emerald theme | Applies to current slide or deck |
+| **`5`** | Quick-switch to Sunset Crimson Orange theme | Applies to current slide or deck |
+| **`6`** | Quick-switch to Monochrome Paper theme | Applies to current slide or deck |
+| **`7`** | Quick-switch to Cyan Tech theme | Applies to current slide or deck |
 | **`F`** | Toggle Fullscreen Mode | Invokes `requestFullscreen()` |
 
 ---
 
-## 5. Element Identity & Custom Bounding Boxes
+## 8. Multi-Format Presentation Exports
 
-Each editable canvas element is registered with a unique key:
-```typescript
-export interface EditBox {
-  x: number;       // Left offset in 1920px canvas space
-  y: number;       // Top offset in 1080px canvas space
-  width?: number;  // Explicit pixel width override
-  height?: number; // Explicit pixel height override
-}
-
-export interface SlideData {
-  id: string;
-  type: SlideType;
-  title: string;
-  boxes?: Record<string, EditBox>; // e.g., { "headline": { x: 140, y: 240, width: 1200 } }
-}
-```
-
-When builder mode is active:
-- Element renders a `SelectionOverlay` with a `2px solid #38bdf8` outline.
-- Four corner drag handles (`size: 8×8px`, background `#FFFFFF`, border `#0284c7`).
-- Live coordinates display in a floating micro-tooltip (`x: 140px, y: 240px`).
+1. **Headless High-Resolution PDF Print (`slides.print.tsx`):**
+   - Headless Chromium navigates to `/slides/print?theme=light&reducedMotion=true`.
+   - Renders 1 slide per page in landscape 16:9 (`1920×1080`) format with zero animation delay.
+2. **3-Up Executive Handout (`slides.handout-3up.tsx`):**
+   - Formats 3 consecutive slides on the left column with structured blank ruled lines on the right column for executive note-taking.
+3. **Deck Manifest JSON Export:**
+   - One-click export downloading the entire deck JSON schema including all slide contents, themes, gradient stops, and bounding box overrides.
 
 ---
 
-## 6. Acoustic & Audio Cue Engine
-
-Tactile acoustic cues trigger dynamically during live presentations:
-
-| Audio Event | Asset File | Debounce Window | Default Volume |
-|:---|:---|:---:|:---:|
-| **Slide Transition Swoosh** | `/sounds/fade_swoosh_v4.mp3` | `120ms` | `0.90 × Master` |
-| **Sub-Step Advance Click** | `/sounds/click.mp3` | `80ms` | `0.70 × Master` |
-| **Typewriter Character Tap** | `/sounds/tap.mp3` | `45ms` | `0.35 × Master` |
-
----
-
-## 7. Ultra-High Resolution Headless PDF Export
-
-To generate pixel-perfect, print-ready PDF handouts:
-1. Load deck in headless Chromium (`puppeteer` / `playwright`).
-2. Lock viewport dimensions to exact `1920 × 1080`.
-3. Disable all animations via URL query parameter `?export=pdf&reducedMotion=true`.
-4. Iterate slides 1 through $N$, executing page capture:
-   ```javascript
-   await page.pdf({
-     path: 'deck-handout-print.pdf',
-     width: '1920px',
-     height: '1080px',
-     printBackground: true,
-     margin: { top: 0, right: 0, bottom: 0, left: 0 }
-   });
-   ```
-
----
-
-## 8. Anti-Hallucination & Quality Verification Checklist
+## 9. Anti-Hallucination & Quality Verification Checklist
 
 - [ ] State architecture strictly maintains dual-store separation (`useDeckStore` vs `useEditStore`).
 - [ ] Stacking context adheres strictly to the 7 defined visual layers.
+- [ ] Floating builder panel is draggable, clamped to viewport, and minimizable.
+- [ ] `convertSlideType` successfully maps primary and secondary text across all 20 slide types without null values.
 - [ ] Hotkeys `B` and `E` toggle builder mode; `Escape` clears selection.
-- [ ] Audio cue triggers adhere to debounce windows (swoosh: 120ms, click: 80ms).
 - [ ] PDF export forces 1920×1080 dimensions with background graphics enabled and animations bypassed.

@@ -1,134 +1,183 @@
-# 31 — Slide Controller Buttons and Dots
+# 31 — Slide Controller Buttons, HUD Pill, Webcam Overlay & Dots
 
-> **/goal** Specify the controller pill, its buttons, the progress bar, and the dot row.
-> **/learn** These controls sit on the viewport, never inside the scaled `1920×1080` stage. Keys and the slide builder stay in `29-slide-navigation-and-builder.md`.
+> **/goal** Specify the global floating presenter HUD pill, 8-position mounting system, navigation buttons, audio chimes, background music toggle, onboarding popup, webcam PIP overlay, timer, top progress bar, and bottom dot pagination.
+> **/learn** These controls sit on the global viewport (`z-index: 50`–`60`), never inside the scaled `1920×1080` stage. Web Audio API synthesizers and the 8-layer slide skeleton operate in strict coordination with these controls.
 
-**Version:** 1.0.0
+**Version:** 4.2.0
 **Status:** Active
+**AI Confidence:** High
+**Ambiguity:** None
 
 ---
 
-## 0. Anti-hallucination
+## 1. Floating Controller HUD Pill & 8-Position Mounting System
 
-Colors are the tokens in `30-slide-palette-type-and-shell.md`. Do not recolor a button with a marketing blue.
+The controller is a single unified floating pill anchored to any of 8 viewport positions (default `'BottomCenter'` or `'TopRight'`). It renders via `createPortal` into `document.body` so it floats above the scaled stage and is never clipped by `overflow: hidden`:
 
----
+```
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│  ‹   5 / 37   ›  │  ⌁ Share  │  🎨 Theme  │  📹 Cam  │  🎵 Music  │  ✎ Build  │  ⤢ Full │
+└─────────────────────────────────────────────────────────────────────────────────────────────┘
+  ▲─── Height: 56px, Radius: 9999px, Backdrop Blur 12px, Hover-Reveal Pill HUD ───────────────▲
+```
 
-## 1. Pill
+### 1.1 Geometry, Tokens & Surface Properties
 
-| Property | Value |
-|---|---|
-| Position | `fixed`, `top: 32px`, `right: 32px` |
-| Z-index | `50` |
-| Height | `56px` |
-| Padding | `8px 12px` |
-| Radius | `9999px` |
-| Background | `hsl(240 8% 8% / 0.85)` plus `backdrop-filter: blur(12px)` |
-| Border | `1px solid hsl(var(--border))` |
-| Shadow | `0 8px 24px hsl(0 0% 0% / 0.4)` |
-| Gap | `4px` between groups |
-
-Three groups, separated by a `1px` by `24px` divider in `hsl(var(--border))`:
-
-1. Previous, counter, next
-2. Share
-3. Fullscreen
-
-Hover background on every icon button: `hsl(0 0% 100% / 0.08)`, radius `9999px`, `background-color 120ms ease-out`. Active: `hsl(0 0% 100% / 0.14)`. Reduced motion snaps the background with no duration.
-
----
-
-## 2. Previous and next
-
-| Property | Value |
-|---|---|
-| Icons | Lucide `ChevronLeft`, `ChevronRight` |
-| Icon | `20px`, stroke `2px`, `hsl(var(--foreground))` |
-| Hit target | `40×40px`, round |
-| Disabled | `opacity: 0.35`, `cursor: not-allowed` |
-| Names | "Previous slide", "Next slide" |
-
-Previous is disabled when the index is the first slide. Next is disabled on the last slide. Both write the hash `#slide-{n}`.
-
----
-
-## 3. Counter
-
-Poppins `500`, `20px`, `hsl(var(--foreground))`. Format is `{current} / {total}` with spaces around the slash. Min width `64px`, centered, `font-variant-numeric: tabular-nums`, `user-select: none`.
-
----
-
-## 4. Share button
-
-Lucide `Share2`, `20px`, hit target `40×40px`, name "Share current slide".
-
-The link is the current slide, not the deck root. Set `url.hash` to `#slide-{current}` before sharing.
-
-When `navigator.share` exists, share that URL with the deck title and the slide title. Otherwise copy the URL and show a toast "Link to slide {n} copied" that dismisses after `2s`. On mount, read `location.hash` and open that slide.
-
----
-
-## 5. Fullscreen button
-
-Lucide `Maximize2` when windowed, `Minimize2` when fullscreen. Hit target `40×40px`. Names: "Enter fullscreen" and "Exit fullscreen". Toggle `document.documentElement.requestFullscreen()` and `document.exitFullscreen()`. Swap the icon on `fullscreenchange`. Key `F` toggles. `Escape` exits.
-
----
-
-## 6. Progress bar
-
-Independent of the pill. `position: fixed; top: 0; left: 0; right: 0; height: 4px`. Track is `hsl(var(--border-subtle))`. Fill width is `current / total * 100%` with the gradient in file 30. Show it on every slide.
-
----
-
-## 7. Dot row
-
-`fixed`, `bottom: 32px`, centered. Flex row, `gap: 12px`, `z-index: 50`. Max width `min(1600px, calc(100vw - 96px))`.
-
-| State | Shape | Fill |
+| Property | Value | Notes |
 |---|---|---|
-| Inactive | `8×8px` circle | `--foreground-subtle` at `60%` opacity |
-| Hover | `8×8px` circle | `--foreground` |
-| Active | pill `28×8px`, radius `9999px` | `--primary` |
-| Visited, optional | `8×8px` circle | `--foreground-subtle` at `80%` opacity |
+| **Height** | `56px` | Constant across all 8 positions |
+| **Padding** | `8px 12px` | Horizontal and vertical inner margin |
+| **Border Radius** | `9999px` | Full capsule pill |
+| **Background** | `hsl(240 8% 8% / 0.85)` + `backdrop-filter: blur(12px)` | Always near-black chrome on all themes |
+| **Border** | `1px solid hsl(var(--border))` | Subtle hairline boundary |
+| **Shadow** | `0 8px 24px hsl(0 0% 0% / 0.40)` | High-elevation lift |
+| **Z-Index** | `60` | Above slides (`1–4`), below modals (`80`) |
+| **Internal Dividers** | `1px` wide × `24px` high | In `hsl(var(--border))` separating action clusters |
 
-Transition: `all 200ms cubic-bezier(0.2, 0.8, 0.2, 1)`. Reduced motion snaps.
+### 1.2 The 8-Position Mounting Matrix (`ControllerPosition`)
 
-Wrap the row in `<nav aria-label="Slide pagination">`. Each dot is a button named "Go to slide {n}: {title}" with `aria-current="true"` on the active dot.
+Presenters can configure the pill anchor across 8 edge coordinates, persisted to `localStorage` (`ctrl.position.v1`):
 
-The earlier `32×8` active mark is not this controller. New dark-amber decks use `28×8` active and `8×8` inactive.
+```typescript
+export type ControllerPosition =
+  | "TopLeft" | "TopCenter" | "TopRight"
+  | "BottomLeft" | "BottomCenter" | "BottomRight"
+  | "LeftCenter" | "RightCenter";
+```
+
+| Anchor Position | Viewport Offset CSS (includes `env(safe-area-inset-*)`) | Tooltip Direction | Expand Axis |
+|:---|:---|:---:|:---:|
+| **`TopLeft`** | `top: calc(24px + env(safe-area-inset-top)); left: calc(24px + env(safe-area-inset-left));` | `bottom` | downward |
+| **`TopCenter`** | `top: calc(24px + env(safe-area-inset-top)); left: 50%; transform: translateX(-50%);` | `bottom` | downward |
+| **`TopRight`** | `top: calc(32px + env(safe-area-inset-top)); right: calc(32px + env(safe-area-inset-right));` | `bottom` | downward |
+| **`BottomLeft`** | `bottom: calc(24px + env(safe-area-inset-bottom)); left: calc(24px + env(safe-area-inset-left));` | `top` | upward |
+| **`BottomCenter`** | `bottom: calc(24px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%);` | `top` | upward |
+| **`BottomRight`** | `bottom: calc(24px + env(safe-area-inset-bottom)); right: calc(24px + env(safe-area-inset-right));` | `top` | upward |
+| **`LeftCenter`** | `top: 50%; left: calc(24px + env(safe-area-inset-left)); transform: translateY(-50%);` | `right` | inward |
+| **`RightCenter`** | `top: 50%; right: calc(24px + env(safe-area-inset-right)); transform: translateY(-50%);` | `left` | inward |
 
 ---
 
-## 8. Dot tooltip
+## 2. Hover-Reveal & Auto-Hide Lifecycle
 
-Appears above the dot. Show delay `120ms`. Hide delay `80ms`. Also on keyboard focus.
-
-| Property | Value |
-|---|---|
-| Background | `--background-elevated` |
-| Border | `1px solid hsl(var(--border))` |
-| Radius | `8px` |
-| Padding | `8px 14px` |
-| Shadow | `0 4px 12px hsl(0 0% 0% / 0.5)` |
-| Type | Poppins `500`, `16px`, `--foreground` |
-| Number | The `{n}.` prefix is `--primary`. One space, then the title in white |
-| Caret | `6px` triangle, same fill, centered on the dot |
-| Gap | `8px` between tooltip and dot |
-
-Flip horizontally when the dot is near a viewport edge.
+To eliminate visual distraction during executive presentations, the controller implements a 2.5s idle fade:
+1. **Idle State:** After `2500ms` without mouse movement, pointer input, or touch interaction, the pill fades to `opacity: 0.15` (or `opacity: 0` in presenter mode).
+2. **Awakening:** Any mousemove on window, keypress, or hovering over the pill boundary immediately transitions opacity back to `1.0` over `150ms ease-out`.
+3. **Lock:** While a popover (Theme Menu, Audio Settings, Quick Jumper) is open, auto-hide is completely suppressed.
 
 ---
 
-## 9. Transitions for this shell
+## 3. Controller Action Groups & Button Contracts
 
-The shell picks the transition. A slide does not animate its own mount.
+Every icon button inside the pill uses a `40×40px` circular hit target with hover background `hsl(0 0% 100% / 0.08)` and active `hsl(0 0% 100% / 0.14)`:
 
-| Variant | When | Duration | Easing |
+### 3.1 Navigation Group
+- **Previous (`ChevronLeft`):** `40×40px`, disabled when `current === 1` (`opacity: 0.35`). Navigates `current - 1`, updates `#slide-{n}`.
+- **Slide Counter:** Poppins `500`, `20px`, tabular numbers, `user-select: none`. Minimum width `64px`, format: `${current} / ${total}`. Double-clicking activates numeric Quick Jumper.
+- **Next (`ChevronRight`):** `40×40px`, disabled when `current === total` (`opacity: 0.35`). Navigates `current + 1`, updates `#slide-{n}`.
+
+### 3.2 Share, Theme & Media Group
+- **Share (`Share2`):** Deep links to current slide `#slide-{current}`. Uses `navigator.share` or copies URL to clipboard with 2-second Sonner toast.
+- **Theme Palette (`Palette`):** Opens upward-expanding Theme Menu popover with live WCAG contrast validator.
+- **Presenter Webcam (`Video` / `VideoOff`):** Toggles floating PIP overlay (`z-index: 55`).
+- **Background Music (`Music` / `Volume2` / `VolumeX`):** Toggles ambient audio track loop on/off with volume slider.
+- **Builder Mode (`Pencil`):** Activates in-canvas drag-and-drop editing and floating `BuilderPanel`. Hotkey: `B` or `E`.
+- **Fullscreen (`Maximize2` / `Minimize2`):** Toggles HTML5 Fullscreen API. Hotkey: `F`.
+
+---
+
+## 4. Audio Chimes & Sound Synthesis (Web Audio API)
+
+All UI feedback sounds are synthesized via the native Web Audio API (`AudioContext`) with zero external sound asset downloads:
+
+```typescript
+class DeckSoundEngine {
+  private ctx: AudioContext | null = null;
+  private init() { if (!this.ctx) this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)(); }
+
+  playTick() { // Navigation step: 800Hz sine decay over 30ms
+    this.init(); if (!this.ctx) return;
+    const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+    osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+    gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.03);
+    osc.connect(gain); gain.connect(this.ctx.destination);
+    osc.start(); osc.stop(this.ctx.currentTime + 0.03);
+  }
+
+  playChord() { // Slide jump chord: dual 523Hz (C5) + 659Hz (E5) over 120ms
+    this.init(); if (!this.ctx) return;
+    [523.25, 659.25].forEach((freq) => {
+      const osc = this.ctx!.createOscillator(); const gain = this.ctx!.createGain();
+      osc.frequency.setValueAtTime(freq, this.ctx!.currentTime);
+      gain.gain.setValueAtTime(0.06, this.ctx!.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx!.currentTime + 0.12);
+      osc.connect(gain); gain.connect(this.ctx!.destination);
+      osc.start(); osc.stop(this.ctx!.currentTime + 0.12);
+    });
+  }
+}
+```
+
+---
+
+## 5. First-Run Onboarding Popup ("Story")
+
+On a user's first visit (`localStorage.getItem("ctrl.onboarded.v1") !== "1"`), a floating onboarding card mounts above the controller pill:
+- **Badge:** `[✨ PRO TIP]` in `--capsule-gold`.
+- **Title:** "Keyboard-First Presentation Engine"
+- **Shortcuts Grid:**
+  - `←` / `→` or `Space` — Navigate slides & reveal steps
+  - `F` — Fullscreen presentation mode
+  - `G` — 37-slide thumbnail gallery
+  - `J` — Direct numeric jump
+  - `C` — Live presenter webcam PIP
+- **Dismiss:** Button "Got it!" writes `"1"` to `ctrl.onboarded.v1` and unmounts the card. Pressing any navigation key also dismisses automatically.
+
+---
+
+## 6. The 8-Layer Z-Stack Slide Anatomy Skeleton
+
+Every slide is rendered inside a shared 8-layer shell (`<DeckLayout>`). Individual slide components only author **Layer 4**:
+
+```
+Layer 8 ─ Controller HUD Pill       fixed top:32 right:32 (z-index: 60)
+Layer 7 ─ Bottom Dot Pagination    fixed bottom:32 (z-index: 50)
+Layer 6 ─ Top Progress Bar         4px fixed top:0 (z-index: 50)
+Layer 5 ─ Brand Logo (Top-Left)    48px tall SVG/PNG (z-index: 45)
+Layer 4 ─ Slide Content Component   1920×1080 stage content (z-index: 10)
+Layer 3 ─ Radial Spotlight Aura    centered behind focal point (z-index: 3)
+Layer 2 ─ Decorative Outline Icons 10–14 Lucide icons, 10% opacity (z-index: 2)
+Layer 1 ─ Cross-Hatch Grid Mesh    48px cells, 2.5% opacity (z-index: 1)
+Layer 0 ─ Slide Canvas Ground      hsl(var(--background)) (z-index: 0)
+```
+
+---
+
+## 7. Bottom Pagination Dot Row
+
+Fixed at `bottom: 32px`, centered horizontally across the viewport:
+- **Container:** `<nav aria-label="Slide pagination">` at `fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3`.
+- **Max Width:** `min(1600px, calc(100vw - 96px))`.
+
+| State | Dot Shape | Dimensions | Fill & Border |
 |---|---|---|---|
-| `crossfade` | Default | `240ms` | `cubic-bezier(0.2, 0.8, 0.2, 1)` |
-| `slide-x` | Only when the deck opts in | `320ms` | `cubic-bezier(0.2, 0.8, 0.2, 1)` |
-| `none` | `prefers-reduced-motion: reduce` | `0ms` | none |
+| **Inactive** | Circle | `8×8px` | `hsl(var(--foreground-subtle) / 0.6)` |
+| **Hover** | Circle | `8×8px` | `hsl(var(--foreground))` |
+| **Active** | Expanded Pill | `28×8px` | `hsl(var(--pres-accent))` |
+| **Visited** | Circle | `8×8px` | `hsl(var(--foreground-subtle) / 0.8)` |
 
-`crossfade` is opacity `0` to `1`. `slide-x` is opacity `0` and `translateX(48px)` to opacity `1` and `translateX(0)`.
+- **Animation:** `all 200ms cubic-bezier(0.2, 0.8, 0.2, 1)`. Under `prefers-reduced-motion: reduce`, dimensions snap without interpolation.
+- **Accessibility:** `<button aria-label="Go to slide {n}: {title}" aria-current={current === n ? "true" : undefined} />`.
 
-JSON decks still use `fade` and `camera-zoom` from file 29. Do not mix that family with `crossfade` / `slide-x` inside one deck.
+---
+
+## 8. Anti-Hallucination & Quality Verification Checklist
+
+- [ ] Controller supports all 8 anchor positions with safe area `env(safe-area-inset-*)` offsets.
+- [ ] Hover-reveal fades to `opacity: 0.15` after 2.5s idle; any mousemove restores `1.0`.
+- [ ] Tooltip expansion direction is derived from position edge (bottom anchor opens top, top opens bottom).
+- [ ] Sound synthesis uses native Web Audio API oscillators without external asset requests.
+- [ ] First-run onboarding card mounts once and dismisses cleanly via click or keypress.
+- [ ] Slide anatomy strictly preserves the 8-layer Z-stack with individual slide content residing exclusively in Layer 4.
+- [ ] Deep link share formats `#slide-{current}` and falls back to clipboard copy + Sonner toast.
