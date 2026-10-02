@@ -33,6 +33,8 @@
 | `AC-CG-CI-006` | Distribution Packaging and Release Asset Governance | [`06-distribution.md`](06-distribution.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
 | `AC-CG-CI-007` | Rule Taxonomy, Severity Mapping, and Tier Coordination | [`07-rules-mapping.md`](07-rules-mapping.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
 | `AC-CG-CI-008` | Probe Ordering, Parallelism, and Timeout Budgets | [`08-performance.md`](08-performance.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CICD-FAQ-001` | Linter Pack FAQ & Consumer Operations Conformance | [`98-faq.md`](98-faq.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration/98-faq.md --check-only` |
+| `AC-CG-CICD-TROUBLE-001` | Linter Pack Operations Troubleshooting Conformance | [`99-troubleshooting.md`](99-troubleshooting.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration/99-troubleshooting.md --check-only` |
 
 ---
 
@@ -185,6 +187,46 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-c
 **Verification command:**
 ```bash
 python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+---
+
+### AC-CG-CICD-FAQ-001: Linter Pack FAQ & Consumer Operations Conformance
+
+- [ ] Inline suppression syntax mandates rule ID and reason text (`// codeguidelines:disable=RULE — reason`).
+- [ ] Suppressions lacking justification trigger synthetic warning finding `STYLE-099`.
+- [ ] Baseline workflows support `--baseline` and `--refresh-baseline` flags to isolate legacy violations.
+- [ ] Filter flags (`--rules`, `--languages`, `--exclude-rules`) and configuration files (`.codeguidelines.toml`) operate deterministically.
+- [ ] Version pinning instructions mandate exact semantic versions or commit SHAs with zero floating tags (`@latest`, `@main`).
+
+**Given** CI/CD pipeline infrastructure, configuration files, and linter consumer queries.
+**When** Audited against this FAQ specification.
+**Then** All suppression patterns, baselining steps, and version pins conform to documented standards with exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration/98-faq.md --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+---
+
+### AC-CG-CICD-TROUBLE-001: Linter Pack Operations Troubleshooting Conformance
+
+- [ ] Python 3 runtime requirements (>= 3.10) and setup actions (`actions/setup-python@v5`) are documented across platforms.
+- [ ] Native C dependency requirements for AST parsers (tree-sitter, python3-dev, build-essential) are explicitly detailed.
+- [ ] SARIF schema validation and upload troubleshooting cover GitHub, GitLab, and Azure DevOps integration.
+- [ ] Exit code semantics (0=pass, 1=violations, 2=configuration/runtime error) are verified with reproducible remediation steps.
+- [ ] Configuration parsing (`.codeguidelines.toml`) errors provide actionable validation commands.
+
+**Given** CI/CD pipeline infrastructure, runner execution environments, and diagnostic incident reports.
+**When** Audited against this troubleshooting specification.
+**Then** All operational failure modes have actionable diagnosis and remediation steps with exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration/99-troubleshooting.md --check-only
 ```
 **Expected:** exit 0. Zero violations.
 

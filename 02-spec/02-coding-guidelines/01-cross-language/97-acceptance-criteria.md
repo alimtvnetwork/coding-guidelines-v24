@@ -1,4 +1,4 @@
-# Cross-Language Coding Guidelines — Acceptance Criteria Registry
+# Cross-Language Coding Guidelines — Acceptance Criteria Registry (AI Execution Prompt)
 
 > **/goal** Provide a consolidated, traceable registry of testable acceptance criteria across all cross-language coding guideline specifications.
 > **/learn** Reference individual criteria by canonical ID (`AC-CG-[CATEGORY]-[NUM]`) and verify compliance using targeted linters.

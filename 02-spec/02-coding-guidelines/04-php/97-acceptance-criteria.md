@@ -34,11 +34,12 @@
 | `AC-CG-PHP-007` | PHP Spacing, Blank Lines and Import Hygiene | [`07-spacing-and-imports.md`](07-spacing-and-imports.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
 | `AC-CG-PHP-008` | PHP Response Key Type Inventory & Taxonomy | [`08-response-key-type-inventory.md`](08-response-key-type-inventory.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
 | `AC-CG-PHP-009` | PHP-Go Cross-Language Architecture Consistency | [`09-php-go-consistency-audit.md`](09-php-go-consistency-audit.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
-| `AC-CG-PHP-REF-001` | PHP Modular Naming and Structured Error Envelopes | [`07-php-standards-reference/02-naming-and-errors.md`](07-php-standards-reference/02-naming-and-errors.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
-| `AC-CG-PHP-REF-002` | PHP Centralized Constants and Backed Enums | [`07-php-standards-reference/03-constants-and-deps.md`](07-php-standards-reference/03-constants-and-deps.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
-| `AC-CG-PHP-REF-003` | PHP Constructor Initialization, Positive Booleans, and isDefined Guards | [`07-php-standards-reference/04-initialization-and-booleans.md`](07-php-standards-reference/04-initialization-and-booleans.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
-| `AC-CG-PHP-REF-004` | PHP PSR-12 Code Style, Braces, Vertical Spacing, and Function Size Limits | [`07-php-standards-reference/05-code-style.md`](07-php-standards-reference/05-code-style.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
-| `AC-CG-PHP-REF-005` | PHP Forbidden Globals, Sanitization, and Prepared Database Queries | [`07-php-standards-reference/06-forbidden-and-database.md`](07-php-standards-reference/06-forbidden-and-database.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| `AC-CG-PHP-REF-000` | PHP Standards Reference Index Conformance | [`07-php-standards-reference/readme.md`](07-php-standards-reference/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| `AC-CG-PHP-REF-002` | PHP Modular Naming and Structured Error Envelopes | [`07-php-standards-reference/02-naming-and-errors.md`](07-php-standards-reference/02-naming-and-errors.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| `AC-CG-PHP-REF-003` | PHP Centralized Constants and Backed Enums | [`07-php-standards-reference/03-constants-and-deps.md`](07-php-standards-reference/03-constants-and-deps.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| `AC-CG-PHP-REF-004` | PHP Constructor Initialization, Positive Booleans, and isDefined Guards | [`07-php-standards-reference/04-initialization-and-booleans.md`](07-php-standards-reference/04-initialization-and-booleans.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| `AC-CG-PHP-REF-005` | PHP PSR-12 Code Style, Braces, Vertical Spacing, and Function Size Limits | [`07-php-standards-reference/05-code-style.md`](07-php-standards-reference/05-code-style.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| `AC-CG-PHP-REF-006` | PHP Forbidden Globals, Sanitization, and Prepared Database Queries | [`07-php-standards-reference/06-forbidden-and-database.md`](07-php-standards-reference/06-forbidden-and-database.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
 
 ---
 
@@ -170,7 +171,21 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-p
 
 ---
 
-### AC-CG-PHP-REF-001: PHP Modular Naming and Structured Error Envelopes
+### AC-CG-PHP-REF-000: PHP Standards Reference Index Conformance
+
+**Given** PHP standards reference files and companion plugin implementations.
+**When** Audited against `07-php-standards-reference/readme.md`.
+**Then** All reference guidelines comply with repository architecture and exit code is 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php/07-php-standards-reference --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+---
+
+### AC-CG-PHP-REF-002: PHP Modular Naming and Structured Error Envelopes
 
 **Given** PHP classes, enums, functions, and error response builders.
 **When** Audited against `07-php-standards-reference/02-naming-and-errors.md`.
@@ -184,7 +199,7 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-p
 
 ---
 
-### AC-CG-PHP-REF-002: PHP Centralized Constants and Backed Enums
+### AC-CG-PHP-REF-003: PHP Centralized Constants and Backed Enums
 
 **Given** PHP constants, hooks, capabilities, HTTP methods, and file paths.
 **When** Audited against `07-php-standards-reference/03-constants-and-deps.md`.
@@ -198,7 +213,7 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-p
 
 ---
 
-### AC-CG-PHP-REF-003: PHP Constructor Initialization, Positive Booleans, and isDefined Guards
+### AC-CG-PHP-REF-004: PHP Constructor Initialization, Positive Booleans, and isDefined Guards
 
 **Given** PHP class constructors, property definitions, and conditional branching.
 **When** Audited against `07-php-standards-reference/04-initialization-and-booleans.md`.
@@ -212,7 +227,7 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-p
 
 ---
 
-### AC-CG-PHP-REF-004: PHP PSR-12 Code Style, Braces, Vertical Spacing, and Function Size Limits
+### AC-CG-PHP-REF-005: PHP PSR-12 Code Style, Braces, Vertical Spacing, and Function Size Limits
 
 **Given** PHP statements, braces, conditionals, returns, and function declarations.
 **When** Audited against `07-php-standards-reference/05-code-style.md`.
@@ -226,7 +241,7 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-p
 
 ---
 
-### AC-CG-PHP-REF-005: PHP Forbidden Globals, Sanitization, and Prepared Database Queries
+### AC-CG-PHP-REF-006: PHP Forbidden Globals, Sanitization, and Prepared Database Queries
 
 **Given** PHP database access, user input handling, and runtime execution.
 **When** Audited against `07-php-standards-reference/06-forbidden-and-database.md`.
