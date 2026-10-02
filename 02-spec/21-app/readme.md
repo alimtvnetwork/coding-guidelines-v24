@@ -72,6 +72,7 @@ All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent e
 | [`14-white-blue-theme-v3-prompt-and-multi-repo-sync.md`](14-white-blue-theme-v3-prompt-and-multi-repo-sync.md) | White Blue Theme Design System, Parent Task N-Steps V3 Prompt & Multi-Repo Sync | Application Spec | Active |
 | [`01-variadic-spread-params-and-multi-repo/`](01-variadic-spread-params-and-multi-repo/) | Variadic & Spread Parameter Architecture, Prompt 36, and Multi-Repo Sync Spec | Application Spec | Active |
 | [`02-string-normalization-and-equalfoldany/`](02-string-normalization-and-equalfoldany/) | String Normalization, EqualFoldAny Architecture, Prompt 37, and Skill | Application Spec | Active |
+| [`03-sync-other-codebase/`](03-sync-other-codebase/) | Multi-Repository Synchronization Engine, Prompt 01-sync-other-codebase, and Skill | Application Spec | Active |
 
 ---
 
