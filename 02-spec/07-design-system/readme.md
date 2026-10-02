@@ -44,6 +44,10 @@ Before authoring components or generating code, AI agents MUST read and master t
   - Read [`10-header-navigation.md`](./10-header-navigation.md) & [`33-mega-menu-components.md`](./33-mega-menu-components.md) — Sticky `72px` glass header and full dropdown component architecture.
 - [ ] `/learn` **Phase 6e: Website Content Builder Mode & In-Page Visual Editor**
   - Read [`26-visual-builder.md`](./26-visual-builder.md) — The only website-builder contract. [`36-website-content-builder-mode.md`](./36-website-content-builder-mode.md) is a pointer to that file.
+- [ ] `/learn` **Phase 6f0: Bright Gold Tech and Logo**
+  - Read [`05-bright-gold-tech/readme.md`](./05-bright-gold-tech/readme.md) — Dark gold tokens, dot-field background, definition page, and the nine other page types.
+  - Read [`39-logo-construction.md`](./39-logo-construction.md) — One-archetype SVG mark. Missing name, idea, or colors stops the job.
+  - Read [`98-confidence-report.md`](./98-confidence-report.md) — What to build and what to refuse.
 - [ ] `/learn` **Phase 6f: Standalone Image & Banner Specifications**
   - Read [`37-image-specifications.md`](./37-image-specifications.md) — Canvas geometries, safe zones, text rules, and image palette.
   - Follow [`01-prompts/10-ui-and-design/09-write-and-enhance-design-spec.md`](../../01-prompts/10-ui-and-design/09-write-and-enhance-design-spec.md) to author/enhance specs.
@@ -110,8 +114,8 @@ All animations are hardware-accelerated (`transform` and `opacity`) and include 
 **Version:** 4.3.0
 **Updated:** 2026-10-02
 **Status:** Active
-**AI Confidence:** Open. See `99-consistency-report.md`.
-**Ambiguity:** The website builder is file 26 only. Slide types `usp-strike` and `bullets` have no component.
+**AI Confidence:** See [`98-confidence-report.md`](./98-confidence-report.md). Bright gold tech is the deck an agent can build today.
+**Ambiguity:** The website builder is file 26 only. Slide types `usp-strike` and `bullets` have no component. A black slide catalog is not in this folder.
 
 ---
 
@@ -144,16 +148,6 @@ All animations and transitions prioritize **GPU-composited CSS3 transforms and o
 | **Dark/Light Parity** | Every token has both light and dark values. Components never branch on theme — tokens handle it. |
 | **Anti-AI-Slop Governance** | Concrete rejection rubrics that ban generic 3-card grids, unanchored heroes, and purple gradient soup. |
 | **Portability** | Platform-agnostic. Works natively with React, Tailwind v4, static HTML, WordPress, or modern SSR frameworks. |
-
----
-
-## Scoring
-
-| Metric | Value |
-|--------|-------|
-| AI Confidence | Production-Ready ✅ |
-| Ambiguity | None 🟢 |
-| Health Score | 100/100 |
 
 ---
 
@@ -204,6 +198,9 @@ All animations and transitions prioritize **GPU-composited CSS3 transforms and o
 | 36 | [36-website-content-builder-mode.md](./36-website-content-builder-mode.md) | Web Builder | Pointer only. The contract is `26-visual-builder.md` |
 | 37 | [37-image-specifications.md](./37-image-specifications.md) | Images | Exact canvas geometries, safe zones, text rules, and closed image palette |
 | 38 | [38-card-and-pricing-components.md](./38-card-and-pricing-components.md) | Components | 3-Tier modular pricing tables and high-trust editorial floating cards |
+| 39 | [39-logo-construction.md](./39-logo-construction.md) | Brand | SVG mark rules. Stops when name, idea, or colors are missing |
+| 05c | [05-bright-gold-tech/readme.md](./05-bright-gold-tech/readme.md) | Theme | Bright gold tech deck and website bands |
+| 98 | [98-confidence-report.md](./98-confidence-report.md) | Meta | What an agent can build, and what it must refuse |
 | 02b | [02-ai-system-design/readme.md](./02-ai-system-design/readme.md) | Sub-System | AI-adaptable modern SaaS theme swapping and section blueprints |
 | 03b | [03-sweet-digs-design-system/readme.md](./03-sweet-digs-design-system/readme.md) | Sub-System | Sweet Digs HSL multi-theme architecture and zoom-free interaction suite |
 | 04b | [04-white-blue-theme/readme.md](./04-white-blue-theme/readme.md) | Sub-System | White Blue Theme 3-format color architecture (`HEX`, `RGB`/`RGBA`, `HSL` + `OKLCH`), 3D flip Mega-Menu, `WhiteBlueButton`, and enterprise section library |

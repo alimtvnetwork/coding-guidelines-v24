@@ -125,7 +125,7 @@ Every newly created or enhanced specification file MUST follow this structure:
 
 **Version:** 4.3.0
 **Status:** Active
-**AI Confidence:** High only when every number has a source row
+**AI Confidence:** High only for numbers this file states. Unstated numbers are not invented.
 **Ambiguity:** State it. Do not write None while another file disagrees.
 
 ---

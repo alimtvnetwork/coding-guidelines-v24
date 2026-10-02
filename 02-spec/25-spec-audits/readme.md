@@ -1,33 +1,33 @@
 # Spec Audits
 
-> **/goal** Keep audit results next to the specs they judge, and use each failed row as the next edit.
-> **/learn** An audit file is a work list. It is not a score to store and leave.
+> **/goal** Keep this folder from becoming a second spec.
+> **/learn** Design findings now live in the design system. Do not add a design ledger here.
 
 **Version:** 4.3.0
 **Updated:** 2026-10-02
 **Status:** Active
-**Ambiguity:** Older notes under `.ai-memory/audits/` are not this module.
+**Ambiguity:** The two prompt notes below are history. They are not a design score.
 
 ---
 
-## Where audits go
+## Design
 
-Spec audits live in this folder, `02-spec/25-spec-audits/`. They do not live under `.ai-memory/audits/`.
+The design-spec source ledger was applied and removed.
 
-An audit improves the spec it names. A failed row is fixed in that spec, then the audit row is marked done. A passing score that hides a contradiction is a failed audit.
+Follow `02-spec/07-design-system/98-confidence-report.md`. A number that file does not license is not built. Do not recreate `03-design-spec-source-ledger/`.
 
 ---
 
 ## Inventory
 
-| # | File | What it judges | Next use |
-|---|---|---|---|
-| 01 | [01-v3-v4-v5-prompt-benchmark-audit.md](./01-v3-v4-v5-prompt-benchmark-audit.md) | Execute prompts V3, V4, V5 | Prompt edits only. Do not treat its self-score as measured. |
-| 02 | [02-v3-v4-v5-v6-prompt-benchmark-audit.md](./02-v3-v4-v5-v6-prompt-benchmark-audit.md) | Execute prompts through V6 | Same rule as 01. |
-| 03 | [03-design-spec-source-ledger/readme.md](./03-design-spec-source-ledger/readme.md) | Numbers in `02-spec/07-design-system/` files 24–38 | Verify each unverified row against the source, or mark the spec line `Not specified in source. Do not invent.` |
+| # | File | What it is |
+|---|---|---|
+| 01 | [01-v3-v4-v5-prompt-benchmark-audit.md](./01-v3-v4-v5-prompt-benchmark-audit.md) | Historical execute-prompt note. Not a design spec. |
+| 02 | [02-v3-v4-v5-v6-prompt-benchmark-audit.md](./02-v3-v4-v5-v6-prompt-benchmark-audit.md) | Historical execute-prompt note. Not a design spec. |
+| 99 | [99-consistency-report.md](./99-consistency-report.md) | This module. |
 
 ---
 
 ## Rule
 
-Do not copy a client, product, or repository name into an audit. Cite the spec path and the symbol.
+Do not copy a client, product, or repository name into this folder.
