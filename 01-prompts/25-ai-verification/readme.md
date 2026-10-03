@@ -1,4 +1,4 @@
-# AI Verification Prompts (`24-ai-verification`)
+# AI Verification Prompts (`25-ai-verification`)
 
 This directory contains autonomous retrospective verification and code quality audit prompts. These prompts inspect recent repository tasks, verify newly authored specifications, check completed plans, audit coding guideline compliance, and monitor CI/CD pipeline health via GitMap telemetry.
 

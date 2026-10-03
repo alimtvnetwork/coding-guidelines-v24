@@ -1,21 +1,25 @@
 #!/usr/bin/env python3
-"""Multi-Repository Prompts, Skills, Coding Guidelines, and AI Scripts Synchronizer & Release Orchestrator.
+"""Multi-Repository Prompts, Skills, Shared Specs (01-20), and AI Scripts Synchronizer.
 
 Synchronizes canonical prompts (01-prompts/), Antigravity & Cursor skills (.agents/skills/, .cursor/skills/),
-AI scripts (03-ai-scripts/ and .agents/scripts/), and coding guidelines / design system specs
-(02-spec/02-coding-guidelines/, 02-spec/07-design-system/, 02-spec/17-consolidated-guidelines/,
-.ai-memory/coding-guidelines.md, .ai-memory/prompts.md) from coding-guidelines across all 43 connected repositories.
+shared specifications (02-spec/01-* through 02-spec/20-*), and additive AI scripts
+(03-ai-scripts/ and .agents/scripts/) from coding-guidelines across all 43 connected repositories.
 
-IMPORTANT: Never synchronizes 06-archive/ or 06-old-prompts/ (archived prompts).
+Strict Non-Negotiable Boundaries:
+1. Spec 21 Exclusion: Never sync 02-spec/21-* through 02-spec/25-* (domain application specs).
+2. Additive-Only AI Scripts: Add new scripts; never overwrite scripts modified by target repos.
+3. Bump Script Protection: Never overwrite version bump scripts (bump*).
+4. Memory & Plans Protection: Never touch or overwrite .ai-memory/memory/ or .ai-memory/plans/.
+5. Archive Exclusion: Never synchronize 06-archive/ or 06-old-prompts/.
 
 Performs the complete, safe multi-branch backup and release ceremony per repo:
-1. Detect base/current branch and pull latest changes (`git pull origin <base_branch> --no-rebase`).
-2. Create and push pre-change backup branch (`backup/pre-v3-nsteps-sync-<timestamp>`).
-3. Ensure a pre-change release tag (`vX.Y.Z`) and release branch (`release/vX.Y.Z`) exist and are pushed before changes.
-4. Mirror 01-prompts/, .agents/skills/, .cursor/skills/, 03-ai-scripts/, .agents/scripts/, and conditional 02-spec / .ai-memory guidelines cleanly.
-5. Commit and push changes on the main/base branch.
-6. Create post-change release branch (`release/v<next_ver>`) and tag (`v<next_ver>`) and push to origin.
-7. Merge release branch back into base branch with `[skip ci]` and push.
+1. Detect base branch and pull latest changes (`git pull origin <base_branch> --no-rebase`).
+2. Create and push pre-change backup branch (`backup/sync-<timestamp>`).
+3. Return to base branch (`git checkout <base_branch>`).
+4. Ensure pre-change release tag exists.
+5. Mirror canonical assets with boundary protections.
+6. Commit and push changes on base branch.
+7. Post-change release ceremony with version bump and tag push.
 """
 from __future__ import annotations
 
@@ -81,19 +85,37 @@ TARGET_REPOS = [
     WORK_ROOT / "wp-onboarding",
 ]
 
-SYNC_DIRS = [
-    ("01-prompts", "01-prompts", False),
-    (".agents/skills", ".agents/skills", False),
-    (".cursor/skills", ".cursor/skills", False),
-    ("03-ai-scripts", "03-ai-scripts", True),
-    (".agents/scripts", ".agents/scripts", True),
-    ("02-spec/02-coding-guidelines", "02-spec/02-coding-guidelines", False),
-]
+def get_sync_dirs() -> list[tuple[str, str, bool]]:
+    """Build dynamic sync directory mappings including shared specs 01 to 20."""
+    dirs: list[tuple[str, str, bool]] = [
+        ("01-prompts", "01-prompts", False),
+        (".agents/skills", ".agents/skills", False),
+        (".cursor/skills", ".cursor/skills", False),
+        ("03-ai-scripts", "03-ai-scripts", True),
+        (".agents/scripts", ".agents/scripts", True),
+    ]
 
-CONDITIONAL_SPEC_DIRS = [
-    "02-spec/07-design-system",
-    "02-spec/17-consolidated-guidelines",
-]
+    spec_root = SOURCE_ROOT / "02-spec"
+
+    if spec_root.exists():
+        for p in sorted(spec_root.iterdir()):
+            if p.is_dir():
+                name = p.name
+                m = re.match(r"^(\d+)-", name)
+
+                if m:
+                    num = int(m.group(1))
+
+                    if 1 <= num <= 20:
+                        rel = f"02-spec/{name}"
+                        dirs.append((rel, rel, False))
+
+    return dirs
+
+
+SYNC_DIRS = get_sync_dirs()
+
+CONDITIONAL_SPEC_DIRS: list[str] = []
 
 CONDITIONAL_MEMORY_FILES = [
     ".ai-memory/coding-guidelines.md",
@@ -112,6 +134,10 @@ EXCLUDE_NAMES = {
     "21-app-issues",
     "21-app-db",
     "21-app-ui-design-system",
+    "22-app-issues",
+    "23-app-db",
+    "24-app-ui-design-system",
+    "25-spec-audits",
     "plans",
     "temp-agents",
     "cicd-issues",
@@ -126,18 +152,26 @@ EXCLUDE_EXTS = {
 
 
 def is_spec_21(path: Path) -> bool:
-    """Check if directory/file belongs to 02-spec/21-* which must NEVER be synced."""
+    """Check if directory/file belongs to 02-spec/21-* or higher application specs which must NEVER be synced."""
     norm = str(path).replace("\\", "/").lower()
 
-    if "/21-" in norm:
-        return True
+    for i in range(21, 30):
+        if f"/{i:02d}-" in norm:
+            return True
 
-    if "spec/21" in norm:
-        return True
+        if f"/{i}-" in norm:
+            return True
+
+        if f"spec/{i}" in norm:
+            return True
 
     for part in path.parts:
-        if part.startswith("21-"):
-            return True
+        for i in range(21, 30):
+            if part.startswith(f"{i:02d}-"):
+                return True
+
+            if part.startswith(f"{i}-"):
+                return True
 
     return False
 
@@ -278,15 +312,17 @@ def bump_patch_version(ver_str: str) -> str:
 def copy_single_file(
     src_file: Path,
     dst_file: Path,
+    repo_root: Path | None = None,
     is_dry_run: bool = False,
     is_additive_only: bool = False,
 ) -> int:
-    """Copy a single file respecting the 4 non-negotiable boundaries.
+    """Copy a single file respecting the non-negotiable boundaries.
 
-    Boundary 1: Spec 21 Exclusion (never sync 02-spec/21-*).
-    Boundary 2: Additive-Only AI Scripts (never overwrite existing target scripts).
+    Boundary 1: Spec 21 Exclusion (never sync 02-spec/21-* to 25-*).
+    Boundary 2: Additive-Only AI Scripts (preserve repo modifications, update unmodified, add new).
     Boundary 3: Bump Script Protection (never overwrite target bump scripts).
     Boundary 4: Memory & Plans Protection (never overwrite or delete target memory/plans).
+    Boundary 5: Archive Exclusion (never sync 06-archive).
     """
     if not src_file.exists():
         return 0
@@ -310,10 +346,29 @@ def copy_single_file(
         if dst_file.exists():
             return 0
 
-    # Boundary 2: Additive-Only AI Scripts
+    # Boundary 2: Additive-Only AI Scripts with repo modification checks
     if is_additive_only:
         if dst_file.exists():
-            return 0
+            if repo_root is not None:
+                try:
+                    rel_to_repo = dst_file.relative_to(repo_root)
+                    _, out_status, _ = run_cmd(["git", "status", "--porcelain", rel_to_repo.as_posix()], repo_root)
+
+                    if out_status.strip():
+                        return 0
+
+                    code_log, out_log, _ = run_cmd(["git", "log", "-n", "1", "--format=%s", "--", rel_to_repo.as_posix()], repo_root)
+
+                    if code_log == 0:
+                        if out_log.strip():
+                            last_commit = out_log.strip().lower()
+
+                            if "sync" not in last_commit:
+                                return 0
+                except Exception:
+                    return 0
+            else:
+                return 0
 
     is_copy_needed = False
 
@@ -341,6 +396,7 @@ def copy_single_file(
 def mirror_directory(
     src: Path,
     dst: Path,
+    repo_root: Path | None = None,
     is_dry_run: bool = False,
     is_additive_only: bool = False,
 ) -> tuple[int, int]:
@@ -348,8 +404,9 @@ def mirror_directory(
 
     If is_additive_only is True (used for AI scripts):
       - Stale files in dst are NEVER deleted.
-      - Existing scripts in dst are NEVER overwritten.
-      - Only new scripts from src are added.
+      - Existing scripts modified by repo are NEVER overwritten.
+      - Unmodified scripts have upstream prioritized.
+      - New scripts from src are added.
 
     Memory & plans protection (Boundary 4):
       - Never delete or overwrite target repo memory or plans.
@@ -474,6 +531,7 @@ def mirror_directory(
             copied += copy_single_file(
                 src_file,
                 dst_file,
+                repo_root=repo_root,
                 is_dry_run=is_dry_run,
                 is_additive_only=is_additive_only,
             )
@@ -491,6 +549,7 @@ def mirror_conditional_guidelines(target: Path, is_dry_run: bool = False) -> tup
             c, r = mirror_directory(
                 SOURCE_ROOT / spec_rel,
                 target / spec_rel,
+                repo_root=target,
                 is_dry_run=is_dry_run,
             )
             copied += c
@@ -501,6 +560,7 @@ def mirror_conditional_guidelines(target: Path, is_dry_run: bool = False) -> tup
             copied += copy_single_file(
                 SOURCE_ROOT / mem_rel,
                 target / mem_rel,
+                repo_root=target,
                 is_dry_run=is_dry_run,
             )
 
@@ -615,6 +675,7 @@ def sync_repo(target: Path, is_dry_run: bool = False, is_no_push: bool = False) 
         c, r = mirror_directory(
             src_path,
             dst_path,
+            repo_root=target,
             is_dry_run=is_dry_run,
             is_additive_only=is_additive,
         )

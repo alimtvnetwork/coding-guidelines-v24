@@ -75,6 +75,8 @@ All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent e
 | [`03-sync-other-codebase/`](03-sync-other-codebase/) | Multi-Repository Synchronization Engine, Prompt 01-sync-other-codebase, and Skill | Application Spec | Active |
 | [`04-coding-guidelines-actionable-checklists-and-acceptance-criteria/`](04-coding-guidelines-actionable-checklists-and-acceptance-criteria/) | Coding Guidelines Actionable Checklists & Acceptance Criteria Standard | Application Spec | Active |
 | [`07-coding-guideline-actionable-checklist-and-acceptance/`](07-coding-guideline-actionable-checklist-and-acceptance/) | Coding Guidelines Actionable Checklists & Acceptance Criteria Standard (V6 Multi-Agent) | Application Spec | Active |
+| [`08-ai-verification-and-letterly-extensions/`](08-ai-verification-and-letterly-extensions/) | Retrospective AI Verification, Letterly Extensions & Native Skill Triggers | Application Spec | Active |
+| [`09-multi-repo-sync-engine-and-prompt-upgrades/`](09-multi-repo-sync-engine-and-prompt-upgrades/) | Multi-Repository Synchronization Engine, V4 Archive & Letterly/Cursor Prompt Upgrades | Application Spec | Active |
 
 ---
 

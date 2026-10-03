@@ -268,7 +268,7 @@ target-repo-gamma                  | OK       | v2.1.0     | v2.1.1     | +14/-0
 
 ## 8. Traceability & Related Prompts
 
-- **Canonical Execution Prompt:** `01-prompts/23-sync/01-sync-other-codebase.md`
-- **Category Index:** `01-prompts/23-sync/readme.md`
+- **Canonical Execution Prompt:** `01-prompts/24-sync/02-sync-other-codebase.md`
+- **Category Index:** `01-prompts/24-sync/readme.md`
 - **Architecture Specification:** `02-spec/21-app/03-sync-other-codebase/01-architecture-spec.md`
 - **Automation Engine:** `03-ai-scripts/38-sync-prompts-skills-scripts.py`

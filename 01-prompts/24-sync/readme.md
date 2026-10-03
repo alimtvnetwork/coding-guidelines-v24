@@ -1,7 +1,7 @@
-# Multi-Repository Synchronization Prompts (`23-sync`) — Index & Catalog
+# Multi-Repository Synchronization Prompts (`24-sync`) — Index & Catalog
 
 > [!IMPORTANT]
-> Category: `23-sync`
+> Category: `24-sync`
 > Architecture: V6 Parameter-Driven Multi-Agent Protocol
 > Scope: Canonical Prompts, Skills, Guidelines, and AI Scripts Distribution
 
@@ -9,7 +9,7 @@
 
 ## Overview
 
-The `23-sync` prompt category governs autonomous, safe, and lossless synchronization of canonical architecture from the central Prompt Architect repository to connected downstream repositories.
+The `24-sync` prompt category governs autonomous, safe, and lossless synchronization of canonical architecture from the central Prompt Architect repository to connected downstream repositories.
 
 Downstream codebases require standardized prompts (`01-prompts/`), agent skills (`.agents/skills/`, `.cursor/skills/`), coding guidelines (`02-spec/02-coding-guidelines/`), and automation scripts (`03-ai-scripts/`, `.agents/scripts/`). However, synchronization must never destroy repository identity, erase custom application logic, overwrite project-specific versioning tools, or leak sensitive credentials.
 
@@ -21,7 +21,8 @@ This category codifies the non-negotiable boundaries, preflight safety protocols
 
 | Prompt File | Version | Scope | Key Capabilities |
 | :--- | :--- | :--- | :--- |
-| [`01-sync-other-codebase.md`](01-sync-other-codebase.md) | V6 (6.0.0) | Cross-Repository | Multi-agent autonomous synchronization of canonical prompts, skills, guidelines, and additive scripts with backup branching, 5 non-negotiable boundaries, zero hardcoded paths, and full release ceremony. |
+| [`01-sync.md`](01-sync.md) | V6 (6.0.0) | Full Fleet (43 Repos) | Multi-agent autonomous synchronization of canonical prompts (`01-prompts/`), skills, shared specs (`02-spec/01-*` to `02-spec/20-*`), and additive AI scripts across all 43 connected repositories with automated pre-flight, backup branches, 5 non-negotiable boundaries, and atomic GitMap commits. |
+| [`02-sync-other-codebase.md`](02-sync-other-codebase.md) | V6 (6.0.0) | Parameter-Driven (Cross-Repo) | Multi-agent autonomous synchronization of canonical prompts, skills, guidelines, and additive scripts with backup branching, 5 non-negotiable boundaries, zero hardcoded paths, dynamic `SOURCE_REPO` / `TARGET_REPOS`, and full release ceremony. |
 
 ---
 

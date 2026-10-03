@@ -1,4 +1,4 @@
-# [V6] Multi-Repository Synchronization & Downstream Codebase Mirroring — Workflow (must follow)
+# [V6] Full-Fleet Multi-Repository Synchronization & Canonical Mirroring Engine — Workflow (must follow)
 
 ```text
 N = 300 (Total self-loop steps budget — editable top-header parameter, default: 300)
@@ -15,40 +15,113 @@ WAVES = ceil(subtasks / (A x H))
 > [!IMPORTANT]
 > Prompt Version: 6.0.0
 > Runtime: Google Antigravity 2.0 (IDE and CLI)
-> Invoke: `/sync-other-codebase` or paste below task directives
+> Invoke: `/sync` or paste below task directives
 >
 > **Top-Instruction Priority Mandate (Above Precedence / Preamble Precedence):**
 > Whatever directives, constraints, checklists, or user instructions are given ABOVE this prompt (including in the user preamble, header blocks, or incoming user request above) are HIGHEST PRIORITY and MUST BE FOLLOWED as strictly NON-NEGOTIABLE. They supersede and strictly override any conflicting general advice, default conventions, or lower-level guidelines below. The agent MUST inspect and follow the instructions above with absolute precedence.
 
-[/goal](slashCommand;goal) Autonomously pull target repositories on their base branch, create and push dedicated pre-change backup branches, mirror canonical prompts (`01-prompts/`), agent skills (`.agents/skills/`, `.cursor/skills/`), coding guidelines (`02-spec/02-coding-guidelines/`), and additive AI scripts (`03-ai-scripts/`, `.agents/scripts/`) across target codebases, strictly enforcing the 5 Non-Negotiable Boundaries (Spec 21 Exclusion, Bump Script Protection, Additive-Only AI Scripts, Memory & Plans Protection, Zero Secrets Leakage), verify with targeted linters, and complete safe release ceremony per target repository with ZERO hardcoded paths.
+[/goal](slashCommand;goal) Autonomously pull, backup, synchronize canonical prompts (`01-prompts/`), agent skills (`.agents/skills/`, `.cursor/skills/`), shared specifications (`02-spec/01-*` through `02-spec/20-*`), and additive AI scripts (`03-ai-scripts/`, `.agents/scripts/`) across all 43 connected repositories, strictly enforcing the 5 Non-Negotiable Boundaries (Spec 21 Exclusion, Additive-Only AI Scripts with repo-modification checks, Bump Script Protection, Memory & Plans Protection, Zero Secrets Leakage), verify with targeted linters, and complete safe release ceremony per target repository with atomic GitMap commits.
 
 [/learn](slashCommand;learn) Enforce the Top-Instruction Priority Mandate: whatever directives, custom requirements, checklists, or user instructions are provided ABOVE this prompt outrank everything below. Turn 1 MUST showcase the target repository inventory and sync parameters in visible chat before background execution. Each rule is stated once (R1 to R16) and cited by ID. Progress lives in the ledger and in `.ai-memory/plans/`, never only in chat.
 
-[/plan](slashCommand;plan) Execute thorough step-by-step target repository validation and inventory before mirroring. Ensure all target repository paths, git base branches, and backup branch names are cleanly established in the audit ledger and subtask plans before dispatching worker waves.
+[/plan](slashCommand;plan) Execute thorough step-by-step target repository validation and inventory before mirroring. Ensure all target repository paths, git base branches, and backup branch names are cleanly established in the audit ledger and subtask plans before dispatching worker waves across the 43 repositories.
 
 ---
 
-## 0. Dynamic Parameter Configuration (Zero Hardcoded Paths Mandate)
+## 0. Connected Repositories Inventory Sequence (43 Target Repositories)
 
-> [!CAUTION]
-> **ZERO HARDCODED PATHS MANDATE:**
-> The source repository and target repository paths MUST NEVER be hardcoded into this prompt or any generated instructions.
-> The caller dynamically provides `SOURCE_REPO` and `TARGET_REPOS` in the user preamble, prompt invocation, or task definition.
-> The orchestrator and worker subagents ingest these parameters dynamically at runtime.
+The synchronization engine operates across the full fleet of 43 connected repositories in deterministic order:
 
-```text
-SOURCE_REPO  = <path-to-source-repo>   # Path to the canonical source repository (provided by caller)
-TARGET_REPOS = [                       # List of target repository paths provided dynamically by caller
-    "<path-to-target-repo-1>",
-    "<path-to-target-repo-2>",
-    ...
-]
-```
+| # | Relative Folder Path | Relative Path (`../`) |
+| :---: | :--- | :--- |
+| **01** | `02-prompts/ai-empathy-prompt-tuner` | `../02-prompts/ai-empathy-prompt-tuner` |
+| **02** | `alim-cv` | `../alim-cv` |
+| **03** | `alim-karim-profile` | `../alim-karim-profile` |
+| **04** | `aukgit/alim.karim.profile` | `../aukgit/alim.karim.profile` |
+| **05** | `antigravity-manager` | `../antigravity-manager` |
+| **06** | `cat-my` | `../cat-my` |
+| **07** | `03-aukgo/core` | `../03-aukgo/core` |
+| **08** | `digital-name-card` | `../digital-name-card` |
+| **09** | `presentations-repos/flat-slide-show` | `../presentations-repos/flat-slide-show` |
+| **10** | `gitlogger-new` | `../gitlogger-new` |
+| **11** | `gitmap` | `../gitmap` |
+| **12** | `presentations-repos/global-ppt-v1` | `../presentations-repos/global-ppt-v1` |
+| **13** | `presentations-repos/hiltrax` | `../presentations-repos/hiltrax` |
+| **14** | `icon-coding-guidelines` | `../icon-coding-guidelines` |
+| **15** | `img-pdf` | `../img-pdf` |
+| **16** | `presentations-repos/ki-health-ppt` | `../presentations-repos/ki-health-ppt` |
+| **17** | `aukgit/kubernetes-training` | `../aukgit/kubernetes-training` |
+| **18** | `lara-licensing` | `../lara-licensing` |
+| **19** | `lara-publishing` | `../lara-publishing` |
+| **20** | `laravel-automation` | `../laravel-automation` |
+| **21** | `letsmarknow-ui` | `../letsmarknow-ui` |
+| **22** | `letsmarknow` | `../letsmarknow` |
+| **23** | `macro-ahk` | `../macro-ahk` |
+| **24** | `presentations-repos/maid-app-spec-presentation` | `../presentations-repos/maid-app-spec-presentation` |
+| **25** | `movie-cli` | `../movie-cli` |
+| **26** | `03-aukgo/pathhelper` | `../03-aukgo/pathhelper` |
+| **27** | `presentations-repos/presentation-aug-2026-plans-alim` | `../presentations-repos/presentation-aug-2026-plans-alim` |
+| **28** | `02-prompts/prompts-connect` | `../02-prompts/prompts-connect` |
+| **29** | `punam-case-studies-v1` | `../punam-case-studies-v1` |
+| **30** | `presentations-repos/rasia-logo` | `../presentations-repos/rasia-logo` |
+| **31** | `scripts-fixer` | `../scripts-fixer` |
+| **32** | `presentations-repos/slides-spec` | `../presentations-repos/slides-spec` |
+| **33** | `spec-builder` | `../spec-builder` |
+| **34** | `web-system/sweet-digs-finder` | `../web-system/sweet-digs-finder` |
+| **35** | `ui-prompts-cat` | `../ui-prompts-cat` |
+| **36** | `presentations-repos/white-presentation-v1` | `../presentations-repos/white-presentation-v1` |
+| **37** | `workflowy-ui` | `../workflowy-ui` |
+| **38** | `workflowy` | `../workflowy` |
+| **39** | `wp-exam` | `../wp-exam` |
+| **40** | `wp-git-log` | `../wp-git-log` |
+| **41** | `wp-html-automate` | `../wp-html-automate` |
+| **42** | `wp-link-manager` | `../wp-link-manager` |
+| **43** | `wp-onboarding` | `../wp-onboarding` |
 
-### Dynamic Parameter Guidelines:
-1. **Dynamic Ingestion:** If `SOURCE_REPO` is unspecified, default to the current workspace root dynamically via relative path determination or current directory context.
-2. **Target Repository List:** If `TARGET_REPOS` is provided in the user request, process exclusively the specified repositories. If the caller requests "all connected repos" or invokes `03-ai-scripts/38-sync-prompts-skills-scripts.py`, ingest the dynamic target list discovered by the script or CLI flags (`--repo <slug>`).
-3. **No Hardcoded Absolute Paths:** NEVER write machine-specific paths (e.g. `C:\Users\...` or `/home/...`) into any file, plan, or spec. Use relative paths or dynamic shell parameter interpolation.
+### Full 43-Repository Sequence:
+1. `02-prompts/ai-empathy-prompt-tuner` (`../02-prompts/ai-empathy-prompt-tuner`)
+2. `alim-cv` (`../alim-cv`)
+3. `alim-karim-profile` (`../alim-karim-profile`)
+4. `aukgit/alim.karim.profile` (`../aukgit/alim.karim.profile`)
+5. `antigravity-manager` (`../antigravity-manager`)
+6. `cat-my` (`../cat-my`)
+7. `03-aukgo/core` (`../03-aukgo/core`)
+8. `digital-name-card` (`../digital-name-card`)
+9. `presentations-repos/flat-slide-show` (`../presentations-repos/flat-slide-show`)
+10. `gitlogger-new` (`../gitlogger-new`)
+11. `gitmap` (`../gitmap`)
+12. `presentations-repos/global-ppt-v1` (`../presentations-repos/global-ppt-v1`)
+13. `presentations-repos/hiltrax` (`../presentations-repos/hiltrax`)
+14. `icon-coding-guidelines` (`../icon-coding-guidelines`)
+15. `img-pdf` (`../img-pdf`)
+16. `presentations-repos/ki-health-ppt` (`../presentations-repos/ki-health-ppt`)
+17. `aukgit/kubernetes-training` (`../aukgit/kubernetes-training`)
+18. `lara-licensing` (`../lara-licensing`)
+19. `lara-publishing` (`../lara-publishing`)
+20. `laravel-automation` (`../laravel-automation`)
+21. `letsmarknow-ui` (`../letsmarknow-ui`)
+22. `letsmarknow` (`../letsmarknow`)
+23. `macro-ahk` (`../macro-ahk`)
+24. `presentations-repos/maid-app-spec-presentation` (`../presentations-repos/maid-app-spec-presentation`)
+25. `movie-cli` (`../movie-cli`)
+26. `03-aukgo/pathhelper` (`../03-aukgo/pathhelper`)
+27. `presentations-repos/presentation-aug-2026-plans-alim` (`../presentations-repos/presentation-aug-2026-plans-alim`)
+28. `02-prompts/prompts-connect` (`../02-prompts/prompts-connect`)
+29. `punam-case-studies-v1` (`../punam-case-studies-v1`)
+30. `presentations-repos/rasia-logo` (`../presentations-repos/rasia-logo`)
+31. `scripts-fixer` (`../scripts-fixer`)
+32. `presentations-repos/slides-spec` (`../presentations-repos/slides-spec`)
+33. `spec-builder` (`../spec-builder`)
+34. `web-system/sweet-digs-finder` (`../web-system/sweet-digs-finder`)
+35. `ui-prompts-cat` (`../ui-prompts-cat`)
+36. `presentations-repos/white-presentation-v1` (`../presentations-repos/white-presentation-v1`)
+37. `workflowy-ui` (`../workflowy-ui`)
+38. `workflowy` (`../workflowy`)
+39. `wp-exam` (`../wp-exam`)
+40. `wp-git-log` (`../wp-git-log`)
+41. `wp-html-automate` (`../wp-html-automate`)
+42. `wp-link-manager` (`../wp-link-manager`)
+43. `wp-onboarding` (`../wp-onboarding`)
 
 ---
 
@@ -65,7 +138,7 @@ TARGET_REPOS = [                       # List of target repository paths provide
 
 ## 2. The 5 Non-Negotiable Synchronization Boundaries
 
-Every sync operation across codebases MUST strictly enforce these five boundaries without exception:
+Every sync operation across connected codebases MUST strictly enforce these five boundaries without exception:
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -81,10 +154,10 @@ Every sync operation across codebases MUST strictly enforce these five boundarie
 
 ### Boundary 1: Spec 21 Exclusion (TOTAL BAN)
 - **Rule:** NEVER sync, copy, modify, or touch any directory matching `02-spec/21-*` (such as `21-app/`, `21-app-issues/`, `21-app-db/`, `21-app-ui-design-system/`).
-- **Rationale:** Directories prefixed with `21-` contain private application specifications, user journeys, feature specs, database entity definitions, and architecture plans unique to that specific repository. Mirroring these from the source wipes out the target repository's application identity and destroys domain requirements.
+- **Rationale:** Directories prefixed with `21-` contain private application specifications, user journeys, feature specs, database entity definitions, and architecture plans unique to that specific repository. Mirroring these from the source wipes out the target repository's application identity and destroys domain requirements. Shared specifications in `02-spec/01-*` through `02-spec/20-*` are synchronized; `02-spec/21-*` and above remain strictly untouched.
 
 ### Boundary 2: Bump Script Protection (IMMUTABLE)
-- **Rule:** NEVER overwrite version bumping scripts or version manifests in target repositories (`bump-version.mjs`, `bump_versions.py`, `37-bump-version.py`, `scripts/bump*.py`, `version.json`, etc.).
+- **Rule:** NEVER overwrite version bumping scripts or version manifests in target repositories (`bump*`, `bump-version.mjs`, `bump_versions.py`, `37-bump-version.py`, `scripts/bump*.py`, `version.json`, etc.).
 - **Rationale:** Each repository maintains unique SemVer targets, custom package manifests (Go `version.go`, Node `package.json`, Python `pyproject.toml`, Rust `Cargo.toml`, PHP `composer.json`), and custom git tag formats. Overwriting these scripts breaks release pipelines and invalidates tag history.
 
 ### Boundary 3: Additive-Only AI Scripts (NO BLIND OVERWRITES)
@@ -101,40 +174,49 @@ Every sync operation across codebases MUST strictly enforce these five boundarie
 
 ---
 
-## 3. Automation Engine & Script Architecture
+## 3. Step-by-Step Synchronization Ceremony
 
-### Primary Automation Script: `03-ai-scripts/38-sync-prompts-skills-scripts.py`
-
-The canonical script `03-ai-scripts/38-sync-prompts-skills-scripts.py` automates the synchronization ceremony safely:
+For each target repository, execute the complete 8-step safety ceremony:
 
 ```text
-SYNCHRONIZATION WORKFLOW PER TARGET REPOSITORY:
-1. Detect base branch: git branch --show-current (main / master)
-2. Pull latest changes: git pull origin <base_branch> --no-rebase
-3. Pre-change backup branch: git checkout -b backup/pre-v3-nsteps-sync-<timestamp> && git push origin backup/...
-4. Pre-change release verification: ensure pre-change release tag and release branch exist
-5. Safe directory mirroring:
-   - 01-prompts/                -> 01-prompts/                (mirror, excluding 06-old-prompts/)
-   - .agents/skills/            -> .agents/skills/            (mirror)
-   - .cursor/skills/            -> .cursor/skills/            (mirror)
-   - 03-ai-scripts/             -> 03-ai-scripts/             (additive-only, bump scripts protected)
-   - .agents/scripts/           -> .agents/scripts/           (additive-only)
-   - 02-spec/02-coding-guidelines/ -> 02-spec/02-coding-guidelines/ (mirror)
-   - 02-spec/07-design-system/  -> 02-spec/07-design-system/  (conditional mirror)
-   - 02-spec/17-consolidated-guidelines/ -> 02-spec/17-...    (conditional mirror)
-6. Commit & Push on base branch via GitMap or git
-7. Post-change release ceremony:
-   - Create release branch: release/v<next_ver>
-   - Create release tag: v<next_ver>
-   - Push release branch and tag to origin
-   - Merge release branch back into base branch with [skip ci] and push
+SYNCHRONIZATION PIPELINE PER TARGET REPOSITORY:
+1. Pre-flight pull on base branch:
+   git pull origin <base_branch> --no-rebase
+2. Safety backup branch creation & push:
+   git checkout -b backup/sync-<timestamp>
+   git push origin backup/sync-<timestamp>
+3. Return to base branch:
+   git checkout <base_branch>
+4. Controlled asset mirroring:
+   - 01-prompts/                 -> 01-prompts/                 (mirror, strictly excluding 06-archive/)
+   - .agents/skills/             -> .agents/skills/             (mirror)
+   - .cursor/skills/             -> .cursor/skills/             (mirror)
+   - 02-spec/01-* .. 02-spec/20-* -> 02-spec/01-* .. 02-spec/20-* (mirror shared specs, NEVER 02-spec/21-*)
+5. Additive AI scripts distribution:
+   - Copy brand-new scripts in 03-ai-scripts/ and .agents/scripts/
+   - NEVER overwrite scripts that have been modified by the target repository
+6. Protection invariant verification:
+   - Verify bump scripts (bump*) were NOT overwritten
+   - Verify .ai-memory/memory/ and .ai-memory/plans/ were NOT modified
+7. Atomic commit via GitMap:
+   gitmap cpf "sync - update prompts skills and shared specs across repository"
+8. Automation command execution:
+   python 03-ai-scripts/38-sync-prompts-skills-scripts.py
 ```
 
-### Script CLI Flags & Options:
-- Single repository target: `python 03-ai-scripts/38-sync-prompts-skills-scripts.py --repo <slug>`
-- Dry-run simulation: `python 03-ai-scripts/38-sync-prompts-skills-scripts.py --dry-run`
-- Worker concurrency: `python 03-ai-scripts/38-sync-prompts-skills-scripts.py --workers 4`
-- Skip release ceremony: `python 03-ai-scripts/38-sync-prompts-skills-scripts.py --skip-release`
+### Automation Engine: `03-ai-scripts/38-sync-prompts-skills-scripts.py`
+The primary synchronization script `03-ai-scripts/38-sync-prompts-skills-scripts.py` orchestrates this ceremony across all 43 repositories with multi-threaded workers, automated backup branches, and boundary verification.
+
+```powershell
+# Run full 43-repo sync with automated pre-flight, backup, and release ceremony:
+python 03-ai-scripts/38-sync-prompts-skills-scripts.py
+
+# Run on a single repository:
+python 03-ai-scripts/38-sync-prompts-skills-scripts.py --repo <slug>
+
+# Run dry-run verification:
+python 03-ai-scripts/38-sync-prompts-skills-scripts.py --dry-run
+```
 
 ---
 
@@ -195,14 +277,14 @@ GitMap is your **PRIMARY** acceleration engine across all operations:
 
 ## 6. The Unified Master Pipeline (Atomic Numbered Steps)
 
-Execute multi-repository synchronization via a strict 3-Phase pipeline.
+Execute multi-repository synchronization via a strict 3-Phase pipeline:
 
 ### Phase 1A: Verbatim Capture, Target Parameter Extraction & Chat Showcase (Turn 1)
 
 1. **Top-Instruction Priority Verification:** Verify whatever directives or repository parameters are supplied above this prompt.
 2. **Showcase Given Task First (Turn 1 Action):** In your VERY FIRST response turn, output the confirmed task breakdown and target repository list directly in visible chat. Never execute tools silently without displaying the task breakdown first!
 3. **Lossless Verbatim Capture:** Store incoming prompt under `## User Request (Verbatim)` in canonical spec and parent plan.
-4. **Target Inventory Extraction:** Extract `SOURCE_REPO` and list of `TARGET_REPOS` into discrete actionable items (`Task-01`, `Task-02`, ...).
+4. **Target Inventory Extraction:** Confirm target list of 43 connected repositories into discrete actionable items (`Task-01`, `Task-02`, ...).
 5. **Mandatory Same-Turn Tool Chaining:** Emit the breakdown in chat with clean vertical formatting, and in the **EXACT SAME TURN**, invoke your first tool call. Never emit text alone and stop.
 
 ```markdown
@@ -210,15 +292,15 @@ Execute multi-repository synchronization via a strict 3-Phase pipeline.
 
 1. **Task-01: Target Codebase Preflight & Safety Audit**
    - **State:** `[IN PROGRESS — EXECUTING IMMEDIATELY]`
-   - **Understood:** `[YES]` — [Validate base branch, clean working tree, and bump script inventory for target repos]
+   - **Understood:** `[YES]` — [Validate base branches, clean working trees, and bump script inventory for 43 target repos]
    - **Actionable Scope:** [Target repositories inventory and branch verification]
-   - **Target Areas:** `[TARGET_REPOS]`
+   - **Target Areas:** `[43 Connected Repositories]`
 
 2. **Task-02: Multi-Repository Synchronization & Safe Mirroring**
    - **State:** `[QUEUED — EXECUTING NOW WITHOUT USER PROMPT]`
    - **Understood:** `[YES]` — [Create backup branches, mirror canonical assets enforcing 5 non-negotiable boundaries]
-   - **Actionable Scope:** [Safe mirroring of prompts, skills, guidelines, and additive scripts]
-   - **Target Areas:** `[TARGET_REPOS]`
+   - **Actionable Scope:** [Safe mirroring of prompts, skills, shared specs 01-20, and additive scripts]
+   - **Target Areas:** `[43 Connected Repositories]`
 
 Proceeding directly to Preflight & Phase 1B Discovery (Active Tool Call Running Below).
 ```
@@ -230,8 +312,8 @@ Proceeding directly to Preflight & Phase 1B Discovery (Active Tool Call Running 
    - Initialize task DB: `python 03-ai-scripts/46-agent-sqlite-task-manager.py init --name "<sync task name>" --budget 300`
    - Initialize `.ai-memory/temp-agents/<nn>-<slug>/ledger.md`.
 2. **Spawn Discovery Subagents (A = 2 `research` subagents):**
-   - Subagent 1: Inspect target repositories, check git working trees (`git status`), detect base branches (`main`/`master`), verify existing tags.
-   - Subagent 2: Scan target repositories for existing bump scripts (`bump-version.mjs`, `bump_versions.py`, `37-bump-version.py`, `version.json`) and existing custom scripts in `03-ai-scripts/` to ensure Boundary 2 and Boundary 3 compliance.
+   - Subagent 1: Inspect target repositories, check git working trees, detect base branches (`main`/`master`), verify existing tags.
+   - Subagent 2: Scan target repositories for existing bump scripts (`bump*`) and customized scripts in `03-ai-scripts/` to ensure Boundary 2 and Boundary 3 compliance.
 3. **Yield Turn:** Lead stops calling tools after `invoke_subagent` to allow reactive wakeup.
 4. **Master Sync Plan Generation (Lead Agent):** Lead synthesizes discovery reports and writes `.ai-memory/plans/pending/nn-<slug>.md`.
 
@@ -246,9 +328,9 @@ Proceeding directly to Preflight & Phase 1B Discovery (Active Tool Call Running 
 ### Phase 2: Execution Step (Worker Waves) (Steps 151 .. 300)
 
 1. **Mandatory Subagent Dispatch (`invoke_subagent`, A = 2 `self` workers):**
-   - Subagent 1: Executes pre-change backup branch creation (`backup/pre-v3-nsteps-sync-<timestamp>`) and pushes backup branches.
-   - Subagent 2: Executes safe asset mirroring (prompts, skills, guidelines, additive scripts) adhering strictly to the 5 Non-Negotiable Boundaries.
-   - Alternatively, workers process disjoint batches of `TARGET_REPOS` via `03-ai-scripts/38-sync-prompts-skills-scripts.py --repo <slug>`.
+   - Subagent 1: Executes pre-change backup branch creation (`backup/sync-<timestamp>`) and pushes backup branches.
+   - Subagent 2: Executes safe asset mirroring (prompts, skills, shared specs `02-spec/01-*` to `02-spec/20-*`, additive scripts) adhering strictly to the 5 Non-Negotiable Boundaries.
+   - Alternatively, workers process disjoint batches of repositories via `03-ai-scripts/38-sync-prompts-skills-scripts.py --repo <slug>`.
 2. **Self-Contained Worker Brief Envelope:**
    Inject complete instructions into the worker brief including SQLite logging commands, git ban for workers, and 5 Non-Negotiable Boundaries.
 3. **Turn-Yielding & Crash Forensics:**
@@ -262,12 +344,13 @@ Proceeding directly to Preflight & Phase 1B Discovery (Active Tool Call Running 
 
 1. **Consolidate Subtasks:**
    Merge completed subtasks into `.ai-memory/plans/completed/nn-<slug>.md`. Remove pending subtask files.
-2. **Release Ceremony per Target Repository (if applicable):**
-   - If full release ceremony is enabled: create post-change release branch (`release/v<next>`), create tag (`v<next>`), push to origin, merge back to base branch with `[skip ci]`, and push.
+2. **Release Ceremony per Target Repository:**
+   - Create post-change release tag (`v<next>`) and push to origin.
+   - Ensure clean working tree across all 43 repositories.
 3. **Update Central Registers:**
    - Update `01-prompts/readme.md`, `.ai-memory/prompts.md`, and `.ai-memory/plans/readme.md`.
 4. **Final Atomic Commit in Source Repo:**
-   - Call `gitmap cpf "SYNC - synchronize prompts skills and guidelines to connected repositories"`.
+   - Call `gitmap cpf "sync - update prompts skills and shared specs across repository"`.
    - Use hyphen `-` format (no colons in GitMap message argument).
 
 ---
@@ -288,7 +371,7 @@ You are Worker <NN> for task nn-<slug>. You have no prior chat context; this bri
 
 ### The 5 Non-Negotiable Boundaries:
 1. Spec 21 Exclusion: NEVER sync or touch 02-spec/21-*.
-2. Bump Script Protection: NEVER overwrite version bump scripts (bump-version.mjs, bump_versions.py, 37-bump-version.py, version.json).
+2. Bump Script Protection: NEVER overwrite version bump scripts (bump*).
 3. Additive-Only AI Scripts: Copy new scripts; diff and preserve existing modified scripts.
 4. Memory & Plans Protection: NEVER touch .ai-memory/memory/ or .ai-memory/plans/ in target repos.
 5. Zero Secrets Leakage: NEVER sync .env or credentials.
@@ -324,12 +407,12 @@ Write subtask output to .ai-memory/plans/subtasks/nn-<slug>/01-<name>.json and r
 ### Synchronization Completion Summary
 
 - ✅ **Task-01: Target Codebase Preflight & Safety Audit** — `[Completed]` — [preflight exit 0, backup branches pushed]
-- ✅ **Task-02: Multi-Repository Synchronization & Safe Mirroring** — `[Completed]` — [prompts, skills, guidelines mirrored; 5 boundaries enforced]
+- ✅ **Task-02: Multi-Repository Synchronization & Safe Mirroring** — `[Completed]` — [prompts, skills, shared specs mirrored; 5 boundaries enforced]
 
 ### Modified / Synchronized Target Repositories
 
-- [repo-1-slug] (base branch: main, backup branch: backup/pre-v3-nsteps-sync-..., release: vX.Y.Z)
-- [repo-2-slug] (base branch: main, backup branch: backup/pre-v3-nsteps-sync-..., release: vX.Y.Z)
+- [repo-1-slug] (base branch: main, backup branch: backup/sync-..., release: vX.Y.Z)
+- [repo-2-slug] (base branch: main, backup branch: backup/sync-..., release: vX.Y.Z)
 
 ### Steps Used
 
@@ -368,9 +451,8 @@ Run on changed files/folders only:
 ## 11. Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
 
 - [ ] TOP-INSTRUCTION PRIORITY MANDATE: Verified whatever directives or parameters are provided above this prompt are treated as highest priority.
-- [ ] ZERO HARDCODED PATHS MANDATE: Verified source and target repository paths are supplied dynamically from caller and never hardcoded in prompt or scripts.
 - [ ] BOUNDARY 1 (SPEC 21 EXCLUSION): Verified `02-spec/21-*` directories were NEVER touched, synced, or overwritten in target repositories.
-- [ ] BOUNDARY 2 (BUMP SCRIPT PROTECTION): Verified version bumping scripts (`bump-version.mjs`, `bump_versions.py`, `37-bump-version.py`, `version.json`) in target repos were NEVER overwritten.
+- [ ] BOUNDARY 2 (BUMP SCRIPT PROTECTION): Verified version bumping scripts (`bump*`, `bump-version.mjs`, `bump_versions.py`, `37-bump-version.py`, `version.json`) in target repos were NEVER overwritten.
 - [ ] BOUNDARY 3 (ADDITIVE-ONLY AI SCRIPTS): Verified new AI scripts were added cleanly, and existing customized scripts were diffed and preserved, never overwritten blindly.
 - [ ] BOUNDARY 4 (MEMORY & PLANS SAFE): Verified `.ai-memory/memory/` and `.ai-memory/plans/` in target repositories were never modified or overwritten.
 - [ ] BOUNDARY 5 (ZERO SECRETS LEAKAGE): Verified no `.env` or credential files were synchronized across repositories.
@@ -405,7 +487,7 @@ Run on changed files/folders only:
 - [ ] Echo Back the Spec: Verified Acceptance Criteria from the Spec file verbatim.
 - [ ] Pre-Commit Diff Proof: Verified `git status` shows actual modified files before committing.
 - [ ] No Placeholder Search: Confirmed zero `TODO` or `\[.*\]` placeholders remain in modified files.
-- [ ] Index Sync Deadman Switch: Registered `23-sync/` in `01-prompts/readme.md` and `.ai-memory/prompts.md`.
+- [ ] Index Sync Deadman Switch: Registered `24-sync/` in `01-prompts/readme.md` and `.ai-memory/prompts.md`.
 - [ ] Blast Radius Acknowledgment: Global search across codebase performed via `gitmap aum search "<symbol>" [dir]`.
 - [ ] Final Step Commit & Push Verified: Staged and committed all changes atomically via GitMap using hyphen format (`gitmap cpf "<module> - <summary>"`).
 

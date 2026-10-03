@@ -11,7 +11,7 @@ Format whatever input text is provided according to the exact minor release temp
    - Item 3: `3. Execute minor version bump via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"`
    - Item 4: `4. Consolidate and update release notes in root changelog.md and manifests`
    - Item 5: `5. Commit atomically via gitmap cpf and push release tag to remote tracking branch`
-5. Append the mandatory release skill invocation suffix `@[.cursor/skills/minor-bump]`.
+5. Append the mandatory release skill invocation suffix [minor-bump](file;.cursor/skills/minor-bump).
 6. Output ONLY the resulting formatted markdown block.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
@@ -33,7 +33,7 @@ ${Input Text Verbatim}
 
 Must follow and spawn agent using
 
-@[.cursor/skills/minor-bump]
+[minor-bump](file;.cursor/skills/minor-bump)
 
 ## Additional Instructions
 

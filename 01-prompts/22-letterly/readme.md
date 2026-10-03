@@ -17,13 +17,13 @@ This collection contains deterministic prompt transformation templates designed 
 | **09** | [`09-execute-with-verification-letterly.md`](09-execute-with-verification-letterly.md) | Execute + Retrospective Audit | Formats input into execute N-steps with mandatory retrospective AI verification at task end | `letterly-execute-with-verification` |
 | **10** | [`10-execute-with-release-letterly.md`](10-execute-with-release-letterly.md) | Execute + Minor Release | Formats input into execute N-steps followed directly by green CI verification and minor release | `letterly-execute-with-release` |
 
-### Cursor Prompt Suite (`cursor/`)
+### Cursor Prompt Suite (`23-cursor-prompts/`)
 
-For Cursor environments requiring `.cursor/skills/` resolution, see [`cursor/readme.md`](cursor/readme.md) which houses the dedicated Cursor prompt suite (`01-mobile-letterly-cursor.md` through `10-execute-with-release-letterly-cursor.md`).
+For Cursor environments requiring `.cursor/skills/` resolution, see [`../23-cursor-prompts/readme.md`](../23-cursor-prompts/readme.md) which houses the dedicated Cursor prompt suite (`01-mobile-letterly-cursor.md` through `10-execute-with-release-letterly-cursor.md`).
 
 ## Core Invariants
 
 1. **Zero Conversational Filler:** Never output "Certainly! Here is your output:".
 2. **Lossless Verbatim Capture:** Never drop specific technical flags, file paths, or commands from input.
-3. **Mandatory Native Skill Triggers:** Every formatted prompt must conclude with its designated skill trigger: `@[.agents/skills/<skill-name>]` (or `@[.cursor/skills/<skill-name>]` in Cursor).
+3. **Mandatory Native Skill Triggers:** Every formatted prompt must conclude with its designated skill trigger: `[<skill-name>](file;.agents/skills/<skill-name>)`.
 4. **Standard Letterly Suffix:** All prompt files in this directory strictly carry the `-letterly.md` file suffix.

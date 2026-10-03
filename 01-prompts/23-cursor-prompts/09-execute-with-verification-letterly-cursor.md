@@ -1,12 +1,6 @@
----
-name: letterly-execute-with-release
-description: >-
-  Formats raw voice dictation into execute N-steps structure that executes the task, verifies CI/CD, and directly initiates minor release ceremony via minor-bump skill, using the cursor skill format.
----
+# Execute with Verification Mode (Cursor) — Letterly Prompt Formatter
 
-# Execute with Release Mode (Cursor) — Letterly Prompt Formatter
-
-Format whatever input text is provided according to the exact execution with minor release template below, following the execute N-steps structure and using the Cursor skill format. Do NOT add conversational filler or commentary.
+Format whatever input text is provided according to the exact execution with retrospective verification template below, following the execute N-steps structure and using the Cursor skill format. Do NOT add conversational filler or commentary.
 
 1. Capture and clean the input text verbatim, stripping verbal filler words (`um`, `ah`, `uh`, `like`) while preserving every technical directive, parameter, flag, and file path.
 2. Structure the output starting immediately with `[/plan](slashCommand;plan)` followed by `# High Priority Instruction`.
@@ -14,9 +8,8 @@ Format whatever input text is provided according to the exact execution with min
 4. Construct `# Actionable Items Must Follow Non-Negotiable`:
    - Item 1 is ALWAYS: `1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first`
    - Item 2..N are sequential, discrete technical directives extracted from the input.
-   - Penultimate Item is ALWAYS: `Verify live CI/CD pipeline health via gitmap pe -t until green`
-   - Final Item is ALWAYS: `Execute minor version bump release ceremony via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>", update changelog.md, commit atomically via gitmap cpf, tag release, and push to remote tracking branch`
-5. Append the mandatory release skill invocation suffix pointing to [minor-bump](file;.cursor/skills/minor-bump).
+   - Final Item is ALWAYS: `Run retrospective AI verification prompt/script (01-retrospective-ai-verification.md / 03-ai-scripts/47-retrospective-ai-verification.py) or skill [ai-verification](file;.cursor/skills/ai-verification) to audit specs, touched files, code quality, and CI/CD status upon task completion`
+5. Append the mandatory agent invocation suffix pointing to both [execute-parent-task-with-n-steps-v6](file;.cursor/skills/execute-parent-task-with-n-steps-v6) and [ai-verification](file;.cursor/skills/ai-verification).
 6. Output ONLY the resulting formatted markdown block.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
@@ -34,12 +27,12 @@ ${Input Text Verbatim}
 1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first
 2. [Second actionable technical directive extracted from input]
 3. [Third actionable technical directive extracted from input]
-4. Verify live CI/CD pipeline health via gitmap pe -t until green
-5. Execute minor version bump release ceremony via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>", update changelog.md, commit atomically via gitmap cpf, tag release, and push to remote tracking branch
+4. Run retrospective AI verification prompt/script (01-retrospective-ai-verification.md / 03-ai-scripts/47-retrospective-ai-verification.py) or skill [ai-verification](file;.cursor/skills/ai-verification) to audit specs, touched files, code quality, and CI/CD status upon task completion
 
 Must follow and spawn agent using
 
-[minor-bump](file;.cursor/skills/minor-bump)
+[execute-parent-task-with-n-steps-v6](file;.cursor/skills/execute-parent-task-with-n-steps-v6)
+[ai-verification](file;.cursor/skills/ai-verification)
 
 ## Additional Instructions
 

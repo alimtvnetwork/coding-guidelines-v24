@@ -1,4 +1,4 @@
-# Cursor Letterly Prompt Formatters (`22-letterly/cursor`)
+# Cursor Letterly Prompt Formatters (`23-cursor-prompts`)
 
 This directory contains deterministic prompt transformation templates specifically structured for Cursor environments. These templates ingest raw voice-dictated user transcripts from Letterly (mobile and desktop) and format them into rigorous, non-negotiable agent prompts referencing the `.cursor/skills/` skill tree.
 
@@ -21,5 +21,5 @@ This directory contains deterministic prompt transformation templates specifical
 
 1. **Zero Conversational Filler:** Never output "Certainly! Here is your output:".
 2. **Lossless Verbatim Capture:** Never drop specific technical flags, file paths, or commands from input.
-3. **Mandatory Native Skill Triggers:** Every formatted prompt must conclude with its designated skill trigger: `@[.cursor/skills/<skill-name>]`.
+3. **Mandatory Native Skill Triggers:** Every formatted prompt must conclude with its designated skill trigger: `[<skill-name>](file;.cursor/skills/<skill-name>)`.
 4. **Standard Cursor Suffix:** All prompt files in this directory strictly carry the `-letterly-cursor.md` file suffix.
