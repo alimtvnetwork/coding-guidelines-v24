@@ -18,20 +18,20 @@ Functions and methods should have a maximum of **3 parameters**.
 
 If a function requires 4 or more parameters, or if the method signature exceeds **100 characters** in length:
 
-- You **MUST** refactor the parameters into an options struct/class/object (e.g., \UpdateUserOptions\).
+- You **MUST** refactor the parameters into an options struct/class/object (e.g., `UpdateUserOptions`).
 - If you absolutely cannot use an options object (e.g., interfacing with a legacy system), you **MUST** split the signature to have **one parameter per line**.
 
 ### Example (Go)
 
 ❌ BAD:
-\\\go
+```go
 func ProcessTransaction(userId int, amount float64, currency string, idempotencyKey string, retryCount int) error { ... }
-\\\
+```
 
 ✅ GOOD (Options Struct):
-\\\go
+```go
 type TransactionOptions struct {
-    UserID         int
+    UserId         int
     Amount         float64
     Currency       string
     IdempotencyKey string
@@ -39,10 +39,10 @@ type TransactionOptions struct {
 }
 
 func ProcessTransaction(opts TransactionOptions) error { ... }
-\\\
+```
 
 ✅ GOOD (One Per Line - Only if Struct is impossible):
-\\\go
+```go
 func ProcessTransaction(
     userId int,
     amount float64,
@@ -50,16 +50,16 @@ func ProcessTransaction(
     idempotencyKey string,
     retryCount int,
 ) error { ... }
-\\\
+```
 
 ## 2. Acronyms & Magic Strings
 
-- Acronyms must be PascalCase (\UserId\ not \UserID\, \HttpServer\ not \HTTPServer\).
+- Acronyms must be PascalCase (`UserId` not `UserID`, `HttpServer` not `HTTPServer`).
 - Magic strings and numbers must be extracted to constants at the top of the file or in a dedicated constants package.
 
 ## 3. Temporary Scripts
 
-- Any temporary code, scratchpads, or debugging scripts you create must be written to the \.ai-memory/temp-scripts/\ directory.
+- Any temporary code, scratchpads, or debugging scripts you create must be written to the `.ai-memory/temp-scripts/` directory.
 - **NEVER** commit temporary scripts to Git.
 
 ## 4. File Encoding & Line Endings
