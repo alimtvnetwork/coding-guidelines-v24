@@ -35,4 +35,5 @@ Must follow and spawn agent using
 
 ## Additional Instructions
 
-learn [/learn](slashCommand;learn) if you have to learn something and [/plan](slashCommand;plan) stuff before working please.
+[/plan](slashCommand;plan) first before doing the work to reduce the credits.
+

@@ -32,6 +32,3 @@ Must follow and spawn agent using
 
 [run](file;.agents/skills/run)
 
-## Additional Instructions
-
-learn [/learn](slashCommand;learn) if you have to learn something and [/plan](slashCommand;plan) stuff before working please.
