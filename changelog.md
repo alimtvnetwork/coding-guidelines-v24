@@ -2216,3 +2216,2370 @@ the canonical superset.
 
 ---
 
+
+## Subsystem Historical Changelog Archive
+
+
+### Historical Archive: `02-spec/01-spec-authoring-guide/98-changelog.md`
+
+# Spec Authoring Guide — Changelog
+
+**Version:** 3.2.0
+**Last Updated:** 2026-04-16
+
+---
+
+## [2026-03-30] v2.0.0 Compliance Rollout
+
+**Scope:** Project-wide sub-folder `readme.md` upgrade
+**Total files upgraded:** 139 sub-folder overviews + 2 new files created
+**Health impact:** 100% compliance with Spec Authoring Guide v2.0.0
+
+### Summary
+
+Upgraded all `readme.md` files across the entire spec tree to include the four mandatory sections introduced by the Spec Authoring Guide v2.0.0:
+
+1. **AI Confidence** — metadata field (High for all modules)
+2. **Ambiguity** — metadata field (None for all modules)
+3. **Keywords** — searchable tags derived from module context
+4. **Scoring** — standardized compliance table
+
+### Phases
+
+| Phase | Scope | Files |
+|-------|-------|-------|
+| 1 | Module-level overviews (01–36, 99) | 31 |
+| 2 | Module 01 sub-folders | 12 |
+| 3 | Module 02 sub-folders | 60 |
+| 4 | Module 03 sub-folders | 5 |
+| 5 | Modules 04–36, 99, validation-reports | 62 |
+
+### New Files Created
+
+| File | Module |
+|------|--------|
+| `02-spec/02-coding-guidelines/05-rust/97-acceptance-criteria.md` | Rust Coding Standards |
+| `02-spec/02-coding-guidelines/05-rust/99-consistency-report.md` | Rust Coding Standards |
+
+### Method
+
+- Phases 1–2: Manual per-file upgrades
+- Phases 3–5: Automated Python script with keyword derivation and version bumping
+- Post-processing: Keyword cleanup pass to remove path artifacts
+
+### Verification
+
+- Final scan confirmed 0 non-compliant `readme.md` files (excluding root dashboard)
+- Parent consistency reports updated where applicable
+
+---
+
+## Cross-References
+
+- [Spec Authoring Guide Overview](./readme.md)
+- [Acceptance Criteria](./97-acceptance-criteria.md)
+- [Consistency Report](./99-consistency-report.md)
+
+### Historical Archive: `02-spec/03-error-manage/98-changelog.md`
+
+# Error Management — Changelog
+
+**Version:** 3.2.0
+**Last Updated:** 2026-04-16
+
+---
+
+## v2.3.1 — 2026-09-01
+
+### Mandatory Error Type First & Extended Collection Mutators
+
+#### Changed — `pkg/appfault` Constructors
+
+- Mandated `errtype.Variation` as the first argument in `Wrap(errType, cause, msg)` and `WrapType(errType, cause)`.
+- Added `NewType(errType)` creating AppErrors with default type names.
+- Guaranteed nil return when `cause == nil` or `errType == None`.
+
+#### Added — `pkg/appfaults` Extended Mutators
+
+- `AddType(errType)`: Adds error from enum type.
+- `AddTypeMsg(errType, msg)`: Adds error from enum type + message.
+- `AddTypeMsgf(errType, fmt, args...)`: Formatted message error.
+- `AddError(errType, cause)`: Wraps cause error with explicit type.
+- `AddErrorMsg(errType, cause, msg)`: Wraps cause error with explicit type and message.
+- `AddWithContext(errType, msg, ctx)`: Adds error with custom context map.
+
+---
+
+## v2.3.0 — 2026-09-01
+
+### Dedicated `errtype` Package & Integer-Backed Enums
+
+#### Added — `pkg/errtype` Package
+
+- `type Variation uint16` with `None = 0` (no error / success).
+- Standard variations: `Generic (1)`, `Validation (2)`, `NotFound (3)`, `Precondition (4)`, `Execution (5)`, `Database (6)`, `Network (7)`, `Timeout (8)`, `IO (9)`, `Unauthorized (10)`, `Forbidden (11)`, `Internal (12)`, `Unknown (13)`.
+- Extensible custom error types (`const CustomErr errtype.Variation = 1001`).
+
+#### Added — Integer Enums with PascalCase Serialization
+
+- `SeverityType` (`byte`) and `PriorityType` (`byte`) enums in `pkg/appfault`.
+- PascalCase string outputs (`"Info"`, `"Warn"`, `"Error"`, `"Critical"`, `"Fatal"`) via `String()` and custom JSON/YAML marshaling.
+- Documented in retrospective `02-spec/03-error-manage/01-error-resolution/03-retrospectives/07-golang-integer-enums-and-pascal-serialization.md`.
+
+---
+
+## v2.2.0 — 2026-04-02
+
+### Domain Convenience Constructors + Error Merge
+
+#### Added — Domain convenience constructors (in `02-apperror-struct.md`)
+
+- `UrlError(errType, url)` / `WrapUrlError(cause, errType, url)` — auto-sets `WithUrl()`
+- `SlugError(errType, slug)` / `WrapSlugError(cause, errType, slug)` — auto-sets `WithSlug()`
+- `SiteError(errType, siteId)` / `WrapSiteError(cause, errType, siteId)` — auto-sets `WithSiteId()`
+- `EndpointError(errType, method, ep, statusCode)` / `WrapEndpointError(...)` — auto-sets `WithEndpoint()` + `WithMethod()` + `WithStatusCode()`
+- Convenience summary table (section 2.2.6)
+
+#### Added — Error merge methods (in `02-apperror-struct.md`)
+
+- `Merge(errors)` — combines multiple `AppError` into one, uses first error's code
+- `MergeWithCode(code, message, errors)` — merges under a specific error code
+- Batch validation and multi-step processing examples
+
+---
+
+## v2.1.0 — 2026-04-02
+
+### WrapTypeMsg Constructor + Path Convenience Methods
+
+#### Added — `WrapTypeMsg` constructor (in `02-apperror-struct.md`)
+
+- `WrapTypeMsg(cause error, errType ErrorType, message string)` — wraps with enum code but custom message
+- Enables 3-level progression: `Wrap()` → `WrapType()` → `WrapTypeMsg()`
+
+#### Added — Path convenience constructors (in `02-apperror-struct.md`)
+
+- `PathError(errType, path)` — creates path-related AppError with automatic `WithPath()` diagnostic
+- `WrapPathError(cause, errType, path)` — wraps cause with path variant + automatic `WithPath()` diagnostic
+
+#### Added — New path variants (in `05-apperrtype-enums.md`)
+
+- `PathMissing` (E4016) — required path is missing
+- `PathFailedToCreate` (E4017) — failed to create path
+- `PathFailedToRead` (E4018) — failed to read path
+- `PathFailedToWrite` (E4019) — failed to write to path
+- `PathFailedToDelete` (E4020) — failed to delete path
+
+#### Changed — Root `readme.md`
+
+- Expanded CODE-RED-005/006 example from 2 levels to 3-level progression (✅ → ✅✅ → ✅✅✅)
+- Added `PathError` / `WrapPathError` usage examples
+
+---
+
+## v2.0.0 — 2026-04-02
+
+### `apperrtype` v2 Migration — Single Variation Enum
+
+**Breaking change:** Migrated from per-domain `byte` enums to a single `uint16 Variation` enum with global registry. Inspired by [evatix-go/errorwrapper/errtype](https://gitlab.com/auk-go/errorwrapper/-/tree/develop/errtype).
+
+#### Changed — `05-apperrtype-enums.md` (full rewrite)
+
+- Replaced 14 per-domain `byte` enums (`PluginError`, `ConfigError`, etc.) with single `Variation uint16`
+- Replaced `ErrorDetail{Code, Message}` with `VariantStructure{Name, Code, Message, Variant}`
+- Replaced per-domain detail maps with single `variantRegistry map[Variation]VariantStructure`
+- `ErrorType` interface gains `Name() string` method
+- Added display methods on `Variation`: `String()`, `CodeTypeName()`, `CodeTypeNameWithReferences()`
+- Added display methods on `VariantStructure`: `TypeNameCodeMessage()`, `CodeTypeNameWithMessage()`, `Error()`, `ErrorNoRefs()`, `Panic()`
+- Added `IsValid()` and `Structure()` methods on `Variation`
+- Expanded domains: E15xxx (Network), E16xxx (Process), E17xxx (Encoding), E18xxx (Permission)
+- Added migration table documenting v1→v2 mapping
+
+#### Added — `StringToVariantMap` (in `05-apperrtype-enums.md`)
+
+- New `string_to_variant_map.go` — reverse-lookup from PascalCase name → `Variation`
+- `VariationFromName(name) (Variation, bool)` — safe lookup
+- `MustVariationFromName(name) Variation` — panics if not found
+
+#### Added — `CodeToVariantMap` (in `05-apperrtype-enums.md`)
+
+- New `code_to_variant_map.go` — reverse-lookup from string code (e.g. `"E2010"`) → `Variation`
+- `VariationFromCode(code) (Variation, bool)` — safe lookup
+- `MustVariationFromCode(code) Variation` — panics if not found
+
+#### Changed — `02-apperror-struct.md`
+
+- Updated `NewType` / `WrapType` constructor signatures to accept `apperrtype.ErrorType`
+- Added section 2.3.1: Variation display methods with corrected signatures and examples
+- Added section 2.3.2: `Structure()` lookup with `VariantStructure` display method table
+- Added section 2.3.3: Direct error creation from `VariantStructure` (`Error()`, `ErrorNoRefs()`, `Panic()`)
+- Fixed all example output formats to match actual `05-apperrtype-enums.md` implementations
+- Replaced non-existent variants (`DatabaseTimeout`, `ConfigMissing`) with valid ones
+
+#### Changed — `04-codes-and-policy.md`
+
+- Replaced v1 `PluginError byte` + `ErrorDetail` + per-domain map examples with v2 `Variation` + `VariantStructure` + `variantRegistry`
+- Updated rules section to reflect single-enum architecture
+- Fixed spec cross-reference link to point to `05-apperrtype-enums.md`
+
+#### Changed — Root `readme.md`
+
+- Updated `apperrtype` package section from v1 pattern to v2
+- Added `VariantStructure`, `variantRegistry`, `StringToVariantMap` documentation
+- Added `VariationFromName()` reverse-lookup example
+- Fixed spec link from `04-codes-and-policy.md` to `05-apperrtype-enums.md`
+
+#### Files Modified
+
+| File | Change |
+|------|--------|
+| `02-error-architecture/06-apperror-package/01-apperror-reference/05-apperrtype-enums.md` | Full rewrite to v2 |
+| `02-error-architecture/06-apperror-package/01-apperror-reference/02-apperror-struct.md` | Display methods + signature fixes |
+| `02-error-architecture/06-apperror-package/01-apperror-reference/04-codes-and-policy.md` | v1→v2 examples |
+| `readme.md` (project root) | v1→v2 apperrtype section |
+
+---
+
+## v1.0.0 — 2026-03-31
+
+### Initial Consolidation
+
+#### Added
+
+- Created `04-error-manage/` as the single canonical location for all error management specs
+- Organized into 3 categories: Error Resolution, Error Architecture, Error Code Registry
+- New `readme.md` with core principles, common pitfalls, and cross-references
+
+#### Consolidated From
+
+#### Structure
+
+- `01-error-resolution/` — Retrospectives, verification patterns, debugging guides, cheat sheet, cross-reference diagram
+- `02-error-architecture/` — Error handling reference, delegation fix, notification colors, error modal, response envelope, apperror, logging
+- `03-error-code-registry/` — Master registry, integration guide, collision resolution, utilization report, overlap validator, schemas, scripts, templates
+
+---
+
+*Keep this file updated when specs change.*
+
+### Historical Archive: `02-spec/05-split-db-architecture/98-changelog.md`
+
+# Split DB Architecture — Changelog
+
+**Version:** 3.2.0
+**Last Updated:** 2026-04-16
+
+All notable changes to the Split DB Architecture specification are documented here.
+
+---
+
+## v2.0.0 — 2026-03-09
+
+### Global Version Bump
+
+Project-wide major version increment (+1.0.0) applied to all specification files in `06-split-db-architecture`.
+
+#### Changed
+
+- All spec files received a major version bump and date update to 2026-03-09.
+- Part of a global effort spanning ~638 files across all 30+ spec folders, establishing a new project-wide versioning baseline.
+
+---
+
+*Keep this file updated when specs change.*
+
+### Historical Archive: `02-spec/06-seedable-config-architecture/98-changelog.md`
+
+# Seedable Config Architecture — Changelog
+
+**Version:** 3.2.0
+**Last Updated:** 2026-04-16
+
+All notable changes to the Seedable Config Architecture specification are documented here.
+
+---
+
+## v2.0.0 — 2026-03-09
+
+### Global Version Bump
+
+Project-wide major version increment (+1.0.0) applied to all specification files in `07-seedable-config-architecture`.
+
+#### Changed
+
+- All spec files received a major version bump and date update to 2026-03-09.
+- Part of a global effort spanning ~638 files across all 30+ spec folders, establishing a new project-wide versioning baseline.
+
+---
+
+*Keep this file updated when specs change.*
+
+---
+
+## v3.4.0 — 2026-04-20
+
+### Repository Slug Migration
+
+Updated all references from `coding-guidelines-v24` to `coding-guidelines-v24` across distribution and CI/CD specifications.
+
+#### Changed
+
+- Install scripts, CI templates, and release pipelines now reference `coding-guidelines-v24` repository slug
+- Affected specs: Distribution & Runner (15), Generic Release (16), CI/CD Integration (02), Update Check Mechanism (14)
+- 42 files updated with 440 total reference replacements
+
+### Historical Archive: `02-spec/11-powershell-integration/10-changelog.md`
+
+# PowerShell Script Changelog
+
+All notable changes to the PowerShell runner script (`run.ps1`) and upload scripts will be documented in this file.
+
+## New Entry Template (copy/paste)
+
+Use this template whenever you change `run.ps1`, upload scripts, or make a functional/config-schema change to `powershell.json`.
+
+```md
+
+## [X.Y.Z] - YYYY-MM-DD
+
+### Added
+
+- ...
+
+### Changed
+
+- ...
+
+### Fixed
+
+- ...
+
+### Notes
+
+- (optional) Migration steps, breaking changes, required config updates
+```
+
+---
+
+## [2.1.0] - 2026-03-12
+
+### Added
+
+- **QUpload admin menu system**: Full WordPress admin UI with Dashboard and Error Logs pages, replacing the old Tools submenu
+- **QUpload error log viewer**: Tabbed file viewer (Log, Error, Stack Trace) with Copy, Download, Clear, and Live auto-refresh
+- **QUpload Admin class with traits**: `AdminMenuTrait`, `AdminErrorAjaxTrait` for menu registration, asset enqueuing, and AJAX file operations
+- **QUpload enums**: `AdminPageType`, `AdminTabType`, `NonceType`, `AjaxActionType` for admin infrastructure
+- **FileLogger getters**: `getLogFile()`, `getErrorFile()`, `getStacktraceFile()` for AJAX log access
+- **QUpload admin assets**: `admin.css`, `admin-errors.css`, `admin-errors.js`
+
+### Changed
+
+- **QUpload bootstrap**: Admin initialization moved from `Plugin` constructor trait to standalone `Admin` singleton in `qupload.php` (matches Riseup Asia pattern)
+- **Version bump**: All components synchronized to 2.1.0 (app, PowerShell, both plugins)
+- **HookType enum**: Added `AdminInit`, `AdminEnqueue`, and `ajax()` helper method
+- **CapabilityType enum**: Added `ManageOptions` case
+
+### Fixed
+
+- **Riseup Asia `admin-settings.php`**: Removed duplicate `<?php` tag causing `unexpected token "<"` parse error on deployment
+- **Riseup Asia `Admin.php`**: Replaced `PaginationConfigType::logRetrievalMaxLines()` method call in static property default with literal `500` (PHP does not allow method calls in constant expressions)
+
+---
+
+## [upload-plugin-v2 2.1.0] - 2026-02-10
+
+### Added
+
+- **Self-update OPcache flush**: After uploading `riseup-asia-uploader` to itself, script calls `opcache-reset.php` to force-flush PHP OPcache, then verifies version
+- **`opcache-reset.php`**: New standalone PHP file deployed with the plugin for OPcache reset (Basic Auth secured)
+- **Imunify360 detection**: JSON responses with "Access denied" / "bot-protection" now throw actionable errors instead of false success
+- **ZIP staging progress**: Real-time file count display during staging (e.g., `Staging: 47/47 files (100%)`)
+- **Full path display**: ZIP destination path, cache directory, compression ratio shown in output
+- **`Accept: application/json` header**: All HTTP requests now include this to prevent HTML challenge pages
+
+### Changed
+
+- **Pipeline expanded to 8 steps**: Step 8 is now self-update-aware (OPcache flush + verify) or standard version check
+- **Self-update version priority**: For self-updates, client-sent version takes priority over server response (server returns stale version from cached old code)
+- **V1 fallback**: Uses direct named parameters instead of array splatting to prevent JSON mangling
+
+### Fixed
+
+- Version mismatch on self-update caused by PHP OPcache serving old bytecode
+- False "PUBLISH COMPLETE" when server returns Imunify360 block message
+- V1 fallback failing due to `@fallbackArgs` array splatting mangling JSON strings
+
+---
+
+## [run.ps1 1.2.0] - 2026-02-08
+
+### Added
+
+- **Runtime data cleanup**: Force mode (`-f`, `-r`) now cleans backend sessions, request-sessions, error logs, and standalone log files from `backend/data/`
+- **cleanPaths expanded**: `powershell.json` now includes `backend/data/sessions`, `backend/data/request-sessions`, and `backend/data/errors`
+
+### Changed
+
+- `-r` flag description updated to reflect session/log cleanup behavior
+
+### Notes
+
+- Directories cleaned: `data/sessions/`, `data/request-sessions/`, `data/errors/`, `data/log.txt`, `data/error.log.txt`
+- Cleanup only runs when `dataDir` is configured in `powershell.json`
+
+---
+
+## [run.ps1 1.1.0] - 2026-02-04
+
+### Added
+
+- **Version tracking**: Script now has version number in header and `powershell.json`
+- **PnP artifact cleanup**: Force mode now removes `.pnp.cjs`, `.pnp.loader.mjs`, `.pnp.data.json`
+- **Improved install detection**: Respects `EffectiveNodeLinker` (PnP vs isolated) when checking if install is needed
+
+### Changed
+
+- **Rebuild sequence**: `-r` flag now correctly defers frontend install until after force-clean
+- **Install always runs**: `-i` and `-r` flags always trigger `pnpm install`, even if `node_modules` exists
+
+### Fixed
+
+- "vite is not recognized" error when using `-r` flag
+
+---
+
+## [run.ps1 1.0.0] - 2026-02-02
+
+### Added
+
+- Initial PowerShell runner with pnpm PnP support
+- Git pull, prerequisites check, pnpm install, build, and run steps
+- Flags: `-b`, `-s`, `-p`, `-f`, `-i`, `-r`, `-fw`, `-h`, `-v`
+- Auto-install of Go, Node.js, and pnpm via winget
+- Windows Firewall rule management
+- Configurable via `powershell.json`
+
+---
+
+*Keep this file updated when scripts change.*
+
+### Historical Archive: `02-spec/18-wp-plugin-how-to/23-changelog.md`
+
+# Gold Standard Spec — Changelog
+
+All notable changes to the WordPress plugin development specification.
+
+---
+
+## [1.3.0] — 2026-04-14
+
+### Added
+
+- Phase 20: End-to-End Walkthrough (`21-end-to-end-walkthrough.md`)
+- Complete "Task Tracker" plugin built from scratch in 14 steps
+- Phase coverage matrix mapping all 19 phases to walkthrough steps
+- Final "Is My Plugin Gold Standard?" checklist
+
+---
+
+## [1.2.0] — 2026-04-14
+
+### Priority 1 Fixes
+
+| Phase | Section | Addition |
+|-------|---------|----------|
+| 04 | §4.8 | **Forbidden error patterns** — 8 anti-patterns with correct alternatives |
+| 04 | §4.10 | **Stack trace transport format** — JSON structure for AJAX/REST delivery |
+| 12 | §2.4 | **Dark mode token overrides** — `:root.dark-mode` CSS variable layer |
+| 12 | §3.4 | **Slug substitution guide** — `{plugin-slug}` replacement rules for CSS classes, option names, text domains |
+| 16 | §16.10 | **ErrorResponse class** — immutable value object with `toArray()` envelope |
+| 16 | §16.11 | **AdminErrorAjaxTrait** — complete AJAX handler for error log viewer (read/clear/download) |
+| 16 | §16.12 | **admin-errors.php template** — tabbed error viewer partial with JS integration points |
+
+### Priority 2 Fixes
+
+| Phase | Section | Addition |
+|-------|---------|----------|
+| 08 | §8.1 | **Admin menu error count badge** — `update-plugins` CSS class pattern with `wp_options` storage |
+| 11 | §11.4 | **Complete partial example** — full data flow from orchestrator to partial with escaping rules |
+| 16 | §16.13 | **ErrorSessions SQLite migration** — `DatabaseMigrationsErrorSessionsTrait` with `TableType::ErrorSessions` |
+| 17 | §17.2 | **colors.json formal JSON Schema** — hex pattern validation + `ColorConfig` static-cache helper |
+
+### Validation
+
+- Cross-reference pass: **191 sections verified, 0 broken links**
+- Implementability audit: overall AI success probability **83.0% → 89.1%** (+6.1pp)
+- All 19 active phases now score ≥85% confidence
+
+---
+
+## [1.1.0] — 2026-04-09
+
+### Added
+
+- Phase 19: Micro-ORM & Root Database (`20-micro-orm-and-root-db.md`)
+- Fluent query builder, `TypedQuery`, Go-style `DbResult`/`DbResultSet`/`DbExecResult` wrappers
+- `FileCache` with scan/store trait decomposition
+- Cross-plugin `RootDb` manifest pattern
+
+---
+
+## [1.0.0] — 2026-03-15
+
+### Added
+
+- Initial 18-phase Gold Standard specification (Phases 0–18)
+- Phase 2 subfiles: enum architecture, metadata pattern, `SelfUpdateStatusType`, `ActionType`
+- Complete reading order, cross-reference table, and phase index
+
+---
+
+*Update this file when spec phases are added, modified, or restructured.*
+
+### Historical Archive: `02-spec/19-main-worker-service/98-changelog.md`
+
+## v6.65.1 — 2026-10-02 (Add 1:1 Cursor skills parity for letterly, slide deck, design spec, and aliases)
+
+**Scope:** Version bump. Add 1:1 Cursor skills parity for letterly, slide deck, design spec, and aliases.
+
+---
+
+## v6.65.0 — 2026-10-02 (Bright gold slide spec, logo construction, and design confidence report)
+
+**Scope:** Version bump. Bright gold slide spec, logo construction, and design confidence report.
+
+---
+
+## v6.64.0 — 2026-10-01 (CBF - synchronize all 167 prompts to skills and sync 43 repositories)
+
+**Scope:** Version bump. CBF - synchronize all 167 prompts to skills and sync 43 repositories.
+
+---
+
+## v6.63.0 — 2026-10-01 (CBF - clarify hyphen format and omit colon in gitmap commit syntax for v6)
+
+**Scope:** Version bump. CBF - clarify hyphen format and omit colon in gitmap commit syntax for v6.
+
+---
+
+## v6.62.0 — 2026-10-01 (CBF - enforce hyphen format in gitmap commit syntax and generate v6 skill)
+
+**Scope:** Version bump. CBF - enforce hyphen format in gitmap commit syntax and generate v6 skill.
+
+---
+
+## v6.61.0 — 2026-10-01 (Add SQLite multi-agent task manager and standardize GitMap commit syntax)
+
+**Scope:** Version bump. Add SQLite multi-agent task manager and standardize GitMap commit syntax.
+
+---
+
+## v6.60.0 — 2026-10-01 (Release v6.60.0)
+
+**Scope:** Version bump. Release v6.60.0.
+
+---
+
+## v6.59.0 — 2026-10-01 (Release v6.59.0)
+
+**Scope:** Version bump. Release v6.59.0.
+
+---
+
+## v6.58.0 — 2026-10-01 (Release v6.58.0)
+
+**Scope:** Version bump. Release v6.58.0.
+
+---
+
+## v6.57.0 — 2026-10-01 (Release v6.57.0)
+
+**Scope:** Version bump. Release v6.57.0.
+
+---
+
+## v6.56.0 — 2026-10-01 (Release v6.56.0)
+
+**Scope:** Version bump. Release v6.56.0.
+
+---
+
+## v6.55.0 — 2026-10-01 (pre-cg-execute prompts optimization snapshot)
+
+**Scope:** Version bump. pre-cg-execute prompts optimization snapshot.
+
+---
+
+## v6.54.0 — 2026-10-01 (remove deprecated fix-repo and fix-except scripts from root)
+
+**Scope:** Version bump. remove deprecated fix-repo and fix-except scripts from root.
+
+---
+
+## v6.53.0 — 2026-10-01 (add V6 execute-parent-task prompt with parameter-driven orchestration)
+
+**Scope:** Version bump. add V6 execute-parent-task prompt with parameter-driven orchestration.
+
+---
+
+## v6.52.0 — 2026-10-01 (add V6 parent task orchestrator prompt, skills, and benchmark audit)
+
+**Scope:** Version bump. add V6 parent task orchestrator prompt, skills, and benchmark audit.
+
+---
+
+## v6.51.0 — 2026-10-01 (Release v6.51.0)
+
+**Scope:** Version bump. Release v6.51.0.
+
+---
+
+## v6.50.0 — 2026-10-01 (Release v6.50.0)
+
+**Scope:** Version bump. Release v6.50.0.
+
+---
+
+## v6.49.0 — 2026-09-30 (Add V4 Antigravity-native execute-parent-task prompt with skill pointers, open-conventions note, and plans 15 and 16)
+
+**Scope:** Version bump. Add V4 Antigravity-native execute-parent-task prompt with skill pointers, open-conventions note, and plans 15 and 16.
+
+---
+
+## v6.48.0 — 2026-09-30 (Release v6.48.0)
+
+**Scope:** Version bump. Release v6.48.0.
+
+---
+
+## v6.47.0 — 2026-09-27 (upgrade prompts to v1/v2, elevate gitmap aum, sync skills, and fix linux directory permissions)
+
+**Scope:** Version bump. upgrade prompts to v1/v2, elevate gitmap aum, sync skills, and fix linux directory permissions.
+
+---
+
+## v6.47.2 — 2026-09-30 (Routine patch ceremony (one-shot))
+
+**Scope:** Version bump (`6.47.1` → `6.47.2`). Routine patch ceremony (one-shot).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`
+
+---
+
+## v6.47.1 — 2026-09-29 (add branch immutability and pointer reduction guidelines, prompts, and skills)
+
+**Scope:** Version bump (`6.47.0` → `6.47.1`). add branch immutability and pointer reduction guidelines, prompts, and skills.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`
+
+---
+
+## v6.46.0 — 2026-09-24 (add ai-adaptable design system specification and gitmap skill update)
+
+**Scope:** Version bump. add ai-adaptable design system specification and gitmap skill update.
+
+---
+
+## v6.45.0 — 2026-09-22 (enhance release orchestrator with automated release notes and GitHub release creation)
+
+**Scope:** Version bump. enhance release orchestrator with automated release notes and GitHub release creation.
+
+---
+
+## v6.44.0 — 2026-09-22 (fix execute prompt premature turn closure and mandate same-turn tool chaining)
+
+**Scope:** Version bump. fix execute prompt premature turn closure and mandate same-turn tool chaining.
+
+---
+
+## v6.43.0 — 2026-09-22 (enforce unconditional zero-question execution mandate and top-instruction priority)
+
+**Scope:** Version bump. enforce unconditional zero-question execution mandate and top-instruction priority.
+
+---
+
+# 98 — Changelog
+
+**Spec:** `19-main-worker-service`
+
+---
+
+## v6.42.0 — 2026-09-18 (feat(prompts): integrate GitMap pipeline-ai and dynamic waiting protocol)
+
+**Scope:** Version bump (`6.41.0` → `6.42.0`). feat(prompts): integrate GitMap pipeline-ai and dynamic waiting protocol.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`
+
+---
+
+## v6.41.0 — 2026-09-17 (Nuclear package modularization prompt and 5-day test inventory freshness)
+
+**Scope:** Version bump (`6.40.0` → `6.41.0`). Nuclear package modularization prompt and 5-day test inventory freshness.
+**Sync-regenerated artifacts:** `public/health-score.json`
+
+---
+
+## v6.39.0 — 2026-09-13 (sync banned operation checklists, os enum detector, and atomic test inventory tracking)
+
+**Scope:** Version bump (`6.38.0` → `6.39.0`). sync banned operation checklists, os enum detector, and atomic test inventory tracking.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`
+
+---
+
+## v6.38.0 — 2026-09-10 (Tracer OS temp backup and recycle bin, single-file guideline checklist, audit purge)
+
+**Scope:** Version bump (`6.37.0` → `6.38.0`). Tracer OS temp backup and recycle bin, single-file guideline checklist, audit purge.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`
+
+---
+
+## v6.36.0 — 2026-09-05 (Package architecture, streaming writers, base enums, and comment cleanup)
+
+**Scope:** Version bump (`6.35.3` → `6.36.0`). Package architecture, streaming writers, base enums, and comment cleanup.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`
+
+---
+
+## v6.35.3 — 2026-08-30 (Routine)
+
+**Scope:** Version bump (`6.35.2` → `6.35.3`). Routine.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.35.2 — 2026-08-30 (Fix)
+
+**Scope:** Version bump (`6.35.1` → `6.35.2`). Fix.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.35.0 — 2026-08-30 (Convert codegen CI verifiers to Python & fix fixture determinism drift)
+
+**Scope:** Version bump (`6.34.0` → `6.35.0`). Convert codegen CI verifiers to Python & fix fixture determinism drift.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.34.0 — 2026-08-30 (Fix installer template literal SyntaxError & enhance fast Python tooling)
+
+**Scope:** Version bump (`6.34.0` → `6.34.0`). Fix installer template literal SyntaxError & enhance fast Python tooling.
+**Sync-regenerated artifacts:** `public/health-score.json`
+
+---
+
+## v6.33.3 — 2026-08-29 (Routine)
+
+**Scope:** Version bump (`6.33.2` → `6.33.3`). Routine.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.33.2 — 2026-08-29 (Routine)
+
+**Scope:** Version bump (`6.33.1` → `6.33.2`). Routine.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.33.1 — 2026-08-29 (Routine)
+
+**Scope:** Version bump (`6.33.0` → `6.33.1`). Routine.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.33.0 — 2026-08-29 (Routine)
+
+**Scope:** Version bump (`6.32.0` → `6.33.0`). Routine.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.32.0 — 2026-08-28 (Update)
+
+**Scope:** Version bump (`6.31.0` → `6.32.0`). Update.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.31.0 — 2026-08-28 (Enforce)
+
+**Scope:** Version bump (`6.30.0` → `6.31.0`). Enforce.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.30.0 — 2026-08-28 (Rename)
+
+**Scope:** Version bump (`6.29.0` → `6.30.0`). Rename.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.29.0 — 2026-08-28 (Upgrade)
+
+**Scope:** Version bump (`6.28.0` → `6.29.0`). Upgrade.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.28.0 — 2026-08-28 (Add)
+
+**Scope:** Version bump (`6.27.0` → `6.28.0`). Add.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.27.0 — 2026-08-28 (Implement)
+
+**Scope:** Version bump (`6.26.0` → `6.27.0`). Implement.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.26.0 — 2026-08-28 (Add)
+
+**Scope:** Version bump (`6.25.0` → `6.26.0`). Add.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.25.0 — 2026-08-28 (Add)
+
+**Scope:** Version bump (`6.24.0` → `6.25.0`). Add.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.24.0 — 2026-08-27 (markdown)
+
+**Scope:** Version bump (`6.23.0` → `6.24.0`). markdown.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.23.0 — 2026-08-27 (add)
+
+**Scope:** Version bump (`6.22.0` → `6.23.0`). add.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.22.0 — 2026-08-26 (Update)
+
+**Scope:** Version bump (`6.21.0` → `6.22.0`). Update.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.21.0 — 2026-08-26 (Add Alim profile link and update prompts from prompt-architect-v2)
+
+**Scope:** Version bump (`6.20.0` → `6.21.0`). Add Alim profile link and update prompts from prompt-architect-v2.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.20.0 — 2026-08-26 (version.json subpackage inheritance, import protocol, what-to-read queue, release architecture map)
+
+**Scope:** Version bump (`6.19.0` → `6.20.0`). version.json subpackage inheritance, import protocol, what-to-read queue, release architecture map.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.18.1 — 2026-08-26 (Sync)
+
+**Scope:** Version bump (`6.18.0` → `6.18.1`). Sync.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.18.0 — 2026-08-24 (Installer)
+
+**Scope:** Version bump (`6.17.0` → `6.18.0`). Installer.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.132.0 — 2026-07-19 (CI sync auto-fix workflow and drift report artifact)
+
+**Scope:** Version bump (`5.131.0` → `5.132.0`). CI sync auto-fix workflow and drift report artifact.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.124.0 — 2026-07-19 (OQ-A1 → D15, OQ-A2 → D16; chapter 17 v1.1.0)
+
+**Scope:** Version bump (`5.123.0` → `5.124.0`). Chapter 17 (`18-cascading-roles-and-cache-bin.md`) promoted from v1.0.0 to v1.1.0. §7 rewritten from "Open Questions, Default Proposals Adopted" to "Resolved Decisions". OQ-A1 (cascading semantics) locked as **D15** (simple union final, no role hierarchy). OQ-A2 (cache-bin storage tier) locked as **D16** (per-process SQLite `:memory:` final; Redis and in-process map remain configurable alternatives against the four-function contract in §4 and the invalidation endpoint in §5). `.ai-memory/29-plan.md` Locked Decisions table updated with D15/D16; Open Questions section now shows both items resolved. Every downstream chapter (13, 14, 15, 07, 11) already conforms; no cross-chapter edits required.
+
+## v5.115.0 — 2026-07-19 (Slides build fix (slide 59 JSX escapes, structure section registry) + release preflight (SRA + guideline drift + slides typecheck) + pre-push parity)
+
+**Scope:** Version bump (`5.114.0` → `5.115.0`). Slides build fix (slide 59 JSX escapes, structure section registry) + release preflight (SRA + guideline drift + slides typecheck) + pre-push parity.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.105.0 — 2026-07-19 (SS-02 tasks 52-53: REACT-004 no raw for/forEach in render, REACT-005 never mutate state/props/hook returns)
+
+**Scope:** Version bump (`5.104.0` → `5.105.0`). SS-02 tasks 52-53: REACT-004 no raw for/forEach in render, REACT-005 never mutate state/props/hook returns.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.78.0 — 2026-07-19 (SS-02 task 25: boolean naming slide (BOOL-002))
+
+**Scope:** Version bump (`5.77.0` → `5.78.0`). SS-02 task 25: boolean naming slide (BOOL-002).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.77.0 — 2026-07-19 (SS-02 task 24: zero-underscore + full-caps acronyms slide (NAM-003))
+
+**Scope:** Version bump (`5.76.0` → `5.77.0`). SS-02 task 24: zero-underscore + full-caps acronyms slide (NAM-003).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.76.0 — 2026-07-19 (SS-02 task 23: DB schema naming slide (NAM-002))
+
+**Scope:** Version bump (`5.75.0` → `5.76.0`). SS-02 task 23: DB schema naming slide (NAM-002).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.55.0 — 2026-07-19 (SS-02: rewrite Core Principles slides with Symptom/Rule/Action)
+
+**Scope:** Version bump (`5.54.0` → `5.55.0`). SS-02: rewrite Core Principles slides with Symptom/Rule/Action.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.54.0 — 2026-07-19 (SS-02 task 63: a11y badge in GitHub Release notes)
+
+**Scope:** Version bump (`5.53.0` → `5.54.0`). SS-02 task 63: a11y badge in GitHub Release notes.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.52.0 — 2026-07-19 (Attach slides-deck.zip to GitHub Release (Plan SS-01 step 6))
+
+**Scope:** Version bump (`5.52.0` → `5.52.0`). Attach slides-deck.zip to GitHub Release (Plan SS-01 step 6).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`
+
+---
+
+## v5.51.0 — 2026-07-19 (Slides a11y scan (axe-core WCAG 2.1 A/AA) in CI (Plan SS-01 step 5))
+
+**Scope:** Version bump (`5.50.0` → `5.51.0`). Slides a11y scan (axe-core WCAG 2.1 A/AA) in CI (Plan SS-01 step 5).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.50.0 — 2026-07-19 (sync-guidelines generator: file 31 as single source of truth (Plan SS-01 step 4))
+
+**Scope:** Version bump (`5.49.0` → `5.50.0`). sync-guidelines generator: file 31 as single source of truth (Plan SS-01 step 4).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.49.0 — 2026-07-19 (Wire slides-app build into release ceremony (Plan SS-01 step 3))
+
+**Scope:** Version bump (`5.48.1` → `5.49.0`). Wire slides-app build into release ceremony (Plan SS-01 step 3).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.48.0 — 2026-06-20 (Pin installer probe-version floor to v24 (was v19))
+
+**Scope:** Version bump (`5.47.0` → `5.48.0`). Pin installer probe-version floor to v24 (was v19).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.47.0 — 2026-06-20 (Routine release ceremony — sync regeneration and release artifact refresh)
+
+**Scope:** Version bump (`5.46.0` → `5.47.0`). Routine release ceremony — sync regeneration and release artifact refresh.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.46.0 — 2026-05-09 (Diagram cache CI integration, pre-commit no-cache toggle, render-diagrams --help and cache-hit logging)
+
+**Scope:** Version bump (`5.45.0` → `5.46.0`). Diagram cache CI integration, pre-commit no-cache toggle, render-diagrams --help and cache-hit logging.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.45.0 — 2026-05-07 (Mermaid-v11 parser fix in `diagrams/seq-incremental-backup.mmd` (`;` → `and`); diagram pipeline at 100% coverage; root readme updated.)
+
+**Scope:** Diagram-source fix only — no spec/19 chapter markdown changed. `seq-incremental-backup.mmd` and `02-spec/12/ci-pipeline-flow.mmd` now render cleanly under mermaid-cli 11.4.2; `render-diagrams.mjs` reports `failed=0`. Backup-tier deferral preserved; readiness baseline unchanged at 99/100 (audit-15).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.44.0 — 2026-05-07 (Audit-15 blind-AI readiness v6 shipped: 98 → 99/100 (A+); audit-12 §2.2 closed for 8/9 diagrams; backup-tier deferral preserved.)
+
+**Scope:** Audit-only — no spec/19 markdown changed. New file: `audit/15-blind-ai-readiness-2026-05-07-v6.md`. Linter posture unchanged (12/12 non-Go lint-ci steps GREEN, 89-code MWS catalogue, 0 stale folder refs). Sole residual −1 = intentional v2.0 `Backup.Snapshot.Restore.*` freeze.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.43.0 — 2026-05-07 (Baseline diagram PNGs committed via render-diagrams pipeline; audit-14 shipped; 20 new PNGs, 26 total; 2 pre-existing mermaid-v11 parser failures tracked separately.)
+
+**Scope:** Renderer output only — no spec/19 markdown changed. `@mermaid-js/mermaid-cli@11.4.2` added as dev dep. `02-spec/19-main-worker-service/audit/14-baseline-diagram-pngs-2026-05-07.md` documents disposition. Backup-tier deferral preserved.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.42.0 — 2026-05-07 (Minor version bump; no spec/19 markdown changes; Backup-tier deferral preserved.)
+
+**Scope:** Version bump (`5.41.0` → `5.42.0`). No spec/19 markdown touched. Readiness baseline unchanged at 98/100 (audit-12). `MainWorker.Backup.*` surface remains frozen until v2.0 behind `MAIN-900-01 SpecContradiction`.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.41.0 — 2026-05-07 (Hardening Patch I: G1+G2+G3 closed; MWS error catalogue 84→89 codes; audit-12 (blind-AI v5) + audit-13 (Patch-I reverification) shipped; readiness 97→98/100.)
+
+**Scope:** Spec + linter + audit work. (a) `14-error-codes.md`: catalogued 5 real codes (`WORKER-403-01` `PushDisabledInProduction`, `WORKER-403-02` `PayloadHostNotAllowed`, `WORKER-503-01` `MainUnreachable`, `WORKER-503-02` `ManifestUnreachable`, `MAIN-900-01` `SpecContradiction`); header §1 + §4 now first-class document the `21200-21299` overflow range. (b) `26-inherited-rules.md`: corrected `../03-error-manage/` link depth. (c) `linter-scripts/check-mws-error-codes.py`: R4 widened, new unallocated allowlist `check-mws-error-codes.unallocated.txt` for `WORKER-940-05/10` + `MAIN-830-04`. (d) `linter-scripts/spec-folder-refs.allowlist`: `03-tasks` allowlisted. (e) New audits `12-blind-ai-readiness-2026-05-07-v5.md` (98/100) + `13-patch-i-reverification-2026-05-07.md`. All 14/14 lint-ci steps + 4/4 ancillary checks GREEN. Spec/19 implementation constraint memory broadened (v5.40.0 reverted Phase-14 scaffold + new tracker forbidden).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.40.0 — 2026-05-07 (Reverted: Phase-14 kickoff scaffold deleted; spec/19 SPEC-ONLY constraint broadened to forbid issue-tracking + app-side trackers + typed task indexes derived from spec/19.)
+
+**Scope:** Version bump (`5.39.0` → `5.40.0`). No spec/19 markdown touched.
+
+---
+
+## v5.39.0 — 2026-05-07 (Patch D (audit-10) closure: RAG mutation-score TBD resolved at v2.0.0; ≥80% gate now binding for future executable RAG validator (deferred-by-design); audit-11 disposition updated.)
+
+**Scope:** Version bump (`5.38.0` → `5.39.0`). Spec-only — no spec/19 markdown touched (cross-corpus closure of audit-10 Patch D in `02-spec/06-seedable-config-architecture/02-features/04-rag-test-coverage-matrix.md`); audit-11 Patch D row updated to reflect re-closure at v5.39.0. No mutation tooling added inside `02-spec/` per `mem://constraints/spec19-no-implementation`.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.38.0 — 2026-05-06 (v2.0.0 backup-tier seed materialization: 28 MainWorker.Backup.* keys + Backup.Enabled flag fully checked by T3 parity (silent waiver lifted); §2.16 cache catalogue added; check-tunable-constants linter parser fixed (§2-only scope) and wired into CI.)
+
+**Scope:** Version bump (`5.37.0` → `5.38.0`). v2.0.0 backup-tier seed materialization: 28 MainWorker.Backup.* keys + Backup.Enabled flag fully checked by T3 parity (silent waiver lifted); §2.16 cache catalogue added; check-tunable-constants linter parser fixed (§2-only scope) and wired into CI..
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.37.0 — 2026-05-06 (CI/docs build step renders all spec/**/{diagrams,images}/*.mmd to PNG via mermaid-cli, uploads as artifact (Phase 13 closure).)
+
+**Scope:** Version bump (`5.36.0` → `5.37.0`). CI/docs build step renders all spec/**/{diagrams,images}/*.mmd to PNG via mermaid-cli, uploads as artifact (Phase 13 closure)..
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.36.0 — 2026-05-06 (Patches E-H)
+
+**Scope:** Version bump (`5.35.0` → `5.36.0`). Patches E-H.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.35.0 — 2026-05-06 (Audit 11)
+
+**Scope:** Version bump (`5.34.0` → `5.35.0`). Audit 11.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.34.0 — 2026-05-06 (CI parity)
+
+**Scope:** Version bump (`5.33.0` → `5.34.0`). CI parity.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.33.0 — 2026-05-06 (CI wiring)
+
+**Scope:** Version bump (`5.32.0` → `5.33.0`). CI wiring.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.32.0 — 2026-05-06 (Diagrams pipeline)
+
+**Scope:** Version bump (`5.31.0` → `5.32.0`). Diagrams pipeline.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.31.0 — 2026-05-06 (Backup-tier seed v2.0.0)
+
+**Scope:** Version bump (`5.30.0` → `5.31.0`). Backup-tier seed v2.0.0.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.30.0 — 2026-05-06 (Patches A-D)
+
+**Scope:** Version bump (`5.29.0` → `5.30.0`). Patches A-D.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.29.0 — 2026-05-06 (Cross-spec sweep)
+
+**Scope:** Version bump (`5.28.0` → `5.29.0`). Cross-spec sweep.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.28.0 — 2026-05-06 (Audit 09 wrap-up)
+
+**Scope:** Version bump (`5.27.0` → `5.28.0`). Audit 09 wrap-up.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.27.0 — 2026-05-06 (Phase 13.3 — literal-reader trap audit + §6.4 visibility callout in 22- (audit-08 §2.5 traps #1 and #3 confirmed false positives))
+
+**Scope:** Version bump (`5.26.0` → `5.27.0`). Phase 13.3 — literal-reader trap audit + §6.4 visibility callout in 22- (audit-08 §2.5 traps #1 and #3 confirmed false positives).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.26.0 — 2026-05-06 (Phase 13.3 — inline cross-spec inherited rules in new 26-inherited-rules.md (closes audit-08 §2.4))
+
+**Scope:** Version bump (`5.25.0` → `5.26.0`). Phase 13.3 — inline cross-spec inherited rules in new 26-inherited-rules.md (closes audit-08 §2.4).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.25.0 — 2026-05-06 (Phase 13.3 — seed parity: add CacheRecentCompanyPerUserTtlSeconds to §4 (config.seed.json v1.5.0), extend §4.1 alias map, document Backup-tier seed deferral to v2.0.0)
+
+**Scope:** Version bump (`5.24.0` → `5.25.0`). Phase 13.3 — seed parity: add CacheRecentCompanyPerUserTtlSeconds to §4 (config.seed.json v1.5.0), extend §4.1 alias map, document Backup-tier seed deferral to v2.0.0.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.24.0 — 2026-05-06 (Phase 13.3 — golden-file fixtures (endpoints, errors, JWT) + 06-/08- authority pointers)
+
+**Scope:** Version bump (`5.23.0` → `5.24.0`). Phase 13.3 — golden-file fixtures (endpoints, errors, JWT) + 06-/08- authority pointers.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.23.0 — 2026-05-06 (Phase 13.3 — diagrams refresh (4-tier framing, UserDirectory/AppUser split, backup-node lane in routing seq, EndpointAuthSetting FK))
+
+**Scope:** Version bump (`5.22.0` → `5.23.0`). Phase 13.3 — diagrams refresh (4-tier framing, UserDirectory/AppUser split, backup-node lane in routing seq, EndpointAuthSetting FK).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.22.0 — 2026-05-06 (spec)
+
+**Scope:** Version bump (`5.21.0` → `5.22.0`). spec.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.21.0 — 2026-05-06 (Phase 13.1 — Blind-AI prose hardening (4 fixes; 92→100); linter-pack VERSION reconciled to 3.79.0; cross-link audit + memory scan green)
+
+**Scope:** Version bump (`5.20.0` → `5.21.0`). Phase 13.1 — Blind-AI prose hardening (4 fixes; 92→100); linter-pack VERSION reconciled to 3.79.0; cross-link audit + memory scan green.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v2.17.0 — 2026-05-06 (Phase 12.7 — Blind-AI readiness audit + readme pin refresh)
+
+**Scope:** Minor bump (`5.19.1` → `5.20.0`). Adds **`audit/06-blind-ai-readiness-2026-05-06.md`** — a fresh audit scoring the full 24-file spec against the *dumbest plausible* AI implementer (literal-minded, no clarification questions). Result: **92/100 (A−)**. The 8-point gap is itemised as 4 mechanical prose-hardening fixes (Gap 1: stale OQ-1 hint in `06-auth-and-2fa.md` line 62; Gap 2: two `SyncOp` shapes in `20-incremental-backup-sync.md` §1; Gap 3: OQ-22-1 inferred-not-pinned in `23-backup-apply-logic.md` §12; Gap 4: stale "3-tier" prose in 4 places). Companion non-spec change: root `readme.md` line 43 stale pin `v5.7.0` → `v5.19.1` and "22 spec folders" → "23 spec folders". No spec content, schema, error-code, or AC changes.
+
+---
+
+## v2.16.1 — 2026-05-06 (Phase 12.6.1 — Sync-managed file drift fix)
+
+**Scope:** Patch bump (`5.19.0` → `5.19.1`). Re-ran `npm run sync` to regenerate the 5 sync-managed artifacts that drifted in CI (`public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`). No spec content, schema, error-code, or AC changes — generated stamps + spec-tree counts only (664 files / 23 folders / 143,353 lines). Unblocks the `sync:check` pre-commit / CI gate.
+
+---
+
+## v2.16.0 — 2026-05-06 (Phase 12.6 — Spec slot 24 reserved with `25-threat-model.md` stub)
+
+**Scope:** Closes the last unresolved item in the Backup System initiative. Creates a stub `25-threat-model.md` (v0.1.0) that visibly reserves spec slot 24 inside `19-main-worker-service/` so a future spec author cannot grab it for an unrelated topic. The stub is the **shared prerequisite** declared by `13-jwt-delivery-contract.md` §11.3 (OQ-12-1 / OQ-12-2) and `24-snapshot-storage-and-restore.md` §14.4 (OQ-23-1 / OQ-23-2). Project version bump to `5.19.0`.
+
+- **`25-threat-model.md` → v0.1.0 (NEW, stub)**
+  - §1 Purpose: explicit slot-reservation, cross-links the four origin OQs to the two future-work catalogues that depend on this slot.
+  - §2 CODE RED forbidden contents: no STRIDE, no error-code allocations, no schema sketches, no AC rows, no "for future use" allocations, no v1.0 implementation guidance — adding any of these to a stub is itself a CODE RED violation per the formalised dispositions.
+  - §3 Promotion criteria: 4 mandatory conditions before stub → draft (trigger fired + tunable cap added + error-code family allocated + AC row added). All four must hold.
+  - §4 Cross-references back to `13-jwt-delivery-contract.md`, `24-snapshot-storage-and-restore.md`, `16-tunable-constants.md`, `14-error-codes.md`, `97-acceptance-criteria.md`.
+- **No new tables, no new error codes, no acceptance criteria changes** — by design. The stub is a structural reservation only.
+- **Initiative status:** Backup System spec arc complete. All open questions in scope have a binding v1.0 disposition; the v2.0 reopen path is now structurally protected.
+
+---
+
+## v2.15.0 — 2026-05-06 (Phase 12.5 — OQ-23-1 / OQ-23-2 dispositions formalised)
+
+**Scope:** Promotes the two remaining open questions in `24-snapshot-storage-and-restore.md` from inferred-deferred / inferred-rejected to **binding v1.0 dispositions** with explicit forbidden patterns, v2.0 trigger conditions, and a future-work catalogue. Mirrors the Phase 12.4 pattern. Project version bump to `5.18.0`.
+
+- **`24-snapshot-storage-and-restore.md` → v1.2.0**
+  - §14 retitled *Open Questions — formalised dispositions* (was *logged, non-blocking*).
+  - §14.1 OQ-23-1 (snapshot dedup pyramid): rationale matrix (restore complexity, failure modes, retention sweep, operator mental model, disk savings, CODE RED footprint, forward-secrecy interaction), 3 v2.0 reopen triggers (retention >180d AND p95 size >5GB; >90% no-change days + paid feature ask; per-byte tier crossover), 4 forbidden v1.0 patterns (no non-flat storage; no `BasedOnSnapshotCatalogId` FK; no skip-empty-day optimization; no premature error-code allocation).
+  - §14.2 OQ-23-2 (partial-table / per-tenant restore): rationale matrix (ownership, cross-row consistency, re-seal, watermark realignment, mental model, forward-secrecy), 2 reopen triggers (schema-level tenant isolation contract + per-tenant PITR regulatory regime), 3 forbidden patterns (no `TenantId` filter on BE-3; no `RestoreScope` column "leaving room"; no manual SQL bypass of BE-6 audit path), CODE RED reasoning against "operators sometimes ask for it".
+  - §14.3 OQ-23-3 resolution preserved.
+  - §14.4 Future-work catalogue: 4 ordered v2.0 prerequisites including reservation of `25-threat-model.md` (shared with `13-jwt-delivery-contract.md` §11.3) and the `WORKER-940-05+` / `WORKER-940-10+` error-code ranges left explicitly unallocated.
+- **`97-acceptance-criteria.md` → v1.5.0** — Two new criteria: (a) flat-snapshot guarantee (no `BasedOnSnapshotCatalogId` column + every-day-produces-row test), (b) no-partial-restore guarantee (BE-3 rejects `TenantId`/`RestoreScope` with `MAIN-830-04 RestoreScopeUnsupported`; no `RestoreScope` column on `BackupRestoreJob`).
+- **No new tables, no new error codes** — per the formalised dispositions, allocating `WORKER-940-05+` or `MAIN-830-04` "for future use" is itself a CODE RED violation. `MAIN-830-04` referenced in the AC test is allocated **only when partial-restore actually ships**.
+- **Spec slot 24** remains reserved for `25-threat-model.md` (shared trigger of §14.4 and `13-jwt-delivery-contract.md` §11.3).
+
+---
+
+## v2.14.0 — 2026-05-06 (Phase 12.4 — OQ-12-1 / OQ-12-2 dispositions formalised)
+
+**Scope:** Promotes the two open questions in `13-jwt-delivery-contract.md` from inferred-deferred / inferred-rejected to **binding v1.0 dispositions** with explicit forbidden patterns, v2.0 trigger conditions, and a future-work catalogue. Project version bump to `5.17.0`.
+
+- **`13-jwt-delivery-contract.md` → v1.2.0**
+  - §11 retitled *Open Questions — formalised dispositions* (was *logged, non-blocking*).
+  - §11.1 OQ-12-1: rationale matrix (refresh authority, theft window, server state, sign-out-everywhere, CODE RED footprint, what-it-buys), 3 trigger conditions for v2.0 reopen, 4 forbidden v1.0 patterns (`Set-Cookie: RefreshToken`, refresh-token persistence, Main-cookie-value rotation on refresh, premature error-code allocation).
+  - §11.2 OQ-12-2: same matrix shape, 2 trigger conditions (cross-origin isolation + browser primitive), CODE RED reasoning ("sounds more secure" is a swallowed reason).
+  - §11.3 Future-work catalogue: 4 ordered prerequisites for any v2.0 reopen — `MainWorker.Auth.MaxSessionLifetimeSeconds` cap, threat-model spec slot 24 reserved, error-code family allocation, AC row.
+- **`97-acceptance-criteria.md` → v1.4.0** — Two new criteria: (a) grep-test for forbidden `Set-Cookie: RefreshToken`, (b) grep-test for SW token postMessage call sites. Both negative tests + positive counterparts.
+- **No new tables, no schema migrations, no error codes.** Per the formalised disposition itself, allocating "WORKER-100-04 REFRESH_REPLAY for future use" is itself a CODE RED violation — error codes are added when the feature ships.
+
+---
+
+## v2.13.0 — 2026-05-06 (Phase 12.3 — OQ-2 resolved: default worker-selection strategy)
+
+**Scope:** Resolves Phase-1 OQ-2 by promoting `LeastLoaded` from "recommended" to authoritative default with a full rationale block. Project version bump to `5.16.0`.
+
+- **`16-tunable-constants.md` → v1.4.0** — added `MainWorker.Routing.DefaultStrategy = "LeastLoaded"` to §2.5 with allow-list (`RoundRobin | LeastLoaded | Manual`) and start-up enforcement note (Main MUST refuse to start on out-of-list values — CODE RED, no silent fallback).
+- **`05-worker-routing.md` → v1.3.0**
+  - §1 prose: replaced "configurable via Seedable-Config" with explicit cross-reference to canonical default + allow-list start-up rule.
+  - §1.2: re-titled `LeastLoaded` from *(recommended default)* → ***default* — resolves OQ-2**.
+  - New §1.5 *Default selection rationale*: 6-criterion decision matrix (cold-cluster fairness, recovery after quarantine, long-running fairness, predictability, query cost, ties), explicit override guidance (`RoundRobin` for tests, `Manual` for reserved capacity / canaries), explicit non-reasons, and migration path (existing `Company → Worker` mappings are NOT rebalanced — only new creates observe a strategy change).
+- **`97-acceptance-criteria.md` → v1.3.0** — AC-3 worker-selection row extended with the start-up allow-list guard test in addition to the existing ±10% distribution test.
+- **`29-plan.md`** — OQ-2 marked ✅ Resolved Phase 12.3 with cross-references.
+
+---
+
+## v2.12.0 — 2026-05-06 (Phase 12.2 — OQ-23-3 resolved: pinned-snapshot audit trail)
+
+**Scope:** Resolves OQ-23-3 from `24-snapshot-storage-and-restore.md`. Adds the audit-trail column trio that operators need when reviewing why a snapshot escaped retention. Project version bump to `5.15.0`.
+
+- **`24-snapshot-storage-and-restore.md` → v1.1.0**
+  - Expanded `BackupSnapshotCatalog` with three new nullable columns (Rule 12 compliant): `PinReason TEXT NULL`, `PinnedAtEpoch INTEGER NULL`, `PinnedByActor TEXT NULL`.
+  - Expanded the `Status` enum comment to include `Pinned` (formal addition; previously footnoted in §6).
+  - Added §6.1 *Pin / unpin protocol*: required column contract on every `Available → Pinned` transition; unpin clears all four pin columns; forbidden transitions enumerated (no direct `Pinned → Reaped`, no NULL `PinReason`, no raw-SQL pinning bypassing audit).
+  - Replaced "manual UPDATE" pin mechanism with BE-3 sub-route `POST /API/V1/Backup/Snapshot/Pin` (per §6 override table) so every pin emits an `EndpointAuthAuditEvent` row in the same transaction.
+  - Added linter rule `BACKUP-SNAP-005` enforcing the audit-trail invariant.
+  - Marked OQ-23-3 ✅ Resolved with cross-reference to §6.1.
+- **`diagrams/erd-backup-tier.mmd` → v1.1.0** — `BackupSnapshotCatalog` entity gains the three new columns; banner version bumped.
+- **`97-acceptance-criteria.md` → v1.2.0** — New criterion *Pinned snapshots carry mandatory audit trail* with positive (BE-3 writes paired audit row) and negative (linter fails on missing trio) tests.
+- **No table-renames, no destructive migrations.** All three columns are NULL-safe additions per Rule 12; existing `Available`/`Reaped`/`Corrupt` rows untouched.
+
+---
+
+## v2.11.0 — 2026-05-06 (Phase 12.1 — Cross-spec Backup stubs landed)
+
+**Scope:** Executes the deferred cross-spec stubs from Phase 12. No new behavior — purely wires the Backup-tier audience and endpoint catalogue into the three home specs that operators read first. Project version bump to `5.14.0`.
+
+- **`06-auth-and-2fa.md` → v2.1.0** — added §11 *Backup S2S Audience*: codifies `aud="Backup"`, mandatory `PairingId` claim, four `Backup.*` scopes, HTTP 421 + `MAIN-800-04` enforcement at the proxy layer (CODE RED — no audience downgrade). Cross-references `22-backup-endpoints.md` §3 and `13-jwt-delivery-contract.md` §13.
+- **`13-jwt-delivery-contract.md` → v1.1.0** — added §13 *Backup-tier S2S tokens*: canonical claim shape (with `sub="PairingId:..."`), 5-step verification order, comparison table vs. UI Worker JWT, and four new test cases T-10..T-13 covering audience confusion, missing `PairingId`, wrong scope, and pairing mismatch.
+- **`07-core-api-endpoints.md` → v1.3.0** — added §6 *Backup-Tier Endpoint Catalogue*: directory pointer for BE-1..BE-6 with method, path, direction, scope, and auth surface. Codifies audience isolation (BE-* MUST NOT be satisfied by `aud=worker`/`aud=main-orchestration`), 421 misroute rule, BE-1/BE-2 rate-limit override via `MainWorker.Backup.PerPairingEnvelopesPerMinute`, and `EndpointAuthAuditEvent` wiring for BE-3/BE-6.
+- **Authority chain unchanged.** `22-backup-endpoints.md` remains the single authoritative file for Backup endpoint payloads, error envelopes, and idempotency contracts; the three new sections are pointer-stubs only — they MUST NOT redefine shapes.
+- **Project version** bumped from `5.13.0` to `5.14.0` (minor — additive cross-spec wiring, no breaking changes).
+
+---
+
+## v2.10.0 — 2026-05-06 (Phase 12 — Final consolidation)
+
+**Scope:** Closes the Backup System spec arc (Phases 7–11). No new feature surface; this phase is wiring, diagrams, acceptance criteria, and cross-spec stubs. Final version bump to `5.13.0`.
+
+- **Diagrams** — three new `.mmd` files in `diagrams/` (all carry the standard NON-AUTHORITATIVE PROJECTION banner):
+  - `erd-backup-tier.mmd` v1.0.0 — projects all 10 Backup-tier App-DB tables (`SyncOpLedger`, `BackupPairing`, `BackupKeyEpoch`, `BackupSyncWatermark`, `BackupOutboxEnvelope`, `BackupApplyIdempotency`, `BackupApplyDeadLetter`, `BackupSnapshotCatalog`, `BackupSnapshotJob`, `BackupRestoreJob`) with PascalCase + INTEGER PKs + Notes/Comments per Rule 11 / Description per Rule 10.
+  - `seq-incremental-backup.mmd` v1.0.0 — primary → backup CDC flow: trigger → ledger → outbox seal → BE-1 → 5-stage Apply pipeline (with V7 idempotency branch) → watermark advance + ACK; explicit DLQ note (no silent skips).
+  - `seq-backup-restore.mmd` v1.0.0 — operator restore-by-date: BE-3 enqueue (with `MAIN-830-01/02` failure branches) → snapshot decrypt under HKDF `"BackupSnapshot/v1"` → re-seal under current Active KeyEpoch → BE-6 inbox import → watermark realignment.
+- **Diagrams index** (`diagrams/readme.md`) bumped to v1.1.0 — three new rows added to both the authoritative-source table and the user-facing tables; ERDs and Sequence Diagrams sections both extended.
+- **Acceptance criteria** (`97-acceptance-criteria.md`) bumped to v1.1.0 — new section **"Backup-tier acceptance (Phases 7–11)"** with 13 criteria covering: CDC capture, KeyEpoch enforcement, S2S `421 Misdirected Request` enforcement, V7 idempotency, DLQ-no-silent-skip (CODE RED), `sqlite3_backup_init` integrity, distinct HKDF salts for envelope vs snapshot, forward-secrecy on restore, 30-day retention with never-auto-shorten, watermark realignment after restore, mandatory `PairingId` JWT claim, Rules 10/11/12 compliance, linter rule promotion.
+- **Cross-spec stubs** (deferred to Phase 12 by Phases 9–11 changelogs):
+  - `06-auth-and-2fa.md` §S2S — note pending: cite `22-backup-endpoints.md` §3 for the `Backup` audience and 5 scopes (`Backup.Diff.Write`, `Backup.Rotate.Write`, `Backup.Restore.Write`, `Backup.Restore.Apply`, `Backup.Read`).
+  - `13-jwt-delivery-contract.md` — note pending: document mandatory `PairingId` claim on `Backup`-audience tokens (mismatch → `MAIN-800-04`).
+  - `07-core-api-endpoints.md` §2 — note pending: merge BE-1..BE-6 catalogue rows from `21-…` §2 + `23-…` §8 into the canonical endpoint table.
+- **Linter promotion** — `96-linter-audit.md` to lift the `BACKUP-*` and `DB-SYNCOP-*` rule families from "draft" to "enforced in CI" (referenced by acceptance criteria; promotion follows the standard linter-scripts cycle per memory rule).
+- **Seed promotion** — `AppBackupTrackedTable` seed referenced by acceptance criterion 1 to land via the same migration as `BackupApplyIdempotency` UNIQUE-on-`EnvelopeId` lock (no schema change in this phase).
+- **Open questions still pending** (non-blocking, carried into post-5.13.0 maintenance):
+  - OQ-23-1 — snapshot dedup pyramid for low-write primaries.
+  - OQ-23-2 — partial-table restore.
+  - OQ-23-3 — `PinReason` column on `BackupSnapshotCatalog` for the `Pinned` status.
+- **Version bump** — `5.13.0-phase11` → **`5.13.0`** (final). Phase suffix removed; the Backup System spec arc is now feature-complete.
+
+**Closes:** Phases 7–11 (`18-…` through `23-…md`). The 19-main-worker-service spec folder now contains the full Backup System contract (24 numbered files: `00-…23` plus `96`/`97`/`98`/`99`).
+
+---
+
+## v2.9.0 — 2026-05-06 (Phase 11 — Snapshot storage + restore flow)
+
+**Scope:** Resolves locked decision **D14** (date-by-date full snapshot storage on backup; main-controlled restore by date). Closes open question **OQ-A4** — snapshot retention adopted at **30 days rolling** (linter floor: 7 days). Final backup-tier spec; only diagrams + acceptance criteria + linter promotion remain (Phase 12).
+
+- New file **`24-snapshot-storage-and-restore.md` v1.0.0** — three-moment lifecycle (Build / Catalogue / Restore), eight-step Build pipeline using SQLite's `sqlite3_backup_init` for transactional consistency, snapshot zip password derived from a separate HKDF salt (`"BackupSnapshot/v1"`) to prevent envelope/snapshot keystream collision, eight-step Restore flow that re-seals the snapshot under the **current Active KeyEpoch** (forward secrecy — never revives a Retired epoch), new `BackupSnapshotCatalog` (entity-ish, Rule 10) + `BackupSnapshotJob` (transactional, Rule 11) + `BackupRestoreJob` (transactional, Rule 11) tables on the backup App tier, retention sweep with `Pinned` status reserved for operator-protected snapshots, never-auto-shorten guarantee under disk pressure.
+- New endpoint **BE-6** `POST /API/V1/Backup/RestoreInbox` hosted on the **primary** Worker — symmetric counterpart to BE-1 but flowing backward; uses scope `Backup.Restore.Apply`; bypasses `23-backup-apply-logic.md` Stage-4 dispatch (offline App-tier import).
+- Final wiring of the **`Backup` S2S audience** reserved by Phase 9 §9: 5 scopes (`Backup.Diff.Write`, `Backup.Rotate.Write`, `Backup.Restore.Write`, `Backup.Restore.Apply`, `Backup.Read`); mandatory `PairingId` JWT claim; mismatch short-circuits with `MAIN-800-04`.
+- `14-error-codes.md` → **v1.5.0**: §2.10 extended with `WORKER-940-01..04` (`SnapshotQuiesceTimeout` 21204, `RestoreImportFailed` 21205, `SnapshotBuildTimeout` 21206, `SnapshotSealFailed` 21207). §3.11 extended with `MAIN-840-02 SnapshotCorrupt` (21192). Reserved-range table refreshed; `MAIN-21193-21199` reserved for future overflow.
+- `16-tunable-constants.md` → **v1.10.0**: new §2.15 — `SnapshotRetentionDays=30` (resolves OQ-A4), `Snapshot.BuildHourUtc=3`, `Snapshot.QuiesceTimeoutSeconds=120`, `Snapshot.MaxBuildSeconds=1800` (30 m), `Restore.PrimaryAckTimeoutSeconds=600` (10 m). All Backup-tier tunables now allocated.
+
+**Cross-spec impact:**
+
+- `06-auth-and-2fa.md` §S2S — Phase 12 cleanup will add a one-line stub citing `23-…` §9 for the `Backup` audience (no schema change needed; audience names are config).
+- `13-jwt-delivery-contract.md` — Phase 12 cleanup will document the mandatory `PairingId` claim on `Backup`-audience tokens.
+- `07-core-api-endpoints.md` §2 — Phase 12 cleanup will merge BE-1..BE-6 catalogue rows from `21-…` §2 + `23-…` §8 into the canonical endpoint table.
+- ER diagram regen deferred to Phase 12 — Worker ER must show `BackupSnapshotCatalog`, `BackupSnapshotJob`, `BackupRestoreJob`.
+- A successful restore (R7) **resets** the incremental watermark by definition — `BackupSyncWatermark.LastAcceptedSyncOpSeq` is realigned to the snapshot's max `SyncOpSeq` so subsequent BE-1 deliveries continue without re-shipping pre-snapshot rows.
+
+**Decisions resolved (this phase):**
+
+- D14 — fully spec'd (date-named files, Main-controlled restore-by-date).
+- OQ-A4 — **30 days rolling** with operator override and 7-day compliance floor.
+
+**Open questions still pending:**
+
+- OQ-23-1 (snapshot dedup pyramid for low-write primaries), OQ-23-2 (partial-table restore), OQ-23-3 (`PinReason` column for `Pinned` status) — all logged in `23-…` §14, non-blocking; OQ-23-3 will be picked up by the Phase-12 migration.
+
+---
+
+## v2.8.0 — 2026-05-06 (Phase 10 — Backup apply pipeline)
+
+**Scope:** Server-side processing pipeline that runs on the backup node once BE-1 (`22-backup-endpoints.md` §4) accepts a sealed envelope. Wire is owned by Phase 9, encryption by Phase 8, CDC source-side by Phase 7. Snapshot/restore remains Phase 11.
+
+- New file **`23-backup-apply-logic.md` v1.0.0** — five-stage strictly-sequential pipeline (Decrypt → Open → Validate → Dispatch → Persist ACK), seven validation rules V1–V7, single-TX `BEGIN IMMEDIATE` per envelope with idempotent dispatch (`Insert`/`Update` = upsert, `Delete` = absent-row tolerated), explicit DLQ on any failure (no silent skips per CODE RED), V7 idempotency short-circuit using a `UNIQUE` constraint as the lock (no advisory mutexes). Two new App-tier tables on the backup: `BackupApplyIdempotency` and `BackupApplyDeadLetter`, both with `{TableName}Id` PK + `Notes`/`Comments TEXT NULL` (transactional Rule 11) + INTEGER `*At` (D2). CODE-RED-compliant per-row pseudocode with positively-named guards (`AssertKnownSyncOp`, `AssertKnownTable`, `AssertNonEmptyPk`).
+- `14-error-codes.md` → **v1.4.0**: §2.10 extended with four new Worker apply codes `WORKER-930-01..04` opening a fresh overflow window `WORKER-21200-21299` (per §1 Slot-overflow rule, since `WORKER-21095-21099` was fully consumed by Phase 8). §3.11 added with `MAIN-840-01 BackupApplyExhausted` consuming the first slot of the Phase-11-reserved window (`MAIN-21191`); reserved-range table refreshed — `MAIN-21192-21199` now reserved for snapshot/restore.
+- `16-tunable-constants.md` → **v1.9.0**: new §2.14 with four apply-pipeline keys — `MaxRetriesPerEnvelope=5`, `TransactionTimeoutSeconds=30`, `DeadLetterRetentionDays=30`, `IdempotencyRowRetentionDays=14`.
+
+**Cross-spec impact:**
+
+- `BackupApplyIdempotency` + `BackupApplyDeadLetter` are App-tier-local on the backup; the cross-tier reconciliation file (`11-…`) does not need an entry.
+- BE-1's idempotency short-circuit (V7) tightens the contract referenced in `21-…` §4.4 — replay returns the **stored** `OriginalResponseJson`, not a freshly-recomputed body.
+- Tracked-table allowlist (`AppBackupTrackedTable` ref) is reserved for the Phase 12 seed; `BACKUP-APPLY-003` linter will enforce membership.
+- `MAIN-840-01` is surfaced via BE-5 Health (`21-…` §8) — no new endpoint surface in Phase 10.
+- ER diagram regen deferred to Phase 12 — Worker ER must show `BackupApplyIdempotency` + `BackupApplyDeadLetter`.
+
+**Open questions still pending:**
+
+- **OQ-A4** — Snapshot retention policy (Phase 11).
+- OQ-22-1 (per-envelope WAL pragma), OQ-22-2 (DLQ auto-sweep semantics), OQ-22-3 (tracked-table allowlist seeding strategy) logged in `22-…` §12, non-blocking.
+
+---
+
+## v2.7.0 — 2026-05-06 (Phase 9 — Backup endpoints contract)
+
+**Scope:** Wire surface for Phases 6–8. Five S2S OAuth-protected HTTP endpoints hosted on the backup node, all Main-triggered. Apply logic remains Phase 10; snapshot storage / retention remains Phase 11.
+
+- New file **`22-backup-endpoints.md` v1.0.0** — `BE-1 IncrementalDiff` (multipart upload of sealed Phase-8 envelope; ACKs `LastAcceptedSyncOpSeq` back into `BackupSyncWatermark`), `BE-2 RotateKeys` (steps S3/S6 of the Pair-RSA rotation flow), `BE-3 RestoreByDate` (202-Accepted enqueue, returns `RestoreJobId`), `BE-4 Snapshots` (date-bounded catalogue), `BE-5 Health` (single-call dashboard surface; never throws on degradation). Defence-in-depth `421` re-asserted at proxy. Endpoint↔scope matrix introduces `Backup.Diff.Write`, `Backup.Rotate.Write`, `Backup.Restore.Write`, `Backup.Read` scopes plus a new `Backup` audience to be wired into `05-…` §S2S in Phase 11. CODE-RED handler size budgets pinned per endpoint.
+- `14-error-codes.md` → **v1.3.0**: §3.10 added with two new wire-only Main codes — `MAIN-830-01 SnapshotNotFound` (21189, 404) and `MAIN-830-02 RestoreAlreadyInProgress` (21190, 409). Reserved-range table refreshed; `MAIN-21191-21199` now reserved for Phase 11 snapshot/restore overflow.
+- `16-tunable-constants.md` → **v1.8.0**: new §2.13 with five backup-endpoint timeouts — `IncrementalDiffTimeoutSeconds=120`, `RotateKeysTimeoutSeconds=30`, `RestoreByDateTimeoutSeconds=60`, `SnapshotsTimeoutSeconds=15`, `HealthTimeoutSeconds=5`.
+
+**Cross-spec impact:**
+
+- `07-core-api-endpoints.md` §2 receives a paste-ready `2.X Backup` table merge in Phase 12 cleanup; this file is the source of truth in the interim.
+- `MAIN-830-*` rows are wire-side only here; their storage semantics (filesystem layout, retention sweep) are owned by `22-snapshot-storage-and-restore.md` (Phase 11).
+- ER diagram regen deferred to Phase 12 — no schema change in Phase 9 (BE-1 writes are confined to `BackupSyncWatermark` already in `19-…`; BE-3 enqueues a job into the existing worker job table).
+
+**Open questions still pending:**
+
+- **OQ-A4** — Snapshot retention policy (Phase 11).
+- OQ-21-1 (streaming vs. multipart for BE-1 at >100 MB envelopes) and OQ-21-2 (BE-5 scope vs. unauth proxy probe) logged in `21-…` §14, non-blocking.
+
+---
+
+## v2.6.0 — 2026-05-06 (Phase 8 — Backup encryption and Pair-RSA key rotation)
+
+**Scope:** Per locked decision **D13** (RSA pair shared between Worker and its Backups; Main issues rotation; zip password follows known pattern). Resolves open question **OQ-A3** (zip password derivation = `HMAC-SHA256(SharedSecret, EnvelopeTimestampEpoch)` truncated to 32 hex chars). Endpoints / apply / restore remain Phases 9–11.
+
+- New file **`21-backup-encryption-and-keys.md` v1.0.0** — three-artefact key inventory (Pair-RSA / Envelope-AES / Zip-Password), envelope sealing pipeline (AES-256-GCM body + RSA-OAEP wrap + RSA-PSS sign + AES-256-ZIP outer), HKDF-derived deterministic zip password resolving OQ-A3, four-state `Pending → Active → Retired → Discarded` rotation state machine, eight-step Main-orchestrated rotation flow with split-brain alerting, `BackupKeyEpoch` table on both primary and backup (Memory: PascalCase + `{TableName}Id` PK + nullable `Description`, INTEGER `*At` per D2), defence-in-depth verification path on the backup (epoch lookup + cipher refusal + signature verify + GCM decrypt).
+- `14-error-codes.md` → **v1.2.0**: §2.10 extended with five new Worker decrypt codes `WORKER-920-01..05` (21095-21099 — fully consuming the Worker future-expansion range), §3.9 added with three new Main rotation-orchestration codes `MAIN-820-01..03` (21186-21188). Reserved-range table refreshed; future-expansion `MAIN-21186-21199` narrows to `MAIN-21189-21199`.
+- `16-tunable-constants.md` → **v1.7.0**: new §2.12 with five backup-encryption keys — `MaxKeyAgeSeconds=7776000` (90 d), `RotationAckTimeoutSeconds=120`, `RotationActivationDelaySeconds=60`, `RetiredKeyGraceSeconds=86400` (24 h), `RsaKeySizeBits=4096`.
+
+**Cross-spec impact:**
+
+- App-tier mirror: `BackupKeyEpoch` is added on both primary and backup Worker App tiers; the cross-tier reconciliation file (`11-…`) does not need a new entry because App-tier additions are local. Main holds the row too but with `PrivateKeyPem` always NULL (public halves only).
+- ER diagram regen deferred to Phase 12 — Worker ER must show `BackupKeyEpoch` with the four-state lifecycle.
+- `20-incremental-backup-sync.md` §6 envelope SQLite is now the input artefact to `20-…` §4 step 1 — no schema change.
+- Phase 9 (endpoints) will surface `POST /API/V1/Backup/RotateKeys` as the operator-forced rotation trigger named in `20-…` §7.1.
+
+**Open questions still pending:**
+
+- **OQ-A4** — Snapshot retention policy (Phase 11).
+- OQ-20-1 (split-brain pager routing) and OQ-20-2 (RSA-4096 vs Ed25519+X25519) logged in `20-…` §14, non-blocking.
+
+---
+
+## v2.5.0 — 2026-05-06 (Phase 7 — Incremental backup sync, CDC)
+
+**Scope:** Per locked decision D10 (`SyncOp` flag on synced rows). Defines the change-data-capture mechanic that lets a primary Worker ship deterministic, replayable diffs to each attached backup. Encryption / wire / apply / restore remain Phases 8–11.
+
+- New file **`20-incremental-backup-sync.md` v1.0.0** — two `SyncOp` shapes (inline column vs. `BackupSyncLog` side table), `SyncOp` ref catalog, per-database monotonic `BackupSyncSequence` allocator, `BackupSyncWatermark` per-attached-backup pointer, CODE-RED-compliant diff-generation driver (resume from `LastAcked`, not `LastShipped`), envelope as a SQLite file with two tables (`Envelope`, `EnvelopeRow`), compaction policies for both shapes with the safety rule "reclaim only past `MIN(LastAckedSyncOpSeq)`", linter hooks `DB-SYNCOP-001/002` queued for Phase 12.
+- `14-error-codes.md` — three new Worker codes (`WORKER-910-01..03`, 21092-21094) and one Main code (`MAIN-810-01 BackupCompactionStalled`, 21185). Reserved-range table updated; future-expansion ranges are now `WORKER-21095-21099` and `MAIN-21186-21199`.
+- `16-tunable-constants.md` → **v1.6.0**: §2.11 extended with five new keys — `SyncIntervalSeconds=60`, `MaxRowsPerEnvelope=5000`, `TombstoneRetentionSeconds=604800`, `LogRetentionSeconds=604800`, `QuarantineCompactionOverrideSeconds=86400`.
+
+**Cross-spec impact:**
+
+- App-tier tables that participate in backup mirroring will need either Shape A columns (`SyncOpCode`, `SyncOpSeq`, `SyncOpAt`) or a write-side hook into `BackupSyncLog`. The concrete tracked-table list is a Phase-12 follow-up (seed file + `DB-SYNCOP-001` linter).
+- `KnownBackupNode.LastSyncWatermark` (Phase 6) is reframed as a denormalized view of `BackupSyncWatermark.LastAckedSyncOpSeq` for human dashboards; the authoritative pointer is the new `BackupSyncWatermark` table.
+- ER diagram regen deferred to Phase 12 — Worker ER must show `SyncOp`, `BackupSyncLog`, `BackupSyncWatermark`, `BackupSyncSequence`.
+
+**Open questions still pending:**
+
+- **OQ-A3** — Backup zip password derivation (Phase 8).
+- **OQ-A4** — Snapshot retention policy (Phase 11).
+
+---
+
+## v2.4.0 — 2026-05-06 (Phase 6 — Backup nodes concept)
+
+**Scope:** Per locked decisions D8 / D9 / D10 (CDC referenced; defined in Phase 7). Defines what a backup node is, how it registers (extends `11-worker-bootstrap-protocol.md`), how Main propagates the pairing to both ends, and the three independent enforcement points for the "backups never serve traffic" invariant. Wire format / encryption / endpoints / restore are explicitly deferred to Phases 7–11.
+
+- New file **`19-backup-nodes.md` v1.0.0** — Kubernetes-style replica framing, three-tier relationship model (R1/R2/R3 facts), registration request/response additions, Main-side acceptance procedure (CODE RED ≤15 lines), `KnownBackupNode` Worker App-tier mirror table, defence-in-depth `421 Misdirected Request` rule for the no-traffic invariant.
+- `14-error-codes.md` — new §3.8 "Backup Lifecycle" series: `MAIN-800-01 BackupChainNotAllowed` (21181, 422), `MAIN-800-02 PrimaryNotFound` (21182, 404), `MAIN-800-03 BackupCapacityExceeded` (21183, 409), `MAIN-800-04 TrafficOnBackupRejected` (21184, 421). Reserved-range table updated; future-expansion ranges narrowed to `MAIN-21172-21180` and `MAIN-21185-21199`.
+- `16-tunable-constants.md` → **v1.5.0**: new §2.11 "Backup nodes" with `MainWorker.Backup.MaxBackupsPerPrimary=3`, `MainWorker.Backup.LagWarningSeconds=900`, `MainWorker.Backup.HeartbeatIntervalSeconds=60`.
+- `15-rbac-and-status-seed.md` — `WorkerNodeStatus` seed bumped to v1.5.0; row count 4 → 7. Added `Provisioning` (backup just registered, awaiting first diff), `BackupAttached` (healthy backup), `BackupLagging` (backup lag exceeds tunable). Existing primary-only codes annotated as never-assigned-to-backups.
+
+**Cross-spec impact:**
+
+- `WorkerNode` schema (Phase 4) is the structural enabler — no further DB changes in Phase 6.
+- `KnownBackupNode` is added to the Worker App tier; the cross-tier reconciliation file (`11-…`) does not need a new entry because App-tier additions are local to the Worker.
+- ER diagram regeneration deferred to Phase 12 — Worker ER must show `KnownBackupNode`.
+
+**Open questions still pending:**
+
+- **OQ-A3** — Backup zip password derivation (Phase 8).
+- **OQ-A4** — Snapshot retention policy (Phase 11).
+
+---
+
+## v2.3.0 — 2026-05-06 (Phase 5 — Cascading roles + Role-Access cache bin)
+
+**Scope:** Per locked decisions D11 (cascading = union) and D12 (cache-bin in ER). Adopts default proposals for OQ-A1 (simple union, no inheritance) and OQ-A2 (per-process SQLite `:memory:` storage with TTL + Main-broadcast invalidation) until the user overrides.
+
+- New file **`18-cascading-roles-and-cache-bin.md` v1.0.0** — single source of truth for:
+  - The union rule for users holding multiple roles (bitwise-OR of `CanRead` / `CanWrite` per AccessItem).
+  - Two-tier resolution: catalog stays on Main, per-user resolution + cache live on Worker.
+  - Cache-bin schema (`RoleAccessCache`, `RoleCacheCatalogVersion`) in the Worker's in-memory Cache tier.
+  - Invalidation broadcast `POST /API/V1/Cache/InvalidateRoleAccess` (idempotent on `CatalogVersion`, retry per §2.1, no rollback on delivery failure — TTL bounds staleness).
+  - JWT staleness mitigations: short TTL + `CatalogVersion` stamp + optional `RequireReauthOnCatalogBump`.
+- `16-tunable-constants.md` → **v1.4.0**: new §2.10 "Role-access cache bin" with `MainWorker.RoleCache.TtlSeconds` (600 s default) and `MainWorker.RoleCache.RequireReauthOnCatalogBump` (false default).
+- `14-error-codes.md`:
+  - New §2.10 "Cache Coherence" (Worker): `WORKER-900-01 RoleCacheRecompileFailed` (21090, 500), `WORKER-900-02 EmptyEffectiveAccessSet` (21091, 403).
+  - New §3.7 "Cache Coherence" (Main): `MAIN-700-01 CacheInvalidationDeliveryFailed` (21171, 502).
+  - Reserved sub-range table updated: 21090-21091 marked consumed; 21171 marked consumed; future-expansion ranges narrowed accordingly.
+
+**Cross-spec impact:**
+
+- Worker JWT mint contract gains `CatalogVersion` claim + read/write AccessItem code arrays. `13-jwt-delivery-contract.md` will need a Phase-12 follow-up entry to document the claim shape (added to the Phase-12 punch list).
+- ER diagram regeneration deferred to Phase 12 — Worker ER must show `RoleAccessCache` and `RoleCacheCatalogVersion` (Cache tier, in-memory annotation); Main ER must show the new `RoleAccessInvalidationEvent` audit table once authored in Phase 12.
+
+**Open questions resolved with default proposals (overridable):**
+
+- **OQ-A1** — Cascading semantics → adopted **simple union**.
+- **OQ-A2** — Cache-bin tech → adopted **per-process SQLite `:memory:`** behind a swappable contract.
+
+**Open questions still pending (carried into Phase 8 / Phase 11):**
+
+- **OQ-A3** — Backup zip password derivation pattern.
+- **OQ-A4** — Snapshot retention policy.
+
+---
+
+## v2.2.0 — 2026-05-06 (Phase 4 — WorkerNode backup & ordering, "Region" UI label)
+
+**Scope:** Per locked decisions D6, D7, D8, D9 — give `WorkerNode` the structural fields needed to express the backup-node concept and the deterministic ordering needed by RoundRobin, and rename the user-facing column to "Region" without touching code identifiers.
+
+- `04-main-db-schema.md` → **v2.2.0**:
+  - `WorkerNode` (§2.1) gains `Sequence INTEGER NOT NULL` (RoundRobin order, unique among non-backup peers), `IsBackup INTEGER NOT NULL DEFAULT 0`, `BackupOfWorkerNodeId INTEGER NULL` (self-FK).
+  - CHECK constraints: backup-flag and FK move together (`(IsBackup=0 AND BackupOfWorkerNodeId IS NULL) OR (IsBackup=1 AND BackupOfWorkerNodeId IS NOT NULL)`); backup chains forbidden (referenced row MUST have `IsBackup=0`, enforced by trigger).
+  - New indexes: `IX_WorkerNode_BackupOf` and partial `IX_WorkerNode_PrimaryEligible (WorkerNodeStatusId, Sequence) WHERE IsBackup = 0`.
+- `05-worker-routing.md` → **v1.2.0**: §1.1 RoundRobin walks `Sequence ASC`; §1.4 eligibility filter prefixed with positive guard `IsPrimary(node) → IsBackup = 0`. Manual strategy now rejects backup targets with `WORKER-300-04 BackupNotRoutable`.
+- `14-error-codes.md`: added `WORKER-300-04 / 21033 / BackupNotRoutable` (HTTP 409).
+- `08-role-based-dashboards.md` → **v2.1.0**: new §9 "UI Labels" — `WorkerNode` renders as **"Region"** in dashboards, forms, and audit views via i18n key `worker_node.label`. Code, API, and DB identifiers unchanged.
+
+**Cross-spec impact:**
+
+- Worker bootstrap (`11-worker-bootstrap-protocol.md`) and self-update pointer (`10-self-update-pointer.md`) are unchanged for primary nodes; backup-node registration / pairing flow is deferred to Phase 6 (`17-backup-nodes.md`).
+- ER diagram regeneration deferred to Phase 12 (`diagrams/erd-main-db.mmd`).
+- Cache-bin tables for role resolution and the cascading-roles union semantics remain Phase 5 work.
+
+**Open questions carried into Phase 5:** OQ-A1 (cascading semantics — union vs hierarchy), OQ-A2 (cache-bin tech), OQ-A3 (zip password derivation), OQ-A4 (snapshot retention).
+
+---
+
+## v2.1.0 — 2026-05-06 (Phase 3 — Move Users off Main)
+
+**Scope:** Per locked decision D5, Main becomes credential-blind. All identity, password, and 2FA state moves to the assigned Worker's split-DB App tier. Spec-only; no runtime code touched.
+
+- `04-main-db-schema.md` → **v2.1.0**:
+  - **REMOVED** `User` table and all auth columns (`UserPasswordHash`, `UserPasswordSalt`, `UserTotpSecret`, `UserTotpEnrolledAt`, `UserTotpBackupCodesHash`).
+  - **REMOVED** `UserRole` join table (assignments now live on Worker as `AppUserRole`).
+  - **ADDED** `UserDirectory` (§2.4) — routing-only index `(UserDirectoryId, UserEmail, CompanyId, WorkerNodeId, CreatedAt, LastSeenAt, Description)`. Carries no secrets and no PII beyond email.
+  - `AccessDenialEvent` (§2.6.3): `UserId` FK replaced by `UserDirectoryId` (nullable) + snapshotted `ActorEmail`. `AccessItemId` FK retained (catalog stays on Main).
+  - `EndpointAuthAuditEvent` (§2.6.4): `UpdatedByUserId` FK replaced by `UpdatedByUserDirectoryId` + snapshotted `UpdatedByUserEmail`.
+  - Indexes: `IX_User_CompanyId` removed; new `IX_UserDirectory_CompanyId`, `IX_UserDirectory_WorkerNodeId`, `UX_UserDirectory_UserEmail`. `IX_EndpointAuthAuditEvent_Actor_At` re-pointed to `UpdatedByUserDirectoryId`.
+  - §4 "What Main DB does NOT store" — added explicit invariant that Main carries no password/TOTP/role-assignment material; grep over Main for `password|totp|secret|hash` MUST return zero column hits.
+  - §5 "Migration Notes" — added v2.1.0 forward-only migration script that backfills `UserDirectory`, forwards credentials to each Worker via `MigrateLegacyUsers` bootstrap instruction, and deletes Main `User`/`UserRole` rows only after Worker ACK.
+- `06-auth-and-2fa.md` → **v2.0.0**: Main rewritten as credential-blind reverse proxy. New §2.1 (proxy flow with constant-time email-miss handling and post-forward buffer-zero), §2.2 (Worker mints JWT; `iss` flips to Worker URL), §3 (password storage moved to Worker `AppUser`), §4 (TOTP storage moved to Worker), §5–§6 (sign-up/sign-in flows reframed as Main → `Worker /Auth/InternalSignUp` / `/Auth/InternalSignIn` over the credential-proxy channel). `JwtExpiresAt` example flipped to epoch seconds per Rule 7.1 v2.
+- `12-split-db-tier-reconciliation.md` → **v1.1.0**: Main §4 — `User` and `UserRole` struck through with the v2.1.0 removal note; `UserDirectory` added to Root tier; `Role`, `AccessItem`, `RoleAccessItem` reaffirmed as Settings-tier **catalogs** (kept on Main, mirrored read-only to each Worker). Worker §5 — `AppUser` annotated as authoritative identity store, `AppUserRole` added as the user→role join.
+
+**Cross-spec impact:**
+
+- Any service reading `MainDB.User.*` MUST switch to either (a) `MainDB.UserDirectory` (routing only) or (b) `WorkerDB.AppUser` (credentials, identity).
+- The `/API/V1/Auth/RefreshWorkerToken` endpoint on Main is **deprecated**; React MUST refresh JWTs by calling Worker `/API/V1/Auth/RefreshToken` directly.
+- Audit consumers joining `EndpointAuthAuditEvent` on `User.UserId` MUST switch to `UserDirectory.UserDirectoryId` (or fall back to `UpdatedByUserEmail` for hard-deleted directory rows).
+
+**Open questions carried into Phase 4:** OQ-A1 (cascading semantics — union vs hierarchy), OQ-A2 (cache-bin tech), OQ-A3 (zip password derivation), OQ-A4 (snapshot retention).
+
+---
+
+## v2.0.0 — 2026-05-06 (Phase 2 — DB convention overhaul)
+
+**Scope:** Apply the global DB convention upgrades from `02-spec/04-database-conventions/` v2 to the Main schema. Spec-only; no runtime code touched.
+
+> **Clarification (post-edit):** Naming **Rule 1** is universal and is **not** relaxed by Rule 13 — every PK on every table is still `{TableName}Id` (e.g. `WorkerNodeStatusId`, `RoleId`, `EndpointAuthChangeKindId`, `WorkerSelectionStrategyId`). Rule 13's "simplification" applies **only** to the descriptive columns `Code`, `Label`, and `Description`, which drop the `{Table}` prefix because those columns never travel as FKs. `03-schema-design.md` §6.5 was rewritten to make this explicit, and the `WorkerNodeStatus` / `WorkerNodeKind` example in `04-main-db-schema.md` §2.2 was expanded to show the full PK names rather than a `{TableName}Id` placeholder.
+
+- `04-main-db-schema.md` → **v2.0.0**:
+  - All `*At` columns flipped from `TEXT` (ISO-8601) to `INTEGER` (epoch seconds, UTC) per Naming Rule 7.1 v2: `WorkerNodeRegisteredAt`, `WorkerNodeLastSeenAt`, `CompanyAssignedAt`, `UserCreatedAt`, `UserTotpEnrolledAt`, `AccessDenialEvent.OccurredAt`, `EndpointAuthAuditEvent.OccurredAt`, `WorkerVersionRecordedAt`, `WorkerSelectionEventAt`. (Removes the temporary "TEXT or INTEGER" wording introduced in v1.4.0 on `AccessDenialEvent.OccurredAt`.)
+  - All ref / enum-like tables flattened to canonical `(Id, Code, Label)` per Rule 13: `WorkerNodeStatus`, `WorkerNodeKind`, `Role`, `EndpointAuthChangeKind`, `WorkerSelectionStrategy`. Old `{Table}Code` / `{Table}Label` column names are removed in this spec.
+  - `Company.CompanySlug` → `Company.Slug`; `Company.CompanyName` → `Company.Name`. Unique index updated to `(Slug)`. Seedable-Config inbound-name aliases accepted through v2.1.0 then removed.
+  - Added Phase-3 banner over §2.4 `User`: `User`, `UserRole`, and TOTP columns will move off Main entirely in v2.1.0 (D5).
+- `02-spec/04-database-conventions/03-naming-conventions.md` → **Rule 7.1 rewritten as v2** ("Epoch-INTEGER Timestamp"). Old TEXT/ISO-8601 storage rule deprecated and forbidden for new schemas. Examples table and "Complete Example" code block updated to `INTEGER NOT NULL DEFAULT (unixepoch())`.
+- `02-spec/04-database-conventions/03-schema-design.md` → §6.4 examples updated to epoch defaults; new **§6.5 Rule 13 — Enum / Lookup Table Canonical Shape `(Id, Code, Label)`** with column table, rationale, lookup pattern, and forbidden alternatives. Template row in §5 updated.
+- `02-spec/05-split-db-architecture/02-fundamentals.md` → **v3.4.0**: convention-propagation banner added stating that every tier (Root / Settings / App / Session / Cache / Document) inherits Rule 7.1 v2 + Rule 13.
+
+**Cross-spec impact:** Any consumer reading `WorkerNodeStatusCode` / `RoleCode` / `RoleLabel` / `CompanySlug` / `CompanyName` / ISO-8601 `*At` strings MUST migrate. Suggested migration: `unixepoch(<OldName>)` for backfill, then drop the old columns in the next minor.
+
+Linter status: column renames are structural; existing R2 / R3 waivers in `14-error-codes.md` unaffected.
+
+---
+
+## v1.4.0 — 2026-05-06 (Phase 1 — `EnumPage` → `AccessItem` rename)
+
+**Scope:** Schema + seed + dashboard rename only. No runtime code touched (per memory rule "Spec/19 is SPEC-ONLY").
+
+- `04-main-db-schema.md` → **v1.4.0**: §2.6.1 renamed `EnumPage` → `AccessItem`; columns flattened from `EnumPageId/EnumPageCode/EnumPageLabel/Description` to `AccessItemId/Code/Label/PageUrlSuffix/Description`. New `PageUrlSuffix TEXT NULL` column is the route matcher (suffix match against normalized request path). §2.6.2 renamed `RolePageAccess` → `RoleAccessItem` with FK column `AccessItemId`. §2.6.3 `AccessDenialEvent.EnumPageId` → `AccessItemId`; `OccurredAt` flagged for INTEGER conversion in Phase 2.
+- `15-rbac-and-status-seed.md` → **v2.0.0**: full seed JSON rewritten for `AccessItem` + `RoleAccessItem`. Each AccessItem row carries `Code`, `Label`, `PageUrlSuffix` (e.g. `/admin`, `/billing`, `/regions`). 19 `RoleAccessItem` grant rows now include explicit `CanRead`/`CanWrite`. Verification SQL counts updated.
+- `08-role-based-dashboards.md` → **v2.0.0**: PHP `enum AccessItem` cases shortened to bare codes (`PowerAdmin`, `Admin`, `Billing`, …) — no `Page` suffix. Access-check function renamed `userHasAccessToPage` → `userHasAccessToItem`. Middleware param `$pageCode` → `$accessItemCode`. §4 deduplicated (no longer redefines columns; refers to `03-…` §2.6).
+- **Deprecation contract:** Old names `EnumPage` / `RolePageAccess` accepted as seed-loader aliases through v1.4.x; removal scheduled for v1.5.0.
+- **Cross-spec impact:** None outside `19-…`. Phase 2 will propagate INTEGER DateTime convention which removes the temporary "TEXT or INTEGER" wording on `AccessDenialEvent.OccurredAt`.
+
+Linter status: structural rename only — seed `Tables` block validates against `06-seedable-config-architecture/02-features/07-reference-table-seeding.md`. No error-code changes.
+
+---
+
+## v1.3.0 — 2026-05-05 (FU-18 EndpointAuthLocked error code)
+
+- `14-error-codes.md` → **v1.1.0**: +§3.4 row `MAIN-400-10 EndpointAuthLocked` / flat `21170` / HTTP 403, message "Endpoint pattern matches the lock-list (`/API/V1/Workers/*` or `/API/V1/SelfUpdate`) and cannot be reconfigured via `PATCH /API/V1/Settings/EndpointAuth`." Source: `07-core-api-endpoints.md` §5.4 R-5 + `06-auth-and-2fa.md` §8. Added §1 *Slot-overflow rule* documenting the first allocation that breaks strict `211{YY}` mapping (4xx routing flats `21140-21149` were exhausted by tasks #32 + #39, so the new code took `21170` from the `MAIN-21170-21199` reserved range). §4 reserved-range table refreshed: `21170` marked consumed, residual reserve narrowed to `MAIN-21171-21199` plus a new `MAIN-21162-21169` external-services band.
+- `error-codes.json` → **v1.2.0**: +entry for `MAIN-400-10` with all 8 fields (Code/Flat/Name/HttpStatus/Tier/Message/Source/Retryable=false). `TotalCodes` 48 → 49. `Generated` 2026-05-04 → 2026-05-05.
+- `07-core-api-endpoints.md` §5.4 R-5 + §5.7 cross-refs: dropped "to be catalogued / to be assigned" hedging; both now cite the assigned `MAIN-400-10` / `21170` slot directly. (No version bump — text-only refinement to v1.2.0 of the same file.)
+
+Linter verification (4/4 green): `check-mws-error-codes` (R1-R4 — 52 codes verified, 21 R2 waivers loaded; new code has 2 source references so no waiver needed), `check-spec-cross-links`, `check-spec-folder-refs`, `check-tunable-constants`. Closes FU-18.
+
+---
+
+## v1.2.0 — 2026-05-05 (FU-17 audit-trail wiring)
+
+---
+
+## v1.1.0 — 2026-05-04 (spec hardening; tasks #07–35)
+
+26 spec-hardening tasks executed against the 5-step audit suite (`audit/01..05`). Headline: **all 26 BLOCKERs → 0**, **all 27 MAJORs → 0** (1 deferred to OQ-1), 76 MINORs → small residual. No breaking schema or contract changes; all additions are clarifications or codifications of previously implicit rules.
+
+### Added — new spec files
+
+- `11-worker-bootstrap-protocol.md` (v1.0.0) — 8-step deterministic boot, `/Workers/Register` contract, JWT public-key fetch (no `/jwks` — static URL + cache), version pinning, `WorkerNode` + `WorkerBootstrapState` schemas, 9 `WORKER-*` error codes. Closes audit F-B-01/02/03, F-X-08. Unblocks AC-1, AC-3, AC-4.
+- `12-split-db-tier-reconciliation.md` (v1.0.0) — Pins Main = 3 tiers (Root/Settings/Session), Worker = 4 tiers (Root/Settings/App/Session) per spec/05's 6-tier model. Per-tier table allocation. Closes F-X-01/04, F-D-09. Unblocks AC-2.
+- `13-jwt-delivery-contract.md` (v1.0.0) — Worker JWT pinned to JSON-body + in-memory storage (NOT cookie/localStorage), mandatory CSP, claim contract, 9 CI test cases. Closes F-A-12, F-D-04, F-B-05. Closes AC-4.
+- `14-error-codes.md` (v1.1.0) — 30 codes (22 `WORKER-*` + 8 `MAIN-*`) catalogued with prefixed↔flat mapping; MWS prefix range `21000-21199` registered in `02-spec/03-error-manage/03-error-code-registry/01-registry.md`; `error-codes.json` mirror generated. Closes F-X-08, F-A-21, F-B-08. Unblocks AC-6.
+- `15-rbac-and-status-seed.md` (v1.0.0) — 3 Roles + 9 EnumPages + 19 RolePageAccess + 4 WorkerNodeStatus + 4 AuthMechanism rows; `@Role.Code` logical-key syntax. Closes F-B-09/10, F-X-06. Closes AC-5.
+- `16-tunable-constants.md` (v1.1.0) — 30 numeric tunables (retry, `IdempotencyKeyTtlSeconds=86400`, heartbeat 30s/3-miss, JWT 900s, routing timeouts, rate limits, push-update windows, bootstrap retry, IssuedSkew, SelfUpdate-RedirectStaleHours). `config.seed.json` `MainWorker` category included verbatim. Closes F-A-15, F-A-16, F-B-12, F-M-02/05/08/09, F-N-05. Closes AC-7.
+- `96-linter-audit.md` (v1.0.0) — Linter pipeline reference.
+- `error-codes.json` — Machine-readable mirror of §13.
+
+### Bumped — root spec files
+
+- `03-glossary.md` → **v1.1.0**: +5 entries (Quarantined, Draining, Seedable-Config superset row, apperror package, Power Admin↔PowerAdmin distinction). Closes F-A-36..40.
+- `04-main-db-schema.md` → **v1.2.0**: +`User.UserTotpSecret/UserTotpEnrolledAt/UserTotpBackupCodesHash` (F-A-24/F-B-11); +`EnumPage` (§2.6.1), `RolePageAccess` (§2.6.2), `AccessDenialEvent` (§2.6.3) (F-A-23/F-B-10/F-A-17); +`MainSetting` (F-B-08); +`WorkerSelectionEvent` audit cols (F-B-07).
+- `05-worker-routing.md` → **v1.1.0**: §1.2 LeastLoaded tiebreaker by capacity-headroom (F-M-03); §1.4 HasCapacity guard rejects `0`-magic (F-A-06); §5.1 strategy interfaces (F-A-33); inline tunable literals replaced with §15 citations.
+- `06-auth-and-2fa.md` → **v1.1.0**: §3 bcrypt-cost env pinning (F-A-03), pepper MUST in prod (F-A-04), breach-check MUST when enabled; §4 backup-codes-at-zero policy + `X-Auth-Action: RegenerateBackupCodes` (F-A-05/F-M-06); §5 `PasswordResetRequest` always-202 anti-enumeration (F-M-07); §6 cookie-scope vs JWT-scope paragraph (F-B-12).
+- `07-core-api-endpoints.md` → **v1.1.0**: §3.1 11-row Nullable validation table (F-M-01/F-A-01); §6 rate limits promoted to MANDATORY defaults (F-A-02); §2.5 `/Workers/Register` payload (F-B-02); `/Workers/.../Update` request body (F-B-06).
+- `08-role-based-dashboards.md` → **v1.1.0**: §5 stack-agnostic 3-step access-guard contract above the Laravel example + Express equivalent (F-A-34).
+- `09-error-contract.md` → **v1.1.0**: §2 envelope +`EnvelopeVersion`/`OperationId`/`SubCode`/`FieldErrors` (F-A-12/15/16/28); §3.4 `X-Auth-Action: Reauthenticate` header (F-A-26); §5 `lastResponse` initialized via `makeNullResponse(call)` (F-A-35); §8 ErrorCode→HTTP-status mapping (F-A-31); §9 Worker→Main envelope + 3 new ErrorCodes `WorkerRegisterRejected/WorkerHeartbeatRejected/WorkerPushAckUnknownJid` (F-A-32); §10 audit-closure log.
+- `10-self-update-pointer.md` → **v1.2.0**: bounded sunset (3-way expiry: spec/19 v2.0.0 OR prod-green-14d OR 2026-12-31); §9 deletion checklist (F-A-09); inline tunables replaced with §15 citations.
+- `readme.md`, `02-architecture.md` → **v1.1.0**: bumped for image-import + tunable citations.
+
+### Cross-spec contributions
+
+- `02-spec/03-error-manage/03-error-code-registry/01-registry.md` — Registered MWS prefix `21000-21199`.
+- `02-spec/04-database-conventions/03-naming-conventions.md` — Added Rule 7.1 (ISO-8601 precision: `YYYY-MM-DDTHH:MM:SS.sssZ`, mandatory ms + UTC `Z`). Closes F-N-08.
+- `02-spec/04-database-conventions/07-rest-api-format.md` — Promoted `X-Correlation-Id` / `X-Idempotency-Key` / `X-Auth-Action` to authoritative section. Closes F-X-10, F-A-22.
+- `02-spec/06-seedable-config-architecture/02-features/07-reference-table-seeding.md` (new) — Tables-block seed schema with `UpsertByLogicalKey`/`AppendOnly` strategies, `TableSeedMeta`+`TableSeedChangelog` bookkeeping. Closes top-10 fix #6.
+- `02-spec/14-update/28-worker-push-instruction.md` (new) — JID schema, transport, RenameFirst flow, error codes, worker-side `WorkerUpdateInstruction` table. Closes F-X-14/15/17 (top-10 fix #5). Pins `MaxRetries=3`.
+
+### Diagrams
+
+- All 6 diagrams in `diagrams/` carry banner v1.0.0 **NON-AUTHORITATIVE PROJECTION** with citation to authoritative source(s). `diagrams/readme.md` rewritten with conflict-resolution rule + per-file authority table. Closes F-D-01..F-D-12.
+- `diagrams/erd-main-db.mmd` → banner v1.1.0: synced to schema v1.2.0 (+`EnumPage`, +`AccessDenialEvent`, +User TOTP triple, `RolePageAccess` upgraded to FK with `CanRead`/`CanWrite`).
+
+### Linters
+
+- New: `linter-scripts/check-tunable-constants.py` (T1 presence + waiver, T2 unique keys, T3 §4↔§2 default parity).
+- New: `linter-scripts/check-mws-error-codes.py` (R2 no-orphan).
+- `linter-scripts/run.sh` and `run.ps1` rewrote Step 3 — runs all 15 spec/docs linters with `--skip-linters` / `--linters-only` toggles. Pipeline 15/15 green.
+
+### Audit closure
+
+- `audit/01-completeness-audit.md` — re-triaged in §7 (v1.1.0); **30/30 findings closed** (28 fixed + 1 deferred to OQ-1 + 1 deferred post-v1.0).
+- `audit/04-cross-spec-dependency-audit.md` — anchor sweep verified clean (task #33).
+- `audit/02`, `audit/03`, `audit/05` — partial closure pending re-triage.
+
+### Deferred (post-v1.1.0)
+
+- OQ-1: per-endpoint auth-mechanism overrides (F-M-10) — design awaits user resolution.
+- OQ-15-1 / OQ-15-2: ✅ resolved in task #37 (`16-tunable-constants.md` v1.2.0).
+- `seq-login-routing.mmd` sync for `X-Auth-Action: Reauthenticate` and `X-Auth-Action: RegenerateBackupCodes` signals: ✅ resolved in task #38 (banner v1.1.0).
+- F-N-07: OpenAPI/Swagger artifact generation.
+
+---
+
+## v1.0.0 — 2026-05-04
+
+Initial authoring. Phases 1–4 of the spec roadmap complete.
+
+### Added
+
+- `29-plan.md` — phased roadmap, locked decisions (Q1–Q5), open questions (OQ-1, OQ-2)
+- `readme.md` — purpose, scope, stack flexibility, document map
+- `02-architecture.md` — topology, request lifecycle, comms contract, caching
+- `03-glossary.md` — canonical terms + forbidden-term replacements (`CW configuration` → `Seedable-Config`, `git map` → `gitmap`)
+- `04-main-db-schema.md` — 9 tables (WorkerNode, WorkerNodeStatus/Kind, Company, User, UserRole, Role, WorkerVersion, WorkerSelectionEvent/Strategy)
+- `05-worker-routing.md` — RoundRobin / LeastLoaded / Manual strategies, eligibility filter, caching, failover
+- `06-auth-and-2fa.md` — three auth surfaces (cookie / RS256 JWT / OAuth), Argon2id, TOTP 2FA, OQ-1 flagged
+- `07-core-api-endpoints.md` — full REST surface, payloads, update schedule, settings
+- `08-role-based-dashboards.md` — `EnumPage` pattern, `RolePageAccess`, three default dashboards, `<RequiresAccess>` wrapper
+- `09-error-contract.md` — Main↔Worker envelope, 8-entry failure taxonomy, retry semantics, correlation-ID propagation
+- `10-self-update-pointer.md` — pointer-only doc; defers to `02-spec/14-update/`
+- `97-acceptance-criteria.md` — verbatim AC-1..AC-9 mapped to deliverables
+- `diagrams/erd-main-db.mmd`, `erd-worker-split-db.mmd`, `erd-seedable-config.mmd`
+- `diagrams/seq-company-creation.mmd`, `seq-login-routing.mmd`, `seq-push-update.mmd`
+- `diagrams/readme.md`
+
+### Decisions locked
+
+- Tenant root: **Company-as-root** (multi-tenant; user-as-root is degenerate 1:1).
+- Spec slot: `02-spec/19-main-worker-service/` (slots 19–20 free).
+- Diagrams home: in-spec `diagrams/` subfolder.
+- Error-manage integration: inline contract + reference, no duplication.
+- Default stack: Laravel; spec is stack-agnostic (.NET / Go / Python / WordPress also explicitly supported).
+- Default worker selection: `LeastLoaded`.
+- Worker JWT: RS256, 15-min TTL.
+- Password hash: Argon2id (preferred) / bcrypt cost ≥12.
+
+### Deferred
+
+- Self-update implementation (pointer only; lives in `02-spec/14-update/`).
+- Tenant migration between workers (sketched in `05-worker-routing.md` §4, not v1.0).
+- OQ-1: per-endpoint auth-mechanism overrides — schema sketched in `07-core-api-endpoints.md` §5; final design awaits user resolution.
+
+---
+
+*Changelog v1.1.0 — 2026-05-04*
+
+## v6.18.2 — 2026-08-26 (Add)
+
+**Scope:** Version bump (`6.18.1` → `6.18.2`). Add.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.20.0 — 2026-08-26 (version.json)
+
+**Scope:** Version bump (`6.19.0` → `6.20.0`). version.json.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.19.0 — 2026-08-26 (Markdown)
+
+**Scope:** Version bump (`6.18.2` → `6.19.0`). Markdown.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+### Historical Archive: `02-spec/14-update/24-update-check-mechanism/98-changelog.md`
+
+# Changelog — Update Check Mechanism
+
+> **Parent:** [readme.md](./readme.md)
+
+---
+
+## v1.0.0 — 2026-04-20
+
+**Initial spec.** Defines the non-blocking, parallel, status-script-driven
+update-check mechanism for every CLI in the stack.
+
+### Files added
+
+* `readme.md` — Index, defining properties, resolved decisions
+* `02-fundamentals.md` — V → V+5 parallel discovery algorithm
+* `02-status-script-json.md` — `Status.ps1` / `Status.sh` output schema
+* `03-combined-json.md` — Combined discovery JSON
+* `04-database-schema.md` — `UpdateChecker` + `UpdateStatus` tables
+* `05-update-checker-service.md` — Reusable service contract
+* `06-cli-commands.md` — `update-check` and `do-update`
+* `07-pre-command-hook.md` — Pre/post hooks, interval gate, warning
+* `08-error-handling.md` — Try/catch policy, log file, error column
+* `09-json-fallback-store.md` — JSON storage when no DB exists
+* `97-acceptance-criteria.md` — 34-point acceptance matrix
+* `97-changelog.md` — This file
+* `99-consistency-report.md` — Cross-spec coherence audit
+
+### Decisions resolved (no ambiguity remains)
+
+1. No walking past V+5 — all six probes fire at once.
+2. `do-update` runs unattended; trailing warning is the consent.
+3. JSON fallback path: `~/.<CliName>/data/UpdateChecker.json`.
+4. `--force` flag bypasses the interval gate.
+5. Pre-hook opt-out via `BackgroundUpdateCheckEnabled`.
+6. Newer-repo detection via `repo-v{N+1..N+5}` probes + `NewRepoUrl`.
+7. `--persist` flag removed — both sync and `--async` persist.
+
+---
+
+*Changelog — 2026-04-20*
+
+### Historical Archive: `02-spec/03-error-manage/02-error-architecture/05-response-envelope/03-changelog.md`
+
+# Universal Response Envelope — Changelog
+
+**Version:** 3.2.0
+**Last Updated:** 2026-04-16
+
+All notable milestones in the design, migration, and adoption of the Universal Response Envelope are documented here.
+
+---
+
+## v3.0.0 — 2026-03-09 · Global Version Bump
+
+Project-wide major version increment (+1.0.0) applied to all specification files in `18-error-resolution`.
+
+- All spec files received a major version bump and date update to 2026-03-09.
+- Part of a global effort spanning ~638 files across all 30+ spec folders, establishing a new project-wide versioning baseline.
+
+---
+
+## v2.0.1 — 2026-02-11 · Cross-Check & Consistency Pass
+
+- Fixed `CapturedError` in `02-spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/02-error-handling-reference.md` — removed incorrect top-level `delegatedRequestServer` field; data is accessed via `envelopeErrors.DelegatedRequestServer`.
+- Fixed `CapturedError` in `02-spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference.md` — same correction, added clarifying comment.
+- Fixed `02-spec/error-modal/copy-formats.md` session endpoint reference — corrected to `GET /api/v1/sessions/{id}/diagnostics`.
+- Updated `copy-formats.md` version to 2.0.0.
+- Added `DelegatedRequestServer` interface to `src/lib/api/types.ts` and exported from barrel index.
+- Verified all 7 spec files have consistent field names, types, and JSON key casing (PascalCase for envelope, camelCase for frontend).
+
+## v2.0.0 — 2026-02-11 · Delegated Server Info & Copy Format Samples
+
+- **Added `DelegatedRequestServer` to `Errors` block** — Structured error details from downstream servers (PHP, Chrome extension, or any 3rd-party). Includes `DelegatedEndpoint`, `Method`, `StatusCode`, `RequestBody`, `Response`, `StackTrace`, and `AdditionalMessages`.
+- Updated `envelope.schema.json` with `DelegatedRequestServer` definition (`$defs`).
+- Updated `envelope-error.json` with realistic delegated server error sample (snapshot settings 403).
+- Updated `configurability.md` with `DelegatedRequestServer` presence rules and `includeDelegatedServerInfo` config toggle.
+- **Created `02-spec/error-modal/copy-formats.md`** — Complete samples for all copy/export formats: Full Report (MD), Report with Backend Logs, error.log.txt, backend error.log.txt with delegated server info.
+- Added `SessionId` to error sample `Attributes` block for session ↔ error linkage.
+- **Updated `02-spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/02-error-handling-reference.md`** (v2.0.0) — 3-hop architecture, DelegatedRequestServer injection flow, E8000 error code range.
+- **Updated `02-spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference.md`** (v2.0.0) — DelegatedRequestServer UI rendering in Stack/Request/Traversal tabs.
+- **Updated `02-spec/logging-and-diagnostics/session-based-logging.md`** (v2.0.0) — DelegatedRequestInfo in session data model, session-error linkage, diagnostics API.
+- **Created `02-spec/error-modal/react-components.md`** — Portable React code reference for rebuilding the error modal.
+
+## v1.9.0 — 2026-02-09 · JSON Schema & DRY Refactoring Complete
+
+- **Created `envelope.schema.json` (v1.0.0)** — canonical JSON Schema (Draft 2020-12) as single source of truth for all envelope types across Go, TypeScript, and PHP.
+- Schema covers all 6 top-level blocks with full `$defs`: `Status`, `Attributes`, `Results`, `Navigation`, `Errors`, `MethodsStack` (including `StackFrame`).
+- Added `@schema` / version comments referencing the schema in all three implementations:
+  - Go: `backend/internal/wordpress/envelope.go`
+  - TypeScript: `src/lib/api/types.ts`
+  - PHP: `wp-plugins/riseup-asia-uploader/includes/Helpers/EnvelopeBuilder.php`
+- **Completed all 10 DRY refactoring phases:**
+  1. Go uploader lifecycle method dedup + stdlib usage
+  2. Envelope unwrap helper + PHP stack extraction
+  3. API error diagnostic context dedup
+  4. Error store capture dedup (`buildCapturedError`)
+  5. `api.ts` split into `src/lib/api/` modules
+  6. `useApiQuery` factory hook
+  7. PHP `SnapshotFactory` for snapshot class construction
+  8. PHP logger context consolidation (`prepare_context`)
+  9. `GlobalErrorModal.tsx` decomposition (2,164 → 195 lines, 7 sub-components)
+  10. Cross-stack envelope JSON schema alignment (this entry)
+
+## v1.8.0 — 2026-02-07 · Configurability Rules
+
+- Published configurability rules document in `02-spec/response-envelope/`.
+- Finalised all phases (1–14) of the envelope migration plan.
+
+## v1.7.0 — 2026-02-05 · Pagination & Navigation
+
+- `Navigation` block provides absolute URL strings (`NextPage`, `PrevPage`, `CloserLinks`).
+- Frontend parses URL strings to extract page numbers for seamless pagination controls.
+
+## v1.6.0 — 2026-02-03 · Error Handling & Diagnostics
+
+- MD5-based deduplication for `error.log.txt` (action + siteId + plugin + endpoint + status + body).
+- Configurable stack depth and **Clear Dedup Hashes** endpoint.
+- PHP safe-execution and shutdown handlers for structured error reporting.
+- Settings → Developer tab: toggles for `includeErrors`, `includeStackTrace`, `includeMethodsStack`, `defaultPerPage`.
+
+## v1.5.0 — 2026-02-01 · OpenAPI Alignment
+
+- Migrated 31+ endpoint schemas in `backend/api/openapi.json` to the typed `Results` array pattern.
+- Added `minItems`/`maxItems` constraints for single-item responses.
+- Comprehensive `example` blocks for Status, Attributes, and Results.
+
+## v1.4.0 — 2026-01-30 · Frontend Integration
+
+- Implemented `parseEnvelope<T>()` in `src/lib/api.ts` with auto-detection of PascalCase structure.
+- Global Error Modal extracts **Errors** and **MethodsStack** from the envelope.
+- Added **Traversal** tab for request-chain and method-stack visualisation.
+
+## v1.3.0 — 2026-01-27 · Go Generics — Typed Envelope Parsing
+
+- Introduced `TypedEnvelope[T any]`, `UnwrapResults[T]`, `UnwrapSingleResult[T]` (Go 1.22+).
+- Replaced all `interface{}`-based unwrapping with compile-time type-safe extraction.
+- Concrete struct targets: `UploaderStatus`, `UploaderPluginInfo`, and others.
+
+## v1.2.0 — 2026-01-25 · Go Backend — Dual-Format Compatibility
+
+- Added `backend/internal/wordpress/envelope.go` with `IsEnvelope()`, `ParseEnvelope()`.
+- Runtime auto-detection enables backward compatibility with legacy (flat) WordPress responses.
+
+## v1.1.0 — 2026-01-22 · PHP Envelope Builder
+
+- Introduced `EnvelopeBuilder` class (formerly `RiseupEnvelopeBuilder`) in the WordPress companion plugin (v1.34.0).
+- Fluent API with PHPStan/Psalm `@template T of array` annotations for static analysis.
+- Migrated all PHP endpoints (status, lifecycle, diagnostics) to the builder.
+
+## v1.0.0 — 2026-01-20 · Initial Specification
+
+- Defined the six top-level envelope blocks: **Status**, **Attributes**, **Results**, **Navigation**, **Errors**, **MethodsStack**.
+- Established PascalCase key convention across all stacks.
+- Published reference JSON samples (`envelope-single.json`, `envelope-multiple.json`, `envelope-error.json`, `envelope-debug.json`, `envelope-minimal.json`).
+- Added `02-spec/response-envelope/readme.md` as the canonical specification document.
+
+---
+
+_This changelog is maintained alongside the specification in `02-spec/response-envelope/`._
+
+### Historical Archive: `02-spec/02-coding-guidelines/01-cross-language/98-changelog.md`
+
+# Coding Guidelines — Changelog (AI Execution Prompt)
+
+> **/goal** Maintain an immutable, sequential audit trail of all cross-language architectural revisions, guideline refactorings, and rule additions across 02-spec/02-coding-guidelines/01-cross-language/.
+> **/learn** Adhere to Keep-a-Changelog SemVer conventions, document structural migrations across subfolders, and verify all cross-language rule cross-references.
+
+**Version:** 3.2.0
+**Last Updated:** 2026-04-16
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Ambiguity:** None
+
+---
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Record every cross-language rule addition, split, or modification under the appropriate SemVer release header.
+- [ ] `/learn` Ensure deduplicated rules (e.g. enum specifications in 06-ai-optimization/) maintain canonical cross-references.
+- [ ] `/goal` Enforce strict relative git paths for all referenced spec files (e.g., `02-spec/02-coding-guidelines/...`).
+- [ ] `/learn` Verify zero syntax or spacing violations via `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only`.
+
+. **CRITICAL AI INSTRUCTION:** This changelog is an active AI execution record. Any updates to cross-language guidelines must be logged here before concluding the task.
+
+---
+
+All notable changes to the Coding Guidelines specification are documented here.
+
+---
+
+## v3.2.0 — 2026-03-31
+
+### Structural Improvements
+
+#### Changed
+
+- `02-boolean-principles.md` split into subfolder (5 files, max 262 lines)
+- `15-master-coding-guidelines.md` split into subfolder (7 files, max 277 lines)
+- Deduplicated enum rules — `06-ai-optimization/05-enum-naming-quick-reference.md` is now the single cross-language enum source
+- Fixed 229 spacing violations in code examples (R4, R5, R10 rules)
+- Fixed all broken anchor links across 48 files
+- Updated cross-references to point to new subfolder locations
+
+---
+
+## v3.0.0 — 2026-03-31
+
+### Phase 4 Rules Added to Master Guidelines
+
+#### Changed
+
+- `15-master-coding-guidelines/readme.md` bumped to **v2.0.0**
+- Added 7 new sections (§14–§20): Lazy Evaluation, Regex Usage, Code Mutation Avoidance, Null Pointer Safety, Nesting Resolution, Newline Styling, Defer Rules (Go)
+- Expanded Quick Checklist with 7 new items covering mutation, regex, lazy eval, defer, nesting, newlines, null safety
+- Added cross-references to Phase 4 spec files (16–21) in "How to Use" section
+
+---
+
+## v2.1.0 — 2026-03-11
+
+### Added
+
+- `14-test-naming-and-03-structure.md` — New spec covering test file naming, three-part test function naming convention, table-driven test rules, test helper placement, AAA pattern, test isolation, and integration test boundaries. Applies to Go, TypeScript, and PHP.
+
+---
+
+## v2.0.0 — 2026-03-09
+
+### Global Version Bump
+
+Project-wide major version increment (+1.0.0) applied to all specification files in `03-coding-guidelines/01-cross-language`.
+
+#### Changed
+
+- All spec files received a major version bump and date update to 2026-03-09.
+- Part of a global effort spanning ~638 files across all 30+ spec folders, establishing a new project-wide versioning baseline.
+
+---
+
+*Keep this file updated when specs change.*
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/01-cross-language/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-LOG-CROSS: Cross-Language Changelog Conformance
+
+**Given** The cross-language changelog file in `02-spec/02-coding-guidelines/01-cross-language/98-changelog.md`.
+**When** Audited by repository linters and guideline autofixers.
+**Then** The file strictly adheres to the 4-part prompt anatomy, maintains an unbroken sequential SemVer audit trail, features 100% valid relative links, and passes linter checks with exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only
+```
+**Expected:** exit 0. Zero violations detected.
+
+### Historical Archive: `02-spec/02-coding-guidelines/02-typescript/98-changelog.md`
+
+# TypeScript Standards — Changelog (AI Execution Prompt)
+
+> **/goal** Record all architectural improvements, strict typing mandates, async patterns, and code hygiene updates across TypeScript coding guidelines.
+> **/learn** Internalize TypeScript CODE RED rules (such as Promise.all() for independent async operations) and ensure all type-safety revisions are documented.
+
+**Version:** 3.2.0
+**Last Updated:** 2026-04-16
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Ambiguity:** None
+
+---
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Document any additions or updates to TypeScript strict typing, enum conventions, and async guidelines.
+- [ ] `/learn` Maintain explicit references to CODE RED async patterns (`Promise.all()`) and interface encapsulation rules.
+- [ ] `/goal` Ensure all specification file paths use strict relative repository paths.
+- [ ] `/learn` Audit formatting and boolean conventions using `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/02-typescript --check-only`.
+
+. **CRITICAL AI INSTRUCTION:** Active AI execution record for TypeScript standards. Modifications to TypeScript guidelines must be recorded here.
+
+---
+
+All notable changes to the TypeScript Standards specification are documented here.
+
+---
+
+## v2.1.0 — 2026-03-31
+
+### Added
+
+- `09-promise-await-patterns.md` — 🔴 CODE RED rule: `Promise.all()` mandatory for independent async calls. Sequential `await` on independent promises is automatic PR rejection.
+- Promise.all rule added to AI quick-reference checklist, condensed master guidelines, and TypeScript consistency report
+
+---
+
+## v2.0.0 — 2026-03-09
+
+### Global Version Bump
+
+Project-wide major version increment (+1.0.0) applied to all specification files in `03-coding-guidelines/02-typescript`.
+
+#### Changed
+
+- All spec files received a major version bump and date update to 2026-03-09.
+- Part of a global effort spanning ~638 files across all 30+ spec folders, establishing a new project-wide versioning baseline.
+
+---
+
+*Keep this file updated when specs change.*
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/02-typescript/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-LOG-TS: TypeScript Standards Changelog Conformance
+
+**Given** The TypeScript standards changelog file in `02-spec/02-coding-guidelines/02-typescript/98-changelog.md`.
+**When** Audited by repository linters and guideline autofixers.
+**Then** The file strictly adheres to the 4-part prompt anatomy, preserves all historical TypeScript version releases, references valid relative specification paths, and passes linter checks with exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/02-typescript --check-only
+```
+**Expected:** exit 0. Zero violations detected.
+
+### Historical Archive: `02-spec/02-coding-guidelines/03-golang/98-changelog.md`
+
+# Golang Standards — Changelog (AI Execution Prompt)
+
+> **/goal** Track version revisions, package standards, integer enum specifications, and error handling updates across Golang coding guidelines.
+> **/learn** Internalize Go-specific requirements: *appfault.AppError return types, zero bare void returns, integer-backed enums with PascalCase serialization, and parameter structs.
+
+**Version:** 3.2.0
+**Last Updated:** 2026-04-16
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Ambiguity:** None
+
+---
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Log all Go standard updates, including integer enum rules, appfault error conventions, and struct sizing rules.
+- [ ] `/learn` Ensure retrospective references point to valid relative paths (e.g. `02-spec/03-error-manage/...`).
+- [ ] `/goal` Enforce proper SemVer numbering and ISO date formats on all new changelog sections.
+- [ ] `/learn` Audit formatting with `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/03-golang --check-only`.
+
+. **CRITICAL AI INSTRUCTION:** Active AI execution record for Go standards. Log all changes to Go specifications here.
+
+---
+
+All notable changes to the Golang Standards specification are documented here.
+
+---
+
+## v2.2.0 — 2026-09-01
+
+### Added — Integer-Backed Enums & PascalCase Serialization Standard
+
+- Enforced integer underlying types (`byte`, `uint16`, `uint32`) for all Go enums.
+- Mandated PascalCase string outputs (`"Info"`, `"Warn"`, `"Error"`, `"Critical"`, `"Fatal"`) via `String()` and custom JSON/YAML marshaling (`MarshalJSON()`, `UnmarshalJSON()`).
+- Documented in retrospective `02-spec/03-error-manage/01-error-resolution/03-retrospectives/07-golang-integer-enums-and-pascal-serialization.md`.
+
+---
+
+## v2.1.0 — 2026-03-31
+
+### Changed
+
+- `04-golang-standards-reference.md` split into subfolder (6 files, max 362 lines — down from 1,280)
+- Deduplicated enum content in `05-enums-and-dry.md` — now links to `01-enum-specification/` as canonical source
+- Fixed spacing violations in code examples
+
+---
+
+## v2.0.0 — 2026-03-09
+
+### Global Version Bump
+
+Project-wide major version increment (+1.0.0) applied to all specification files in `03-coding-guidelines/03-golang`.
+
+#### Changed
+
+- All spec files received a major version bump and date update to 2026-03-09.
+- Part of a global effort spanning ~638 files across all 30+ spec folders, establishing a new project-wide versioning baseline.
+
+---
+
+*Keep this file updated when specs change.*
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/03-golang/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-LOG-GO: Golang Standards Changelog Conformance
+
+**Given** The Golang standards changelog file in `02-spec/02-coding-guidelines/03-golang/98-changelog.md`.
+**When** Audited by repository linters and guideline autofixers.
+**Then** The file strictly adheres to the 4-part prompt anatomy, maintains an immutable record of Go error handling, enum, and package standards, and passes linter checks with exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/03-golang --check-only
+```
+**Expected:** exit 0. Zero violations detected.
+
+### Historical Archive: `02-spec/02-coding-guidelines/04-php/98-changelog.md`
+
+# PHP Standards — Changelog (AI Execution Prompt)
+
+> **/goal** Record all architectural revisions, strict typing standards, and static analysis integrations across PHP coding guidelines.
+> **/learn** Internalize modern PHP standards: strict types (`declare(strict_types=1)`), typed properties, enum standards, and spacing requirements.
+
+**Version:** 3.2.0
+**Last Updated:** 2026-04-16
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Ambiguity:** None
+
+---
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Document updates to PHP coding guidelines, decomposition of reference specs, and code example fixes.
+- [ ] `/learn` Ensure all relative links to PHP subfolders (`07-php-standards-reference/`) resolve correctly.
+- [ ] `/goal` Verify new version entries conform to project-wide SemVer conventions.
+- [ ] `/learn` Audit formatting with `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only`.
+
+. **CRITICAL AI INSTRUCTION:** Active AI execution record for PHP standards. Log all revisions to PHP guidelines here.
+
+---
+
+All notable changes to the PHP Standards specification are documented here.
+
+---
+
+## v2.1.0 — 2026-03-31
+
+### Changed
+
+- `07-php-standards-reference.md` split into subfolder (5 files, max 252 lines — down from 840)
+- Fixed spacing violations in code examples
+
+---
+
+## v2.0.0 — 2026-03-09
+
+### Global Version Bump
+
+Project-wide major version increment (+1.0.0) applied to all specification files in `03-coding-guidelines/04-php`.
+
+#### Changed
+
+- All spec files received a major version bump and date update to 2026-03-09.
+- Part of a global effort spanning ~638 files across all 30+ spec folders, establishing a new project-wide versioning baseline.
+
+---
+
+*Keep this file updated when specs change.*
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/04-php/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-LOG-PHP: PHP Standards Changelog Conformance
+
+**Given** The PHP standards changelog file in `02-spec/02-coding-guidelines/04-php/98-changelog.md`.
+**When** Audited by repository linters and guideline autofixers.
+**Then** The file strictly adheres to the 4-part prompt anatomy, accurately logs PHP strict typing, backed enum, and PSR-4 revisions, and passes linter checks with exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only
+```
+**Expected:** exit 0. Zero violations detected.
+
+### Historical Archive: `02-spec/02-coding-guidelines/05-rust/98-changelog.md`
+
+# Changelog: Rust Standards (AI Execution Prompt)
+
+> **/goal** Maintain a precise audit trail of memory safety rules, async patterns, Clippy linter standards, and error handling updates across Rust guidelines.
+> **/learn** Master Rust-specific conventions: Result/Option idiomatic returns, ownership/borrowing rules, affirmative boolean flags, and Clippy pedantic compliance.
+
+**Version:** 3.2.0
+**Last Updated:** 2026-04-16
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Ambiguity:** None
+
+---
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Record updates to Rust guidelines, AI confidence scoring, and Clippy integration rules.
+- [ ] `/learn` Ensure version numbers match root Rust standards and maintain consistent bracketed SemVer formatting (`## [X.Y.Z] — YYYY-MM-DD`).
+- [ ] `/goal` Verify all cross-references to adjacent Rust specs are valid relative paths.
+- [ ] `/learn` Audit formatting with `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only`.
+
+. **CRITICAL AI INSTRUCTION:** Active AI execution record for Rust standards. Document all updates to Rust guidelines here.
+
+---
+
+## [1.1.0] — 2026-03-30
+
+- Added AI Confidence and Ambiguity scores to overview
+- Added Keywords and Scoring table
+
+## [1.0.0] — 2026-03-09
+
+- Initial Rust standards: naming, error handling, async, memory safety, testing, FFI
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/05-rust/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-LOG-RUST: Rust Standards Changelog Conformance
+
+**Given** The Rust standards changelog file in `02-spec/02-coding-guidelines/05-rust/98-changelog.md`.
+**When** Audited by repository linters and guideline autofixers.
+**Then** The file strictly adheres to the 4-part prompt anatomy, maintains an accurate log of memory safety, async, and Clippy rule updates, and passes linter checks with exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only
+```
+**Expected:** exit 0. Zero violations detected.
+
+### Historical Archive: `02-spec/02-coding-guidelines/07-csharp/98-changelog.md`
+
+# C# Coding Standards — Changelog (AI Execution Prompt)
+
+> **/goal** Maintain an immutable record of C# language standards, nullable reference type rules, async patterns, and StyleCop linter enforcement.
+> **/learn** Master C# conventions: PascalCase methods, `I` prefix interfaces, boolean flag splitting, record types for DTOs, and pattern matching.
+
+**Version:** 3.2.0
+**Last Updated:** 2026-04-16
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Ambiguity:** None
+
+---
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Document all additions to C# coding standards, cross-language integrations, and StyleCop analyzer rules.
+- [ ] `/learn` Verify cross-references to cross-language guidelines (`01-cross-language/24-`, `25-`) and AI checklists remain valid relative paths.
+- [ ] `/goal` Ensure bracketed SemVer formatting (`## [X.Y.Z] — YYYY-MM-DD`) is strictly maintained.
+- [ ] `/learn` Audit formatting with `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only`.
+
+. **CRITICAL AI INSTRUCTION:** Active AI execution record for C# standards. Document all updates to C# guidelines here.
+
+---
+
+## [1.0.0] — 2026-04-02
+
+### Added
+
+- `readme.md` — C# coding standards overview with cross-references
+- `01-naming-and-conventions.md` — PascalCase methods, `I` prefix interfaces, abbreviation casing, boolean naming
+- `02-method-design.md` — Boolean flag splitting, function size limits, async patterns, LINQ usage
+- `03-error-handling.md` — Specific exception catching, guard clauses, nullable reference types
+- `04-type-safety.md` — Generics over object, pattern matching, records for DTOs, no magic strings
+- `97-acceptance-criteria.md` — 30+ testable checks across 7 acceptance categories
+- `99-consistency-report.md` — Initial health report (A+)
+
+### Cross-Language Integration
+
+- Added C# examples to `01-cross-language/24-boolean-flag-methods.md`
+- Added C# examples to `01-cross-language/25-generic-return-types.md`
+- Added 6 C#-specific checks to `06-ai-optimization/02-ai-quick-reference-checklist.md`
+- Added C# column to README key standards table
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/07-csharp/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-LOG-CS: C# Standards Changelog Conformance
+
+**Given** The C# standards changelog file in `02-spec/02-coding-guidelines/07-csharp/98-changelog.md`.
+**When** Audited by repository linters and guideline autofixers.
+**Then** The file strictly adheres to the 4-part prompt anatomy, preserves C# StyleCop, async, and nullable reference type release notes, and passes linter checks with exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only
+```
+**Expected:** exit 0. Zero violations detected.
+
+### Historical Archive: `02-spec/02-coding-guidelines/01-cross-language/16-static-analysis/98-changelog.md`
+
+# Changelog: Static Analysis & Linter Enforcement (AI Execution Prompt)
+
+> **/goal** Track version revisions, rule matrices, and CI quality gate additions for static analysis and linter enforcement specifications.
+> **/learn** Understand SonarQube rule mappings (S1126, S4144) across 8 supported languages, and ensure CI pipeline templates stay synchronized with guideline standards.
+
+**Version:** 1.2.0
+**Last Updated:** 2026-04-01
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Ambiguity:** None
+
+---
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Log updates to multi-language static analysis configurations and SonarQube rule matrices.
+- [ ] `/learn` Verify all referenced linter specs (golangci-lint, phpcs/phpstan, stylecop, clippy, ruff, eslint) maintain active relative links.
+- [ ] `/goal` Confirm new entries follow the standard bracketed SemVer format (`## [X.Y.Z] — YYYY-MM-DD`).
+- [ ] `/learn` Audit formatting with `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language/16-static-analysis --check-only`.
+
+. **CRITICAL AI INSTRUCTION:** This changelog tracks static analysis enforcement standards. Changes to linter rules or pipelines must be recorded here.
+
+---
+
+All notable changes to the `16-static-analysis/` subfolder.
+
+---
+
+## [1.2.0] — 2026-04-01
+
+### Added
+
+- `10-cross-language-rule-matrix.md` — side-by-side SonarQube rule mapping across all 8 languages
+- `97-acceptance-criteria.md` — acceptance criteria for the subfolder
+- `98-changelog.md` — this file
+
+## [1.1.0] — 2026-04-01
+
+### Added
+
+- `09-ci-pipeline-quality-gate.md` — unified CI pipeline spec with GitHub Actions and GitLab CI templates
+- `99-consistency-report.md` — initial consistency report
+
+### Changed
+
+- All 8 language specs bumped to v1.1.0 — standardized Keywords/Scoring sections, integration checklist format, and added missing SonarQube rules (S1126, S4144)
+- `readme.md` bumped to v1.1.0 — added CI pipeline to inventory
+
+## [1.0.0] — 2026-03-31
+
+### Added
+
+- `readme.md` — subfolder overview with document inventory and rule mapping table
+- `02-go-golangci-lint.md` — Go static analysis spec
+- `03-php-phpcs-phpstan.md` — PHP static analysis spec
+- `04-csharp-stylecop.md` — C# static analysis spec
+- `05-rust-clippy.md` — Rust static analysis spec
+- `06-vb-dotnet-analyzers.md` — VB.NET static analysis spec
+- `07-nodejs-eslint.md` — Node.js static analysis spec
+- `08-python-ruff.md` — Python static analysis spec
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/01-cross-language/16-static-analysis/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-LOG-STATIC: Static Analysis Changelog Conformance
+
+**Given** The static analysis changelog file in `02-spec/02-coding-guidelines/01-cross-language/16-static-analysis/98-changelog.md`.
+**When** Audited by repository linters and guideline autofixers.
+**Then** The file strictly adheres to the 4-part prompt anatomy, records multi-language linter and SonarQube rule version histories, contains zero absolute filesystem paths, and passes linter checks with exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language/16-static-analysis --check-only
+```
+**Expected:** exit 0. Zero violations detected.

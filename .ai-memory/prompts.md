@@ -176,8 +176,13 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `20-ai-fix-script-prompts` | [`20-ai-fix-script-prompts/01-python-file-manipulator.md`](../01-prompts/20-ai-fix-script-prompts/01-python-file-manipulator.md) | Python File Manipulator CLI Specification — Tooling Spec (must follow) |
 | `21-temp-end-to-end-tests` | [`21-temp-end-to-end-tests/01-temp-end-to-end-test.md`](../01-prompts/21-temp-end-to-end-tests/01-temp-end-to-end-test.md) | Temporary End-to-End Tests & Isolated On-Demand Validation — Workflow (must follow) |
 | `22-letterly` | [`22-letterly/01-mobile.md`](../01-prompts/22-letterly/01-mobile.md) | Mobile Mode |
-| `22-letterly` | [`22-letterly/02-desktop.md`](../01-prompts/22-letterly/02-desktop.md) | Desktop |
+| `22-letterly` | [`22-letterly/02-desktop.md`](../01-prompts/22-letterly/02-desktop.md) | Desktop Mode — Letterly Prompt Formatter |
 | `22-letterly` | [`22-letterly/03-execute-n-steps.md`](../01-prompts/22-letterly/03-execute-n-steps.md) | Execute N Steps |
+| `22-letterly` | [`22-letterly/04-plan.md`](../01-prompts/22-letterly/04-plan.md) | Plan Mode — Letterly Prompt Formatter |
+| `22-letterly` | [`22-letterly/05-release.md`](../01-prompts/22-letterly/05-release.md) | Release Mode — Letterly Prompt Formatter |
+| `22-letterly` | [`22-letterly/06-cicd-fix-release.md`](../01-prompts/22-letterly/06-cicd-fix-release.md) | CI/CD Fix & Release Mode — Letterly Prompt Formatter |
+| `22-letterly` | [`22-letterly/07-mobile-cicd-fix.md`](../01-prompts/22-letterly/07-mobile-cicd-fix.md) | Mobile CI/CD Fix Mode — Letterly Prompt Formatter |
+| `22-letterly` | [`22-letterly/readme.md`](../01-prompts/22-letterly/readme.md) | Letterly Prompt Formatters (`22-letterly`) |
 | `23-sync` | [`23-sync/01-sync-other-codebase.md`](../01-prompts/23-sync/01-sync-other-codebase.md) | [V6] Multi-Repository Synchronization & Downstream Codebase Mirroring — Workflow (must follow) |
 | `23-sync` | [`23-sync/readme.md`](../01-prompts/23-sync/readme.md) | Multi-Repository Synchronization Prompts (`23-sync`) — Index & Catalog |
 | `.` | [`readme.md`](../01-prompts/readme.md) | Prompt Architect: Canonical AI Prompts Library |
