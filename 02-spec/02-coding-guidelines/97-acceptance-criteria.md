@@ -29,6 +29,7 @@ Consolidated master registry index of testable criteria across all guideline cat
 
 | # | Criterion | Category | Source | Verification Command |
 |---|-----------|----------|--------|----------------------|
+| AC-CG-ROOT-001 | Coding Guideline Authoring Standard Conformance | Specification Standard | [`01-specification-and-coding-guideline-standard.md`](./01-specification-and-coding-guideline-standard.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --check-only` |
 | AC-CG-ROOT-002 | Canonical Size Tier Enforcement (Function <= 15 lines, File <= 300 lines) | Code Style | [`02-canonical-size-tier.md`](./02-canonical-size-tier.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --check-only` |
 | AC-CG-ROOT-003 | Core Coding Style and Parameter Rules (Max 3 params, option structs, UTF-8 LF) | Code Style | [`03-coding-style-checklist.md`](./03-coding-style-checklist.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --check-only` |
 | AC-CG-ROOT-004 | Condensed Review Guide Rules (Zero nesting, no positive/negative mix) | Code Style | [`04-consolidated-review-guide-condensed.md`](./04-consolidated-review-guide-condensed.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --check-only` |
@@ -257,6 +258,7 @@ See [`13-cpp/97-acceptance-criteria.md`](./13-cpp/97-acceptance-criteria.md) for
 ## Cross-References
 
 - [Coding Guidelines Overview](./readme.md)
+- [Coding Guideline Authoring Standard](./01-specification-and-coding-guideline-standard.md)
 - [Cross-Language Standards](./01-cross-language/readme.md)
 - [Cross-Language Acceptance Criteria Registry](./01-cross-language/97-acceptance-criteria.md)
 - [TypeScript Standards](./02-typescript/readme.md)
