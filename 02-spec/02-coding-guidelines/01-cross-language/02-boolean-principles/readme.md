@@ -48,14 +48,13 @@ Previously a single 858-line file, now split into focused modules under 300 line
 
 | # | File | Purpose | Lines |
 |---|------|---------|-------|
-| — | [01-naming-prefixes.md](./02-naming-prefixes.md) | P1: is/has prefixes, P2: no negative words | 134 |
+| — | [02-naming-prefixes.md](./02-naming-prefixes.md) | P1: is/has prefixes, P2: no negative words | 134 |
 | — | [02-guards-and-extraction.md](./03-guards-and-extraction.md) | P3: named guards, P4: extract complex expressions | 205 |
 | — | [03-parameters-and-conditions.md](./04-parameters-and-conditions.md) | P5: explicit params, P6: no mixed booleans, P7: no inline statements, P8: no raw system calls, P9: no explicit true checks | 262 |
 | — | [04-quick-reference.md](./05-quick-reference.md) | Quick reference table, common mistakes | 155 |
 | — | [05-exemptions-and-api.md](./06-exemptions-and-api.md) | Static factory exemption, Result wrapper API | 139 |
 | — | 99-consistency-report.md | — | — |
 
-| — | 99-consistency-report.md | — | — |
 ---
 
 ## Database ↔ Code Inverse Pattern (Rule 9)

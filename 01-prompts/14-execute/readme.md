@@ -31,6 +31,7 @@ The canonical orchestrator is [`02-execute-parent-task-with-n-steps.md`](02-exec
 | [`07-execute-batched-loop-v2.md`](07-execute-batched-loop-v2.md) | V4 | Batched Loop V2 | Streamlined batched loop execution engine. |
 | [`09-parent-task-in-below-steps.md`](09-parent-task-in-below-steps.md) | V4 | Below-Steps Execution | Follows high-priority instructions appended below the prompt separator. |
 | [`13-execute-parent-task-with-n-steps-v6.md`](13-execute-parent-task-with-n-steps-v6.md) | V6 | Reference Implementation | Canonical V6 reference specification and template. |
+| [`14-run.md`](14-run.md) | V6 | Run Script Orchestration | Autonomous execution of run.ps1 / run.sh with GitMap or local-install fallback. |
 
 ---
 
@@ -46,6 +47,7 @@ The canonical orchestrator is [`02-execute-parent-task-with-n-steps.md`](02-exec
 ├── 07-execute-batched-loop-v2.md
 ├── 09-parent-task-in-below-steps.md
 ├── 13-execute-parent-task-with-n-steps-v6.md
+├── 14-run.md
 └── readme.md
 
 Archived:

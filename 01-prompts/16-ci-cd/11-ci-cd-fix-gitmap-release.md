@@ -1,4 +1,4 @@
-# Autonomous CI/CD Pipeline Healing & Minor Release Loop via GitMap (`ci-cd-fix-gitmap`)
+# Autonomous CI/CD Pipeline Healing & Minor Release Loop via GitMap (`ci-cd-fix-gitmap-release`)
 
 ```text
 N = 300 (Total self-loop steps budget — editable top-header parameter, default: 300)
@@ -8,21 +8,21 @@ C = 30  (Tool calls per worker before it must report, default: 30)
 
 System Concurrency Capacity = A × H = 2 agents × 2 hands = 4 concurrent subtask operations
 PHASE_1_BUDGET = N / 2   (Steps 1 .. 150: Telemetry Inspection, 4-Part RCA, and Remediation Planning)
-PHASE_2_BUDGET = N / 2   (Steps 151 .. 300: Surgical Fixes, Minor Version Release, and Continuous Verification Loop)
+PHASE_2_BUDGET = N / 2   (Steps 151 .. 300: Surgical Fixes, Minor Version Release Ceremony, and Continuous Verification Loop)
 WAVES = ceil(subtasks / (A x H))
 ```
 
 > [!IMPORTANT]
 > Prompt Version: 6.0.0
 > Runtime: Google Antigravity 2.0 (IDE and CLI)
-> Invoke: /ci-cd-fix-gitmap <task>
+> Invoke: /ci-cd-fix-gitmap-release <task>
 >
 > **Top-Instruction Priority Mandate (Above Precedence / Preamble Precedence):**
 > Whatever directives, constraints, checklists, or user instructions are given ABOVE this prompt (including in the user preamble, header blocks, or incoming user request above) are HIGHEST PRIORITY and MUST BE FOLLOWED as strictly NON-NEGOTIABLE. They supersede and strictly override any conflicting general advice, default conventions, or lower-level guidelines below.
 
-[/goal](slashCommand;goal) Autonomously monitor, diagnose, and resolve all CI/CD pipeline failures across the repository using GitMap live telemetry (`gitmap pe -t`): FIRST showcase and list out the given task in visible chat during Turn 1, capture it verbatim, plan it in the repo, extract failing pipeline logs, perform grounded 4-part Root Cause Analysis (RCA), apply surgical code fixes without disabling CI or deleting tests, verify locally with targeted linters, commit with `gitmap cpf "<module> - <summary>"`, execute a minor version bump using the minor bump script (`python 03-ai-scripts/37-bump-version.py -t minor`), tag and push, and continuously loop until all CI/CD workflows are completely green.
+[/goal](slashCommand;goal) Autonomously monitor, diagnose, and resolve all CI/CD pipeline failures across the repository using GitMap live telemetry (`gitmap pe -t`): FIRST showcase and list out the given task in visible chat during Turn 1, capture it verbatim, plan it in the repo, extract failing pipeline logs, perform grounded 4-part Root Cause Analysis (RCA), apply surgical code fixes without disabling CI or deleting tests, verify locally with targeted linters, commit with `gitmap cpf "<module> - <summary>"`, execute a minor version bump using the minor bump script (`python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"`), tag release and push to remote tracking branch, and continuously loop until all CI/CD workflows are completely green.
 
-[/learn](slashCommand;learn) Master the GitMap pipeline self-healing protocol: run `gitmap pe -t` to watch workflow runs with dynamic ETA timeline. Extract exact failing lines from `gitmap pe`. NEVER disable CI/CD checks, never comment out validation steps (R1), and always enforce zero-storage Actions rules. Each rule is stated once (R1 to R16) and cited by ID.
+[/learn](slashCommand;learn) Master the GitMap pipeline self-healing protocol: run `gitmap pe -t` to watch workflow runs with dynamic ETA timeline. Extract exact failing lines from `gitmap pe`. NEVER disable CI/CD checks, never comment out validation steps (R1), and always enforce zero-storage Actions rules. Each rule is stated once (R1 to R16) and cited by ID. If needed, request assistance or follow companion release skills: [ci-cd-fix-with-release](file;.agents/skills/ci-cd-fix-with-release) or [minor-bump](file;.agents/skills/minor-bump).
 
 [/plan](slashCommand;plan) Execute thorough step-by-step root cause analysis in the repository before touching code. Formulate a 4-part RCA document in `.ai-memory/cicd-issues/` before dispatching worker waves to apply code repairs.
 
@@ -41,13 +41,13 @@ WAVES = ceil(subtasks / (A x H))
 
 Before executing the tasks below, check if this prompt is already installed as a native Antigravity Skill.
 
-1. If `.agents/skills/ci-cd-fix-gitmap/skill.md` does not exist in the workspace, create it now.
+1. If `.agents/skills/ci-cd-fix-gitmap-release/skill.md` does not exist in the workspace, create it now.
 2. Extract the core instructions of this prompt and save it into that `skill.md` using standard YAML frontmatter.
 3. Once installed, rely on progressive disclosure for future runs.
 
 ---
 
-## The Continuous Self-Healing Pipeline Loop (Steps 1 .. N)
+## The Continuous Self-Healing & Release Loop (Steps 1 .. N)
 
 Execute this workflow in a continuous self-loop until all CI/CD checks pass:
 
@@ -76,12 +76,13 @@ For every detected failure, document a 4-part RCA under `.ai-memory/cicd-issues/
 2. Never run heavy full build or full test suites (R1).
 
 ### Step 5: Minor Version Bump & Release Ceremony
-1. Perform minor version bump:
+1. Perform minor version bump using the repository's standard script:
    `python 03-ai-scripts/37-bump-version.py -t minor -s "<summary of fixes>"`
-2. Verify manifests (`package.json`, `version.json`, `readme.md`, `changelog.md`) are updated.
-3. Commit atomically via GitMap:
+2. If the user commands a release branch workflow, create and checkout `release/vX.Y.Z`.
+3. Verify manifests (`package.json`, `version.json`, `readme.md`, `changelog.md`) are updated.
+4. Commit atomically via GitMap:
    `gitmap cpf "<module> - fix CI/CD and release minor version"`
-4. Tag release version (`git tag -a vX.Y.Z -m "..."`) and push to origin (`git push origin vX.Y.Z`).
+5. Tag release version (`git tag -a vX.Y.Z -m "Release vX.Y.Z"`) and push (`git push origin vX.Y.Z`).
 
 ### Step 6: Loop & Verify
 1. Immediately re-run `gitmap pe -t` to watch the newly triggered CI/CD run.
@@ -96,3 +97,4 @@ For every detected failure, document a 4-part RCA under `.ai-memory/cicd-issues/
 2. **R2 (Targeted Verification):** Use file-scoped linters and `gitmap pe -t`.
 3. **R8 (Atomic Commit Standard):** Hyphen separator in `gitmap cpf "<module> - <summary>"` (no colons).
 4. **R11 (Relative Git Paths):** Zero absolute paths and zero `file:///` URIs.
+5. **R12 (Minor Bump Ceremony):** Always use `python 03-ai-scripts/37-bump-version.py -t minor` for consistency across all package manifests.

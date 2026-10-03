@@ -1,9 +1,3 @@
----
-name: letterly-execute-n-steps
-description: >-
-  Formats raw voice dictation into high-priority instructions, action items starting with write plan and spec, and execute-parent-task-with-n-steps-v6 skill invocation suffix.
----
-
 # Execute N-Steps — Letterly Prompt Formatter
 
 Format whatever input text is provided according to the exact high-priority execution template below. Do NOT add conversational filler or commentary (never write "Certainly! Here is your output:").

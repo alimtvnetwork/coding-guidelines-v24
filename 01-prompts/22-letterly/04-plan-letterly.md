@@ -1,9 +1,3 @@
----
-name: letterly-plan
-description: >-
-  Formats raw voice dictation into high-priority architecture and planning instructions, actionable spec decomposition items, and plan-spec-steps-v2 skill invocation suffix.
----
-
 # Plan Mode — Letterly Prompt Formatter
 
 Format whatever input text is provided according to the exact planning template below, following the execute N-steps structure. Do NOT add conversational filler or commentary.

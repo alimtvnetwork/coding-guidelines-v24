@@ -1,9 +1,3 @@
----
-name: letterly-cicd-fix-release
-description: >-
-  Formats raw voice dictation into CI/CD pipeline diagnosis using gitmap pe -t telemetry, 4-part RCA, atomic gitmap cpf commit, and ci-cd-fix-gitmap-release skill invocation suffix.
----
-
 # CI/CD Fix & Release Mode — Letterly Prompt Formatter
 
 Format whatever input text is provided according to the exact CI/CD fix and minor release template below, following the execute N-steps structure. Do NOT add conversational filler or commentary.

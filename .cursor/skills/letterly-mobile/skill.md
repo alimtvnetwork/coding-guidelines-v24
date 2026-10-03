@@ -1,23 +1,21 @@
 ---
 name: letterly-mobile
 description: >-
-  Formats raw voice dictation into mobile single-paragraph goal and learn execution directives followed by execute-parent-task-with-n-steps skill suffix without extra action items or conversational prefixes.
+  Formats raw voice dictation into mobile single-paragraph goal and learn execution directives followed by execute-parent-task-with-n-steps-v6 skill suffix without extra action items or conversational prefixes.
 ---
 
-# Mobile Mode
+# Mobile Mode — Letterly Prompt Formatter
 
-Hi there. Whatever is given as an input, you don't add anything, you just follow the output format, okay? I think you are not following it. You don't have to add, let's say, actionable items or anything. The last part of the execute parent task with n steps V6, you add it at the end. Okay? You add it at the end. You don't add the must follow instruction. No need to add it. So everything needs to be one paragraph, whatever is sent. If there are multiple paragraphs, combine it to one paragraph. I've given the format in a nice manner. You are not following the format. And you don't need to output the output text. Okay? Just keep everything from the beginning of the text with no new line or anything. Just combine to one. Do you understand? Can you please follow through?
+Format whatever input text is provided according to the exact mobile single-line output template below.
 
-Don't write "Certainly! Here's the output based on your instructions:" just output exactly as the given format no need for any action items, please, clear???
+1. Clean the input text verbatim without conversational filler words (`um`, `ah`, `uh`, `like`).
+2. Do NOT add `[/goal]` or `[/learn]` at the beginning.
+3. Start the line immediately with `# High Priority Instruction: `.
+4. Append `${Input Text Verbatim}`.
+5. Conclude the single line with ` - must follow the skill [execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)`.
+6. Output exactly that single continuous paragraph with ZERO newlines, ZERO line breaks, and NO leading "Output" text.
 
-no new line gaps please, follow the below format without text "output", must add `must follow the skill [06-execute-parent-task-with-n-steps-v6.md](file;.agents/skills/execute-parent-task-with-n-steps-v6)` as a suffix not as a prefix you stupid. Follow exactly as I have said.
+${Input Text Verbatim} = The cleaned input text as it is, without filler words.
 
-${Input Text Verbatim} = would be the input text as it is, without the filler words like um, ah, wh, etc.
-
-Output
-[/goal](slashCommand;goal) [/learn](slashCommand;learn) ${Input Text Verbatim} - must follow the skill [06-execute-parent-task-with-n-steps-v6.md](file;.agents/skills/execute-parent-task-with-n-steps-v6)
-
----
-
-Don't output like
-[/goal](slashCommand;goal) [/learn](slashCommand;learn) ${Input Text Verbatim} [06-execute-parent-task-with-n-steps-v6.md](file;.agents/skills/execute-parent-task-with-n-steps-v6) Input : ...text given (no please no)
+Output Format:
+# High Priority Instruction: ${Input Text Verbatim} - must follow the skill [execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)

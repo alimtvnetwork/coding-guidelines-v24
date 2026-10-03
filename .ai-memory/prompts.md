@@ -77,6 +77,7 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `14-execute` | [`14-execute/07-execute-batched-loop-v2.md`](../01-prompts/14-execute/07-execute-batched-loop-v2.md) | 07-execute-batched-loop-v2.md |
 | `14-execute` | [`14-execute/09-parent-task-in-below-steps.md`](../01-prompts/14-execute/09-parent-task-in-below-steps.md) | [V6] Parent Task in Below Steps Continuous Loop & Mandatory Multi-Agent Subagent Orchestration — Workflow (must follow) |
 | `14-execute` | [`14-execute/13-execute-parent-task-with-n-steps-v6.md`](../01-prompts/14-execute/13-execute-parent-task-with-n-steps-v6.md) | [V6] Parent Task N-Step Continuous Loop & Mandatory Multi-Agent Subagent Orchestration — Workflow (must follow) |
+| `14-execute` | [`14-execute/14-run.md`](../01-prompts/14-execute/14-run.md) | Run Script Orchestration — Execute Workflow (`run`) |
 | `14-execute` | [`14-execute/readme.md`](../01-prompts/14-execute/readme.md) | Execution Prompts (`14-execute`) — Index & Catalog |
 | `15-cg-execute` | [`15-cg-execute/01-execute-coding-guideline-fix.md`](../01-prompts/15-cg-execute/01-execute-coding-guideline-fix.md) | Ledger: NN-<slug> |
 | `15-cg-execute` | [`15-cg-execute/02-error-management.md`](../01-prompts/15-cg-execute/02-error-management.md) | Ledger: NN-<slug> |
@@ -119,14 +120,14 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `16-ci-cd` | [`16-ci-cd/01-ci-cd-fix-tweak.md`](../01-prompts/16-ci-cd/01-ci-cd-fix-tweak.md) | CI/CD Fix Tweak with Targeted Smart Testing & RCA — Workflow (must follow) |
 | `16-ci-cd` | [`16-ci-cd/02-ci-cd-fix-with-release-tweak.md`](../01-prompts/16-ci-cd/02-ci-cd-fix-with-release-tweak.md) | Release-Triggered CI/CD Fix Tweak with Targeted Smart Testing — Workflow (must follow) |
 | `16-ci-cd` | [`16-ci-cd/03-ci-cd-fix.md`](../01-prompts/16-ci-cd/03-ci-cd-fix.md) | CI/CD Fix Loop with 4-Part RCA & Local Runner — Workflow (must follow) |
-| `16-ci-cd` | [`16-ci-cd/04-cicd-run-ps1.md`](../01-prompts/16-ci-cd/04-cicd-run-ps1.md) | PowerShell CI/CD Pipeline & Runner Creation — Workflow (must follow) |
+| `16-ci-cd` | [`16-ci-cd/04-create-run-ps1-file.md`](../01-prompts/16-ci-cd/04-create-run-ps1-file.md) | Create Run & Install Scripts Architecture — CI/CD Workflow (`create-run-ps1-file`) |
 | `16-ci-cd` | [`16-ci-cd/05-fix-ci-cd-and-run-scripts.md`](../01-prompts/16-ci-cd/05-fix-ci-cd-and-run-scripts.md) | Cross-Platform CI/CD & Run Scripts Fix — Workflow (must follow) |
 | `16-ci-cd` | [`16-ci-cd/06-ci-cd-fix-with-release.md`](../01-prompts/16-ci-cd/06-ci-cd-fix-with-release.md) | Release-Triggered CI/CD Fix Loop — Workflow (must follow) |
 | `16-ci-cd` | [`16-ci-cd/07-cicd-pipeline-create.md`](../01-prompts/16-ci-cd/07-cicd-pipeline-create.md) | Pipeline Architecture & Cross-Platform Python Automation — Workflow (must follow) |
 | `16-ci-cd` | [`16-ci-cd/08-ci-cd-fix-with-n-steps.md`](../01-prompts/16-ci-cd/08-ci-cd-fix-with-n-steps.md) | [V2] CI/CD Fix N-Step Continuous Loop & 4-Part RCA Orchestration — Workflow (must follow) |
 | `16-ci-cd` | [`16-ci-cd/09-ci-cd-fix-with-release-n-steps.md`](../01-prompts/16-ci-cd/09-ci-cd-fix-with-release-n-steps.md) | [V2] Release-Triggered CI/CD Fix N-Step Continuous Loop & Automated Release Ceremony — Workflow (must follow) |
 | `16-ci-cd` | [`16-ci-cd/10-zero-storage-actions-purge.md`](../01-prompts/16-ci-cd/10-zero-storage-actions-purge.md) | Zero-Storage Actions Purge & Storage Governance — Workflow (must follow) |
-| `16-ci-cd` | [`16-ci-cd/11-ci-cd-fix-gitmap.md`](../01-prompts/16-ci-cd/11-ci-cd-fix-gitmap.md) | Autonomous CI/CD Pipeline Healing & Minor Release Loop via GitMap (`ci-cd-fix-gitmap`) |
+| `16-ci-cd` | [`16-ci-cd/11-ci-cd-fix-gitmap-release.md`](../01-prompts/16-ci-cd/11-ci-cd-fix-gitmap-release.md) | Autonomous CI/CD Pipeline Healing & Minor Release Loop via GitMap (`ci-cd-fix-gitmap-release`) |
 | `16-ci-cd` | [`16-ci-cd/readme.md`](../01-prompts/16-ci-cd/readme.md) | CI/CD Prompts (`16-ci-cd`) |
 | `17-release-management` | [`17-release-management/01-major-bump.md`](../01-prompts/17-release-management/01-major-bump.md) | Major Version Bump — Release Management (must follow) |
 | `17-release-management` | [`17-release-management/02-minor-bump.md`](../01-prompts/17-release-management/02-minor-bump.md) | Minor Version Bump — Release Management (must follow) |
@@ -177,13 +178,13 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `19-old-execute-prompts/backup-v6.46.0` | [`19-old-execute-prompts/backup-v6.46.0/readme.md`](../01-prompts/19-old-execute-prompts/backup-v6.46.0/readme.md) | Coding Guideline Execution Suite (`cg-execute`) — Index & Catalog (must follow) |
 | `20-ai-fix-script-prompts` | [`20-ai-fix-script-prompts/01-python-file-manipulator.md`](../01-prompts/20-ai-fix-script-prompts/01-python-file-manipulator.md) | Python File Manipulator CLI Specification — Tooling Spec (must follow) |
 | `21-temp-end-to-end-tests` | [`21-temp-end-to-end-tests/01-temp-end-to-end-test.md`](../01-prompts/21-temp-end-to-end-tests/01-temp-end-to-end-test.md) | Temporary End-to-End Tests & Isolated On-Demand Validation — Workflow (must follow) |
-| `22-letterly` | [`22-letterly/01-mobile.md`](../01-prompts/22-letterly/01-mobile.md) | Mobile Mode |
-| `22-letterly` | [`22-letterly/02-desktop.md`](../01-prompts/22-letterly/02-desktop.md) | Desktop Mode — Letterly Prompt Formatter |
-| `22-letterly` | [`22-letterly/03-execute-n-steps.md`](../01-prompts/22-letterly/03-execute-n-steps.md) | Execute N Steps |
-| `22-letterly` | [`22-letterly/04-plan.md`](../01-prompts/22-letterly/04-plan.md) | Plan Mode — Letterly Prompt Formatter |
-| `22-letterly` | [`22-letterly/05-release.md`](../01-prompts/22-letterly/05-release.md) | Release Mode — Letterly Prompt Formatter |
-| `22-letterly` | [`22-letterly/06-cicd-fix-release.md`](../01-prompts/22-letterly/06-cicd-fix-release.md) | CI/CD Fix & Release Mode — Letterly Prompt Formatter |
-| `22-letterly` | [`22-letterly/07-mobile-cicd-fix.md`](../01-prompts/22-letterly/07-mobile-cicd-fix.md) | Mobile CI/CD Fix Mode — Letterly Prompt Formatter |
+| `22-letterly` | [`22-letterly/01-mobile-letterly.md`](../01-prompts/22-letterly/01-mobile-letterly.md) | Mobile Mode — Letterly Prompt Formatter |
+| `22-letterly` | [`22-letterly/02-desktop-letterly.md`](../01-prompts/22-letterly/02-desktop-letterly.md) | Desktop Mode — Letterly Prompt Formatter |
+| `22-letterly` | [`22-letterly/03-execute-n-steps-letterly.md`](../01-prompts/22-letterly/03-execute-n-steps-letterly.md) | Execute N-Steps — Letterly Prompt Formatter |
+| `22-letterly` | [`22-letterly/04-plan-letterly.md`](../01-prompts/22-letterly/04-plan-letterly.md) | Plan Mode — Letterly Prompt Formatter |
+| `22-letterly` | [`22-letterly/05-release-letterly.md`](../01-prompts/22-letterly/05-release-letterly.md) | Release Mode — Letterly Prompt Formatter |
+| `22-letterly` | [`22-letterly/06-cicd-fix-release-letterly.md`](../01-prompts/22-letterly/06-cicd-fix-release-letterly.md) | CI/CD Fix & Release Mode — Letterly Prompt Formatter |
+| `22-letterly` | [`22-letterly/07-mobile-cicd-fix-letterly.md`](../01-prompts/22-letterly/07-mobile-cicd-fix-letterly.md) | Mobile CI/CD Fix Mode — Letterly Prompt Formatter |
 | `22-letterly` | [`22-letterly/readme.md`](../01-prompts/22-letterly/readme.md) | Letterly Prompt Formatters (`22-letterly`) |
 | `23-sync` | [`23-sync/01-sync-other-codebase.md`](../01-prompts/23-sync/01-sync-other-codebase.md) | [V6] Multi-Repository Synchronization & Downstream Codebase Mirroring — Workflow (must follow) |
 | `23-sync` | [`23-sync/readme.md`](../01-prompts/23-sync/readme.md) | Multi-Repository Synchronization Prompts (`23-sync`) — Index & Catalog |

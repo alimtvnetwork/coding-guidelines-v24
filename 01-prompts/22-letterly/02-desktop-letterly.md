@@ -1,9 +1,3 @@
----
-name: letterly-desktop
-description: >-
-  Formats raw voice dictation into desktop high-priority instructions, non-negotiable action items starting with write spec and plan, and execute-parent-task-with-n-steps-v6 skill suffix.
----
-
 # Desktop Mode — Letterly Prompt Formatter
 
 Format whatever input text is provided according to the exact output template below following the execute N-steps structure. Do NOT add conversational filler (never write "Certainly! Here is your output:").

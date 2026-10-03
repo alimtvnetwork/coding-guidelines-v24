@@ -1,9 +1,3 @@
----
-name: letterly-release
-description: >-
-  Formats raw voice dictation into minor version release ceremony instructions, changelog updates, and minor-bump skill invocation suffix.
----
-
 # Release Mode — Letterly Prompt Formatter
 
 Format whatever input text is provided according to the exact minor release template below, following the execute N-steps structure. Do NOT add conversational filler or commentary.

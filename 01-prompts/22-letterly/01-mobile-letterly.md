@@ -1,9 +1,3 @@
----
-name: letterly-mobile
-description: >-
-  Formats raw voice dictation into mobile single-paragraph goal and learn execution directives followed by execute-parent-task-with-n-steps-v6 skill suffix without extra action items or conversational prefixes.
----
-
 # Mobile Mode — Letterly Prompt Formatter
 
 Format whatever input text is provided according to the exact mobile single-line output template below.
