@@ -104,3 +104,19 @@
 - [Repository Changelog](../../../changelog.md)
 - [Parent Coding Guidelines Acceptance Criteria](../97-acceptance-criteria.md)
 - [Canonical Architecture Specification](../../21-app/07-coding-guideline-actionable-checklist-and-acceptance/01-architecture-spec.md)
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-XLANG-REG-001: Cross-Language Acceptance Criteria Registry Conformance
+
+**Given** The cross-language acceptance criteria registry in `02-spec/02-coding-guidelines/01-cross-language/97-acceptance-criteria.md`.
+**When** Audited by the automated guideline validator.
+**Then** All criteria entries across Boolean, Style, Naming, Type Safety, Architecture, Testing, and Static Analysis categories correctly map to active specifications with runnable verification commands and exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only
+```
+**Expected:** exit 0. Zero violations.

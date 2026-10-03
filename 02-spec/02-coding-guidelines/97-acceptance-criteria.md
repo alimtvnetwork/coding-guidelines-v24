@@ -306,3 +306,19 @@ See [`13-cpp/97-acceptance-criteria.md`](./13-cpp/97-acceptance-criteria.md) for
 - [Python Acceptance Criteria Registry](./12-python/97-acceptance-criteria.md)
 - [Modern C++ Standards](./13-cpp/readme.md)
 - [Modern C++ Acceptance Criteria Registry](./13-cpp/97-acceptance-criteria.md)
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-MASTER-REG-001: Master Acceptance Criteria Registry Conformance
+
+**Given** The consolidated master acceptance criteria registry in `02-spec/02-coding-guidelines/97-acceptance-criteria.md`.
+**When** Audited by the automated guideline validator.
+**Then** All criteria entries correctly map to active guideline specifications with runnable verification commands and exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --check-only
+```
+**Expected:** exit 0. Zero violations.
