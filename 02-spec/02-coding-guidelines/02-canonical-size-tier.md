@@ -70,7 +70,7 @@ function mapKind(k: Kind): Label { ... }
 
 _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-CG-STYLE-002: Canonical Size Tier Enforcement
+### AC-CG-ROOT-002: Canonical Size Tier Enforcement
 
 **Given** Source files in the repository.
 **When** Codebases are audited by coding guideline scanners and lint rules.

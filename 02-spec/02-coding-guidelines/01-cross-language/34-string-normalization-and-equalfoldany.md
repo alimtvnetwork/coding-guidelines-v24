@@ -37,9 +37,11 @@ if strings.EqualFold(trimmed, "y") || strings.EqualFold(trimmed, "yes") {
 While functional on the surface, this ubiquitous idiom introduces severe architectural, performance, and maintenance friction when repeated ad-hoc across codebases:
 
 ### 1.1 Redundant Allocations & Computational Waste
+
 In garbage-collected environments such as Go and Python, functions like `strings.ToLower()` or `str.lower()` allocate brand-new string objects on the heap. Even when utilizing case-insensitive comparisons such as Go's `strings.EqualFold()`, call sites frequently combine it with repeated `strings.TrimSpace()` calls. When matching against multiple candidates (`"y"`, `"yes"`, `"true"`, `"1"`), callers either allocate intermediate transformed strings or repeatedly execute transformation routines across chained conditions.
 
 ### 1.2 Cognitive Bloat & Call-Site Clutter
+
 Chained boolean expressions using logical OR (`||`) bury core business logic underneath layers of mechanical string manipulation boilerplate:
 - **Go:** `strings.EqualFold(trimmed, "y") || strings.EqualFold(trimmed, "yes") || strings.EqualFold(trimmed, "true")`
 - **TypeScript:** `input.trim().toLowerCase() === 'y' || input.trim().toLowerCase() === 'yes' || input.trim().toLowerCase() === 'true'`
@@ -49,6 +51,7 @@ Chained boolean expressions using logical OR (`||`) bury core business logic und
 Every additional candidate broadens horizontal complexity and cyclomatic branching, expanding the surface area for logic errors and cluttering code reviews.
 
 ### 1.3 Asymmetry & Inconsistent Edge-Case Handling
+
 Because individual developers implement string checks ad-hoc at each call site, edge-case handling fractures:
 - Caller A trims whitespace but performs case-sensitive matching (`trimmed == "y"`).
 - Caller B performs case-insensitive matching but neglects whitespace trimming (`strings.EqualFold(raw, "y")`).
@@ -56,6 +59,7 @@ Because individual developers implement string checks ad-hoc at each call site, 
 - Caller D applies lowercase transformation instead of Unicode case folding.
 
 ### 1.4 Code Duplication & Re-Invention Fatigue
+
 Without an authoritative canonical utility, AI agents and engineers repeatedly author one-off helper functions inside individual command or handler files (such as `isYes(s string) bool`, `checkConfirm(str string) bool`, or `matchesOption(opt string) bool`). This fragments repositories into unshared micro-helpers that violate the DRY (Don't Repeat Yourself) principle.
 
 ---
@@ -174,6 +178,7 @@ func confirmUndoRelease(tag string) bool {
 ```
 
 #### Deficiencies in this implementation:
+
 1. **Redundant intermediate variable:** `trimmed` is declared solely to feed two successive `strings.EqualFold()` calls.
 2. **Horizontal expansion:** Supporting additional confirmations (`"true"`, `"1"`, or localized equivalents) multiplies the `||` chain linearly.
 3. **Zero reusability:** Any other command requiring user confirmation must duplicate this identical logic or create a divergent variant.
@@ -234,6 +239,7 @@ func EqualFoldAnyTrim(target string, candidates ...string) bool {
 ### 5.2 TypeScript (`src/lib/strutil.ts`)
 
 #### ❌ Anti-Pattern: Inefficient Repeated Chaining
+
 ```typescript
 // ❌ WRONG: Inefficient repeated chaining and array inclusion
 function isAffirmative(input: string): boolean {
@@ -243,6 +249,7 @@ function isAffirmative(input: string): boolean {
 ```
 
 #### ✅ Canonical Implementation & Usage
+
 ```typescript
 // ✅ Canonical implementation in src/lib/strutil.ts:
 export function equalFoldAny(
@@ -279,6 +286,7 @@ const isConfirmed = equalFoldAnyTrim(userInput, 'y', 'yes', 'true');
 ### 5.3 Rust (`src/util/strutil.rs`)
 
 #### ❌ Anti-Pattern: Manual Trimming and Chained Calls
+
 ```rust
 // ❌ WRONG: Manual trimming and chained eq_ignore_ascii_case
 fn is_positive_response(input: &str) -> bool {
@@ -288,6 +296,7 @@ fn is_positive_response(input: &str) -> bool {
 ```
 
 #### ✅ Canonical Implementation & Usage
+
 ```rust
 // ✅ Canonical implementation in src/util/strutil.rs:
 pub fn equal_fold_any(target: &str, candidates: &[&str]) -> bool {
@@ -316,6 +325,7 @@ let is_positive = equal_fold_any_trim(user_input, &["y", "yes"]);
 ### 5.4 Python (`pkg/strutil/strutil.py`)
 
 #### ❌ Anti-Pattern: Chained Transforms Across Scripts
+
 ```python
 # ❌ WRONG: Chained lower/strip checks scattered across scripts
 if s.strip().lower() == "y" or s.strip().lower() == "yes":
@@ -323,6 +333,7 @@ if s.strip().lower() == "y" or s.strip().lower() == "yes":
 ```
 
 #### ✅ Canonical Implementation & Usage
+
 ```python
 # ✅ Canonical implementation in pkg/strutil/strutil.py:
 def equal_fold_any(target: str, *candidates: str) -> bool:

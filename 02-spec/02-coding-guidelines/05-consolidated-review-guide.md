@@ -768,7 +768,7 @@ useQuery({
 
 _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-CG-STYLE-005: Consolidated Master Review Rules
+### AC-CG-ROOT-005: Consolidated Master Review Rules
 
 **Given** Source files in the repository.
 **When** Codebases are audited by coding guideline scanners and lint rules.

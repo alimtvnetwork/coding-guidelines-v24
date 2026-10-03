@@ -6,7 +6,7 @@ Format whatever input text is provided according to the exact CI/CD fix and mino
 2. Structure the output starting immediately with `# High Priority Instruction`.
 3. Prepend `[/goal](slashCommand;goal) [/learn](slashCommand;learn) Diagnose, repair, and verify CI/CD pipeline failures using gitmap pe -t telemetry, apply targeted surgical fixes, commit atomically, and execute minor release ceremony:` before the input text.
 4. Extract structured action items under `# Actionable Items Must Follow Non-Negotiable` (run `gitmap pe -t` to watch and capture failing CI/CD logs, conduct 4-part Root Cause Analysis, apply minimal surgical code fixes, verify with local linters without full runner bloat, commit atomically via `gitmap cpf "<module> - <summary>"`, execute minor version release ceremony).
-5. Append the mandatory skill invocation suffix `[ci-cd-fix-with-release](file;.agents/skills/ci-cd-fix-with-release)`.
+5. Append the mandatory skill invocation suffix `[ci-cd-fix-gitmap](file;.agents/skills/ci-cd-fix-gitmap)`.
 6. Output ONLY the resulting markdown block.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
@@ -28,7 +28,7 @@ Output Format:
 
 Must follow and spawn agent using
 
-[ci-cd-fix-with-release](file;.agents/skills/ci-cd-fix-with-release)
+[ci-cd-fix-gitmap](file;.agents/skills/ci-cd-fix-gitmap)
 
 ## Additional Instructions
 

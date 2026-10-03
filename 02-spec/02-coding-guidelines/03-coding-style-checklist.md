@@ -74,7 +74,7 @@ func ProcessTransaction(
 
 _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-CG-STYLE-003: Core Coding Style and Parameter Rules
+### AC-CG-ROOT-003: Core Coding Style and Parameter Rules
 
 **Given** Source files in the repository.
 **When** Codebases are audited by coding guideline scanners and lint rules.
