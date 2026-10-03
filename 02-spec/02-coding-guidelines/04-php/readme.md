@@ -45,10 +45,9 @@ PHP-specific coding standards and patterns for the RiseupAsia namespace.
 | [`08-response-key-type-inventory.md`](./08-response-key-type-inventory.md) | ResponseKeyType case inventory (176 cases) |
 | [`09-php-go-consistency-audit.md`](./09-php-go-consistency-audit.md) | PHP–Go cross-language consistency audit |
 | [`97-acceptance-criteria.md`](./97-acceptance-criteria.md) | PHP acceptance criteria registry |
-| [`98-changelog.md`](./98-changelog.md) | Version history and specification changelog |
-| [`99-consistency-report.md`](./99-consistency-report.md) | Guideline consistency and audit report |
+| [`99-consistency-report.md`](../../99-consistency-report.md) | Guideline consistency and audit report |
 
-**Total:** 8 spec files + acceptance criteria, changelog, consistency report
+**Total:** 8 spec files + acceptance criteria, consistency report
 
 ---
 

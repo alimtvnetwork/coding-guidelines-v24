@@ -66,10 +66,9 @@ C#-specific coding standards that extend the [cross-language guidelines](../01-c
 | [`04-error-handling.md`](./04-error-handling.md) | Exception patterns, Result types, guard clauses |
 | [`05-type-safety.md`](./05-type-safety.md) | Generics, nullable reference types, pattern matching |
 | [`97-acceptance-criteria.md`](./97-acceptance-criteria.md) | C# acceptance criteria registry |
-| [`98-changelog.md`](./98-changelog.md) | Version history and specification changelog |
-| [`99-consistency-report.md`](./99-consistency-report.md) | Guideline consistency and audit report |
+| [`99-consistency-report.md`](../../99-consistency-report.md) | Guideline consistency and audit report |
 
-**Total:** 4 spec files + acceptance criteria, changelog, consistency report
+**Total:** 4 spec files + acceptance criteria, consistency report
 
 ---
 

@@ -75,8 +75,7 @@ This override exists because Rust's compiler actively enforces `snake_case` for 
 | [`06-testing-standards.md`](./06-testing-standards.md) | Unit/integration test structure, mocking, property testing |
 | [`07-ffi-platform.md`](./07-ffi-platform.md) | FFI safety rules, conditional compilation, platform abstractions |
 | [`97-acceptance-criteria.md`](./97-acceptance-criteria.md) | Compliance requirements |
-| [`98-changelog.md`](./98-changelog.md) | Version history |
-| [`99-consistency-report.md`](./99-consistency-report.md) | Structural health |
+| [`99-consistency-report.md`](../../99-consistency-report.md) | Structural health |
 
 ---
 
@@ -95,8 +94,7 @@ This override exists because Rust's compiler actively enforces `snake_case` for 
 | [`06-testing-standards.md`](./06-testing-standards.md) | Unit/integration test standards and mocking |
 | [`07-ffi-platform.md`](./07-ffi-platform.md) | FFI boundaries and platform abstraction |
 | [`97-acceptance-criteria.md`](./97-acceptance-criteria.md) | Acceptance criteria registry |
-| [`98-changelog.md`](./98-changelog.md) | Version changelog |
-| [`99-consistency-report.md`](./99-consistency-report.md) | Consistency report |
+| [`99-consistency-report.md`](../../99-consistency-report.md) | Consistency report |
 
 ---
 

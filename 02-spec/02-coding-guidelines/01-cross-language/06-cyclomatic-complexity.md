@@ -28,7 +28,7 @@ Cyclomatic complexity measures the number of linearly independent paths through 
 
 The following pattern is **absolutely forbidden** in this project. Every nested `if` adds a branch, increases indentation, and forces readers to mentally track multiple conditions simultaneously.
 
-### ❌ BAD — Deeply Nested (Cyclomatic Complexity: 5)
+### ❌ FORBIDDEN — Deeply Nested (Cyclomatic Complexity: 5)
 
 ```csharp
 public void Process(Order? order)
@@ -71,7 +71,7 @@ public void Process(Order? order)
 
 Invert every condition and return/throw early. The function body becomes a **flat sequence of guards** followed by the happy path at the bottom with zero indentation.
 
-### ✅ GOOD — Flat Guard Clauses (Cyclomatic Complexity: 1)
+### ✅ REQUIRED — Flat Guard Clauses (Cyclomatic Complexity: 1)
 
 ```csharp
 public void Process(Order? order)

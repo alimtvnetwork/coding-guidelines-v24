@@ -59,7 +59,6 @@ TypeScript-specific coding standards, enum definitions, and type safety enforcem
 | 11 | [11-eslint-enforcement.md](./12-eslint-enforcement.md) | Enforcement | ESLint rule mapping + SonarQube integration |
 | 12 | [12-discriminated-union-patterns.md](./13-discriminated-union-patterns.md) | Patterns | Discriminated union & action type patterns — no inline types, PascalCase enums |
 | 97 | [97-acceptance-criteria.md](./97-acceptance-criteria.md) | Testing | Acceptance criteria |
-| 98 | [98-changelog.md](./98-changelog.md) | Meta | Changelog |
 
 ---
 

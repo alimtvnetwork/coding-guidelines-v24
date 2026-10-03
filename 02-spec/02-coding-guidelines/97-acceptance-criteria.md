@@ -104,11 +104,21 @@ See [`04-php/97-acceptance-criteria.md`](./04-php/97-acceptance-criteria.md) for
 
 | # | Criterion | Source | Verification Command |
 |---|-----------|--------|----------------------|
-| AC-CG-PHP-000 | PHP Guidelines Directory Index Conformance | [`04-php/readme.md`](./04-php/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
-| AC-CG-PHP-001 | Class naming follows WordPress PSR-4 autoloading conventions | [`04-php/readme.md`](./04-php/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
-| AC-CG-PHP-002 | Database queries use $wpdb prepared statements exclusively | [`04-php/readme.md`](./04-php/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
-| AC-CG-PHP-003 | Type declarations (parameter + return types) required on all functions | [`04-php/readme.md`](./04-php/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
-| AC-CG-PHP-004 | Input sanitization and output escaping follow WordPress security standards | [`04-php/readme.md`](./04-php/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-001 | PHP Standards Index & Overview Conformance | [`04-php/readme.md`](./04-php/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-002 | PHP Enums and Backed Enum Standards | [`04-php/02-enums.md`](./04-php/02-enums.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-003 | PHP Forbidden Anti-Patterns and Quality Gates | [`04-php/03-forbidden-patterns.md`](./04-php/03-forbidden-patterns.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-004 | PHP Naming Conventions, Identifiers, and Casings | [`04-php/04-naming-conventions.md`](./04-php/04-naming-conventions.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-005 | PHP Response Array Standards and Result Envelopes | [`04-php/05-response-array-standard.md`](./04-php/05-response-array-standard.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-006 | PHP Standards Reference Conformance | [`04-php/06-php-standards-reference.md`](./04-php/06-php-standards-reference.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-007 | PHP Spacing, Blank Lines and Import Hygiene | [`04-php/07-spacing-and-imports.md`](./04-php/07-spacing-and-imports.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-008 | PHP Response Key Type Inventory & Taxonomy | [`04-php/08-response-key-type-inventory.md`](./04-php/08-response-key-type-inventory.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-009 | PHP-Go Cross-Language Architecture Consistency | [`04-php/09-php-go-consistency-audit.md`](./04-php/09-php-go-consistency-audit.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-REF-000 | PHP Standards Reference Index Conformance | [`04-php/07-php-standards-reference/readme.md`](./04-php/07-php-standards-reference/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-REF-002 | PHP Modular Naming and Structured Error Envelopes | [`04-php/07-php-standards-reference/02-naming-and-errors.md`](./04-php/07-php-standards-reference/02-naming-and-errors.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-REF-003 | PHP Centralized Constants and Backed Enums | [`04-php/07-php-standards-reference/03-constants-and-deps.md`](./04-php/07-php-standards-reference/03-constants-and-deps.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-REF-004 | PHP Constructor Initialization, Positive Booleans, and isDefined Guards | [`04-php/07-php-standards-reference/04-initialization-and-booleans.md`](./04-php/07-php-standards-reference/04-initialization-and-booleans.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-REF-005 | PHP PSR-12 Code Style, Braces, Vertical Spacing, and Function Size Limits | [`04-php/07-php-standards-reference/05-code-style.md`](./04-php/07-php-standards-reference/05-code-style.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
+| AC-CG-PHP-REF-006 | PHP Forbidden Globals, Sanitization, and Prepared Database Queries | [`04-php/07-php-standards-reference/06-forbidden-and-database.md`](./04-php/07-php-standards-reference/06-forbidden-and-database.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
 | AC-CG-PHP-REG-001 | PHP Acceptance Criteria Registry Conformance | [`04-php/97-acceptance-criteria.md`](./04-php/97-acceptance-criteria.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only` |
 
 ---
@@ -119,11 +129,13 @@ See [`05-rust/97-acceptance-criteria.md`](./05-rust/97-acceptance-criteria.md) f
 
 | # | Criterion | Source | Verification Command |
 |---|-----------|--------|----------------------|
-| AC-CG-RUST-000 | Rust Guidelines Directory Index Conformance | [`05-rust/readme.md`](./05-rust/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
-| AC-CG-RUST-001 | Naming conventions follow Rust idioms (snake_case for functions, PascalCase for types) | [`05-rust/readme.md`](./05-rust/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
-| AC-CG-RUST-002 | Error handling uses `Result<T, E>` pattern with custom error types | [`05-rust/readme.md`](./05-rust/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
-| AC-CG-RUST-003 | Async patterns use tokio runtime with proper cancellation handling | [`05-rust/readme.md`](./05-rust/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
-| AC-CG-RUST-004 | Memory safety patterns documented for FFI boundaries | [`05-rust/readme.md`](./05-rust/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
+| AC-CG-RUST-001 | Rust Coding Guidelines Index & Architecture Conformance | [`05-rust/readme.md`](./05-rust/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
+| AC-CG-RUST-002 | Rust Naming Conventions and Positive Booleans | [`05-rust/02-naming-conventions.md`](./05-rust/02-naming-conventions.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
+| AC-CG-RUST-003 | Rust Result Handling, Error Trait and No Panics | [`05-rust/03-error-handling.md`](./05-rust/03-error-handling.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
+| AC-CG-RUST-004 | Rust Async Tokio Cancellation and Send Bounds | [`05-rust/04-async-patterns.md`](./05-rust/04-async-patterns.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
+| AC-CG-RUST-005 | Rust Zero Unsafe and RAII Lifetime Safety | [`05-rust/05-memory-safety.md`](./05-rust/05-memory-safety.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
+| AC-CG-RUST-006 | Rust Test Suite Organization and Mocking Safety | [`05-rust/06-testing-standards.md`](./05-rust/06-testing-standards.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
+| AC-CG-RUST-007 | Rust FFI Safety Boundaries and Platform Isolation | [`05-rust/07-ffi-platform.md`](./05-rust/07-ffi-platform.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
 | AC-CG-RUST-REG-001 | Rust Acceptance Criteria Registry Conformance | [`05-rust/97-acceptance-criteria.md`](./05-rust/97-acceptance-criteria.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
 
 ---
@@ -161,10 +173,11 @@ See [`07-csharp/97-acceptance-criteria.md`](./07-csharp/97-acceptance-criteria.m
 
 | # | Criterion | Source | Verification Command |
 |---|-----------|--------|----------------------|
-| AC-CG-CS-000 | C# Standards Directory Index Conformance | [`07-csharp/readme.md`](./07-csharp/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only` |
-| AC-CG-CS-002 | C# Naming Conventions and PascalCase Types | [`07-csharp/02-naming-and-conventions.md`](./07-csharp/02-naming-and-conventions.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only` |
-| AC-CG-CS-003 | Method Design, Parameter Limits, and Pure Expressions | [`07-csharp/03-method-design.md`](./07-csharp/03-method-design.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only` |
-| AC-CG-CS-004 | Structured Exceptions and Zero Swallowed Faults | [`07-csharp/04-error-handling.md`](./07-csharp/04-error-handling.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only` |
+| AC-CG-CS-001 | C# Coding Guidelines Index & Module Conformance | [`07-csharp/readme.md`](./07-csharp/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only` |
+| AC-CG-CS-002 | C# PascalCase/camelCase and Positive Booleans | [`07-csharp/02-naming-and-conventions.md`](./07-csharp/02-naming-and-conventions.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only` |
+| AC-CG-CS-003 | C# Method Signatures, Parameter Limits and Guard Clauses | [`07-csharp/03-method-design.md`](./07-csharp/03-method-design.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only` |
+| AC-CG-CS-004 | C# Structured Exceptions, Specific Catches and Result Types | [`07-csharp/04-error-handling.md`](./07-csharp/04-error-handling.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only` |
+| AC-CG-CS-005 | C# Nullable Reference Types and Pattern Matching | [`07-csharp/05-type-safety.md`](./07-csharp/05-type-safety.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only` |
 | AC-CG-CS-REG-001 | C# Acceptance Criteria Registry Conformance | [`07-csharp/97-acceptance-criteria.md`](./07-csharp/97-acceptance-criteria.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only` |
 
 ---

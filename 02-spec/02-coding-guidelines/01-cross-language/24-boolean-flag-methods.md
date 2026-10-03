@@ -35,7 +35,7 @@ Boolean flags hide branching logic inside function calls. The caller cannot unde
 ## The Problem
 
 ```
-// ❌ BAD — What does `true` mean here?
+// ❌ FORBIDDEN — What does `true` mean here?
 processOrder(order, true)
 processOrder(order, false)
 
@@ -54,7 +54,7 @@ Every boolean flag parameter that changes method behavior must be replaced with 
 ### Go
 
 ```go
-// ❌ BAD — boolean flag hides intent
+// ❌ FORBIDDEN — boolean flag hides intent
 func ProcessOrder(order Order, isPriority bool) error {
     if isPriority {
         // priority logic
@@ -63,7 +63,7 @@ func ProcessOrder(order Order, isPriority bool) error {
     }
 }
 
-// ✅ GOOD — two methods, intent is clear
+// ✅ REQUIRED — two methods, intent is clear
 func ProcessPriorityOrder(order Order) error {
     // priority logic
 }
@@ -76,7 +76,7 @@ func ProcessStandardOrder(order Order) error {
 ### TypeScript
 
 ```typescript
-// ❌ BAD
+// ❌ FORBIDDEN
 function formatUser(user: User, isDetailed: boolean): string {
     if (isDetailed) {
         return `${user.name} (${user.email}, ${user.role})`;
@@ -84,7 +84,7 @@ function formatUser(user: User, isDetailed: boolean): string {
     return user.name;
 }
 
-// ✅ GOOD
+// ✅ REQUIRED
 function formatUserSummary(user: User): string {
     return user.name;
 }
@@ -97,7 +97,7 @@ function formatUserDetailed(user: User): string {
 ### PHP
 
 ```php
-// ❌ BAD
+// ❌ FORBIDDEN
 function syncPlugin(Plugin $plugin, bool $isForced): void {
     if ($isForced) {
         // force sync logic
@@ -106,7 +106,7 @@ function syncPlugin(Plugin $plugin, bool $isForced): void {
     }
 }
 
-// ✅ GOOD
+// ✅ REQUIRED
 function syncPluginIncremental(Plugin $plugin): void {
     // incremental sync logic
 }
@@ -119,7 +119,7 @@ function syncPluginForced(Plugin $plugin): void {
 ### Rust
 
 ```rust
-// ❌ BAD
+// ❌ FORBIDDEN
 fn write_log(entry: &LogEntry, is_verbose: bool) {
     if is_verbose {
         // verbose output
@@ -128,7 +128,7 @@ fn write_log(entry: &LogEntry, is_verbose: bool) {
     }
 }
 
-// ✅ GOOD
+// ✅ REQUIRED
 fn write_log_compact(entry: &LogEntry) {
     // compact output
 }
@@ -141,14 +141,14 @@ fn write_log_verbose(entry: &LogEntry) {
 ### C#
 
 ```csharp
-// ❌ BAD
+// ❌ FORBIDDEN
 public void SaveDocument(Document doc, bool isDraft)
 {
     if (isDraft) { /* draft logic */ }
     else { /* publish logic */ }
 }
 
-// ✅ GOOD
+// ✅ REQUIRED
 public void SaveDraft(Document doc)
 {
     // draft logic
