@@ -36,9 +36,9 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FOLDERS -->24<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->6.65.1<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-10-02<!-- /STAMP:UPDATED -->
-  <!-- STAMP:FILES -->767<!-- /STAMP:FILES -->
-  <!-- STAMP:LINES -->163,954<!-- /STAMP:LINES -->
+  <em>Stats:</em> <!-- STAMP:FOLDERS -->24<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->6.65.1<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-10-03<!-- /STAMP:UPDATED -->
+  <!-- STAMP:FILES -->696<!-- /STAMP:FILES -->
+  <!-- STAMP:LINES -->166,993<!-- /STAMP:LINES -->
 </p>
 
 <p align="center"><sub><strong>📦 Two version tracks (intentional):</strong> the <strong>repo / spec version</strong> shown above (<code>v6.15.0</code>) covers all 23 spec folders, docs, bundles, and installers. The <strong>linter pack version</strong> shown in <a href="quickstart.md">quickstart.md</a> (currently <code>v3.79.0</code>) is the standalone <a href="linters-cicd/"><code>linters-cicd/</code></a> bundle that external repos pin in CI. They move on different cadences so spec-only edits don't force every downstream pipeline to re-pin. See <a href="quickstart.md#-two-version-tracks">Two version tracks</a> for the full table.</sub></p>
@@ -2119,8 +2119,8 @@ The result: when an AI agent operates inside a repo following these rules, the g
 
 ## ⚡ High-Speed Search & Discovery Benchmarks: GitMap AUM vs. Ripgrep vs. Python vs. PowerShell
 
-> **Measured Environment:** Windows x86_64, NVMe SSD, PowerShell 7.4 (`pwsh`), Go 1.23+  
-> **Repository Context:** `alimtvnetwork/coding-guidelines-v24` (700+ specifications, 22 prompt categories, 150,000+ lines)  
+> **Measured Environment:** Windows x86_64, NVMe SSD, PowerShell 7.4 (`pwsh`), Go 1.23+
+> **Repository Context:** `alimtvnetwork/coding-guidelines-v24` (700+ specifications, 22 prompt categories, 150,000+ lines)
 > **Key Finding:** Native compiled engines (**GitMap AUM** and **Ripgrep**) outperform standard shell commands by **5x to 26x** on cold scans, and GitMap's SQLite `DH2D` Hot-Cache tier delivers queries in **<0.05 ms** (up to **370,000x faster** than PowerShell `Get-ChildItem | Select-String`).
 
 ### 1. Measured Performance Matrix

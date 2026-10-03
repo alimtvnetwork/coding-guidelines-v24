@@ -1130,17 +1130,20 @@ def main() -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description="Cross-Language Coding Guidelines Validator")
-    parser.add_argument("--path", default="src", help="Directory to scan (default: src)")
+    parser.add_argument("positional_path", nargs="?", default=None, help="Directory to scan")
+    parser.add_argument("--path", default=None, help="Directory to scan (default: src)")
     parser.add_argument("--json", action="store_true", help="Output as JSON")
     parser.add_argument("--max-lines", type=int, default=15, help="Max function lines (default: 15)")
     args = parser.parse_args()
+
+    target_path = args.positional_path or args.path or "src"
 
     report = ValidationReport()
 
     extensions = ("*.go", "*.ts", "*.tsx", "*.js", "*.jsx", "*.php", "*.rs")
 
     for ext in extensions:
-        for filepath in glob.glob(os.path.join(args.path, "**", ext), recursive=True):
+        for filepath in glob.glob(os.path.join(target_path, "**", ext), recursive=True):
             report.total_files += 1
             violations = validate_file(filepath)
 
