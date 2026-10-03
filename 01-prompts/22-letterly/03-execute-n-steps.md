@@ -15,7 +15,7 @@ ${Input Text Verbatim}
 
 # Actionable Items Must Follow Non-Negotiable
 
-1. Write a plan and spec first
+1. Write a /plan [/plan](slashCommand;plan) and spec first
 2. ..
 
 Must follow and spawn agent using
