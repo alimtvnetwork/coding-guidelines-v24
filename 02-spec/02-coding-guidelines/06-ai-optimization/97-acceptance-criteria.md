@@ -34,6 +34,7 @@
 | `AC-CG-AI-007` | Cross-Language Enum Standards Enforcement | [`07-enum-naming-quick-reference.md`](07-enum-naming-quick-reference.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-ai-optimization --check-only` |
 | `AC-CG-AI-008` | Hallucination Prevention & Static Verification | [`08-hallucination-checks.md`](08-hallucination-checks.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-ai-optimization --check-only` |
 | `AC-CG-AI-009` | Agent Memory Lifecycle & TTL Maintenance | [`09-agent-memory-lifecycle.md`](09-agent-memory-lifecycle.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-ai-optimization --check-only` |
+| `AC-CG-AI-REG-001` | AI Optimization Criteria Registry Conformance | [`97-acceptance-criteria.md`](97-acceptance-criteria.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-ai-optimization --check-only` |
 
 ---
 
@@ -212,6 +213,22 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-a
 **Given** AI agents operating within the repository and codebase guidelines.
 **When** Audited against this optimization specification.
 **Then** Zero compliance or citation failures are detected and exit code is 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-ai-optimization --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-AI-REG-001: AI Optimization Criteria Registry Conformance
+
+**Given** The AI optimization criteria registry in `02-spec/02-coding-guidelines/06-ai-optimization/97-acceptance-criteria.md`.
+**When** Audited by the automated guideline validator.
+**Then** All AI optimization specification criteria correctly map to active guideline specifications with runnable verification commands and exit code 0.
 
 **Verification command:**
 ```bash

@@ -445,9 +445,9 @@ To maintain full traceability across all guidelines, acceptance criteria are cat
 
 ---
 
-## 6. Verification & Acceptance Criteria
+## Verification & Acceptance Criteria
 
-### AC-CG-SPEC-001: Architecture Specification Structural Compliance
+### AC-CG-SPEC-001: Coding Guidelines Architecture Specification Conformance
 
 **Given** The coding guidelines standard specification in `02-spec/21-app/07-coding-guideline-actionable-checklist-and-acceptance/01-architecture-spec.md`.
 **When** Audited by repository linters and guideline autofixers.

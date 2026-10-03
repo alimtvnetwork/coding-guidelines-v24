@@ -31,6 +31,7 @@
 | `AC-CG-GO-007` | Code Severity Taxonomy, Error Classification, and Fault Logging | [`07-code-severity-taxonomy.md`](07-code-severity-taxonomy.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md --check-only` |
 | `AC-CG-GO-008` | Unified PathUtil & FileUtil Cross-Platform Specification | [`08-pathutil-fileutil-spec.md`](08-pathutil-fileutil-spec.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/03-golang/08-pathutil-fileutil-spec.md --check-only` |
 | `AC-CG-GO-009` | Wrapped Result Monad and Single Return Parameter Standards | [`09-wrapped-boolean-results.md`](09-wrapped-boolean-results.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/03-golang/09-wrapped-boolean-results.md --check-only` |
+| `AC-CG-GO-REG-001` | Go Acceptance Criteria Registry Conformance | [`97-acceptance-criteria.md`](97-acceptance-criteria.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/03-golang --check-only` |
 
 ---
 
@@ -365,3 +366,19 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/03-g
 - [Master Coding Guidelines Acceptance Criteria](../97-acceptance-criteria.md)
 - [Cross-Language Standards](../01-cross-language/readme.md)
 - [Cross-Language Acceptance Criteria](../01-cross-language/97-acceptance-criteria.md)
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-GO-REG-001: Go Acceptance Criteria Registry Conformance
+
+**Given** The Go acceptance criteria registry in `02-spec/02-coding-guidelines/03-golang/97-acceptance-criteria.md`.
+**When** Audited by the automated guideline validator.
+**Then** All Go specification criteria correctly map to active guideline specifications with runnable verification commands and exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/03-golang --check-only
+```
+**Expected:** exit 0. Zero violations.

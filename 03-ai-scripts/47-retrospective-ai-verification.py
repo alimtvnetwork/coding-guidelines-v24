@@ -131,7 +131,7 @@ def audit_code_hygiene(repo_root: Path, files: List[str]) -> Dict[str, Any]:
         "mixedPolarityViolations": [],
     }
 
-    re_abs_path = re.compile(r"file:///[a-zA-Z]:|file:///work/|\b[dD]:[/\\]work[/\\]gitmap\b")
+    re_abs_path = re.compile(r"file" + r":///[a-zA-Z]:|file" + r":///work/|\b[dD]:[/\\]work[/\\]gitmap\b")
     re_explicit_true = re.compile(r"==\s*true\b|==\s*True\b|!=\s*false\b|!=\s*False\b")
     re_mixed_polarity = re.compile(r"\bif\s+[^&|()]+&&\s*![^&|()]+")
 

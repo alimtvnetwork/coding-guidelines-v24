@@ -173,7 +173,7 @@ Use `constants.NewLineUnix` (`"\n"`) in 90% of cases. Only use `constants.NewLin
 
 _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-CG-STYLE-008: Vertical Newline Spacing & Whitespace Conformance
+### AC-CG-STYLE-009: Vertical Newline Spacing & Whitespace Conformance
 
 **Given** Source code files containing function bodies, control flow blocks, and return statements across Go, TypeScript, and PHP.
 **When** Code guideline linters or CI autofixers scan vertical whitespace patterns.

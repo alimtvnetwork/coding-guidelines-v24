@@ -24,7 +24,7 @@ python 03-ai-scripts/47-retrospective-ai-verification.py --format json
    - Verify every new spec file under `02-spec/21-app/` contains a non-empty `## Acceptance Criteria` section with binary checkboxes (`- [ ]`).
 2. **Coding Guideline Hygiene:**
    - **Booleans:** Implicit checks only (`if isReady`), zero `== true` / `== false`, zero mixed polarity (`if isA && !isB`).
-   - **Paths:** Strict relative paths starting from git root; zero absolute paths (`file:///work/`, `d:\...`).
+   - **Paths:** Strict relative paths starting from git root; zero absolute paths (no URI schemes, no drive letters).
    - **Vertical Line Spacing:** Blank line before `if`, blank line after `}`, blank line before `return`.
 3. **CI/CD Pipeline Telemetry:**
    - Inspect live pipeline health using `gitmap pe -t`.

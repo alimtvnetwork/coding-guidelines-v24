@@ -54,7 +54,7 @@ This module outlines modern C++ conventions (C++20 baseline) to ensure memory sa
 
 _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-CG-CPP-000: C++ Standards Index Conformance
+### AC-CG-CPP-001: Modern C++ Standards Index Conformance
 
 **Given** Polyglot development guidelines and language standards.
 **When** Audited against this language specification.

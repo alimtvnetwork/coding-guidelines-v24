@@ -33,6 +33,7 @@
 | `AC-CG-SEC-AXIOS-000` | Axios Client Security Overview | [`01-axios-version-control/readme.md`](01-axios-version-control/readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/11-security/01-axios-version-control/readme.md --check-only` |
 | `AC-CG-SEC-AXIOS-001` | Strict Axios Version Pinning & Dependency Locking | [`01-axios-version-control/02-implementation-rules.md`](01-axios-version-control/02-implementation-rules.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/11-security/01-axios-version-control/02-implementation-rules.md --check-only` |
 | `AC-CG-SEC-AXIOS-002` | CVE Remediation & Supply Chain Security Verification | [`01-axios-version-control/03-security-notes.md`](01-axios-version-control/03-security-notes.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/11-security/01-axios-version-control/03-security-notes.md --check-only` |
+| `AC-CG-SEC-REG-001` | Security Acceptance Criteria Registry Conformance | [`97-acceptance-criteria.md`](97-acceptance-criteria.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/11-security --check-only` |
 
 ---
 
@@ -184,5 +185,21 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/11-s
 **Verification command:**
 ```bash
 python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/11-security/01-axios-version-control/03-security-notes.md --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-SEC-REG-001: Security Acceptance Criteria Registry Conformance
+
+**Given** The security acceptance criteria registry in `02-spec/02-coding-guidelines/11-security/97-acceptance-criteria.md`.
+**When** Audited by the automated guideline validator.
+**Then** All security specification criteria correctly map to active guideline specifications with runnable verification commands and exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/11-security --check-only
 ```
 **Expected:** exit 0. Zero violations.

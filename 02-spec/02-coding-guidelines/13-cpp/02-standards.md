@@ -76,6 +76,30 @@ _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-crit
 
 **Verification command:**
 ```bash
-python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --check-only
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/13-cpp --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+### AC-CG-CPP-003: Modern C++ Memory Safety & RAII Conformance
+
+**Given** C++ classes, resource handles, and heap-allocated objects.
+**When** Inspected for memory management and ownership patterns.
+**Then** Manual `new` and `delete` invocations are strictly absent, ownership is expressed via `std::unique_ptr` or `std::shared_ptr`, and classes adhere to the Rule of Zero (or complete Rule of Five) with zero violations detected.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/13-cpp --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+### AC-CG-CPP-004: C++ FFI Boundaries & Calling Conventions Conformance
+
+**Given** C++ modules exposing C-compatible FFI or receiving foreign function calls.
+**When** Audited for exception leakage and ABI stability.
+**Then** Zero exceptions escape C++ boundaries into foreign runtime contexts (enforced via `noexcept` and `try/catch` wrapping), and error codes/enums communicate status across FFI layers with zero violations detected.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/13-cpp --check-only
 ```
 **Expected:** exit 0. Zero violations.

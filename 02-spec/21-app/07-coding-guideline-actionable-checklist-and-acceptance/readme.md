@@ -45,7 +45,7 @@ Every guideline file is structured as:
 
 _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-APP-CG-001: Architecture Specification Module Conformance
+### AC-CG-SPEC-000: Architecture Specification Module Conformance
 
 **Given** The specification files in `02-spec/21-app/07-coding-guideline-actionable-checklist-and-acceptance/`.
 **When** Audited against Prompt Architect specification rules.

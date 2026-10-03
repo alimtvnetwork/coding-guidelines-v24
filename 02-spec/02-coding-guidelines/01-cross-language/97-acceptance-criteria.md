@@ -49,6 +49,7 @@
 | `AC-CG-STYLE-006` | Multi-Line Formatting and Trailing Commas | [`04-code-style/06-multi-line-formatting.md`](04-code-style/06-multi-line-formatting.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language/04-code-style/06-multi-line-formatting.md --check-only` |
 | `AC-CG-STYLE-007` | Comments and Self-Documenting Code | [`04-code-style/07-comments-and-documentation.md`](04-code-style/07-comments-and-documentation.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language/04-code-style/07-comments-and-documentation.md --check-only` |
 | `AC-CG-STYLE-008` | Comprehensive Code Style Checklist | [`04-code-style/08-checklist.md`](04-code-style/08-checklist.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language/04-code-style/08-checklist.md --check-only` |
+| `AC-CG-STYLE-009` | Vertical Newline Spacing & Whitespace Conformance | [`21-newline-styling-examples.md`](21-newline-styling-examples.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only` |
 
 ---
 
@@ -108,6 +109,20 @@
 ---
 
 ## Verification & Acceptance Criteria
+
+### AC-CG-STYLE-009: Vertical Newline Spacing & Whitespace Conformance
+
+**Given** Source code files containing function bodies, control flow blocks, and return statements across Go, TypeScript, and PHP.
+**When** Code guideline linters or CI autofixers scan vertical whitespace patterns.
+**Then** All functions adhere strictly to vertical newline rhythm: blank line before return (in multi-line functions), blank line after closing `}`, no blank line at function start, zero double blank lines, and exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+---
 
 ### AC-CG-XLANG-REG-001: Cross-Language Acceptance Criteria Registry Conformance
 

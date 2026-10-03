@@ -31,6 +31,7 @@
 | `AC-CG-FILE-004` | Go File and Package Naming Conventions | [`04-golang.md`](04-golang.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/08-file-folder-naming --check-only` |
 | `AC-CG-FILE-005` | TypeScript and JavaScript File and Folder Naming Standards | [`05-typescript-javascript.md`](05-typescript-javascript.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/08-file-folder-naming --check-only` |
 | `AC-CG-FILE-006` | Rust and C# File and Directory Naming Conventions | [`06-rust-csharp.md`](06-rust-csharp.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/08-file-folder-naming --check-only` |
+| `AC-CG-FILE-REG-001` | File & Folder Naming Criteria Registry Conformance | [`97-acceptance-criteria.md`](97-acceptance-criteria.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/08-file-folder-naming --check-only` |
 
 ---
 
@@ -160,3 +161,19 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/08-f
 - [`04-golang.md`](04-golang.md) — Go file and package naming rules
 - [`05-typescript-javascript.md`](05-typescript-javascript.md) — TypeScript and JavaScript conventions
 - [`06-rust-csharp.md`](06-rust-csharp.md) — Rust and C# conventions
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-FILE-REG-001: File & Folder Naming Criteria Registry Conformance
+
+**Given** The file and folder naming criteria registry in `02-spec/02-coding-guidelines/08-file-folder-naming/97-acceptance-criteria.md`.
+**When** Audited by the automated guideline validator.
+**Then** All file and folder naming specification criteria correctly map to active guideline specifications with runnable verification commands and exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/08-file-folder-naming --check-only
+```
+**Expected:** exit 0. Zero violations.

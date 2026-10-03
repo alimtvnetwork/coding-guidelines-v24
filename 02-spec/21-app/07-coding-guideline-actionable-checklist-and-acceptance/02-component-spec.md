@@ -249,13 +249,19 @@ The acceptance criteria registries are not passive lists; they are actively chec
 
 ---
 
-## 4. Verification & Acceptance Criteria
+## Verification & Acceptance Criteria
 
 ### AC-CG-REG-MASTER-001: Master Registry Completeness & Polyglot Parity
 
 **Given** The master acceptance criteria registry at `02-spec/02-coding-guidelines/97-acceptance-criteria.md`.
 **When** Audited for coverage across all guideline subdirectories in `02-spec/02-coding-guidelines/`.
 **Then** All twelve domain registries (Cross-Language, TypeScript, Golang, PHP, Rust, AI Optimization, CI/CD Integration, C#, File Naming, Security, Python, and C++) are indexed with accurate relative links and summary tables.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --check-only
+```
+**Expected:** exit 0. Zero violations detected.
 
 ---
 
@@ -265,6 +271,12 @@ The acceptance criteria registries are not passive lists; they are actively chec
 **When** Checked for registry presence and criterion completeness.
 **Then** `12-python/97-acceptance-criteria.md` exists, catalogs criteria `AC-CG-PY-001` through `AC-CG-PY-REG-001` with explicit `Given/When/Then` blocks, and defines runnable verification commands.
 
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/12-python --check-only
+```
+**Expected:** exit 0. Zero violations detected.
+
 ---
 
 ### AC-CG-REG-CPP-001: Modern C++ Acceptance Criteria Registry Standardization
@@ -272,6 +284,12 @@ The acceptance criteria registries are not passive lists; they are actively chec
 **Given** The C++ guideline directory at `02-spec/02-coding-guidelines/13-cpp/`.
 **When** Checked for registry presence and criterion completeness.
 **Then** `13-cpp/97-acceptance-criteria.md` exists, catalogs criteria `AC-CG-CPP-001` through `AC-CG-CPP-REG-001` with explicit `Given/When/Then` blocks, and defines runnable verification commands.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/13-cpp --check-only
+```
+**Expected:** exit 0. Zero violations detected.
 
 ---
 

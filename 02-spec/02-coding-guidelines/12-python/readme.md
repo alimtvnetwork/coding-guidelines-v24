@@ -54,7 +54,7 @@ This module defines the standard practices for writing Python code within the re
 
 _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-CG-PY-000: Python Standards Index Conformance
+### AC-CG-PY-001: Python Standards Index Conformance
 
 **Given** Polyglot development guidelines and language standards.
 **When** Audited against this language specification.

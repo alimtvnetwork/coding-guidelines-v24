@@ -32,6 +32,7 @@
 | `AC-CG-RUST-005` | Rust Zero Unsafe and RAII Lifetime Safety | [`05-memory-safety.md`](05-memory-safety.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
 | `AC-CG-RUST-006` | Rust Test Suite Organization and Mocking Safety | [`06-testing-standards.md`](06-testing-standards.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
 | `AC-CG-RUST-007` | Rust FFI Safety Boundaries and Platform Isolation | [`07-ffi-platform.md`](07-ffi-platform.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
+| `AC-CG-RUST-REG-001` | Rust Acceptance Criteria Registry Conformance | [`97-acceptance-criteria.md`](97-acceptance-criteria.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only` |
 
 ---
 
@@ -148,3 +149,19 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-r
 | Rust FFI & Platform | [`07-ffi-platform.md`](07-ffi-platform.md) |
 | Coding Guidelines Root AC Registry | [`../97-acceptance-criteria.md`](../97-acceptance-criteria.md) |
 | Cross-Language Standards | [`../01-cross-language/readme.md`](../01-cross-language/readme.md) |
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-RUST-REG-001: Rust Acceptance Criteria Registry Conformance
+
+**Given** The Rust acceptance criteria registry in `02-spec/02-coding-guidelines/05-rust/97-acceptance-criteria.md`.
+**When** Audited by the automated guideline validator.
+**Then** All Rust specification criteria correctly map to active guideline specifications with runnable verification commands and exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/05-rust --check-only
+```
+**Expected:** exit 0. Zero violations.

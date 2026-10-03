@@ -30,6 +30,7 @@
 | `AC-CG-CS-003` | C# Method Signatures, Parameter Limits and Guard Clauses | [`03-method-design.md`](03-method-design.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only` |
 | `AC-CG-CS-004` | C# Structured Exceptions, Specific Catches and Result Types | [`04-error-handling.md`](04-error-handling.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only` |
 | `AC-CG-CS-005` | C# Nullable Reference Types and Pattern Matching | [`05-type-safety.md`](05-type-safety.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only` |
+| `AC-CG-CS-REG-001` | C# Acceptance Criteria Registry Conformance | [`97-acceptance-criteria.md`](97-acceptance-criteria.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only` |
 
 ---
 
@@ -153,3 +154,19 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-c
 - [Cross-Language Acceptance Criteria Registry](../01-cross-language/97-acceptance-criteria.md) — Master criteria
 - [Boolean Flag Methods (cross-language)](../01-cross-language/24-boolean-flag-methods.md) — Method splitting specification
 - [Generic Return Types (cross-language)](../01-cross-language/25-generic-return-types.md) — Generic signatures
+
+---
+
+## Verification & Acceptance Criteria
+
+### AC-CG-CS-REG-001: C# Acceptance Criteria Registry Conformance
+
+**Given** The C# acceptance criteria registry in `02-spec/02-coding-guidelines/07-csharp/97-acceptance-criteria.md`.
+**When** Audited by the automated guideline validator.
+**Then** All C# specification criteria correctly map to active guideline specifications with runnable verification commands and exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only
+```
+**Expected:** exit 0. Zero violations.

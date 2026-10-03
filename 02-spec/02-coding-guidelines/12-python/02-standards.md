@@ -74,6 +74,30 @@ _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-crit
 
 **Verification command:**
 ```bash
-python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --check-only
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/12-python --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+### AC-CG-PY-003: Python Dynamic Enums & Constants Conformance
+
+**Given** Python scripts and modules defining configurable options or state machines.
+**When** Inspected for hardcoded string constants and Cartesian string permutations.
+**Then** Identifiers use `Enum` or `StrEnum` types, dynamic array builders eliminate repetitive string combinations, and magic literals are eliminated with zero violations detected.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/12-python --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+### AC-CG-PY-004: Python DRY Caching & Architecture Conformance
+
+**Given** Python CI/CD, automation, or linting scripts in `03-ai-scripts/`.
+**When** Scanned for duplicate utility implementations or unshared helpers.
+**Then** Scripts import shared logic from `03-ai-scripts/02-shared-engine.py`, enforce idempotent caching where applicable, and maintain unified exit codes with zero violations detected.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/12-python --check-only
 ```
 **Expected:** exit 0. Zero violations.
