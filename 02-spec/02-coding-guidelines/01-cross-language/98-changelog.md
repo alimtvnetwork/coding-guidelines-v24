@@ -1,7 +1,26 @@
-# Coding Guidelines — Changelog
+# Coding Guidelines — Changelog (AI Execution Prompt)
+
+> **/goal** Maintain an immutable, sequential audit trail of all cross-language architectural revisions, guideline refactorings, and rule additions across 02-spec/02-coding-guidelines/01-cross-language/.
+> **/learn** Adhere to Keep-a-Changelog SemVer conventions, document structural migrations across subfolders, and verify all cross-language rule cross-references.
 
 **Version:** 3.2.0
 **Last Updated:** 2026-04-16
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Ambiguity:** None
+
+---
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Record every cross-language rule addition, split, or modification under the appropriate SemVer release header.
+- [ ] `/learn` Ensure deduplicated rules (e.g. enum specifications in 06-ai-optimization/) maintain canonical cross-references.
+- [ ] `/goal` Enforce strict relative git paths for all referenced spec files (e.g., `02-spec/02-coding-guidelines/...`).
+- [ ] `/learn` Verify zero syntax or spacing violations via `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only`.
+
+. **CRITICAL AI INSTRUCTION:** This changelog is an active AI execution record. Any updates to cross-language guidelines must be logged here before concluding the task.
+
+---
 
 All notable changes to the Coding Guidelines specification are documented here.
 

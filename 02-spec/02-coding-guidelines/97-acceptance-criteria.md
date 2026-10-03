@@ -13,7 +13,7 @@
 . **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
 
 **Version:** 4.0.0
-**Last Updated:** 2026-10-02
+**Last Updated:** 2026-10-03
 **Status:** Active
 **AI Confidence:** Production-Ready
 
@@ -210,6 +210,34 @@ See [`11-security/97-acceptance-criteria.md`](./11-security/97-acceptance-criter
 
 ---
 
+## AC-12: Python Standards Registry
+
+See [`12-python/97-acceptance-criteria.md`](./12-python/97-acceptance-criteria.md) for the complete criteria inventory across Python static typing, Pydantic data validation, PEP-8 compliance, and specific exceptions.
+
+| # | Criterion | Source |
+|---|-----------|--------|
+| AC-CG-PY-001 | Python Guidelines Directory Index Conformance | [`12-python/readme.md`](./12-python/readme.md) |
+| AC-CG-PY-002 | Python Coding Standards Conformance | [`12-python/02-standards.md`](./12-python/02-standards.md) |
+| AC-CG-PY-003 | Python Dynamic Enum & Array Constants Standard | [`12-python/02-standards.md`](./12-python/02-standards.md) |
+| AC-CG-PY-004 | Python DRY Architecture & Engine Caching Conformance | [`12-python/02-standards.md`](./12-python/02-standards.md) |
+| AC-CG-PY-REG-001 | Python Acceptance Criteria Registry Conformance | [`12-python/97-acceptance-criteria.md`](./12-python/97-acceptance-criteria.md) |
+
+---
+
+## AC-13: Modern C++ Standards Registry
+
+See [`13-cpp/97-acceptance-criteria.md`](./13-cpp/97-acceptance-criteria.md) for the complete criteria inventory across C++20 baseline, concepts, RAII smart pointers, Rule of Zero/Five, and FFI exception boundaries.
+
+| # | Criterion | Source |
+|---|-----------|--------|
+| AC-CG-CPP-001 | Modern C++ Guidelines Directory Index Conformance | [`13-cpp/readme.md`](./13-cpp/readme.md) |
+| AC-CG-CPP-002 | Modern C++ Standards Conformance | [`13-cpp/02-standards.md`](./13-cpp/02-standards.md) |
+| AC-CG-CPP-003 | C++ Memory Safety & RAII Resource Management | [`13-cpp/02-standards.md`](./13-cpp/02-standards.md) |
+| AC-CG-CPP-004 | C++ FFI Boundary Exception Safety & Standard Types | [`13-cpp/02-standards.md`](./13-cpp/02-standards.md) |
+| AC-CG-CPP-REG-001 | Modern C++ Acceptance Criteria Registry Conformance | [`13-cpp/97-acceptance-criteria.md`](./13-cpp/97-acceptance-criteria.md) |
+
+---
+
 ## Cross-References
 
 - [Coding Guidelines Overview](./readme.md)
@@ -233,3 +261,7 @@ See [`11-security/97-acceptance-criteria.md`](./11-security/97-acceptance-criter
 - [File & Folder Naming Acceptance Criteria Registry](./08-file-folder-naming/97-acceptance-criteria.md)
 - [Security Guidelines](./11-security/readme.md)
 - [Security Acceptance Criteria Registry](./11-security/97-acceptance-criteria.md)
+- [Python Standards](./12-python/readme.md)
+- [Python Acceptance Criteria Registry](./12-python/97-acceptance-criteria.md)
+- [Modern C++ Standards](./13-cpp/readme.md)
+- [Modern C++ Acceptance Criteria Registry](./13-cpp/97-acceptance-criteria.md)

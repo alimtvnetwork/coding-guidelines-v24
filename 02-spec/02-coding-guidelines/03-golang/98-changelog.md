@@ -1,7 +1,26 @@
-# Golang Standards — Changelog
+# Golang Standards — Changelog (AI Execution Prompt)
+
+> **/goal** Track version revisions, package standards, integer enum specifications, and error handling updates across Golang coding guidelines.
+> **/learn** Internalize Go-specific requirements: *appfault.AppError return types, zero bare void returns, integer-backed enums with PascalCase serialization, and parameter structs.
 
 **Version:** 3.2.0
 **Last Updated:** 2026-04-16
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Ambiguity:** None
+
+---
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Log all Go standard updates, including integer enum rules, appfault error conventions, and struct sizing rules.
+- [ ] `/learn` Ensure retrospective references point to valid relative paths (e.g. `02-spec/03-error-manage/...`).
+- [ ] `/goal` Enforce proper SemVer numbering and ISO date formats on all new changelog sections.
+- [ ] `/learn` Audit formatting with `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/03-golang --check-only`.
+
+. **CRITICAL AI INSTRUCTION:** Active AI execution record for Go standards. Log all changes to Go specifications here.
+
+---
 
 All notable changes to the Golang Standards specification are documented here.
 

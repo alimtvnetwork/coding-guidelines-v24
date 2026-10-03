@@ -1,6 +1,24 @@
-# C# Coding Standards — Changelog
+# C# Coding Standards — Changelog (AI Execution Prompt)
 
-**Module:** `07-csharp`
+> **/goal** Maintain an immutable record of C# language standards, nullable reference type rules, async patterns, and StyleCop linter enforcement.
+> **/learn** Master C# conventions: PascalCase methods, `I` prefix interfaces, boolean flag splitting, record types for DTOs, and pattern matching.
+
+**Version:** 3.2.0
+**Last Updated:** 2026-04-16
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Ambiguity:** None
+
+---
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Document all additions to C# coding standards, cross-language integrations, and StyleCop analyzer rules.
+- [ ] `/learn` Verify cross-references to cross-language guidelines (`01-cross-language/24-`, `25-`) and AI checklists remain valid relative paths.
+- [ ] `/goal` Ensure bracketed SemVer formatting (`## [X.Y.Z] — YYYY-MM-DD`) is strictly maintained.
+- [ ] `/learn` Audit formatting with `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only`.
+
+. **CRITICAL AI INSTRUCTION:** Active AI execution record for C# standards. Document all updates to C# guidelines here.
 
 ---
 

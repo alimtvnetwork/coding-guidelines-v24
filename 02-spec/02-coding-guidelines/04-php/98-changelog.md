@@ -1,7 +1,26 @@
-# PHP Standards — Changelog
+# PHP Standards — Changelog (AI Execution Prompt)
+
+> **/goal** Record all architectural revisions, strict typing standards, and static analysis integrations across PHP coding guidelines.
+> **/learn** Internalize modern PHP standards: strict types (`declare(strict_types=1)`), typed properties, enum standards, and spacing requirements.
 
 **Version:** 3.2.0
 **Last Updated:** 2026-04-16
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Ambiguity:** None
+
+---
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Document updates to PHP coding guidelines, decomposition of reference specs, and code example fixes.
+- [ ] `/learn` Ensure all relative links to PHP subfolders (`07-php-standards-reference/`) resolve correctly.
+- [ ] `/goal` Verify new version entries conform to project-wide SemVer conventions.
+- [ ] `/learn` Audit formatting with `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/04-php --check-only`.
+
+. **CRITICAL AI INSTRUCTION:** Active AI execution record for PHP standards. Log all revisions to PHP guidelines here.
+
+---
 
 All notable changes to the PHP Standards specification are documented here.
 
