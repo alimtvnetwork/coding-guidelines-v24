@@ -27,12 +27,15 @@ ${Input Text Verbatim}
 # Actionable Items Must Follow Non-Negotiable
 
 1. Write spec and plan first
-2. Inspect live CI/CD pipeline errors and execution timeline using gitmap pe -t (or gitmap pipeline fix)
-3. Perform grounded 4-part Root Cause Analysis (RCA) on exact failing step and log
-4. Apply surgical code fixes directly resolving the root cause without disabling any CI checks
-5. Verify fixes locally with targeted file linters (05-guideline-autofixer.py, check-prompts-loaded.py)
-6. Execute minor version bump via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"
-7. Commit atomically via gitmap cpf, tag release, and loop until CI/CD is completely green
+2. Apply the high priority instructions.
+3. ...(write given instructions in steps...)
+4. Inspect live CI/CD pipeline errors and execution timeline using gitmap pe -t (or gitmap pipeline fix)
+5. Perform grounded 4-part Root Cause Analysis (RCA) on exact failing step and log
+6. Apply surgical code fixes directly resolving the root cause without disabling any CI checks
+7. Verify fixes locally with targeted file linters (05-guideline-autofixer.py, check-prompts-loaded.py)
+8. Execute minor version bump via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"
+9. Commit atomically via gitmap cpf, tag release, and loop until CI/CD is completely green
+
 
 Must follow and spawn agent using
 

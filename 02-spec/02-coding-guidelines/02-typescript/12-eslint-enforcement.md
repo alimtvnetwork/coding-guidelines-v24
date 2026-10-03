@@ -71,6 +71,18 @@ These enforce type safety rules from [TS Standards §1–§2](./09-typescript-st
 | `@typescript-eslint/no-unsafe-call` | `error` | TS Standards §2.1 | No calling `any`-typed values |
 | `@typescript-eslint/no-unsafe-return` | `error` | TS Standards §2.1 | No returning `any`-typed values |
 
+```typescript
+// ❌ FORBIDDEN: Using any type in signatures
+function parseResponse(data: any): any {
+  return data.result;
+}
+
+// ✅ REQUIRED: Explicit domain types and unknown with narrowing
+function parseResponse<T>(data: unknown, validator: (raw: unknown) => T): T {
+  return validator(data);
+}
+```
+
 > **Note:** The `no-unsafe-*` rules require `parserOptions.project` pointing to `tsconfig.json` for type-aware linting.
 
 ---

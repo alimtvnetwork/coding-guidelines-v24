@@ -17,6 +17,14 @@
 - Code MUST NEVER contain hardcoded secrets, API keys, passwords, or tokens.
 - `.env` files containing secrets MUST NOT be committed to version control. Ensure `.env` is in `.gitignore`.
 
+```typescript
+// ❌ FORBIDDEN: Hardcoding credentials directly in source files
+const apiKey = "sk_live_abcdef1234567890";
+
+// ✅ REQUIRED: Injected environment variables or vault secret retrieval
+const apiKey = process.env.SERVICE_API_KEY;
+```
+
 ## 2. Secret Vaults
 
 - Production environments must retrieve secrets dynamically at runtime or during the deployment phase from a secure vault (e.g., HashiCorp Vault, AWS Secrets Manager, Azure Key Vault).

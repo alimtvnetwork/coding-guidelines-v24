@@ -42,6 +42,20 @@ Issues that are **critical** and must be fixed immediately:
 - Mutation of shared state without locks
 - File/path error logged without exact file path or failure reason ([rule](../../03-error-manage/01-error-resolution/app-issues/02-error-management-file-path-and-missing-file-code-red-rule.md))
 
+```go
+// ❌ FORBIDDEN: Unchecked return value causing potential nil panic (Code Red)
+user, _ := findUser(userId)
+fmt.Println(user.Name)
+
+// ✅ REQUIRED: Strict error check before accessing return value
+user, appErr := findUser(userId)
+if appErr != nil {
+    return appfault.Wrap(appErr, "findUser")
+}
+
+fmt.Println(user.Name)
+```
+
 ---
 
 ## 3. Dangerous ⚠️

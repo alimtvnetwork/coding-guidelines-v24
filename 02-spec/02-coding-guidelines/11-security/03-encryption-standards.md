@@ -26,6 +26,15 @@
 - Never use MD5, SHA-1, or bcrypt for new password storage.
 - **Mandatory Algorithm:** Use Argon2id for all password and secret hashing. It provides superior resistance to GPU cracking attacks.
 
+```go
+// ❌ FORBIDDEN: Legacy weak hashing algorithms (MD5, SHA-1)
+hasher := md5.New()
+hasher.Write([]byte(password))
+
+// ✅ REQUIRED: Argon2id cryptographic hashing
+hash, err := argon2id.CreateHash(password, argon2id.DefaultParams)
+```
+
 ---
 
 ## Verification & Acceptance Criteria

@@ -47,6 +47,22 @@
 | Redundant `@param` on typed signatures | Noisy duplication | Remove; keep summary only (see [Strict Typing](../../01-cross-language/13-strict-typing.md)) |
 | Boolean flag changing operation meaning | Unreadable call sites | Split into named methods (see [Function Naming](../../01-cross-language/10-function-naming.md)) |
 
+```php
+// ❌ FORBIDDEN: Catching Exception instead of Throwable, and using magic strings
+try {
+    do_action('custom_hook');
+} catch (Exception $e) {
+    error_log($e->getMessage());
+}
+
+// ✅ REQUIRED: Catching Throwable and using typed enum constants
+try {
+    do_action(HookType::CustomAction->value);
+} catch (Throwable $throwableErr) {
+    Logger::error('Failed custom action', ['error' => $throwableErr->getMessage()]);
+}
+```
+
 ---
 
 ---

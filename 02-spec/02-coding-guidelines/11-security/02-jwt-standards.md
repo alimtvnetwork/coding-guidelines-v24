@@ -22,9 +22,30 @@
 - **Access Tokens:** Should be stored in memory or in a short-lived closure. Never store access tokens in `localStorage`.
 - **Refresh Tokens:** MUST be stored in `HttpOnly`, `Secure`, `SameSite=Strict` cookies. They should never be accessible via JavaScript.
 
+```typescript
+// ❌ FORBIDDEN: Storing JWT tokens in browser localStorage
+localStorage.setItem("authToken", token);
+
+// ✅ REQUIRED: In-memory store for access token, HttpOnly cookie for refresh token
+authMemoryStore.setToken(token);
+res.cookie("refreshToken", refreshToken, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "strict",
+});
+```
+
 ## 3. Payload Constraints
 
 - Never include PII (Personally Identifiable Information) or sensitive secrets in the JWT payload. The payload is Base64 encoded and can be read by anyone. Include only necessary identifiers like `UserId` and role claims.
+
+```typescript
+// ❌ FORBIDDEN: Including PII in JWT payload
+const badPayload = { userId: "u123", email: "user@example.com", ssn: "000-12-3456" };
+
+// ✅ REQUIRED: Minimal non-sensitive claims only
+const goodPayload = { sub: "u123", role: UserRole.Member };
+```
 
 ---
 

@@ -23,6 +23,17 @@
 - Follow the **Rule of Five** (or Rule of Zero preferred). If a class defines a custom destructor, copy constructor, move constructor, copy assignment, or move assignment, it should explicitly define or delete all five.
 - Resources must be tied to object lifecycles (RAII).
 
+```cpp
+// ❌ FORBIDDEN: Raw pointer allocation and manual delete
+Widget* widget = new Widget();
+widget->process();
+delete widget;
+
+// ✅ REQUIRED: Smart pointer and RAII ownership
+auto widget = std::make_unique<Widget>();
+widget->process();
+```
+
 ## 3. Naming Conventions
 
 - Structs, Classes, and Enums: `PascalCase`
@@ -33,6 +44,23 @@
 
 - Avoid exceptions for control flow.
 - When crossing C/C++ boundaries, ensure exceptions do not escape C++ code.
+
+```cpp
+// ❌ FORBIDDEN: Allowing exceptions to escape FFI boundary
+extern "C" void c_api_bridge() {
+    throw std::runtime_error("Unhandled C++ failure");
+}
+
+// ✅ REQUIRED: Catching and converting exceptions at boundary
+extern "C" int c_api_bridge() noexcept {
+    try {
+        execute_operation();
+        return 0;
+    } catch (...) {
+        return -1;
+    }
+}
+```
 
 ---
 

@@ -19,8 +19,27 @@ All applications must actively defend against the OWASP Top 10 vulnerabilities. 
 ## 2. Key Mitigations
 
 - **Injection:** Always use ORMs, parameterized queries, or prepared statements. Never concatenate strings to build SQL queries.
+
+```typescript
+// ❌ FORBIDDEN: Raw SQL concatenation vulnerable to injection
+const query = `SELECT * FROM users WHERE email = '${userInput}'`;
+
+// ✅ REQUIRED: Parameterized query
+const query = "SELECT * FROM users WHERE email = $1";
+await db.query(query, [userInput]);
+```
+
 - **Broken Authentication:** Implement multi-factor authentication (MFA) and strict password complexity rules.
 - **Cross-Site Scripting (XSS):** Rely on modern framework auto-escaping (React, Vue). Never use dangerously set inner HTML without a strict sanitizer (e.g., DOMPurify).
+
+```typescript
+// ❌ FORBIDDEN: Unsanitized inner HTML
+element.innerHTML = rawUntrustedHtml;
+
+// ✅ REQUIRED: Sanitized HTML via DOMPurify
+element.innerHTML = DOMPurify.sanitize(rawUntrustedHtml);
+```
+
 - **Insecure Design:** Threat modeling must be conducted during the planning phase of any major new feature.
 
 ---

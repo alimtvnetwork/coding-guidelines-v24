@@ -27,6 +27,8 @@ ${Input Text Verbatim}
 2. Write the first step on task decomposition and bounded subtasks under .ai-memory/plans/subtasks/<slug>/
 3. Enforce strict no-build and no-test rules throughout the planning phase
 4. Define binary acceptance criteria for every subtask
+5. Write the steps ....
+6. ...
 
 Must follow and spawn agent using
 

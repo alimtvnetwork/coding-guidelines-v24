@@ -34,6 +34,20 @@ Ensure that the codebase enforces strict typing (TypeScript `strict: true`, Go `
 
 Agents are required to verify their own work by running static analysis or build commands (`npm run build`, `go build`, `cargo check`) immediately after generating a block of code.
 
+```typescript
+// ❌ FORBIDDEN: Hallucinating non-existent properties without inspecting schema
+const payload = {
+  userName: "alice",
+  sendEmailNotification: true, // Hallucinated field
+};
+
+// ✅ REQUIRED: Grounded field calls strictly matching verified schema
+const payload: CreateUserParams = {
+  userName: "alice",
+  isNotificationEnabled: true,
+};
+```
+
 ---
 
 ## Verification & Acceptance Criteria

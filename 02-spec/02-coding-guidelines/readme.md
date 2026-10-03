@@ -10,7 +10,7 @@
 - [ ] `/goal` Comply with strict code style constraints: max 3 parameters per function signature, mandatory vertical spacing before/after control flow, and guard clauses for early returns.
 - [ ] `/learn` Run automated verification linters via `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --check-only` ensuring zero CODE-RED violations before committing.
 
-**CRITICAL AI INSTRUCTION:** This `readme.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
+. **CRITICAL AI INSTRUCTION:** This readme.md file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 **Version:** 3.4.0
 **Status:** Active

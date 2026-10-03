@@ -57,6 +57,55 @@ Previously a single 858-line file, now split into focused modules under 300 line
 
 ---
 
+## Core Rules Summary & Code Examples
+
+### Rule 1: Affirmative Prefix Enforcement (`is`, `has`)
+
+- ❌ FORBIDDEN:
+  ```go
+  enabled := true
+  run := false
+  ```
+- ✅ REQUIRED:
+  ```go
+  isEnabled := true
+  hasRun := false
+  ```
+
+### Rule 2: Implicit Boolean Evaluation (No Explicit True)
+
+- ❌ FORBIDDEN:
+  ```go
+  if isReady == true {
+      proceed()
+  }
+  ```
+- ✅ REQUIRED:
+  ```go
+  if isReady {
+      proceed()
+  }
+  ```
+
+### Rule 3: No Mixed Polarity Conditionals
+
+- ❌ FORBIDDEN:
+  ```go
+  if isEnabled && !isCached {
+      load()
+  }
+  ```
+- ✅ REQUIRED:
+  ```go
+  isCacheMiss := !isCached
+
+  if isEnabled && isCacheMiss {
+      load()
+  }
+  ```
+
+---
+
 ## Database ↔ Code Inverse Pattern (Rule 9)
 
 When a boolean originates in the **database**, the storage layer holds the

@@ -17,6 +17,18 @@
 - Every public function MUST include Python type hints for all arguments and return values.
 - Avoid `Any` type. Use generics, `Union`, or `Optional` when needed.
 
+```python
+# ❌ FORBIDDEN: Missing type hints and untyped parameters
+def calculate_metrics(items, flag):
+    return {"total": sum(items), "active": flag}
+
+# ✅ REQUIRED: Explicit type hints and affirmative boolean naming
+def calculate_metrics(items: list[float], isActive: bool) -> dict[str, float | bool]:
+    totalAmount = sum(items)
+
+    return {"total": totalAmount, "isActive": isActive}
+```
+
 ## 2. Data Validation
 
 - Use `pydantic` models for structured data validation at system boundaries (APIs, Database inputs, File reads).
@@ -32,6 +44,21 @@
 
 - Never use bare `except:` or `except Exception:`. Always catch specific exception classes.
 - Wrap low-level exceptions with the application's domain-specific errors.
+
+```python
+# ❌ FORBIDDEN: Bare except catching all exceptions indiscriminately
+try:
+    process_record(record)
+except:
+    pass
+
+# ✅ REQUIRED: Catching specific domain exceptions and wrapping
+try:
+    process_record(record)
+except (ValueError, KeyError) as parseErr:
+    logger.warning("Failed to parse record: %s", parseErr)
+    raise RecordProcessingError("Invalid record payload") from parseErr
+```
 
 ---
 

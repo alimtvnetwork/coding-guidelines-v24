@@ -26,6 +26,14 @@ The `.ai-memory/memories/` folder acts as the institutional knowledge hub for AI
 
 Every memory file must include an `Updated:` date stamp. This allows agents to determine which memory file is more recent if a conflict arises within the memory folder itself.
 
+```markdown
+<!-- ❌ FORBIDDEN: Leaving completed tasks in pending/ or contradicting canonical specs -->
+.ai-memory/plans/pending/01-resolved-task.md  # Left lingering in pending
+
+<!-- ✅ REQUIRED: Moving completed tasks to done/ with explicit update timestamps -->
+.ai-memory/plans/done/01-resolved-task.md     # Archived in done/
+```
+
 ---
 
 ## Verification & Acceptance Criteria

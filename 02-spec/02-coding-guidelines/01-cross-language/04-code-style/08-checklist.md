@@ -43,6 +43,23 @@
 
 ---
 
+## Core Rules & Code Comparisons
+
+### Single-Line Statements & Braces
+
+- ❌ FORBIDDEN:
+  ```go
+  if err != nil { return err }
+  ```
+- ✅ REQUIRED:
+  ```go
+  if err != nil {
+      return err
+  }
+  ```
+
+---
+
 ## Cross-References
 
 - [No Raw Negations](../12-no-negatives.md) — Positive guard functions instead of `!` (all languages)

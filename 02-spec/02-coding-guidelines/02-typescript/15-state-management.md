@@ -26,6 +26,26 @@
 
 - Never mutate state directly in Zustand actions. Always return a new object or use a library like Immer to produce draft mutations safely.
 
+```typescript
+// ❌ FORBIDDEN: Direct state mutation
+updateProfile: (name: string) => {
+  set((state) => {
+    state.user.name = name;
+    return state;
+  });
+};
+
+// ✅ REQUIRED: Immutable state return
+updateProfile: (name: string) => {
+  set((state) => ({
+    user: {
+      ...state.user,
+      name,
+    },
+  }));
+};
+```
+
 ---
 
 ## Verification & Acceptance Criteria

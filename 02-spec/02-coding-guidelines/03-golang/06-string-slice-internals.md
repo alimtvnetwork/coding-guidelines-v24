@@ -42,6 +42,18 @@ type StringHeader struct {
 - No need to pass `*string` for read-only use — it's already efficient
 - Strings are immutable — any modification creates a new allocation
 
+```go
+// ❌ FORBIDDEN: Passing *string or *[]T for read-only operations
+func renderSummary(content *string, items *[]string) string {
+    return fmt.Sprintf("%s: %d", *content, len(*items))
+}
+
+// ✅ REQUIRED: Value semantics for read-only strings and slices
+func renderSummary(content string, items []string) string {
+    return fmt.Sprintf("%s: %d", content, len(items))
+}
+```
+
 **References:**
 
 - [What is the point of passing a pointer to strings in Go?](https://stackoverflow.com/questions/24642311)

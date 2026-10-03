@@ -18,6 +18,8 @@
 - [ ] `/goal` Validate that all verification commands execute cleanly with `Expected: exit 0`.
 - [ ] `/learn` Verify 100% relative paths and zero absolute filesystem paths.
 
+. **CRITICAL AI INSTRUCTION:** This specification is an active AI execution directive. All code generated or modified must strictly follow the rules below.
+
 ---
 
 ## 1. Boolean Principles & Guards (`AC-CG-BOOL-`)

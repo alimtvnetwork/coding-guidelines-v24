@@ -55,10 +55,40 @@ These rules are the **single source of truth** — language-specific specs refer
 | 04 | [04-function-and-type-size.md](./05-function-and-type-size.md) | 15-line function limit, 120-line struct/class limit | 6, 17 |
 | 05 | [05-multi-line-formatting.md](./06-multi-line-formatting.md) | Multi-line arguments, method chaining, apperror formatting | 9, 11, apperror |
 | 06 | [06-comments-and-documentation.md](./07-comments-and-documentation.md) | Comment formatting, doc comments, dead code, backslash rule | 8, 14, 15, 16 |
-| 07 | [07-checklist.md](./08-checklist.md) | PR checklist summary + cross-references | — |
+| 07 | [08-checklist.md](./08-checklist.md) | PR checklist summary + cross-references | — |
 | — | 99-consistency-report.md | — | — |
 
-| — | 99-consistency-report.md | — | — |
+---
+
+## Core Rules Summary & Code Examples
+
+### Rule 1: Mandatory Braces & No Single-Line Statements
+
+- ❌ FORBIDDEN:
+  ```typescript
+  if (isValid) return true;
+  ```
+- ✅ REQUIRED:
+  ```typescript
+  if (isValid) {
+    return true;
+  }
+  ```
+
+### Rule 2: Vertical Spacing Hygiene
+
+- ❌ FORBIDDEN:
+  ```go
+  result := compute()
+  return result
+  ```
+- ✅ REQUIRED:
+  ```go
+  result := compute()
+
+  return result
+  ```
+
 ---
 
 ## Cross-References
