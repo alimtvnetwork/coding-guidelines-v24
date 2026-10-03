@@ -61,7 +61,7 @@
 
 _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-CG-STYLE-007: Code Style Comprehensive Checklist Conformance
+### AC-CG-STYLE-008: Comprehensive Code Style Checklist
 
 **Given** Any pull request or modified source file within the repository across PHP, TypeScript, or Go.
 **When** Static analysis, guideline autofixers, or CI linting checks run against the changes.

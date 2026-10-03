@@ -225,7 +225,7 @@ Trivial getters, setters, single-expression helpers, and any function whose name
 
 _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-CG-STYLE-006: Comments, Documentation Hygiene & Dead Code Elimination
+### AC-CG-STYLE-007: Comments and Self-Documenting Code
 
 **Given** Source code files containing inline comments, docblocks, and statement flows in PHP, TypeScript, or Go.
 **When** Code linters, dead code detectors, or documentation checkers inspect source files.

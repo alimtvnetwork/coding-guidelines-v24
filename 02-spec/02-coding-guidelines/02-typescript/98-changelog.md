@@ -49,3 +49,21 @@ Project-wide major version increment (+1.0.0) applied to all specification files
 ---
 
 *Keep this file updated when specs change.*
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/02-typescript/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-LOG-TS: TypeScript Standards Changelog Conformance
+
+**Given** The TypeScript standards changelog file in `02-spec/02-coding-guidelines/02-typescript/98-changelog.md`.
+**When** Audited by repository linters and guideline autofixers.
+**Then** The file strictly adheres to the 4-part prompt anatomy, preserves all historical TypeScript version releases, references valid relative specification paths, and passes linter checks with exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/02-typescript --check-only
+```
+**Expected:** exit 0. Zero violations detected.

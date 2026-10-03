@@ -40,3 +40,21 @@
 - Added C# examples to `01-cross-language/25-generic-return-types.md`
 - Added 6 C#-specific checks to `06-ai-optimization/02-ai-quick-reference-checklist.md`
 - Added C# column to README key standards table
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/07-csharp/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-LOG-CS: C# Standards Changelog Conformance
+
+**Given** The C# standards changelog file in `02-spec/02-coding-guidelines/07-csharp/98-changelog.md`.
+**When** Audited by repository linters and guideline autofixers.
+**Then** The file strictly adheres to the 4-part prompt anatomy, preserves C# StyleCop, async, and nullable reference type release notes, and passes linter checks with exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-csharp --check-only
+```
+**Expected:** exit 0. Zero violations detected.

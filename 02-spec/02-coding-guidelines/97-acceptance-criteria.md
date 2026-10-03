@@ -49,6 +49,7 @@ See [`01-cross-language/97-acceptance-criteria.md`](./01-cross-language/97-accep
 | AC-CG-ARCH-008 | DRY principles documented with refactoring patterns and modular extraction | Architecture | [`01-cross-language/08-dry-principles.md`](./01-cross-language/08-dry-principles.md) |
 | AC-CG-ARCH-006 | Cyclomatic complexity limits defined with enforcement rules (<= 10) | Architecture | [`01-cross-language/06-cyclomatic-complexity.md`](./01-cross-language/06-cyclomatic-complexity.md) |
 | AC-CG-NAME-022 | Variable and collection naming conventions (camelCase, plural arrays, map prefixes) | Naming | [`01-cross-language/22-variable-naming-conventions.md`](./01-cross-language/22-variable-naming-conventions.md) |
+| AC-CG-LOG-CROSS | Cross-Language Changelog Conformance | Changelog | [`01-cross-language/98-changelog.md`](./01-cross-language/98-changelog.md) |
 | AC-CG-REG-001 | Detailed Cross-Language Criteria Registry (BOOL, STYLE, NAME, TYPE, ARCH, TEST, STATIC) | Registry | [`01-cross-language/97-acceptance-criteria.md`](./01-cross-language/97-acceptance-criteria.md) |
 
 ---
@@ -74,6 +75,7 @@ See [`02-typescript/97-acceptance-criteria.md`](./02-typescript/97-acceptance-cr
 | AC-CG-TS-013 | TypeScript Discriminated Unions and Exhaustive Type Narrowing | [`02-typescript/13-discriminated-union-patterns.md`](./02-typescript/13-discriminated-union-patterns.md) |
 | AC-CG-TS-014 | TypeScript Enum Runtime Validation and Parse Guard Utilities | [`02-typescript/14-enum-checking-and-validation.md`](./02-typescript/14-enum-checking-and-validation.md) |
 | AC-CG-TS-015 | TypeScript State Management, Stores, and Reactive Architecture | [`02-typescript/15-state-management.md`](./02-typescript/15-state-management.md) |
+| AC-CG-LOG-TS | TypeScript Standards Changelog Conformance | [`02-typescript/98-changelog.md`](./02-typescript/98-changelog.md) |
 | AC-CG-TS-REG-001 | TypeScript Acceptance Criteria Registry Conformance | [`02-typescript/97-acceptance-criteria.md`](./02-typescript/97-acceptance-criteria.md) |
 
 ---
@@ -94,6 +96,7 @@ See [`03-golang/97-acceptance-criteria.md`](./03-golang/97-acceptance-criteria.m
 | AC-CG-GO-009 | Wrapped boolean results and monadic error returns | [`03-golang/09-wrapped-boolean-results.md`](./03-golang/09-wrapped-boolean-results.md) |
 | AC-CG-GO-ENUM-000 | Go Enum Specification Registry & Patterns | [`03-golang/01-enum-specification/readme.md`](./03-golang/01-enum-specification/readme.md) |
 | AC-CG-GO-REF-000 | Go Standards Reference (Sizing, Types, DB, Naming, Concurrency) | [`03-golang/04-golang-standards-reference/readme.md`](./03-golang/04-golang-standards-reference/readme.md) |
+| AC-CG-LOG-GO | Golang Standards Changelog Conformance | [`03-golang/98-changelog.md`](./03-golang/98-changelog.md) |
 
 ---
 
@@ -108,6 +111,7 @@ See [`04-php/97-acceptance-criteria.md`](./04-php/97-acceptance-criteria.md) for
 | AC-CG-PHP-002 | Database queries use $wpdb prepared statements exclusively | [`04-php/readme.md`](./04-php/readme.md) |
 | AC-CG-PHP-003 | Type declarations (parameter + return types) required on all functions | [`04-php/readme.md`](./04-php/readme.md) |
 | AC-CG-PHP-004 | Input sanitization and output escaping follow WordPress security standards | [`04-php/readme.md`](./04-php/readme.md) |
+| AC-CG-LOG-PHP | PHP Standards Changelog Conformance | [`04-php/98-changelog.md`](./04-php/98-changelog.md) |
 | AC-CG-PHP-REG-001 | PHP Acceptance Criteria Registry Conformance | [`04-php/97-acceptance-criteria.md`](./04-php/97-acceptance-criteria.md) |
 
 ---
@@ -123,6 +127,7 @@ See [`05-rust/97-acceptance-criteria.md`](./05-rust/97-acceptance-criteria.md) f
 | AC-CG-RUST-002 | Error handling uses `Result<T, E>` pattern with custom error types | [`05-rust/readme.md`](./05-rust/readme.md) |
 | AC-CG-RUST-003 | Async patterns use tokio runtime with proper cancellation handling | [`05-rust/readme.md`](./05-rust/readme.md) |
 | AC-CG-RUST-004 | Memory safety patterns documented for FFI boundaries | [`05-rust/readme.md`](./05-rust/readme.md) |
+| AC-CG-LOG-RUST | Rust Standards Changelog Conformance | [`05-rust/98-changelog.md`](./05-rust/98-changelog.md) |
 | AC-CG-RUST-REG-001 | Rust Acceptance Criteria Registry Conformance | [`05-rust/97-acceptance-criteria.md`](./05-rust/97-acceptance-criteria.md) |
 
 ---
@@ -164,6 +169,7 @@ See [`07-csharp/97-acceptance-criteria.md`](./07-csharp/97-acceptance-criteria.m
 | AC-CG-CS-002 | C# Naming Conventions and PascalCase Types | [`07-csharp/02-naming-and-conventions.md`](./07-csharp/02-naming-and-conventions.md) |
 | AC-CG-CS-003 | Method Design, Parameter Limits, and Pure Expressions | [`07-csharp/03-method-design.md`](./07-csharp/03-method-design.md) |
 | AC-CG-CS-004 | Structured Exceptions and Zero Swallowed Faults | [`07-csharp/04-error-handling.md`](./07-csharp/04-error-handling.md) |
+| AC-CG-LOG-CS | C# Standards Changelog Conformance | [`07-csharp/98-changelog.md`](./07-csharp/98-changelog.md) |
 | AC-CG-CS-REG-001 | C# Acceptance Criteria Registry Conformance | [`07-csharp/97-acceptance-criteria.md`](./07-csharp/97-acceptance-criteria.md) |
 
 ---

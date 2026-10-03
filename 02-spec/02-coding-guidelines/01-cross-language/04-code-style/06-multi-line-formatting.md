@@ -326,7 +326,7 @@ return apperror.Fail[Plugin](appErr)
 
 _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-CG-STYLE-005: Multi-Line Formatting and Trailing Commas
+### AC-CG-STYLE-006: Multi-Line Formatting and Trailing Commas
 
 **Given** Source code files containing function signatures, call sites, collection literals, or chained invocations in PHP, TypeScript, or Go.
 **When** Code style linters or CI autofixers scan parameter lists, call arguments, and data structures.

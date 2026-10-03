@@ -10,7 +10,7 @@
 - [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
 - [ ] `/learn` Run all local verification linters via `python 03-ai-scripts/06-cicd-local-runner.py`.
 
-. **CRITICAL AI INSTRUCTION:** This `readme.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
+**CRITICAL AI INSTRUCTION:** This `readme.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 **Version:** 3.3.0
 **Status:** Active
@@ -27,7 +27,7 @@ Never commit generated code (e.g., ORM models, gRPC clients), test results, test
 
 ### 2. Error Management is the #1 Priority
 
-Error handling must be implemented from the **very first line of code**. Never write business logic without proper error handling wrapping it. Use the \AppError\ / \AppException\ architecture explicitly defined in the \02-spec/03-error-manage/\ folder. This is non-negotiable.
+Error handling must be implemented from the **very first line of code**. Never write business logic without proper error handling wrapping it. Use the `AppError` / `AppException` architecture explicitly defined in the `02-spec/03-error-manage/` folder. This is non-negotiable.
 
 ### 3. Boolean Naming (Strict Positive Assertion)
 
@@ -39,16 +39,16 @@ Extract multi-part conditions into well-named boolean variables.
 
 ### 4. Nesting and Flow Control
 
-Zero nesting. Use early returns and guard clauses. No nested \if\ blocks. If you find yourself nesting, extract the logic into a separate function immediately.
+Zero nesting. Use early returns and guard clauses. No nested `if` blocks. If you find yourself nesting, extract the logic into a separate function immediately.
 
 ### 5. Semantic Naming (No Generics)
 
-Absolutely NO generic garbage names. Variables named \	emp\, \data\, \obj\, \comp_100\ will trigger an instant rejection. All unit tests must be behavior-driven (e.g., \TestUpdateUser_RejectsInvalidEmail\).
+Absolutely NO generic garbage names. Variables named `temp`, `data`, `obj`, `comp_100` will trigger an instant rejection. All unit tests must be behavior-driven (e.g., `TestUpdateUser_RejectsInvalidEmail`).
 
 ### 6. Function Metrics & Signatures
 
 - Functions: 8-15 lines. Files: < 300 lines. React components: < 100 lines.
-- **Maximum 3 Parameters:** See the strict formatting rules in \03-coding-style-checklist.md\.
+- **Maximum 3 Parameters:** See the strict formatting rules in `03-coding-style-checklist.md`.
 
 ### 7. Never Hallucinate
 
@@ -67,7 +67,7 @@ If a requirement is unclear or missing, **ask a clarifying question** instead of
 
 ---
 
-## Verification
+## Verification & Acceptance Criteria
 
 _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-criteria.md` for the full criteria index._
 
@@ -80,7 +80,7 @@ _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-crit
 **Verification command:**
 
 ```bash
-go run linter-scripts/validate-guidelines.go --path spec --max-lines 15 && python3 linter-scripts/validate-guidelines.py spec
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --check-only
 ```
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.

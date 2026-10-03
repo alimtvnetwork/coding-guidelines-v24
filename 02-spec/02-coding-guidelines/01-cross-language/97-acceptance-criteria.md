@@ -45,8 +45,8 @@
 | `AC-CG-STYLE-004` | Blank Lines and Vertical Spacing Hygiene | [`04-code-style/04-blank-lines-and-spacing.md`](04-code-style/04-blank-lines-and-spacing.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language/04-code-style/04-blank-lines-and-spacing.md --check-only` |
 | `AC-CG-STYLE-005` | Function and Type Size Caps | [`04-code-style/05-function-and-type-size.md`](04-code-style/05-function-and-type-size.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language/04-code-style/05-function-and-type-size.md --check-only` |
 | `AC-CG-STYLE-006` | Multi-Line Formatting and Trailing Commas | [`04-code-style/06-multi-line-formatting.md`](04-code-style/06-multi-line-formatting.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language/04-code-style/06-multi-line-formatting.md --check-only` |
-| `AC-CG-STYLE-007` | Comments, Documentation Hygiene & Dead Code Elimination | [`04-code-style/07-comments-and-documentation.md`](04-code-style/07-comments-and-documentation.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language/04-code-style/07-comments-and-documentation.md --check-only` |
-| `AC-CG-STYLE-008` | Vertical Newline Spacing & Whitespace Conformance | [`21-newline-styling-examples.md`](21-newline-styling-examples.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language/21-newline-styling-examples.md --check-only` |
+| `AC-CG-STYLE-007` | Comments and Self-Documenting Code | [`04-code-style/07-comments-and-documentation.md`](04-code-style/07-comments-and-documentation.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language/04-code-style/07-comments-and-documentation.md --check-only` |
+| `AC-CG-STYLE-008` | Comprehensive Code Style Checklist | [`04-code-style/08-checklist.md`](04-code-style/08-checklist.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language/04-code-style/08-checklist.md --check-only` |
 
 ---
 
@@ -88,8 +88,17 @@
 
 ---
 
+## 6. Changelog & Version History (`AC-CG-LOG-`)
+
+| ID | Title | Authoritative Specification | Verification Command |
+|:---|:---|:---|:---|
+| `AC-CG-LOG-CROSS` | Cross-Language Changelog Conformance | [`98-changelog.md`](98-changelog.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only` |
+
+---
+
 ## Cross-References
 
 - [Cross-Language Overview](./readme.md)
+- [Cross-Language Changelog](./98-changelog.md)
 - [Parent Coding Guidelines Acceptance Criteria](../97-acceptance-criteria.md)
 - [Canonical Architecture Specification](../../21-app/04-coding-guidelines-actionable-checklists-and-acceptance-criteria/01-architecture-spec.md)

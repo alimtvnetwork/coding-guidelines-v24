@@ -76,3 +76,21 @@ Project-wide major version increment (+1.0.0) applied to all specification files
 ---
 
 *Keep this file updated when specs change.*
+
+---
+
+## Verification & Acceptance Criteria
+
+_Auto-generated section — see `02-spec/02-coding-guidelines/01-cross-language/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CG-LOG-CROSS: Cross-Language Changelog Conformance
+
+**Given** The cross-language changelog file in `02-spec/02-coding-guidelines/01-cross-language/98-changelog.md`.
+**When** Audited by repository linters and guideline autofixers.
+**Then** The file strictly adheres to the 4-part prompt anatomy, maintains an unbroken sequential SemVer audit trail, features 100% valid relative links, and passes linter checks with exit code 0.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/01-cross-language --check-only
+```
+**Expected:** exit 0. Zero violations detected.
