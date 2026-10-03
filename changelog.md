@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.66.0] - 2026-10-03
+
+### Added
+- consolidate changelogs and reports, eliminate overview files, add letterly prompt suite, and resolve cicd sync drift
+
+---
+
 ## [v6.65.1] - 2026-10-02
 
 ### Added
@@ -2216,9 +2223,7 @@ the canonical superset.
 
 ---
 
-
 ## Subsystem Historical Changelog Archive
-
 
 ### Historical Archive: `02-spec/01-spec-authoring-guide/98-changelog.md`
 
