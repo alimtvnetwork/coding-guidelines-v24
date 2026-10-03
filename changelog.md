@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.67.0] - 2026-10-03
+
+### Added
+- Restructure letterly and cursor prompts with ide skill format and plan enqueueing
+
+---
+
 ## [v6.66.0] - 2026-10-03
 
 ### Added
