@@ -12,11 +12,11 @@
 
 . **CRITICAL AI INSTRUCTION:** This `readme.md` file is the primary entry point for this specification module. AI agents MUST read this file first before exploring other files in this folder.
 
-**Version:** 1.0.0  
-**Updated:** 2026-10-03  
-**Status:** Active  
-**AI Confidence:** Production-Ready  
-**Ambiguity:** None  
+**Version:** 1.0.0
+**Updated:** 2026-10-03
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Ambiguity:** None
 
 ---
 
@@ -47,8 +47,8 @@ _Auto-generated section — see `02-spec/02-coding-guidelines/97-acceptance-crit
 
 ### AC-APP-CG-001: Architecture Specification Module Conformance
 
-**Given** The specification files in `02-spec/21-app/07-coding-guideline-actionable-checklist-and-acceptance/`.  
-**When** Audited against Prompt Architect specification rules.  
+**Given** The specification files in `02-spec/21-app/07-coding-guideline-actionable-checklist-and-acceptance/`.
+**When** Audited against Prompt Architect specification rules.
 **Then** All files feature valid AI execution headers, actionable checklists, and testable acceptance criteria with 0 absolute paths.
 
 **Verification command:**

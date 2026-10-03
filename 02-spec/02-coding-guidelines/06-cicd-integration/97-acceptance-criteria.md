@@ -1,7 +1,7 @@
 # CI/CD Integration — Acceptance Criteria Registry (AI Execution Prompt)
 
 > **/goal** Provide a consolidated, traceable registry of testable acceptance criteria across all CI/CD integration specifications in `06-cicd-integration/`.
-> **/learn** Enforce the canonical criteria taxonomy (`AC-CG-CI-[NUM]`), SARIF 2.1.0 output schemas, portable plugin contracts, multi-platform CI templates, versioned release distribution, rule mapping tiers, and performance budgets.
+> **/learn** Enforce the canonical criteria taxonomy (`AC-CG-CICD-[NUM]` / `AC-CG-CI-[NUM]`), SARIF 2.1.0 output schemas, portable plugin contracts, multi-platform CI templates, versioned release distribution, rule mapping tiers, and performance budgets.
 
 ## 🎯 Actionable CI/CD & Agent Checklist
 
@@ -21,26 +21,27 @@
 
 ---
 
-## 1. CI/CD Integration Criteria Inventory (`AC-CG-CI-`)
+## 1. CI/CD Integration Criteria Inventory (`AC-CG-CICD-` / `AC-CG-CI-`)
 
 | ID | Title | Authoritative Specification | Verification Command |
 |:---|:---|:---|:---|
-| `AC-CG-CI-001` | CI/CD Integration Architecture Conformance | [`readme.md`](readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
-| `AC-CG-CI-002` | SARIF 2.1.0 Contract Conformance and Validation | [`02-sarif-contract.md`](02-sarif-contract.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
-| `AC-CG-CI-003` | Language Plugin Architecture and Registry Standards | [`03-plugin-model.md`](03-plugin-model.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
-| `AC-CG-CI-004` | Language Rollout Roadmap and Promotion Standards | [`04-language-roadmap.md`](04-language-roadmap.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
-| `AC-CG-CI-005` | Cross-Platform CI Templates and Invocation Standards | [`05-ci-templates.md`](05-ci-templates.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
-| `AC-CG-CI-006` | Distribution Packaging and Release Asset Governance | [`06-distribution.md`](06-distribution.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
-| `AC-CG-CI-007` | Rule Taxonomy, Severity Mapping, and Tier Coordination | [`07-rules-mapping.md`](07-rules-mapping.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
-| `AC-CG-CI-008` | Probe Ordering, Parallelism, and Timeout Budgets | [`08-performance.md`](08-performance.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
-| `AC-CG-CICD-FAQ-001` | Linter Pack FAQ & Consumer Operations Conformance | [`98-faq.md`](98-faq.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration/98-faq.md --check-only` |
-| `AC-CG-CICD-TROUBLE-001` | Linter Pack Operations Troubleshooting Conformance | [`99-troubleshooting.md`](99-troubleshooting.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration/99-troubleshooting.md --check-only` |
+| `AC-CG-CICD-001` (alias `AC-CG-CI-001`) | CI/CD Integration Architecture Conformance | [`readme.md`](readme.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CICD-002` (alias `AC-CG-CI-002`) | SARIF 2.1.0 Contract Conformance and Validation | [`02-sarif-contract.md`](02-sarif-contract.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CICD-003` (alias `AC-CG-CI-003`) | Language Plugin Architecture and Registry Standards | [`03-plugin-model.md`](03-plugin-model.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CICD-004` (alias `AC-CG-CI-004`) | Language Rollout Roadmap and Promotion Standards | [`04-language-roadmap.md`](04-language-roadmap.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CICD-005` (alias `AC-CG-CI-005`) | Cross-Platform CI Templates and Invocation Standards | [`05-ci-templates.md`](05-ci-templates.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CICD-006` (alias `AC-CG-CI-006`) | Distribution Packaging and Release Asset Governance | [`06-distribution.md`](06-distribution.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CICD-007` (alias `AC-CG-CI-007`) | Rule Taxonomy, Severity Mapping, and Tier Coordination | [`07-rules-mapping.md`](07-rules-mapping.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CICD-008` (alias `AC-CG-CI-008`) | Probe Ordering, Parallelism, and Timeout Budgets | [`08-performance.md`](08-performance.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CICD-FAQ-001` | Linter Pack FAQ & Consumer Operations Conformance | [`98-faq.md`](98-faq.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CICD-TROUBLE-001` | Linter Pack Operations Troubleshooting Conformance | [`99-troubleshooting.md`](99-troubleshooting.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
+| `AC-CG-CICD-REG-001` | CI/CD Acceptance Criteria Registry Conformance | [`97-acceptance-criteria.md`](97-acceptance-criteria.md) | `python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only` |
 
 ---
 
 ## 2. Detailed Acceptance Criteria Specifications
 
-### AC-CG-CI-001: CI/CD Integration Architecture Conformance
+### AC-CG-CICD-001 / AC-CG-CI-001: CI/CD Integration Architecture Conformance
 
 - [ ] Portable check scripts run under stock POSIX shell + Python 3 with zero external dependencies.
 - [ ] Root `readme.md` provides complete module navigation, execution prompts, and cross-references.
@@ -59,7 +60,7 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-c
 
 ---
 
-### AC-CG-CI-002: SARIF 2.1.0 Contract Conformance and Validation
+### AC-CG-CICD-002 / AC-CG-CI-002: SARIF 2.1.0 Contract Conformance and Validation
 
 - [ ] Emitted SARIF complies with official schema `https://json.schemastore.org/sarif-2.1.0.json`.
 - [ ] All `artifactLocation.uri` paths are strictly relative to scanned repository root.
@@ -78,7 +79,7 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-c
 
 ---
 
-### AC-CG-CI-003: Language Plugin Architecture and Registry Standards
+### AC-CG-CICD-003 / AC-CG-CI-003: Language Plugin Architecture and Registry Standards
 
 - [ ] Each language plugin resides under `linters-cicd/checks/<rule>/<language>.py` and registers in `registry.json`.
 - [ ] Adding a new language requires zero modifications to `run-all.sh` or `action.yml`.
@@ -97,7 +98,7 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-c
 
 ---
 
-### AC-CG-CI-004: Language Rollout Roadmap and Promotion Standards
+### AC-CG-CICD-004 / AC-CG-CI-004: Language Rollout Roadmap and Promotion Standards
 
 - [ ] Phase 1 covers Go, TypeScript, and PHP across all 7 core CODE RED checks.
 - [ ] Language plugins use native AST walkers (Python stdlib `ast`, Tree-sitter, or `phply`) with regex fallbacks.
@@ -116,7 +117,7 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-c
 
 ---
 
-### AC-CG-CI-005: Cross-Platform CI Templates and Invocation Standards
+### AC-CG-CICD-005 / AC-CG-CI-005: Cross-Platform CI Templates and Invocation Standards
 
 - [ ] Ready-to-paste workflow templates provided for GitHub Actions, GitLab CI, Azure DevOps, Bitbucket, and Jenkins.
 - [ ] Single-line integration supported via GitHub composite Action `linters-cicd/action.yml`.
@@ -135,7 +136,7 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-c
 
 ---
 
-### AC-CG-CI-006: Distribution Packaging and Release Asset Governance
+### AC-CG-CICD-006 / AC-CG-CI-006: Distribution Packaging and Release Asset Governance
 
 - [ ] Universal standalone ZIP `coding-guidelines-linters-vX.Y.Z.zip` attached to every release tag.
 - [ ] SHA-256 checksums recorded in `checksums.txt` and verified by `install.sh`.
@@ -154,7 +155,7 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-c
 
 ---
 
-### AC-CG-CI-007: Rule Taxonomy, Severity Mapping, and Tier Coordination
+### AC-CG-CICD-007 / AC-CG-CI-007: Rule Taxonomy, Severity Mapping, and Tier Coordination
 
 - [ ] Canonical mapping of every rule ID to spec source, check script, supported languages, and SARIF severity.
 - [ ] Coordinated function length tier: CODE-RED-005 (strict-8 error) owns build failure, CODE-RED-004 (hard-15 error) acts as defense-in-depth.
@@ -173,7 +174,7 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-c
 
 ---
 
-### AC-CG-CI-008: Probe Ordering, Parallelism, and Timeout Budgets
+### AC-CG-CICD-008 / AC-CG-CI-008: Probe Ordering, Parallelism, and Timeout Budgets
 
 - [ ] Middle-out probe ordering sorts candidate directories by byte weight to surface findings early.
 - [ ] Parallel check execution amortizes interpreter startup across (rule, language) tuples.
@@ -206,7 +207,7 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-c
 
 **Verification command:**
 ```bash
-python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration/98-faq.md --check-only
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only
 ```
 **Expected:** exit 0. Zero violations.
 
@@ -226,7 +227,28 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-c
 
 **Verification command:**
 ```bash
-python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration/99-troubleshooting.md --check-only
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only
+```
+**Expected:** exit 0. Zero violations.
+
+---
+
+### AC-CG-CICD-REG-001: CI/CD Acceptance Criteria Registry Conformance
+
+- [ ] Master registry at `02-spec/02-coding-guidelines/97-acceptance-criteria.md` references the CI/CD Integration registry under section `AC-06B`.
+- [ ] Every criterion in the CI/CD Integration registry maps 1:1 to an authoritative specification in `06-cicd-integration/`.
+- [ ] Both master `AC-CG-CICD-*` taxonomy and local `AC-CG-CI-*` aliases are tracked and harmonized with zero divergence.
+- [ ] All criteria follow the structured `Given / When / Then` contract.
+- [ ] Verification commands execute cleanly with exit code 0.
+- [ ] Strict relative paths are used throughout with zero absolute paths or `file:///` URIs.
+
+**Given** The CI/CD Integration criteria registry at `06-cicd-integration/97-acceptance-criteria.md`.
+**When** Evaluated for taxonomic integrity and traceability.
+**Then** Every entry links 1:1 to authoritative specifications in `06-cicd-integration/`, features explicit `Given/When/Then` definitions, and defines functional verification commands with zero violations detected.
+
+**Verification command:**
+```bash
+python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/06-cicd-integration --check-only
 ```
 **Expected:** exit 0. Zero violations.
 

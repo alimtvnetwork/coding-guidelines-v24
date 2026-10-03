@@ -121,15 +121,18 @@ The body of the specification provides detailed explanations, formal numbered ru
 
 ```markdown
 ### R[N]: [Rule Title]
+
 - [Clear operational description of the rule]
 - [Specific edge cases, banned patterns, or mandatory helpers]
 
 #### ❌ FORBIDDEN: [Anti-pattern description]
+
 ```language
 // Bad code example illustrating the violation
 ```
 
 #### ✅ REQUIRED: [Compliant pattern description]
+
 ```language
 // Good code example illustrating compliant implementation
 ```
@@ -164,9 +167,11 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --ch
 Code style rules enforce readability, visual parsing ease, and compact function boundaries across all languages.
 
 #### Rule R4: Mandatory Blank Line Before `return`
+
 Every `return` statement MUST be preceded by a blank line, unless it is the very first line of a block (or a guard clause immediately following an opening brace).
 
 ##### ❌ FORBIDDEN: Return jammed against previous statement
+
 ```go
 func calculateSubtotal(items []Item) int {
     var total int
@@ -178,6 +183,7 @@ func calculateSubtotal(items []Item) int {
 ```
 
 ##### ✅ REQUIRED: Blank line preceding return
+
 ```go
 func calculateSubtotal(items []Item) int {
     var total int
@@ -190,9 +196,11 @@ func calculateSubtotal(items []Item) int {
 ```
 
 #### Rule R5: Mandatory Blank Line After Closing Brace `}`
+
 Every closing brace `}` MUST be followed by a blank line, unless it is immediately followed by another closing brace `}` or an `else` block (in languages requiring `} else {`).
 
 ##### ❌ FORBIDDEN: Closing brace without vertical gap
+
 ```typescript
 export function processBatch(records: readonly RecordItem[]): void {
   for (const record of records) {
@@ -203,6 +211,7 @@ export function processBatch(records: readonly RecordItem[]): void {
 ```
 
 ##### ✅ REQUIRED: Vertical blank line after closing brace
+
 ```typescript
 export function processBatch(records: readonly RecordItem[]): void {
   for (const record of records) {
@@ -214,9 +223,11 @@ export function processBatch(records: readonly RecordItem[]): void {
 ```
 
 #### Rule R6: Function Length Cap (≤ 15 Lines)
+
 Every function MUST be concise and bounded to at most 15 lines of executable code. Monolithic functions exceeding 15 lines MUST be decomposed into private, focused helper functions.
 
 ##### ❌ FORBIDDEN: Monolithic 30-line function doing everything
+
 ```go
 // ❌ Violation: 30+ lines mixing HTTP parsing, validation, DB query, and formatting
 func HandleUserRegistration(w http.ResponseWriter, r *http.Request) {
@@ -225,6 +236,7 @@ func HandleUserRegistration(w http.ResponseWriter, r *http.Request) {
 ```
 
 ##### ✅ REQUIRED: Decomposed into atomic helpers
+
 ```go
 func HandleUserRegistration(w http.ResponseWriter, r *http.Request) {
     params, err := parseRegistrationParams(r)
@@ -244,9 +256,11 @@ func HandleUserRegistration(w http.ResponseWriter, r *http.Request) {
 ```
 
 #### Rule R7: Parameter Bloat Elimination (Max 3 Parameters)
+
 Functions MUST NOT accept more than 3 loose parameters. When 4 or more arguments are needed, group them into a dedicated parameter struct (`*Params` or `Options`).
 
 ##### ❌ FORBIDDEN: Loose parameter explosion (>3 parameters)
+
 ```typescript
 // ❌ Violation: 5 loose positional parameters
 function createUserProfile(
@@ -259,6 +273,7 @@ function createUserProfile(
 ```
 
 ##### ✅ REQUIRED: Parameter struct encapsulation
+
 ```typescript
 interface CreateUserProfileParams {
   readonly name: string;
@@ -280,9 +295,11 @@ function createUserProfile(params: CreateUserProfileParams): UserProfile {
 Boolean hygiene rules eradicate logical ambiguity, double negatives, and cognitive overhead.
 
 #### Rule B1: Affirmative `is` and `has` Prefixes Only
+
 All boolean variables, properties, functions, and flags MUST use affirmative prefixes: `is` or `has`. The prefixes `can`, `should`, `was`, `did`, and negative naming (`isNotReady`, `disableFeature`) are **TOTALLY BANNED**.
 
 ##### ❌ FORBIDDEN: Negative or non-standard boolean prefixes
+
 ```go
 var isNotActive bool     // ❌ Violation: negative naming
 var shouldProceed bool   // ❌ Violation: banned prefix 'should'
@@ -290,6 +307,7 @@ var canExecute bool      // ❌ Violation: banned prefix 'can'
 ```
 
 ##### ✅ REQUIRED: Affirmative `is` / `has` naming
+
 ```go
 var isActive bool
 var hasPermission bool
@@ -297,9 +315,11 @@ var isReady bool
 ```
 
 #### Rule B2: Zero Explicit True Checks (TOTAL BAN on `== true` / `=== true`)
+
 NEVER evaluate a boolean explicitly against `true` (e.g. `if isReady == true` or `if hasToken === true`). Positive booleans MUST ALWAYS be evaluated implicitly.
 
 ##### ❌ FORBIDDEN: Explicit true comparison
+
 ```go
 if isValid == true { // ❌ Violation: explicit comparison to true
     proceed()
@@ -307,6 +327,7 @@ if isValid == true { // ❌ Violation: explicit comparison to true
 ```
 
 ##### ✅ REQUIRED: Implicit boolean evaluation
+
 ```go
 if isValid {
     proceed()
@@ -314,9 +335,11 @@ if isValid {
 ```
 
 #### Rule B3: Zero Mixed Polarity (No `isA && !isB`)
+
 NEVER combine a positive boolean check and a negative boolean check in the same `if` condition (e.g. `if isReady && !isBlocked`). Mixed polarity creates high cognitive load and subtle bugs. Decompose mixed conditions into separate discrete guard clauses or positive composite flags.
 
 ##### ❌ FORBIDDEN: Mixed polarity condition
+
 ```typescript
 // ❌ Violation: positive 'isAvailable' mixed with negative '!isPending'
 if (isAvailable && !isPending) {
@@ -325,6 +348,7 @@ if (isAvailable && !isPending) {
 ```
 
 ##### ✅ REQUIRED: Discrete guard clauses or positive composite helper
+
 ```typescript
 if (!isAvailable) {
   return;
@@ -342,9 +366,11 @@ processItem();
 ### 4.3 Naming Conventions
 
 #### Rule N1: PascalCase for Types, Schemas, and Models
+
 All struct names, interface names, type aliases, database table schemas, and model classes MUST strictly use `PascalCase`.
 
 ##### ❌ FORBIDDEN: snake_case or camelCase type declarations
+
 ```go
 type user_profile struct { // ❌ Violation: snake_case struct
     account_id string
@@ -352,6 +378,7 @@ type user_profile struct { // ❌ Violation: snake_case struct
 ```
 
 ##### ✅ REQUIRED: PascalCase type declarations
+
 ```go
 type UserProfile struct {
     AccountID string
@@ -359,24 +386,29 @@ type UserProfile struct {
 ```
 
 #### Rule N2: Semantic, Intention-Revealing Identifiers
+
 Variable and parameter names MUST reveal their semantic intent and domain units. Suffix time-based variables with their unit (`TimeoutSeconds`, `DurationMs`).
 
 ##### ❌ FORBIDDEN: Vague and unitless names
+
 ```go
 var t int      // ❌ Violation: single letter
 var timeout int // ❌ Violation: unit is ambiguous (ms? seconds? minutes?)
 ```
 
 ##### ✅ REQUIRED: Intention-revealing with units
+
 ```go
 var timeoutSeconds int
 var requestDurationMs int64
 ```
 
 #### Rule N3: Zero Generic Garbage Identifiers (TOTAL BAN)
+
 Identifiers like `data`, `info`, `temp`, `obj`, `res`, `item`, `val`, `foo`, `bar` are **TOTALLY BANNED**. Always use specific domain terms (`userPayload`, `auditRecord`, `fileDescriptor`).
 
 ##### ❌ FORBIDDEN: Generic garbage variable names
+
 ```go
 func parseData(data map[string]any) (any, error) { // ❌ Violation: 'data' and generic return
     item := data["info"]                          // ❌ Violation: 'item' and 'info'
@@ -385,6 +417,7 @@ func parseData(data map[string]any) (any, error) { // ❌ Violation: 'data' and 
 ```
 
 ##### ✅ REQUIRED: Explicit domain identifiers
+
 ```go
 func parseUserConfiguration(rawConfigMap map[string]any) (UserConfig, error) {
     userSettingValue, hasSetting := rawConfigMap["accountSetting"]

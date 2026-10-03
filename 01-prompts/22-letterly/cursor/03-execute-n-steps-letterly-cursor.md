@@ -1,6 +1,6 @@
-# Execute N-Steps — Letterly Prompt Formatter
+# Execute N-Steps (Cursor) — Letterly Prompt Formatter
 
-Format whatever input text is provided according to the exact high-priority execution template below. Do NOT add conversational filler or commentary (never write "Certainly! Here is your output:").
+Format whatever input text is provided according to the exact high-priority execution template below, using the Cursor skill format. Do NOT add conversational filler or commentary (never write "Certainly! Here is your output:").
 
 1. Capture and clean the input text verbatim, stripping verbal filler words (`um`, `ah`, `uh`, `like`) while preserving every technical directive, parameter, flag, and file path.
 2. Structure the output starting immediately with `# High Priority Instruction`.
@@ -8,7 +8,7 @@ Format whatever input text is provided according to the exact high-priority exec
 4. Construct `# Actionable Items Must Follow Non-Negotiable`:
    - Item 1 is ALWAYS: `1. Write a /plan [/plan](slashCommand;plan) and spec first`
    - Item 2..N are sequential, discrete technical directives extracted from the input.
-5. Append the mandatory agent invocation suffix pointing to `[.agents/skills/execute-parent-task-with-n-steps-v6/skill.md](.agents/skills/execute-parent-task-with-n-steps-v6/skill.md)`.
+5. Append the mandatory agent invocation suffix pointing to `[.cursor/skills/execute-parent-task-with-n-steps-v6/skill.md](.cursor/skills/execute-parent-task-with-n-steps-v6/skill.md)`.
 6. Output ONLY the resulting formatted markdown block.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
@@ -27,7 +27,7 @@ ${Input Text Verbatim}
 
 Must follow and spawn agent using
 
-[.agents/skills/execute-parent-task-with-n-steps-v6/skill.md](.agents/skills/execute-parent-task-with-n-steps-v6/skill.md)
+[.cursor/skills/execute-parent-task-with-n-steps-v6/skill.md](.cursor/skills/execute-parent-task-with-n-steps-v6/skill.md)
 
 ## Additional Instructions
 

@@ -1,6 +1,6 @@
-# Release Mode — Letterly Prompt Formatter
+# Release Mode (Cursor) — Letterly Prompt Formatter
 
-Format whatever input text is provided according to the exact minor release template below, following the execute N-steps structure. Do NOT add conversational filler or commentary.
+Format whatever input text is provided according to the exact minor release template below, following the execute N-steps structure and using the Cursor skill format. Do NOT add conversational filler or commentary.
 
 1. Clean the input text verbatim while strictly capturing version scope, changelog notes, and release constraints.
 2. Structure the output starting immediately with `# High Priority Instruction`.
@@ -11,7 +11,7 @@ Format whatever input text is provided according to the exact minor release temp
    - Item 3: `3. Execute minor version bump via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"`
    - Item 4: `4. Consolidate and update release notes in root changelog.md and manifests`
    - Item 5: `5. Commit atomically via gitmap cpf and push release tag to remote tracking branch`
-5. Append the mandatory release skill invocation suffix `[.agents/skills/minor-bump/skill.md](.agents/skills/minor-bump/skill.md)`.
+5. Append the mandatory release skill invocation suffix `[.cursor/skills/minor-bump/skill.md](.cursor/skills/minor-bump/skill.md)`.
 6. Output ONLY the resulting formatted markdown block.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
@@ -33,7 +33,7 @@ ${Input Text Verbatim}
 
 Must follow and spawn agent using
 
-[.agents/skills/minor-bump/skill.md](.agents/skills/minor-bump/skill.md)
+[.cursor/skills/minor-bump/skill.md](.cursor/skills/minor-bump/skill.md)
 
 ## Additional Instructions
 

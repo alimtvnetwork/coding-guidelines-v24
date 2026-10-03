@@ -14,6 +14,10 @@ This collection contains deterministic prompt transformation templates designed 
 | **06** | [`06-cicd-fix-release-letterly.md`](06-cicd-fix-release-letterly.md) | CI/CD Fix & Release | Formats input into `gitmap pe -t` telemetry diagnosis, 4-part RCA, and minor release | `letterly-cicd-fix-release` |
 | **07** | [`07-mobile-cicd-fix-letterly.md`](07-mobile-cicd-fix-letterly.md) | Mobile CI/CD Fix | One-liner mobile prompt diagnosing via `gitmap pe -t` and triggering release | `letterly-mobile-cicd-fix` |
 
+### Cursor Prompt Suite (`cursor/`)
+
+For Cursor environments requiring `.cursor/skills/` resolution, see [`cursor/readme.md`](cursor/readme.md) which houses the dedicated Cursor prompt suite (`01-mobile-letterly-cursor.md` through `07-mobile-cicd-fix-letterly-cursor.md`).
+
 ## Core Invariants
 
 1. **Zero Conversational Filler:** Never output "Certainly! Here is your output:".

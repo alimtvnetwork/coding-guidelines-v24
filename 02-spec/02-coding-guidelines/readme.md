@@ -48,8 +48,8 @@ Error handling must be implemented from the **very first line of code**. Never w
 
 All booleans **MUST** use `is` or `has` prefixes and are **positively named only** (`can`, `should`, `was` are banned).
 
-- ❌ BAD: `!isSuccess`, `isDisabled`
-- ✅ GOOD: `isFail`, `isActive`
+- ❌ FORBIDDEN: `!isSuccess`, `isDisabled`
+- ✅ REQUIRED: `isFail`, `isActive`
 - **No Explicit True Checks (TOTAL BAN):** NEVER evaluate a boolean explicitly against `true` (e.g., `if isReady == true`). Positive booleans MUST ALWAYS be evaluated implicitly: `if isReady { ... }`.
 - **No Mixed Polarity (TOTAL BAN):** NEVER combine a positive check and a negative check in the same `if` condition (e.g., `if isA && !isB`). Split into discrete conditions or extract into an affirmative variable.
 

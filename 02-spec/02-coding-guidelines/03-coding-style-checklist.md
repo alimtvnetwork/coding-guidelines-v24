@@ -23,12 +23,12 @@ If a function requires 4 or more parameters, or if the method signature exceeds 
 
 ### Example (Go)
 
-❌ BAD:
+❌ FORBIDDEN:
 ```go
 func ProcessTransaction(userId int, amount float64, currency string, idempotencyKey string, retryCount int) error { ... }
 ```
 
-✅ GOOD (Options Struct):
+✅ REQUIRED (Options Struct):
 ```go
 type TransactionOptions struct {
     UserId         int
@@ -41,7 +41,7 @@ type TransactionOptions struct {
 func ProcessTransaction(opts TransactionOptions) error { ... }
 ```
 
-✅ GOOD (One Per Line - Only if Struct is impossible):
+✅ REQUIRED (One Per Line - Only if Struct is impossible):
 ```go
 func ProcessTransaction(
     userId int,

@@ -1,12 +1,6 @@
----
-name: letterly-mobile-cicd-fix
-description: >-
-  Formats raw voice dictation into a single continuous one-liner mobile CI/CD fix prompt diagnosing with gitmap pe -t and releasing via ci-cd-fix-gitmap-release.
----
+# Mobile CI/CD Fix Mode (Cursor) — Letterly Prompt Formatter
 
-# Mobile CI/CD Fix Mode — Letterly Prompt Formatter
-
-Combine the entire output into exactly ONE continuous single-line paragraph with zero newlines, zero line gaps, and zero conversational filler.
+Combine the entire output into exactly ONE continuous single-line paragraph with zero newlines, zero line gaps, and zero conversational filler, using the Cursor skill format.
 
 1. Clean the input text verbatim without conversational filler words (`um`, `ah`, `uh`).
 2. Prefix with `[/goal](slashCommand;goal) [/learn](slashCommand;learn) Run gitmap pe -t to diagnose live CI/CD errors, fix all pipeline failures via 4-part RCA, verify locally, commit atomically via gitmap cpf, and release minor update. `.

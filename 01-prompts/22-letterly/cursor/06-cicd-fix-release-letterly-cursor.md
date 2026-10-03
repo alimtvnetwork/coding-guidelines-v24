@@ -1,6 +1,6 @@
-# CI/CD Fix & Release Mode — Letterly Prompt Formatter
+# CI/CD Fix & Release Mode (Cursor) — Letterly Prompt Formatter
 
-Format whatever input text is provided according to the exact CI/CD fix and minor release template below, following the execute N-steps structure. Do NOT add conversational filler or commentary.
+Format whatever input text is provided according to the exact CI/CD fix and minor release template below, following the execute N-steps structure and using the Cursor skill format. Do NOT add conversational filler or commentary.
 
 1. Clean the input text verbatim while capturing all failing workflow names, errors, and reproduction steps.
 2. Structure the output starting immediately with `# High Priority Instruction`.
@@ -13,7 +13,7 @@ Format whatever input text is provided according to the exact CI/CD fix and mino
    - Item 5: `5. Verify fixes locally with targeted file linters (05-guideline-autofixer.py, check-prompts-loaded.py)`
    - Item 6: `6. Execute minor version bump via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"`
    - Item 7: `7. Commit atomically via gitmap cpf, tag release, and loop until CI/CD is completely green`
-5. Append the mandatory skill invocation suffix `[.agents/skills/ci-cd-fix-gitmap-release/skill.md](.agents/skills/ci-cd-fix-gitmap-release/skill.md)`.
+5. Append the mandatory skill invocation suffix `[.cursor/skills/ci-cd-fix-gitmap-release/skill.md](.cursor/skills/ci-cd-fix-gitmap-release/skill.md)`.
 6. Output ONLY the resulting formatted markdown block.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
@@ -36,7 +36,7 @@ ${Input Text Verbatim}
 
 Must follow and spawn agent using
 
-[.agents/skills/ci-cd-fix-gitmap-release/skill.md](.agents/skills/ci-cd-fix-gitmap-release/skill.md)
+[.cursor/skills/ci-cd-fix-gitmap-release/skill.md](.cursor/skills/ci-cd-fix-gitmap-release/skill.md)
 
 ## Additional Instructions
 

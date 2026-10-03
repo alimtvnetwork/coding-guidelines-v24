@@ -14,7 +14,7 @@ Format whatever input text is provided according to the exact high-priority exec
 4. Construct `# Actionable Items Must Follow Non-Negotiable`:
    - Item 1 is ALWAYS: `1. Write a /plan [/plan](slashCommand;plan) and spec first`
    - Item 2..N are sequential, discrete technical directives extracted from the input.
-5. Append the mandatory agent invocation suffix pointing to `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)`.
+5. Append the mandatory agent invocation suffix pointing to `[.cursor/skills/execute-parent-task-with-n-steps-v6/skill.md](.cursor/skills/execute-parent-task-with-n-steps-v6/skill.md)`.
 6. Output ONLY the resulting formatted markdown block.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
@@ -33,7 +33,7 @@ ${Input Text Verbatim}
 
 Must follow and spawn agent using
 
-[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)
+[.cursor/skills/execute-parent-task-with-n-steps-v6/skill.md](.cursor/skills/execute-parent-task-with-n-steps-v6/skill.md)
 
 ## Additional Instructions
 

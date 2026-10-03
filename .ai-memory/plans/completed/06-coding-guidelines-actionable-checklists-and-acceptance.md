@@ -46,13 +46,16 @@ This plan executed the complete transformation of coding guidelines into authori
 
 ### 2.3 Style & Boolean Guideline Standardization
 - `02-canonical-size-tier.md`: Retagged criterion to `AC-CG-ROOT-002`.
-- `03-coding-style-checklist.md`: Retagged criterion to `AC-CG-ROOT-003`.
+- `03-coding-style-checklist.md`: Standardized `❌ BAD:` to `❌ FORBIDDEN:` and `✅ GOOD:` to `✅ REQUIRED:`; retagged criterion to `AC-CG-ROOT-003`.
+- `02-spec/02-coding-guidelines/readme.md`: Standardized `❌ BAD:` to `❌ FORBIDDEN:` and `✅ GOOD:` to `✅ REQUIRED:`.
 - `04-consolidated-review-guide-condensed.md`: Retagged criterion to `AC-CG-ROOT-004`.
 - `05-consolidated-review-guide.md`: Retagged criterion to `AC-CG-ROOT-005`.
 - `01-cross-language/02-boolean-principles/04-parameters-and-conditions.md`: Renumbered duplicate Principle 9 to Principle 12.
 - `01-cross-language/34-string-normalization-and-equalfoldany.md`: Normalized markdown heading blank line spacing.
 - `06-ai-optimization/97-acceptance-criteria.md`: Normalized markdown heading blank line spacing.
-- `01-cross-language/97-acceptance-criteria.md`: Cleaned up dead links.
+- `01-cross-language/97-acceptance-criteria.md`: Updated spec references to point to `07-coding-guideline-actionable-checklist-and-acceptance/`.
+- `07-csharp/97-acceptance-criteria.md`: Removed `(Can, Should, Was)` on line 64, enforcing strictly affirmative `Is and Has only`.
+- `06-cicd-integration/97-acceptance-criteria.md`: Harmonized criteria IDs between master and domain registries.
 
 ---
 
@@ -61,17 +64,24 @@ This plan executed the complete transformation of coding guidelines into authori
 1. **Guideline Autofixer Validation:**
    ```bash
    python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines --check-only
+   python 03-ai-scripts/05-guideline-autofixer.py 02-spec/21-app/07-coding-guideline-actionable-checklist-and-acceptance --check-only
    ```
-   *Result:* Exit code 0. All 198 files have clean newlines and conform to implicit boolean rules.
+   *Result:* Exit code 0 across both directories. All files have clean newlines and conform to implicit boolean rules.
 
 2. **Relative Path Validation:**
    ```bash
    python linter-scripts/check-relative-paths.py
    ```
-   *Result:* Exit code 0. Zero absolute filesystem paths or `file:///` URIs across 3448 tracked files.
+   *Result:* Exit code 0. Zero absolute filesystem paths or `file:///` URIs across 3454 tracked files.
 
-3. **Multi-Agent Task Tracking:**
+3. **Forbidden Strings Validation:**
+   ```bash
+   python linter-scripts/check-forbidden-strings.py
+   ```
+   *Result:* Exit code 0. Zero forbidden strings found.
+
+4. **Multi-Agent Task Tracking:**
    ```bash
    python 03-ai-scripts/46-agent-sqlite-task-manager.py status --db .ai-memory/temp-agents/07-coding-guideline-actionable-checklist-and-acceptance/agent-task.db
    ```
-   *Result:* Exit code 0. 100% completed across all subtasks (Task-01 through Task-04) without errors.
+   *Result:* Exit code 0. 100% completed across all 8 subtasks (Task-01 through Task-06) without errors.

@@ -61,7 +61,7 @@ python 03-ai-scripts/05-guideline-autofixer.py 02-spec/02-coding-guidelines/07-c
 - [ ] Local variables and parameters use camelCase (`pluginSlug`, `userId`, `siteId`).
 - [ ] Private instance fields use `_camelCase` (`_logger`, `_connectionString`).
 - [ ] Abbreviations treat acronyms as words with first-letter capitalization (`UserId` not `UserID`, `ApiClient` not `APIClient`, `GetUrl` not `GetURL`).
-- [ ] All boolean properties, variables, and parameters use positive prefixes (`Is`, `Has`, `Can`, `Should`, `Was`).
+- [ ] All boolean properties, variables, and parameters use positive prefixes (`Is` and `Has` only).
 - [ ] Negative boolean names are prohibited (`IsPending` not `IsNotReady`, `IsUnauthorized` not `HasNoPermission`).
 - [ ] File names match the primary type declared inside using `{PascalCase}.cs` with strictly one primary type per file.
 - [ ] Namespaces reflect folder hierarchy and use PascalCase (`RiseupAsia.Services`, `RiseupAsia.Domain.Models`).
