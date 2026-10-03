@@ -6,7 +6,7 @@ AI scripts (03-ai-scripts/ and .agents/scripts/), and coding guidelines / design
 (02-spec/02-coding-guidelines/, 02-spec/07-design-system/, 02-spec/17-consolidated-guidelines/,
 .ai-memory/coding-guidelines.md, .ai-memory/prompts.md) from coding-guidelines across all 43 connected repositories.
 
-IMPORTANT: Never synchronizes 06-old-prompts/ (archived v1/v2/v3 prompts).
+IMPORTANT: Never synchronizes 06-archive/ or 06-old-prompts/ (archived prompts).
 
 Performs the complete, safe multi-branch backup and release ceremony per repo:
 1. Detect base/current branch and pull latest changes (`git pull origin <base_branch> --no-rebase`).
@@ -106,6 +106,7 @@ EXCLUDE_NAMES = {
     ".pytest_cache",
     ".mypy_cache",
     ".DS_Store",
+    "06-archive",
     "06-old-prompts",
     "21-app",
     "21-app-issues",
@@ -596,11 +597,13 @@ def sync_repo(target: Path, is_dry_run: bool = False, is_no_push: bool = False) 
     result["pre_release_tag"] = pre_tag
     current_ver = pre_tag.lstrip("v")
 
-    # Ensure 06-old-prompts is never present in target repository
-    old_prompts_dir = target / "06-old-prompts"
+    # Ensure 06-archive and 06-old-prompts are never present in target repository
+    if not is_dry_run:
+        for legacy_dir_name in ("06-archive", "06-old-prompts"):
+            legacy_dir = target / legacy_dir_name
 
-    if old_prompts_dir.exists() and not is_dry_run:
-        shutil.rmtree(old_prompts_dir, ignore_errors=True)
+            if legacy_dir.exists():
+                shutil.rmtree(legacy_dir, ignore_errors=True)
 
     # 4. Mirror directories and conditional coding guidelines cleanly
     total_copied = 0

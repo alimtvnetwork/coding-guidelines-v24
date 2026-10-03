@@ -5,7 +5,7 @@ Synchronizes canonical flat prompts (01-prompts/), Antigravity skills (.agents/s
 and AI scripts (03-ai-scripts/ and .agents/scripts/) from coding-guidelines
 across all 43 connected repositories.
 
-IMPORTANT: Never synchronizes 06-old-prompts/ (archived v1/v2/v3 prompts).
+IMPORTANT: Never synchronizes 06-archive/ or 06-old-prompts/ (archived prompts).
 
 Performs the complete, safe multi-branch backup and release ceremony per repo:
 1. Detect base/current branch and pull latest changes.
@@ -93,6 +93,7 @@ EXCLUDE_NAMES = {
     ".pytest_cache",
     ".mypy_cache",
     ".DS_Store",
+    "06-archive",
     "06-old-prompts",
 }
 
@@ -312,10 +313,13 @@ def sync_repo(target: Path, dry_run: bool = False, no_push: bool = False) -> dic
     result["pre_release_tag"] = pre_tag
     current_ver = pre_tag.lstrip("v")
 
-    # Ensure 06-old-prompts is never present in target repository
-    old_prompts_dir = target / "06-old-prompts"
-    if old_prompts_dir.exists():
-        shutil.rmtree(old_prompts_dir, ignore_errors=True)
+    # Ensure 06-archive and 06-old-prompts are never present in target repository
+    if not dry_run:
+        for legacy_dir_name in ("06-archive", "06-old-prompts"):
+            legacy_dir = target / legacy_dir_name
+
+            if legacy_dir.exists():
+                shutil.rmtree(legacy_dir, ignore_errors=True)
 
     # 4. Mirror directories cleanly
     total_copied = 0

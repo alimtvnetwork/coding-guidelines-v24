@@ -42,6 +42,7 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `09-commit-and-multi-agent-code-fix` | [`09-commit-and-multi-agent-code-fix/05-boolean-improvements-v2.md`](../01-prompts/09-commit-and-multi-agent-code-fix/05-boolean-improvements-v2.md) | Boolean Optimization & Complexity Reduction (v2) — Coding Guideline (must follow) |
 | `09-commit-and-multi-agent-code-fix` | [`09-commit-and-multi-agent-code-fix/06-insult-code-fix.md`](../01-prompts/09-commit-and-multi-agent-code-fix/06-insult-code-fix.md) | Strict Discipline Code Remediation — Quality Protocol (must follow) |
 | `09-commit-and-multi-agent-code-fix` | [`09-commit-and-multi-agent-code-fix/07-clean-artifacts-and-git-history.md`](../01-prompts/09-commit-and-multi-agent-code-fix/07-clean-artifacts-and-git-history.md) | Artifact Sanitization & Git History Preservation — Workflow (must follow) |
+| `09-commit-and-multi-agent-code-fix` | [`09-commit-and-multi-agent-code-fix/08-git-reconcile-and-resolve-conflict.md`](../01-prompts/09-commit-and-multi-agent-code-fix/08-git-reconcile-and-resolve-conflict.md) | Git Reconciliation & Mechanical Conflict Resolution — Workflow (must follow) |
 | `10-ui-and-design` | [`10-ui-and-design/01-logo-create.md`](../01-prompts/10-ui-and-design/01-logo-create.md) | Logo Design & Branding Generation — Lovable Design Workflow |
 | `10-ui-and-design` | [`10-ui-and-design/02-react-ui-fixes-update.md`](../01-prompts/10-ui-and-design/02-react-ui-fixes-update.md) | React Component Modernization & Responsive Styling — Workflow (must follow) |
 | `10-ui-and-design` | [`10-ui-and-design/03-svg-logo.md`](../01-prompts/10-ui-and-design/03-svg-logo.md) | SVG Icon & Vector Graphic Creation — Design Workflow |
@@ -69,18 +70,14 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `13-plan-audit` | [`13-plan-audit/03-audit-app-spec.md`](../01-prompts/13-plan-audit/03-audit-app-spec.md) | 1. the audited scope, with line counts |
 | `13-plan-audit` | [`13-plan-audit/04-fix-spec-from-audit.md`](../01-prompts/13-plan-audit/04-fix-spec-from-audit.md) | 04-fix-spec-from-audit.md |
 | `14-execute` | [`14-execute/01-execute-pending-tasks.md`](../01-prompts/14-execute/01-execute-pending-tasks.md) | 01-execute-pending-tasks.md |
-| `14-execute` | [`14-execute/02-execute-parent-task-with-n-steps.md`](../01-prompts/14-execute/02-execute-parent-task-with-n-steps.md) | Subtask [01]: [Descriptive Subtask Name] |
+| `14-execute` | [`14-execute/02-execute-parent-task-with-n-steps.md`](../01-prompts/14-execute/02-execute-parent-task-with-n-steps.md) | Parent Task N-Step Continuous Loop & Mandatory Multi-Agent Subagent Orchestration — Canonical V6 Workflow (must follow) |
 | `14-execute` | [`14-execute/03-execute-batched-loop.md`](../01-prompts/14-execute/03-execute-batched-loop.md) | 03-execute-batched-loop.md |
 | `14-execute` | [`14-execute/04-execute-ai-instruction-writer.md`](../01-prompts/14-execute/04-execute-ai-instruction-writer.md) | 04-execute-ai-instruction-writer.md |
 | `14-execute` | [`14-execute/05-execute-batched-loop-wor.md`](../01-prompts/14-execute/05-execute-batched-loop-wor.md) | 05-execute-batched-loop-wor.md |
-| `14-execute` | [`14-execute/06-execute-parent-task-with-n-steps-v2.md`](../01-prompts/14-execute/06-execute-parent-task-with-n-steps-v2.md) | Subtask [01]: [Descriptive Subtask Name] |
 | `14-execute` | [`14-execute/07-execute-batched-loop-v2.md`](../01-prompts/14-execute/07-execute-batched-loop-v2.md) | 07-execute-batched-loop-v2.md |
-| `14-execute` | [`14-execute/08-excute-parent-old.md`](../01-prompts/14-execute/08-excute-parent-old.md) | Subtask [01]: [Descriptive Subtask Name] |
-| `14-execute` | [`14-execute/09-parent-task-in-below-steps.md`](../01-prompts/14-execute/09-parent-task-in-below-steps.md) | Subtask [01]: [Descriptive Subtask Name] |
-| `14-execute` | [`14-execute/10-execute-parent-task-with-n-steps-v3.md`](../01-prompts/14-execute/10-execute-parent-task-with-n-steps-v3.md) | [V3] Parent Task N-Step Continuous Loop & Mandatory Multi-Agent Subagent Orchestration — Workflow (must follow) |
-| `14-execute` | [`14-execute/11-execute-parent-task-with-n-steps-v4.md`](../01-prompts/14-execute/11-execute-parent-task-with-n-steps-v4.md) | [V4] Parent Task N-Step Loop: Antigravity-Native Orchestrator (must follow) |
-| `14-execute` | [`14-execute/12-execute-parent-task-with-n-steps-v5.md`](../01-prompts/14-execute/12-execute-parent-task-with-n-steps-v5.md) | [V5] Parent Task N-Step Loop: Antigravity-Native Ultra-Orchestrator — Workflow (must follow) |
+| `14-execute` | [`14-execute/09-parent-task-in-below-steps.md`](../01-prompts/14-execute/09-parent-task-in-below-steps.md) | [V6] Parent Task in Below Steps Continuous Loop & Mandatory Multi-Agent Subagent Orchestration — Workflow (must follow) |
 | `14-execute` | [`14-execute/13-execute-parent-task-with-n-steps-v6.md`](../01-prompts/14-execute/13-execute-parent-task-with-n-steps-v6.md) | [V6] Parent Task N-Step Continuous Loop & Mandatory Multi-Agent Subagent Orchestration — Workflow (must follow) |
+| `14-execute` | [`14-execute/readme.md`](../01-prompts/14-execute/readme.md) | Execution Prompts (`14-execute`) — Index & Catalog |
 | `15-cg-execute` | [`15-cg-execute/01-execute-coding-guideline-fix.md`](../01-prompts/15-cg-execute/01-execute-coding-guideline-fix.md) | Ledger: NN-<slug> |
 | `15-cg-execute` | [`15-cg-execute/02-error-management.md`](../01-prompts/15-cg-execute/02-error-management.md) | Ledger: NN-<slug> |
 | `15-cg-execute` | [`15-cg-execute/03-nested-if-and-guard-clauses.md`](../01-prompts/15-cg-execute/03-nested-if-and-guard-clauses.md) | Ledger: NN-<slug> |
