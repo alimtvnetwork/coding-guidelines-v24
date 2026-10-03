@@ -185,6 +185,14 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `22-letterly` | [`22-letterly/05-release-letterly.md`](../01-prompts/22-letterly/05-release-letterly.md) | Release Mode — Letterly Prompt Formatter |
 | `22-letterly` | [`22-letterly/06-cicd-fix-release-letterly.md`](../01-prompts/22-letterly/06-cicd-fix-release-letterly.md) | CI/CD Fix & Release Mode — Letterly Prompt Formatter |
 | `22-letterly` | [`22-letterly/07-mobile-cicd-fix-letterly.md`](../01-prompts/22-letterly/07-mobile-cicd-fix-letterly.md) | Mobile CI/CD Fix Mode — Letterly Prompt Formatter |
+| `22-letterly/cursor` | [`22-letterly/cursor/01-mobile-letterly-cursor.md`](../01-prompts/22-letterly/cursor/01-mobile-letterly-cursor.md) | Mobile Mode (Cursor) — Letterly Prompt Formatter |
+| `22-letterly/cursor` | [`22-letterly/cursor/02-desktop-letterly-cursor.md`](../01-prompts/22-letterly/cursor/02-desktop-letterly-cursor.md) | Desktop Mode (Cursor) — Letterly Prompt Formatter |
+| `22-letterly/cursor` | [`22-letterly/cursor/03-execute-n-steps-letterly-cursor.md`](../01-prompts/22-letterly/cursor/03-execute-n-steps-letterly-cursor.md) | Execute N-Steps (Cursor) — Letterly Prompt Formatter |
+| `22-letterly/cursor` | [`22-letterly/cursor/04-plan-letterly-cursor.md`](../01-prompts/22-letterly/cursor/04-plan-letterly-cursor.md) | Plan Mode (Cursor) — Letterly Prompt Formatter |
+| `22-letterly/cursor` | [`22-letterly/cursor/05-release-letterly-cursor.md`](../01-prompts/22-letterly/cursor/05-release-letterly-cursor.md) | Release Mode (Cursor) — Letterly Prompt Formatter |
+| `22-letterly/cursor` | [`22-letterly/cursor/06-cicd-fix-release-letterly-cursor.md`](../01-prompts/22-letterly/cursor/06-cicd-fix-release-letterly-cursor.md) | CI/CD Fix & Release Mode (Cursor) — Letterly Prompt Formatter |
+| `22-letterly/cursor` | [`22-letterly/cursor/07-mobile-cicd-fix-letterly-cursor.md`](../01-prompts/22-letterly/cursor/07-mobile-cicd-fix-letterly-cursor.md) | Mobile CI/CD Fix Mode (Cursor) — Letterly Prompt Formatter |
+| `22-letterly/cursor` | [`22-letterly/cursor/readme.md`](../01-prompts/22-letterly/cursor/readme.md) | Cursor Letterly Prompt Formatters (`22-letterly/cursor`) |
 | `22-letterly` | [`22-letterly/readme.md`](../01-prompts/22-letterly/readme.md) | Letterly Prompt Formatters (`22-letterly`) |
 | `23-sync` | [`23-sync/01-sync-other-codebase.md`](../01-prompts/23-sync/01-sync-other-codebase.md) | [V6] Multi-Repository Synchronization & Downstream Codebase Mirroring — Workflow (must follow) |
 | `23-sync` | [`23-sync/readme.md`](../01-prompts/23-sync/readme.md) | Multi-Repository Synchronization Prompts (`23-sync`) — Index & Catalog |
