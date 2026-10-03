@@ -43,7 +43,7 @@ This directory hosts the canonical, production-grade prompts library (V4 archite
 
 ## Directory Index
 
-All 24 canonical prompt categories reside directly at the root of `01-prompts/`:
+All 25 canonical prompt categories reside directly at the root of `01-prompts/`:
 
 ```text
 01-prompts/
@@ -70,5 +70,6 @@ All 24 canonical prompt categories reside directly at the root of `01-prompts/`:
 ├── 20-ai-fix-script-prompts/
 ├── 21-temp-end-to-end-tests/
 ├── 22-letterly/
-└── 23-sync/
+├── 23-sync/
+└── 24-ai-verification/
 ```

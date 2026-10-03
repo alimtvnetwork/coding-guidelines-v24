@@ -10,7 +10,7 @@ Format whatever input text is provided according to the exact planning template 
    - Item 2 is ALWAYS: `2. Write the first step on task decomposition and bounded subtasks under .ai-memory/plans/subtasks/<slug>/`
    - Item 3 is ALWAYS: `3. Enforce strict no-build and no-test rules throughout the planning phase`
    - Item 4..N capture discrete architectural requirements from the input.
-5. Append the mandatory planning skill invocation suffix `[.cursor/skills/plan-spec-steps-v2/skill.md](.cursor/skills/plan-spec-steps-v2/skill.md)`.
+5. Append the mandatory planning skill invocation suffix `@[.cursor/skills/plan-spec-steps-v2]`.
 6. Output ONLY the resulting formatted markdown block.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
@@ -30,7 +30,7 @@ ${Input Text Verbatim}
 
 Must follow and spawn agent using
 
-[.cursor/skills/plan-spec-steps-v2/skill.md](.cursor/skills/plan-spec-steps-v2/skill.md)
+@[.cursor/skills/plan-spec-steps-v2]
 
 ## Additional Instructions
 

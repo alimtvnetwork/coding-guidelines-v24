@@ -8,7 +8,7 @@ Format whatever input text is provided according to the exact output template be
 4. Under `# Actionable Items Must Follow Non-Negotiable`, ensure the first item is ALWAYS:
    `1. Write spec and plan first`
    followed by discrete technical action items extracted from the input text.
-5. End with the mandatory agent invocation suffix pointing to `[.cursor/skills/execute-parent-task-with-n-steps-v6/skill.md](.cursor/skills/execute-parent-task-with-n-steps-v6/skill.md)`.
+5. End with the mandatory agent invocation suffix pointing to `@[.cursor/skills/execute-parent-task-with-n-steps-v6]`.
 6. Output ONLY the resulting markdown block.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
@@ -27,7 +27,7 @@ ${Input Text Verbatim}
 
 Must follow and spawn agent using
 
-[.cursor/skills/execute-parent-task-with-n-steps-v6/skill.md](.cursor/skills/execute-parent-task-with-n-steps-v6/skill.md)
+@[.cursor/skills/execute-parent-task-with-n-steps-v6]
 
 ## Additional Instructions
 

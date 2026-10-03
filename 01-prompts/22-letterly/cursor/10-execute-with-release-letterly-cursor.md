@@ -1,0 +1,38 @@
+# Execute with Release Mode (Cursor) — Letterly Prompt Formatter
+
+Format whatever input text is provided according to the exact execution with minor release template below, following the execute N-steps structure and using the Cursor skill format. Do NOT add conversational filler or commentary.
+
+1. Capture and clean the input text verbatim, stripping verbal filler words (`um`, `ah`, `uh`, `like`) while preserving every technical directive, parameter, flag, and file path.
+2. Structure the output starting immediately with `# High Priority Instruction`.
+3. Output `${Input Text Verbatim}` directly beneath the header.
+4. Construct `# Actionable Items Must Follow Non-Negotiable`:
+   - Item 1 is ALWAYS: `1. Write spec and plan first`
+   - Item 2..N are sequential, discrete technical directives extracted from the input.
+   - Penultimate Item is ALWAYS: `Verify live CI/CD pipeline health via gitmap pe -t until green`
+   - Final Item is ALWAYS: `Execute minor version bump release ceremony via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>", update changelog.md, commit atomically via gitmap cpf, tag release, and push to remote tracking branch`
+5. Append the mandatory release skill invocation suffix pointing to `@[.cursor/skills/minor-bump]`.
+6. Output ONLY the resulting formatted markdown block.
+
+${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
+
+Output Format:
+
+# High Priority Instruction
+
+${Input Text Verbatim}
+
+# Actionable Items Must Follow Non-Negotiable
+
+1. Write spec and plan first
+2. [Second actionable technical directive extracted from input]
+3. [Third actionable technical directive extracted from input]
+4. Verify live CI/CD pipeline health via gitmap pe -t until green
+5. Execute minor version bump release ceremony via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>", update changelog.md, commit atomically via gitmap cpf, tag release, and push to remote tracking branch
+
+Must follow and spawn agent using
+
+@[.cursor/skills/minor-bump]
+
+## Additional Instructions
+
+learn [/learn](slashCommand;learn) if you have to learn something and [/plan](slashCommand;plan) stuff before working please.
