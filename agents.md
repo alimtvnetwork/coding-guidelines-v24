@@ -83,3 +83,23 @@ To survive massive checklists and complex codebases, you MUST operate using thes
   - `gitmap rc folder <folderpath> [--repo <repo-name>]` — Copies `<folderpath>` into `repo-cache/<XX-repo-name>/<01-foldername>` and automatically commits & pushes.
   - `gitmap rc text "<script-content>" --slug <slug> --ext .ps1` — Writes `<script-content>` into `repo-cache/<XX-repo-name>/<01-slug>.ps1` and automatically commits & pushes.
 
+## 10. IDE Skill Link Syntax & Prompt Formatter Invariants
+
+- **Mandatory IDE Skill Link Syntax:** All skill links within prompt templates, instructions, and documentation MUST strictly use the IDE-detectable syntax:
+  - Antigravity Agents: `[<skill-name>](file;.agents/skills/<skill-name>)`
+  - Cursor IDE: `[<skill-name>](file;.cursor/skills/<skill-name>)`
+  - Slash Commands: `[/plan](slashCommand;plan)` and `[/learn](slashCommand;learn)`
+  - NEVER append `/skill.md` or use raw filesystem paths that break IDE interactive detection.
+
+- **Execution Formatter Standards (Letterly & Cursor):**
+  - Line 1 of generated execution prompts must begin directly with `[/plan](slashCommand;plan)`.
+  - Item 1 of Actionable Items must explicitly mandate writing specs in `02-spec/21-app/<slug>/` and enqueueing plan tasks in `.ai-memory/plans/<slug>.md` (with subtasks in `.ai-memory/plans/subtasks/<slug>/`).
+  - Final actionable item for `execute-n-steps` must trigger retrospective AI verification (`47-retrospective-ai-verification.py` / `ai-verification`).
+  - Execution with verification must embed both `execute-parent-task-with-n-steps-v6` and `ai-verification`.
+
+- **GitMap Commit Formatting:**
+  - In all GitMap commit commands (`gitmap cpf`, `gitmap cpb`, `gitmap cpr`), NEVER include colons inside the message argument. GitMap automatically provides `Feature: ` or `Bug: `. Format messages strictly with hyphens:
+    - Feature: `gitmap cpf "<module> - <summary>"`
+    - Bug Fix: `gitmap cpb "<module> - <summary>"`
+
+
