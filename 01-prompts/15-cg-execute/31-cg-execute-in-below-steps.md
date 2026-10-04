@@ -147,7 +147,7 @@ Proceeding directly to Phase 1B: Spec & Subtask Generation (Active Tool Call Run
 - [ ] Multi-Line Arguments (Rule 9a/9b): Signatures and call sites with >2 arguments formatted one argument per line with trailing commas.
 - [ ] Line Endings & Encoding: Strictly Unix LF (`\n`) and UTF-8 without BOM.
 - [ ] Function Sizing: Functions <= 8 lines preferred (hard cap 15 lines).
-- [ ] Strict Relative Git Paths: Zero absolute paths (`/absolute/path/to/...`) or `file:///` URIs.
+- [ ] Strict Relative Git Paths: Only add relative paths, never add absolute paths or `file:///` URIs during your work, and ensure this is respected on the release page and in release notes as well.
 
 ---
 
