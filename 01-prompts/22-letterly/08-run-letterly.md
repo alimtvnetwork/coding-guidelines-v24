@@ -11,7 +11,6 @@ Format whatever input text is provided according to the exact project run templa
    - Item 3 is ALWAYS: `3. If dependencies or compilers are missing, fall back to gitmap aum install or ./local-install.ps1, then auto-rerun`
    - Item 4..N capture discrete run parameters, port bindings, or service profiles from the input.
 5. Append the mandatory run skill invocation suffix `[run](file;.agents/skills/run)`.
-6. Output ONLY the resulting formatted markdown block.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
 

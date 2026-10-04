@@ -9,9 +9,8 @@ Format whatever input text is provided according to the exact high-priority exec
    - Item 1 is ALWAYS: `1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first`
    - Item 2 is ALWAYS: `2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String`
    - Item 3..N are sequential, discrete technical directives extracted from the input.
-   - Final Item is ALWAYS: `Run retrospective AI verification prompt/script (01-retrospective-ai-verification.md / 03-ai-scripts/47-retrospective-ai-verification.py) or skill [ai-verification](file;.agents/skills/ai-verification) to audit specs, touched files, code quality, and CI/CD status upon task completion`
 5. Append the mandatory agent invocation suffix pointing to `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)`.
-6. Output ONLY the resulting formatted markdown block.
+6. Make sure all the action items are listed and nothing pending.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
 
@@ -26,7 +25,6 @@ ${Input Text Verbatim}
 1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first
 2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
 3. ....other steps and more steps sequentially from the input direction. Create more steps in between.
-4. Run retrospective AI verification prompt/script (01-retrospective-ai-verification.md / 03-ai-scripts/47-retrospective-ai-verification.py) or skill [ai-verification](file;.agents/skills/ai-verification) to audit specs, touched files, code quality, and CI/CD status upon task completion
 
 ## Must follow and spawn agent using
 
