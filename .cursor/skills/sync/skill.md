@@ -284,6 +284,7 @@ Following synchronization, verify compliance before concluding:
 - [ ] **Shared Specs Parity:** Verified `02-spec/01-*` through `02-spec/20-*` are cleanly synchronized.
 - [ ] **Prompts & Skills Parity:** Verified `01-prompts/`, `.agents/skills/`, and `.cursor/skills/` are updated.
 - [ ] **Strict Lowercase Hygiene:** Verified all synced files and directories adhere strictly to lowercase naming.
+- [ ] **Strict Relative Git Paths Only:** Verified all paths, links, and references strictly use relative git paths; only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well.
 - [ ] **Zero Secrets Leakage:** Verified no `.env`, token, or credential file is staged or committed.
 - [ ] **Release Ceremony Completed:** Post-sync release tag `v<next_ver>` and release branch created and pushed to origin.
 - [ ] **Base Branch Clean:** Base branch updated with merged release tag using `[skip ci]`.
