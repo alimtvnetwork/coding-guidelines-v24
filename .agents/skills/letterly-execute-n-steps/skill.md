@@ -14,7 +14,8 @@ Format whatever input text is provided according to the exact high-priority exec
 4. Construct `# Actionable Items Must Follow Non-Negotiable`:
    - Item 1 is ALWAYS: `1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first`
    - Item 2 is ALWAYS: `2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String`
-   - Item 3..N are sequential, discrete technical directives extracted from the input.
+   - Item 3 is ALWAYS: `3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); never add absolute paths or file:/// URIs during your work or in release notes`
+   - Item 4..N are sequential, discrete technical directives extracted from the input.
 5. Append the mandatory agent invocation suffix pointing to `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)`.
 6. Make sure all the action items are listed and nothing pending.
 
@@ -30,7 +31,8 @@ ${Input Text Verbatim}
 
 1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first
 2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
-3. ....other steps and more steps sequentially from the input direction. Create more steps in between.
+3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); never add absolute paths or file:/// URIs during your work or in release notes
+4. ....other steps and more steps sequentially from the input direction. Create more steps in between.
 
 ## Must follow and spawn agent using
 

@@ -14,9 +14,10 @@ Format whatever input text is provided according to the exact planning template 
 4. Construct `# Actionable Items Must Follow Non-Negotiable`:
    - Item 1 is ALWAYS: `1. Write the plan and architectural spec first under 02-spec/21-app/<slug>/ adhering to 02-spec/01-spec-authoring-guide/`
    - Item 2 is ALWAYS: `2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String`
-   - Item 3 is ALWAYS: `3. Write the first step on task decomposition and bounded subtasks under .ai-memory/plans/subtasks/<slug>/`
-   - Item 4 is ALWAYS: `4. Enforce strict no-build and no-test rules throughout the planning phase`
-   - Item 5..N capture discrete architectural requirements from the input.
+   - Item 3 is ALWAYS: `3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); never add absolute paths or file:/// URIs during your work or in release notes`
+   - Item 4 is ALWAYS: `4. Write the first step on task decomposition and bounded subtasks under .ai-memory/plans/subtasks/<slug>/`
+   - Item 5 is ALWAYS: `5. Enforce strict no-build and no-test rules throughout the planning phase`
+   - Item 6..N capture discrete architectural requirements from the input.
 5. Append the mandatory planning skill invocation suffix `[plan-spec-steps-v2](file;.agents/skills/plan-spec-steps-v2)`.
 6. Output ONLY the resulting formatted markdown block.
 
@@ -32,9 +33,10 @@ ${Input Text Verbatim}
 
 1. Write the plan and architectural spec first under 02-spec/21-app/<slug>/ adhering to 02-spec/01-spec-authoring-guide/
 2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
-3. Write the first step on task decomposition and bounded subtasks under .ai-memory/plans/subtasks/<slug>/
-4. Enforce strict no-build and no-test rules throughout the planning phase
-5. Define binary acceptance criteria for every subtask
+3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); never add absolute paths or file:/// URIs during your work or in release notes
+4. Write the first step on task decomposition and bounded subtasks under .ai-memory/plans/subtasks/<slug>/
+5. Enforce strict no-build and no-test rules throughout the planning phase
+6. Define binary acceptance criteria for every subtask
 
 ## Must follow and spawn agent using
 

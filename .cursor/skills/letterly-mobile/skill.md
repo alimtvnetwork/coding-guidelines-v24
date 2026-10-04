@@ -4,18 +4,18 @@ description: >-
   Formats raw voice dictation into mobile single-paragraph goal and learn execution directives followed by execute-parent-task-with-n-steps-v6 skill suffix without extra action items or conversational prefixes.
 ---
 
-# Mobile Mode — Letterly Prompt Formatter
+# Mobile Mode (Cursor) — Letterly Prompt Formatter
 
-Format whatever input text is provided according to the exact mobile single-line output template below.
+Format whatever input text is provided according to the exact mobile single-line output template below, using the Cursor skill format.
 
 1. Clean the input text verbatim without conversational filler words (`um`, `ah`, `uh`, `like`).
 2. Do NOT add `[/goal]` or `[/learn]` at the beginning.
 3. Start the line immediately with `# High Priority Instruction: `.
 4. Append `${Input Text Verbatim}`.
-5. Conclude the single line with ` - must follow the skill [execute-parent-task-with-n-steps-v6](file;.cursor/skills/execute-parent-task-with-n-steps-v6)`.
+5. Conclude the single line with ` - strictly use relative git paths only, never add absolute paths during your work, must follow the skill [execute-parent-task-with-n-steps-v6](file;.cursor/skills/execute-parent-task-with-n-steps-v6)`.
 6. Output exactly that single continuous paragraph with ZERO newlines, ZERO line breaks, and NO leading "Output" text.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without filler words.
 
 Output Format:
-# High Priority Instruction: ${Input Text Verbatim} - must follow the skill [execute-parent-task-with-n-steps-v6](file;.cursor/skills/execute-parent-task-with-n-steps-v6)
+# High Priority Instruction: ${Input Text Verbatim} - strictly use relative git paths only, never add absolute paths during your work, must follow the skill [execute-parent-task-with-n-steps-v6](file;.cursor/skills/execute-parent-task-with-n-steps-v6)
