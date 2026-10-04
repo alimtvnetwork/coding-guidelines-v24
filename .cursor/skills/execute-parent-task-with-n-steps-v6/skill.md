@@ -299,7 +299,7 @@ You are Research <NN> for task nn-<slug>. You have no prior chat context; this b
   - High-speed directory inventory: `gitmap lf [pat]`
   - Stream file content: `gitmap cat <filepath>`
 - TOTAL BAN ON GIT COMMANDS: NEVER run `git add`, `git commit`, `git push`, `git status`, `git diff`, `git checkout`.
-- Strict Relative Git Paths: All paths cited in your report must be relative to the repository root. Never use absolute filesystem paths or file:/// URIs.
+- Strict Relative Git Paths: All paths cited in your report must be relative to the repository root; only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well (TOTAL BAN on absolute filesystem paths and `file:///` URIs).
 
 ### Assigned Research Scope:
 - Research Target: <symbol / architectural area / module>
@@ -343,7 +343,7 @@ You are Worker <NN> for task nn-<slug>. You have no prior chat context; this bri
 1. Positive booleans ONLY: use `is` and `has` prefixes exclusively. NEVER evaluate explicit `== true`. NEVER combine positive and negative checks in the same condition (`if isA && !isB` is BANNED).
 2. Go Structured Errors: return `*appfault.AppError`, never bare `error`.
 3. Function Sizing: <= 8 lines preferred, hard cap 15 lines. Extract domain structs and raw generics to `types.go`.
-4. Strict Relative Git Paths & Lowercase: zero absolute filesystem paths and zero `file:///` URIs. All new files strictly lowercase.
+4. Strict Relative Git Paths & Lowercase: zero absolute filesystem paths and zero `file:///` URIs. Only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well. All new files strictly lowercase.
 5. Repo Secrets: if any credentials or private tokens are needed, store them in the `repo-secrets` folder in the default work directory (via `gitmap rs`). Never commit secrets.
 6. Zero Builds or Tests: NEVER run `go build`, `npm run build`, `go test`, or `pytest`.
 7. Targeted Verification: Run only fast file-scoped linters (e.g. `python 03-ai-scripts/05-guideline-autofixer.py <folder> --check-only`). A check scanning 0 files is a FAIL.

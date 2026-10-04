@@ -8,12 +8,12 @@ description: Autonomously pull, backup, and synchronize canonical prompts, skill
 > **[/goal](slashCommand:goal)** Autonomously synchronize canonical prompts, Antigravity skills, Cursor skills, shared specifications (`02-spec/01-*` through `02-spec/20-*`), and additive AI scripts across all 43 connected repositories using pre-flight safety backups, GitMap atomic commits, SemVer release tagging, and non-negotiable boundary protections.
 > **[/learn](slashCommand:learn)** Enforce the 5 Non-Negotiable Boundaries (Spec 21 Exclusion, Bump Script Protection, Additive-Only AI Scripts with Repo Modification Checks, Memory & Plans Protection, Zero Secrets Mandate), pre-flight backup branch creation, SemVer release ceremonies, and parameter-driven inputs without hardcoding machine-specific absolute filesystem paths.
 
-**Version:** 1.0.0  
-**Updated:** 2026-10-03  
-**Status:** Active  
-**AI Confidence:** Production-Ready  
-**Canonical Prompt:** `01-prompts/24-sync/01-sync.md`  
-**Automation Engine:** `python 03-ai-scripts/38-sync-prompts-skills-scripts.py`  
+**Version:** 1.0.0
+**Updated:** 2026-10-03
+**Status:** Active
+**AI Confidence:** Production-Ready
+**Canonical Prompt:** `01-prompts/24-sync/01-sync.md`
+**Automation Engine:** `python 03-ai-scripts/38-sync-prompts-skills-scripts.py`
 
 ---
 

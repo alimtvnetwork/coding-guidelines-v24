@@ -92,3 +92,9 @@ TARGET_REPOS = [
 ```
 
 The orchestrator reads these values at runtime and configures all subagent worker waves accordingly.
+
+---
+
+## Core Invariants
+
+1. **Strict Relative Git Paths Only:** Only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well (TOTAL BAN on `file:///` URIs and absolute filesystem paths).

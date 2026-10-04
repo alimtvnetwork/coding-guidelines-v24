@@ -14,3 +14,4 @@ This directory contains autonomous retrospective verification and code quality a
 2. **Acceptance Criteria Verification:** Confirms all touched specification files under `02-spec/21-app/` have structured `## Acceptance Criteria`.
 3. **Coding Guideline Enforcement:** Enforces implicit booleans, zero absolute paths, and zero CI/CD disabling.
 4. **GitMap Telemetry Integration:** Queries `gitmap pe -t` to ensure all active pipeline workflows remain green.
+5. **Strict Relative Git Paths Only:** Only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well (TOTAL BAN on `file:///` URIs and absolute filesystem paths).

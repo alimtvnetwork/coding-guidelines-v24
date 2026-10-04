@@ -44,5 +44,5 @@ This directory contains the canonical AI training prompts and specifications for
 ## 4. Non-Negotiable AI Rules
 
 - **Total Ban on Shell Search:** TOTAL BAN on `Select-String`, `rg`, `ripgrep`, `grep`, `git grep`, `Get-ChildItem -Recurse`, and `findstr`. Use GitMap commands exclusively.
-- **Strict Relative Paths:** All file paths, markdown links, and subtask paths must be relative git paths from repository root; zero `file:///` URIs.
+- **Strict Relative Paths:** All file paths, markdown links, and subtask paths must be relative git paths from repository root; zero `file:///` URIs. Only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well.
 - **Positive Booleans:** Implicit positive booleans only (`isReady`, `hasCache`).

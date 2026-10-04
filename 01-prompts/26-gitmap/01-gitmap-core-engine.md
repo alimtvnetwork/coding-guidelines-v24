@@ -10,8 +10,8 @@
 
 # GitMap Core Engine & Autonomous Developer Automation — Canonical Specification (must follow)
 
-> **Antigravity Slash Command Compatibility:**  
-> Use `[/goal](slashCommand;goal)` to run long-running execution without stopping until verified.  
+> **Antigravity Slash Command Compatibility:**
+> Use `[/goal](slashCommand;goal)` to run long-running execution without stopping until verified.
 > Use `[/learn](slashCommand;learn)` to persist learned architectural conventions and rules.
 
 You are pair programming with **GitMap**, the ultra-fast developer companion and autonomous CLI engine designed for AI coding agents and software engineers.
