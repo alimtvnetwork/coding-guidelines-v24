@@ -41,7 +41,7 @@ Sibling folders for app-scoped concerns:
 
 ## Specification Authoring Standards for AI Prompts & Agents
 
-All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent execution prompts (e.g. `06-execute-parent-task-with-n-steps-v2.md`) MUST author product specifications directly inside this folder (`02-spec/21-app/`):
+All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent execution prompts (e.g. `02-execute-parent-task-with-n-steps-v6.md`) MUST author product specifications directly inside this folder (`02-spec/21-app/`):
 
 1. **Pure Spec Authoring Isolation:** Spec creation must focus strictly on architecture, contracts, and requirements. No source code implementation or build execution occurs during the spec phase.
 2. **Authoring Structure Patterns:**
