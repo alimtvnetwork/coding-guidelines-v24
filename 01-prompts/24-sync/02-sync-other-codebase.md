@@ -396,7 +396,7 @@ Run on changed files/folders only:
 - [ ] Semantic Naming: Zero generic garbage names (`temp`, `data`, `obj`).
 - [ ] Line Endings & Encoding: Strictly Unix LF (`\n`) and UTF-8 without BOM.
 - [ ] Function Sizing: Functions <= 8 lines preferred (hard cap 15 lines).
-- [ ] Strict Relative Git Paths & Lowercase: Only add relative paths, never add absolute paths or `file:///` URIs during your work, and ensure this is respected on the release page and in release notes as well. All new filenames strictly lowercase.
+- [ ] Strict Relative Git Paths & Lowercase: Only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well. All new filenames strictly lowercase.
 
 ---
 

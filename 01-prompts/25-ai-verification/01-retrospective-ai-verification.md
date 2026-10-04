@@ -53,7 +53,7 @@ Before reading wide files or modifying anything, you **MUST** spawn **A = 2** co
    - Every acceptance item must reflect verifiable outcomes, not vague desires.
 2. **Coding Guidelines Adherence:**
    - **Boolean Standard:** Implicit positive booleans only (`if isReady`), zero explicit `== true`, zero mixed polarity (`if isA && !isB`).
-   - **Relative Paths Mandate:** Strict relative repository paths only; only add relative paths, never add absolute paths or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well.
+   - **Relative Paths Mandate:** Strict relative repository paths only; only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well.
    - **Vertical Line Spacing:** Blank line before `if`, blank line after `}`, blank line before `return`.
    - **Zero-Storage Actions:** Verify no workflows upload build or test artifacts to GitHub storage.
 3. **CI/CD Pipeline Telemetry:**
