@@ -23,6 +23,8 @@
    - **Additive-Only AI Scripts:** Add missing scripts, but NEVER overwrite scripts modified by target repositories.
    - **Bump Script Protection:** NEVER overwrite target repository version bump scripts.
    - **Memory & Plans Protection:** NEVER overwrite or touch `.ai-memory/memory/` or `.ai-memory/plans/` in target repositories.
+   - **Zero Secrets Leakage:** Never synchronize `.env` or credentials across repositories (`repo-secrets` via `gitmap rs`).
+   - **Strict Relative Git Paths Mandate:** All file paths, markdown links, citations, subtask paths, release pages, release notes, changelogs, and memory logs MUST be strictly relative paths starting from the git repository root. Only add the relative paths, never add the absolute path during your work. This MUST be respected on the release page and in release notes as well (TOTAL BAN on `file:///` URIs and absolute filesystem paths).
 
 ---
 
@@ -93,6 +95,7 @@ For each target repository, execution proceeds in 6 discrete stages:
    - Mirror shared `02-spec/01-*` through `02-spec/20-*` specifications, strictly skipping `02-spec/21-*`.
    - Protect all bump scripts (`bump*`).
    - Protect `.ai-memory/memory` and `.ai-memory/plans`.
+   - Strictly enforce relative Git paths only: only relative file or folder names only across all mirrored assets, documentation, changelogs, and release pages.
 5. **Atomic Commit & Push:**
    Commit changes using `gitmap cpf "sync - update prompts, skills, and coding guidelines"`.
 6. **Release Tagging:**
@@ -103,9 +106,10 @@ For each target repository, execution proceeds in 6 discrete stages:
 ## Acceptance Criteria
 
 - [x] `01-prompts/24-sync/01-sync.md` created with V6 continuous execution architecture and full 43-repo sequence.
-- [ ] Companion skills `.agents/skills/sync/skill.md` and `.cursor/skills/sync/skill.md` created.
-- [ ] `06-archive/v4/` folder created with `readme.md`.
-- [ ] `03-ai-scripts/38-sync-prompts-skills-scripts.py` updated to synchronize `02-spec/01-*` through `02-spec/20-*` while protecting `02-spec/21-*`.
-- [ ] Memory updated in `.ai-memory/memory/learned/18-cross-repository-sync-rules.md`.
+- [x] Companion skills `.agents/skills/sync/skill.md` and `.cursor/skills/sync/skill.md` created.
+- [x] `06-archive/v4/` folder created with `readme.md`.
+- [x] `03-ai-scripts/38-sync-prompts-skills-scripts.py` updated to synchronize `02-spec/01-*` through `02-spec/20-*` while protecting `02-spec/21-*`.
+- [x] Memory updated in `.ai-memory/memory/learned/18-cross-repository-sync-rules.md`.
+- [x] Strict Relative Git Paths Mandate: Only relative file or folder names only throughout all specs, plans, prompts, and code (TOTAL BAN on absolute paths and `file:///` URIs).
 - [ ] All 43 connected repositories pulled, backed up, synchronized, and verified.
 - [ ] Working tree in `coding-guidelines` committed cleanly and pushed.
