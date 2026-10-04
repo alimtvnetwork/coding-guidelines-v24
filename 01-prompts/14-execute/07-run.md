@@ -95,5 +95,5 @@ If any required runtime, package manager, or dependency is missing:
 
 1. **R1 (No Disabling Gates):** Never bypass linting or CI flags.
 2. **R2 (Targeted Verification):** Run only targeted tasks specified by caller.
-3. **R11 (Relative Git Paths):** All script paths must be strictly relative to the repository root.
+3. **R11 (Relative Git Paths):** Strict Relative Git Paths Only: Only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well (TOTAL BAN on `file:///` URIs and absolute filesystem paths).
 4. **R12 (GitMap Search Primacy):** Search exclusively via GitMap (`gitmap aum search`, `gitmap find`, `gitmap cat`, `gitmap ps`); TOTAL BAN on `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`, and `findstr`.

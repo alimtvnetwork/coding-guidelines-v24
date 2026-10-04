@@ -90,7 +90,7 @@ Before executing the tasks below, you must check if this prompt is already insta
 >
 > When generating plans, subtasks (`.ai-memory/plans/subtasks/`), memory issue logs (`.ai-memory/memory/issues/`), specs, code comments, or citations:
 >
-> 1. Strictly Relative to Git Root: All file paths, markdown links, citations, and task targets MUST be relative paths starting from the repository root (e.g. `02-spec/03-error-manage/readme.md`, `[SSH Commands]`02-spec/13-generic-cli/readme.md)`, `cmd/main.go`).
+> 1. Strictly Relative to Git Root: All file paths, markdown links, citations, and task targets MUST be relative paths starting from the repository root (e.g. `02-spec/03-error-manage/readme.md`, `[SSH Commands](02-spec/13-generic-cli/readme.md)`, `cmd/main.go`). Only add the relative paths, never add the absolute path during your work; this must be respected on the release page and in release notes as well.
 > 2. Total Ban on Absolute Paths: NEVER write drive letters or absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///absolute/path/to/...`, `file:///absolute/path/to/...`) into ANY file.
 >
 > Examples:
@@ -362,7 +362,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] Completed tasks were `mv`'d to `plans/completed/` and `.ai-memory/plans/readme.md` was updated.
 - [ ] 3-strike rule respected: failed tasks cleanly rolled back and logged to `last-failure.md`.
 - [ ] Staged files sanitized of artifact zips and temporary scratch files.
-- [ ] Strict Relative Git Paths: All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`) or `file:///` URIs.
+- [ ] Strict Relative Git Paths: All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well (TOTAL BAN on `file:///` URIs and absolute filesystem paths).
 - [ ] Coding Guidelines & Master Consolidated File: I have fully read, checked, and strictly enforced every file in `02-spec/02-coding-guidelines/`, as well as the master consolidated coding guideline file at `.ai-memory/coding-guidelines.md`.
 
 ### Master Task Checklist (Atomic Numbered Steps)
