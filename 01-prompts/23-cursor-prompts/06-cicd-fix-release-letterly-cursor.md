@@ -8,7 +8,7 @@ Format whatever input text is provided according to the exact CI/CD fix and mino
 4. Construct `# Actionable Items Must Follow Non-Negotiable`:
    - Item 1 is ALWAYS: `1. Write spec and plan first`
    - Item 2: `2. Inspect live CI/CD pipeline errors and execution timeline using gitmap pe -t (or gitmap pipeline fix)`
-   - Item 3 is ALWAYS: `3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add relative paths, never add absolute paths or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well`
+   - Item 3 is ALWAYS: `3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well`
    - Item 4: `4. Perform grounded 4-part Root Cause Analysis (RCA) on exact failing step and log`
    - Item 5: `5. Apply surgical code fixes directly resolving the root cause without disabling any CI checks`
    - Item 6: `6. Verify fixes locally with targeted file linters (05-guideline-autofixer.py, check-prompts-loaded.py)`
@@ -29,7 +29,7 @@ ${Input Text Verbatim}
 
 1. Write spec and plan first
 2. Inspect live CI/CD pipeline errors and execution timeline using gitmap pe -t (or gitmap pipeline fix)
-3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add relative paths, never add absolute paths or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well
+3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well
 4. Perform grounded 4-part Root Cause Analysis (RCA) on exact failing step and log
 5. Apply surgical code fixes directly resolving the root cause without disabling any CI checks
 6. Verify fixes locally with targeted file linters (05-guideline-autofixer.py, check-prompts-loaded.py)

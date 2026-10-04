@@ -14,7 +14,7 @@ Format whatever input text is provided according to the exact execution with min
 4. Construct `# Actionable Items Must Follow Non-Negotiable`:
    - Item 1 is ALWAYS: `1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first`
    - Item 2 is ALWAYS: `2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String`
-   - Item 3 is ALWAYS: `3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add relative paths, never add absolute paths or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well`
+   - Item 3 is ALWAYS: `3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well`
    - Item 4..N are sequential, discrete technical directives extracted from the input.
    - Penultimate Item is ALWAYS: `Verify live CI/CD pipeline health via gitmap pe -t until green`
    - Final Item is ALWAYS: `Execute minor version bump release ceremony via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>", update changelog.md, commit atomically via gitmap cpf, tag release, and push to remote tracking branch`
@@ -33,7 +33,7 @@ ${Input Text Verbatim}
 
 1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first
 2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
-3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add relative paths, never add absolute paths or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well
+3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well
 4. [Fourth actionable technical directive extracted from input]
 5. Verify live CI/CD pipeline health via gitmap pe -t until green
 6. Execute minor version bump release ceremony via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>", update changelog.md, commit atomically via gitmap cpf, tag release, and push to remote tracking branch

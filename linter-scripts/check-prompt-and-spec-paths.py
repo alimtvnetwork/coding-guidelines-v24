@@ -61,6 +61,8 @@ IGNORE_TERMS = {
     "icons-svg/01-logo.svg", "icons-svg/02-logo-dark.svg", "icons-svg/03-logo-white.svg",
     "icons-svg/04-logo-animated.svg", "icons-svg/logo-animated.svg",
     "02-projects/01-acme-pay/readme.md",
+    "02-spec/19-main-worker-service/98-changelog.md",
+    "pkg/strutil/strutil.go",
     "youtube-thumbnails/01-thumbnail-1280x720.png",
     "linkedin-banners/02-banner-3168x792.png", "linkedin-banners/02-banner-2256x382.png",
     "02-spec/02-coding-guidelines/01-cross-language/14-constants-enums.md",

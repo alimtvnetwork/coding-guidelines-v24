@@ -5,11 +5,11 @@ description: "Executes the Execute Batched Loop V2 prompt. Autonomously orchestr
 
 # Execute Batched Loop V2
 
-Source prompt: `01-prompts/14-execute/07-execute-batched-loop-v2.md`
+Source prompt: `01-prompts/14-execute/06-execute-batched-loop-v2.md`
 
 ## Instructions
 
-1. Read `01-prompts/14-execute/07-execute-batched-loop-v2.md` in full before doing the task.
+1. Read `01-prompts/14-execute/06-execute-batched-loop-v2.md` in full before doing the task.
 2. Execute that prompt verbatim. It is the source of truth for this workflow.
 3. A direct instruction in the current user message overrides the prompt when they conflict.
 4. Do not shorten, paraphrase, or skip checklist items in the source prompt.
