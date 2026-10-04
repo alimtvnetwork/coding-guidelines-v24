@@ -94,6 +94,7 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 - **Execution Formatter Standards (Letterly & Cursor):**
   - Line 1 of generated execution prompts must begin directly with `[/plan](slashCommand;plan)`.
   - Item 1 of Actionable Items must explicitly mandate writing specs in `02-spec/21-app/<slug>/` and enqueueing plan tasks in `.ai-memory/plans/<slug>.md` (with subtasks in `.ai-memory/plans/subtasks/<slug>/`).
+  - Item 2 of Actionable Items must explicitly mandate searching codebase exclusively via GitMap (`gitmap aum search`, `gitmap find`, `gitmap cat`) with a total ban on `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`.
   - Final actionable item for `execute-n-steps` must trigger retrospective AI verification (`47-retrospective-ai-verification.py` / `ai-verification`).
   - Execution with verification must embed both `execute-parent-task-with-n-steps-v6` and `ai-verification`.
 
@@ -117,6 +118,12 @@ When synchronizing canonical assets (prompts, skills, shared specs, scripts) acr
   3. **Bump Script Protection (IMMUTABLE):** NEVER overwrite version bump scripts or manifests (`bump*`, `bump_versions.py`, `bump-version.mjs`, `version.json`). Each repository maintains custom SemVer targets and release logic.
   4. **Memory & Plans Protection (TOTAL ISOLATION):** NEVER modify, sync, or mirror `.ai-memory/memory/` or `.ai-memory/plans/` in target repositories.
   5. **Zero Secrets Leakage:** NEVER synchronize `.env` files, tokens, or credentials across repositories. Secrets reside strictly in `repo-secrets` via `gitmap rs`.
+
+## 12. GitMap High-Speed Search Primacy & Strict Shell Search Ban (Total Ban on rg, ripgrep, Select-String)
+
+- **Search Primacy:** All AI agents, discovery subagents, and worker subagents MUST strictly use GitMap commands (`gitmap aum search`, `gitmap find`, `gitmap search`, `gitmap cat`) for all code searches and symbol discoveries.
+- **TOTAL BAN on Shell Search Tools:** TOTAL BAN on `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`, `Get-ChildItem -Recurse`, and `findstr`.
+
 
 
 
