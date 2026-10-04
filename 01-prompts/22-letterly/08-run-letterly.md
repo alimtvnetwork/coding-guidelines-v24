@@ -13,6 +13,7 @@ Format whatever input text is provided according to the exact project run templa
    - Item 5..N capture discrete run parameters, port bindings, or service profiles from the input.
 5. Append the mandatory run skill invocation suffix `[run](file;.agents/skills/run)`.
 6. Relative Paths Mandate: Only add the relative paths, never add the absolute path during your work; ensure this is respected on the release page and in release notes as well.
+7. Additional Instructions Mandate: Always append the relative paths directive under ## Additional Instructions: '- Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.'
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
 
@@ -33,3 +34,9 @@ ${Input Text Verbatim}
 ## Must follow and spawn agent using
 
 [run](file;.agents/skills/run)
+
+## Additional Instructions
+
+- [/plan](slashCommand;plan) first before doing the work to reduce the credits.
+- [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
+- Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.

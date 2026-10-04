@@ -136,6 +136,7 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 - [ ] Update the memory inside the `.ai-memory` folder regarding this wrapper pattern so future AI agents do not make the same mistake.
 - [ ] Make a plan for the required fixes and self-loop to execute it.
 - [ ] Group similar code changes together into single commits (do not commit one file at a time) and include a nice commit message.
+- [ ] Strict Relative Git Paths: Only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well (TOTAL BAN on `file:///` URIs and absolute filesystem paths).
 - [ ] Push the code to the repository before ending the job.
 - [ ] Fix any remaining issues that arise before completion.
 

@@ -23,6 +23,7 @@ Format whatever input text is provided according to the exact CI/CD fix and mino
 5. Append the mandatory skill invocation suffix `[ci-cd-fix-gitmap-release](file;.agents/skills/ci-cd-fix-gitmap-release)`.
 6. Output ONLY the resulting formatted markdown block.
 7. Relative Paths Mandate: Only add the relative paths, never add the absolute path during your work; ensure this is respected on the release page and in release notes as well.
+8. Additional Instructions Mandate: Always append the relative paths directive under ## Additional Instructions: '- Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.'
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
 
@@ -51,3 +52,4 @@ ${Input Text Verbatim}
 
 - [/plan](slashCommand;plan) first before doing the work to reduce the credits.
 - [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap live telemetry, pipeline self-healing, and toolchain caching.
+- Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.

@@ -15,7 +15,9 @@ The canonical orchestrator is [`02-execute-parent-task-with-n-steps-v6.md`](02-e
 
 > [!NOTE]
 > **Archived Versions Notice:**
-> Legacy execution prompt iterations have been archived to [`01-prompts/19-old-execute-prompts/`](../19-old-execute-prompts/readme.md) and [`06-archive/execute/`](../../06-archive/execute/) and are not synchronized downstream.
+> Legacy execution prompt iterations have been archived to [`01-prompts/19-old-execute-prompts/`](../19-old-execute-prompts/readme.md) and [`06-archive/execute/`](../../06-archive/execute/) and are not synchronized downstream. All previous execution skills have been purged from `.agents/skills/` and `.cursor/skills/`, leaving `execute-parent-task-with-n-steps-v6` as the sole canonical execution engine.
+>
+> **Strict Relative Git Paths Only:** Only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well (TOTAL BAN on `file:///` URIs and absolute filesystem paths).
 
 ---
 

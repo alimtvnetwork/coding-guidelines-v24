@@ -39,7 +39,7 @@ You are pair programming with **GitMap**, the ultra-fast developer companion and
 6. **Semantic Hyphen-Separated Atomic Commits:**
    - In commit messages, GitMap automatically prefixes `Feature: ` or `Bug: `. NEVER provide a colon inside the commit message argument. Format messages with hyphens: `gitmap cpf "<module> - <summary>"` and `gitmap cpb "<module> - <summary>"`.
 7. **Strict Relative Paths Mandate:**
-   - All file references, links, and citations MUST be relative paths starting from the repository root (e.g. `01-prompts/26-gitmap/readme.md`). Zero absolute filesystem paths and zero `file:///` URIs.
+   - All file references, links, and citations MUST be relative paths starting from the repository root (e.g. `01-prompts/26-gitmap/readme.md`). Only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well (TOTAL BAN on absolute filesystem paths and `file:///` URIs).
 
 ---
 

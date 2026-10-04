@@ -37,7 +37,10 @@ This directory hosts the canonical, production-grade prompts library (V4 archite
    - Pure parameterization driven entirely by header variables (`N = 300`, `A = 2`, `H = 2`, `C = 30`, `PHASE_1_BUDGET = 150`, `PHASE_2_BUDGET = 150`, `WAVES`) with zero hardcoded literal step or agent counts in the body.
    - **Mandatory Subagent Spawning Gate (`invoke_subagent`, Zero Solo Execution):** Requires spawning `A = 2` concurrent subagents (`H = 2` disjoint tasks per subagent, `TypeName: "self"` in Phase 2) across both Phase 1 discovery/spec generation and Phase 2 code execution.
    - 100% GitMap commit primacy via atomic `gitmap cpf` / `gitmap cpb` (eliminating manual `git add` and `git commit`), upstream `.gitignore` hygiene gate (R8) with automatic untracking of ignored files (`git rm --cached`), SQLite task tracking, self-contained worker briefs with language-specific rules, secrets gate, and <= 3,200-word footprint.
-   - Historical versions (V2, V3, V4, V5, and `excute-parent-old.md`) are preserved in [`06-archive/execute/`](../06-archive/execute/) and [`01-prompts/19-old-execute-prompts/`](19-old-execute-prompts/readme.md).
+   - Historical versions (V2, V3, V4, V5, and `excute-parent-old.md`) are preserved in [`06-archive/execute/`](../06-archive/execute/) and [`01-prompts/19-old-execute-prompts/`](19-old-execute-prompts/readme.md). All previous versions of execution skills have been completely purged from `.agents/skills/` and `.cursor/skills/`, leaving [`execute-parent-task-with-n-steps-v6`](file;.agents/skills/execute-parent-task-with-n-steps-v6) as the sole canonical execution engine.
+
+7. **Strict Relative Git Paths Mandate (TOTAL BAN on Absolute Paths & `file:///` URIs):**
+   - Only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well. All references, links, changelogs, manifests, and documentation must strictly use relative paths from repository root.
 
 ---
 
