@@ -23,3 +23,4 @@ This directory contains deterministic prompt transformation templates specifical
 2. **Lossless Verbatim Capture:** Never drop specific technical flags, file paths, or commands from input.
 3. **Mandatory Native Skill Triggers:** Every formatted prompt must conclude with its designated skill trigger: `[<skill-name>](file;.cursor/skills/<skill-name>)`.
 4. **Standard Cursor Suffix:** All prompt files in this directory strictly carry the `-letterly-cursor.md` file suffix.
+5. **Strict Relative Git Paths Only:** Only add relative paths, never add absolute paths during your work, and ensure this is respected on the release page and in release notes as well.

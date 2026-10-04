@@ -37,8 +37,8 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 
 ## 5. Strict Relative Git Paths Mandate (TOTAL BAN on Absolute Paths / `file:///` URIs)
 
-- **Strict Relative Git Paths:** All file paths, markdown links, citations, subtask paths (`.ai-memory/plans/subtasks/`), and memory logs MUST be strictly relative paths starting from the git repository root (e.g., `02-spec/02-coding-guidelines/04-error-handling.md`, `.ai-memory/plans/subtasks/01-task.md`, `cmd/main.go`).
-- **TOTAL BAN:** NEVER write absolute filesystem paths (e.g., `/absolute/path/to/...`, `C:\Users\...`, `/home/...`) or absolute file URIs (`file:///absolute/path/to/...`, `file:///absolute/path/to/`) inside ANY repository files, plans, specs, comments, or documentation.
+- **Strict Relative Git Paths:** All file paths, markdown links, citations, subtask paths (`.ai-memory/plans/subtasks/`), release pages, release notes, changelogs, and memory logs MUST be strictly relative paths starting from the git repository root (e.g., `02-spec/02-coding-guidelines/04-error-handling.md`, `.ai-memory/plans/subtasks/01-task.md`, `cmd/main.go`). Only add relative paths, never add absolute paths during your work. This MUST be respected on the release page and in release notes as well.
+- **TOTAL BAN:** NEVER write absolute filesystem paths (e.g., `/absolute/path/to/...`, `C:\Users\...`, `/home/...`) or absolute file URIs (`file:///absolute/path/to/...`, `file:///absolute/path/to/`) inside ANY repository files, plans, specs, comments, release pages, release notes, or documentation.
   - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/.ai-memory/02-spec/commands/01-ssh-commands.md)`
   - ❌ **BAD:** `Target File: /absolute/path/to/...\cmd\login.go`
   - ✅ **GOOD:** `[SSH Commands](.ai-memory/02-spec/commands/01-ssh-commands.md)`
@@ -96,7 +96,7 @@ To survive massive checklists and complex codebases, you MUST operate using thes
   - Slash command suggestions such as `[/plan](slashCommand;plan)` belong strictly under `## Additional Instructions` at the bottom of execution prompts, and are strictly prohibited on verification audit prompts.
   - Item 1 of Actionable Items must explicitly mandate writing specs in `02-spec/21-app/<slug>/` and enqueueing plan tasks in `.ai-memory/plans/<slug>.md` (with subtasks in `.ai-memory/plans/subtasks/<slug>/`).
   - Item 2 of Actionable Items must explicitly mandate searching codebase exclusively via GitMap (`gitmap aum search`, `gitmap find`, `gitmap cat`, `gitmap ps`) with a total ban on `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`.
-  - Item 3 of Actionable Items must explicitly mandate strictly relative Git paths (`02-spec/...`, `.ai-memory/...`, `cmd/...`) with a TOTAL BAN on absolute filesystem paths and `file:///` URIs across all work, code, and release notes.
+  - Item 3 of Actionable Items must explicitly mandate strictly relative Git paths (`02-spec/...`, `.ai-memory/...`, `cmd/...`): only add relative paths, never add absolute paths or `file:///` URIs during your work, and ensure this is respected on the release page and in release notes as well.
   - Retrospective AI verification is an audit and verification gate, NOT a planning step. Only `09-execute-with-verification-letterly.md` (and its mirrors) contains retrospective AI verification; standard `execute-n-steps` formatters MUST NOT mandate retrospective AI verification.
   - Execution with verification must embed both `execute-parent-task-with-n-steps-v6` and `ai-verification`.
 

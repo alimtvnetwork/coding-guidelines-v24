@@ -11,43 +11,43 @@ This specification details the component-level modifications across all affected
 ### 2.1 AGENTS.md Section 10 Enhancement
 In `AGENTS.md` under `## 10. IDE Skill Link Syntax & Prompt Formatter Invariants` -> `Execution Formatter Standards (Letterly & Cursor)`:
 - Add explicit bullet mandating strict relative Git paths in Actionable Items:
-  `Item 3 of Actionable Items must explicitly mandate strictly relative Git paths (02-spec/..., .ai-memory/..., cmd/...) with a TOTAL BAN on absolute filesystem paths and file:/// URIs across all work, code, and release notes.`
+  `Item 3 of Actionable Items must explicitly mandate strictly relative Git paths (02-spec/..., .ai-memory/..., cmd/...): only add relative paths, never add absolute paths or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well.`
 
 ### 2.2 Letterly Formatters (`01-prompts/22-letterly/`)
 In all 10 Letterly formatters, inject the relative path mandate:
 - **`01-mobile-letterly.md`:**
   Update rule 5 and output format to include:
-  `- strictly use relative git paths only, never add absolute paths during your work, must follow the skill [execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)`
+  `- strictly use relative git paths only, never add absolute paths during your work (this must be respected on the release page and in release notes as well), must follow the skill [execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)`
 - **`02-desktop-letterly.md`:**
   Under `# Actionable Items Must Follow Non-Negotiable`, insert:
-  `Item 3 is ALWAYS: 3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); never add absolute paths or file:/// URIs during your work or in release notes`
+  `Item 3 is ALWAYS: 3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add relative paths, never add absolute paths or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well`
   Followed by discrete technical action items.
 - **`03-execute-n-steps-letterly.md` (Golden Prompt):**
   Under `# Actionable Items Must Follow Non-Negotiable`, insert:
-  `Item 3 is ALWAYS: 3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); never add absolute paths or file:/// URIs during your work or in release notes`
+  `Item 3 is ALWAYS: 3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add relative paths, never add absolute paths or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well`
   Followed by Item 4..N sequential directives.
 - **`04-plan-letterly.md`:**
   Under `# Actionable Items Must Follow Non-Negotiable`, insert:
-  `Item 3 is ALWAYS: 3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); never add absolute paths or file:/// URIs during your work or in release notes`
+  `Item 3 is ALWAYS: 3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add relative paths, never add absolute paths or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well`
   Followed by Item 4 (task decomposition) and Item 5 (no-build/no-test).
 - **`05-release-letterly.md`:**
   Under `# Actionable Items Must Follow Non-Negotiable`, insert:
-  `Item 3 is ALWAYS: 3. Strictly use relative Git paths only; TOTAL BAN on absolute paths and file:/// URIs in changelog.md, release notes, manifests, and documentation`
+  `Item 3 is ALWAYS: 3. Strictly use relative Git paths only; only add relative paths, never add absolute paths or file:/// URIs during your work, and ensure this is respected on the release page, in release notes, changelog.md, manifests, and documentation`
 - **`06-cicd-fix-release-letterly.md`:**
   Under `# Actionable Items Must Follow Non-Negotiable`, insert:
-  `Item 3 is ALWAYS: 3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); never add absolute paths or file:/// URIs during your work or in release notes`
+  `Item 3 is ALWAYS: 3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add relative paths, never add absolute paths or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well`
 - **`07-mobile-cicd-fix-letterly.md`:**
   Update rule 4 and output format to include:
-  `- strictly use relative git paths only, never add absolute paths during your work, must follow the skill [ci-cd-fix-gitmap-release](file;.agents/skills/ci-cd-fix-gitmap-release)`
+  `- strictly use relative git paths only, never add absolute paths during your work (this must be respected on the release page and in release notes as well), must follow the skill [ci-cd-fix-gitmap-release](file;.agents/skills/ci-cd-fix-gitmap-release)`
 - **`08-run-letterly.md`:**
   Under `# Actionable Items Must Follow Non-Negotiable`, insert:
-  `Item 4 is ALWAYS: 4. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); never add absolute paths or file:/// URIs during your work or execution`
+  `Item 4 is ALWAYS: 4. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add relative paths, never add absolute paths or file:/// URIs during your work, execution, or on the release page and in release notes`
 - **`09-execute-with-verification-letterly.md`:**
   Under `# Actionable Items Must Follow Non-Negotiable`, insert:
-  `Item 3 is ALWAYS: 3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); never add absolute paths or file:/// URIs during your work or in release notes`
+  `Item 3 is ALWAYS: 3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add relative paths, never add absolute paths or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well`
 - **`10-execute-with-release-letterly.md`:**
   Under `# Actionable Items Must Follow Non-Negotiable`, insert:
-  `Item 3 is ALWAYS: 3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); never add absolute paths or file:/// URIs during your work or in release notes`
+  `Item 3 is ALWAYS: 3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add relative paths, never add absolute paths or file:/// URIs during your work, and ensure this is respected on the release page and in release notes as well`
 
 ### 2.3 Cursor Formatters (`01-prompts/23-cursor-prompts/`)
 Mirror the exact same relative paths mandate in all 10 Cursor prompt formatters (01 through 10), substituting `(file;.cursor/skills/...)`.

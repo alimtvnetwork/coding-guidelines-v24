@@ -1,8 +1,8 @@
 # GitMap CI/CD Self-Healing & Letterly Integration Protocol
 
 > **Reference Specification:** `02-spec/21-app/04-cicd-fix-gitmap/01-architecture-spec.md`  
-> **Associated Prompt:** `01-prompts/16-ci-cd/11-ci-cd-fix-gitmap.md`  
-> **Associated Skills:** `.agents/skills/ci-cd-fix-gitmap/skill.md`, `.cursor/skills/ci-cd-fix-gitmap/skill.md`
+> **Associated Prompt:** `01-prompts/16-ci-cd/11-ci-cd-fix-gitmap-release.md`  
+> **Associated Skills:** `.agents/skills/ci-cd-fix-gitmap-release/skill.md`, `.cursor/skills/ci-cd-fix-gitmap-release/skill.md`
 
 ## 1. Core Objectives & Principles
 
@@ -29,9 +29,9 @@ When diagnosing and healing failing CI/CD pipelines across any connected reposit
 Letterly converts spoken voice notes into executable prompts for autonomous AI agents:
 
 1. **Desktop Format:** Structured with `# High Priority Instruction`, `[/goal]`, `[/learn]`, `# Actionable Items Must Follow Non-Negotiable`, and mandatory skill suffix:
-   `[ci-cd-fix-gitmap](file;.agents/skills/ci-cd-fix-gitmap)`.
+   `[ci-cd-fix-gitmap-release](file;.agents/skills/ci-cd-fix-gitmap-release)`.
 2. **Mobile Format:** Strictly ONE single line / continuous paragraph with zero line breaks or code fences, prefixing with `[/goal] [/learn] Run gitmap pe -t to diagnose...` and suffixing with:
-   `- must follow the skill [ci-cd-fix-gitmap](file;.agents/skills/ci-cd-fix-gitmap)`.
+   `- must follow the skill [ci-cd-fix-gitmap-release](file;.agents/skills/ci-cd-fix-gitmap-release)`.
 
 ## 3. Tool & Skill Synchronization Invariant
 
