@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.72.0] - 2026-10-04
+
+### Added
+- feat(aum): enhance letterly prompts with gitmap py llm train and gitmap skill learning
+
+---
+
 ## [v6.71.0] - 2026-10-04
 
 ### Added
