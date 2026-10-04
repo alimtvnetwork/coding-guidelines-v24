@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.71.0] - 2026-10-04
+
+### Added
+- feat(aum): sync golden letterly prompts, create gitmap engine prompt, and archive legacy execute prompts
+
+---
+
 ## [v6.70.0] - 2026-10-04
 
 ### Added
