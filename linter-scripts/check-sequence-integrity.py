@@ -89,6 +89,14 @@ def resolve_reference(citing_file: Path, raw_target: str, repo_root: Path) -> Pa
     if not clean or is_placeholder(clean) or is_external_or_special(clean):
         return None
 
+    # Handle IDE skill links: file;.agents/skills/<name> or file;.cursor/skills/<name>
+    if clean.startswith("file;"):
+        skill_ref = clean[len("file;"):].strip()
+        skill_path = (repo_root / skill_ref).resolve()
+        if skill_path.exists() or (skill_path / "skill.md").exists():
+            return skill_path
+        return None
+
     # Check relative to repository root
     root_resolved = (repo_root / clean).resolve()
     if root_resolved.exists():
