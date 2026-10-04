@@ -40,4 +40,5 @@ ${Input Text Verbatim}
 
 ## Additional Instructions
 
-[/plan](slashCommand;plan) first before doing the work to reduce the credits.
+- [/plan](slashCommand;plan) first before doing the work to reduce the credits.
+- [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap live telemetry, pipeline self-healing, and toolchain caching.

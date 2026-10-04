@@ -7,7 +7,7 @@ Format whatever input text is provided according to the exact execution with min
 3. Output `${Input Text Verbatim}` directly beneath the header.
 4. Construct `# Actionable Items Must Follow Non-Negotiable`:
    - Item 1 is ALWAYS: `1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first`
-   - Item 2 is ALWAYS: `2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String`
+   - Item 2 is ALWAYS: `2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String`
    - Item 3..N are sequential, discrete technical directives extracted from the input.
    - Penultimate Item is ALWAYS: `Verify live CI/CD pipeline health via gitmap pe -t until green`
    - Final Item is ALWAYS: `Execute minor version bump release ceremony via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>", update changelog.md, commit atomically via gitmap cpf, tag release, and push to remote tracking branch`
@@ -25,7 +25,7 @@ ${Input Text Verbatim}
 # Actionable Items Must Follow Non-Negotiable
 
 1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first
-2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
+2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
 3. [Third actionable technical directive extracted from input]
 4. Verify live CI/CD pipeline health via gitmap pe -t until green
 5. Execute minor version bump release ceremony via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>", update changelog.md, commit atomically via gitmap cpf, tag release, and push to remote tracking branch
@@ -36,4 +36,5 @@ ${Input Text Verbatim}
 
 ## Additional Instructions
 
-[/plan](slashCommand;plan) first before doing the work to reduce the credits.
+- [/plan](slashCommand;plan) first before doing the work to reduce the credits.
+- [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.

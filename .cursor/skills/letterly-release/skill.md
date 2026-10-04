@@ -13,7 +13,7 @@ Format whatever input text is provided according to the exact minor release temp
 3. Put `${Input Text Verbatim}` directly beneath the high priority header.
 4. Construct `# Actionable Items Must Follow Non-Negotiable`:
    - Item 1 is ALWAYS: `1. Write spec and plan first adhering to 02-spec/16-generic-release/ and 01-prompts/17-release-management/02-minor-bump.md`
-   - Item 2 is ALWAYS: `2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String`
+   - Item 2 is ALWAYS: `2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String`
    - Item 3 is ALWAYS: `3. Enforce zero-storage GitHub Actions rules (zero routine artifact uploads)`
    - Item 4 is ALWAYS: `4. Execute minor version bump via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"`
    - Item 5 is ALWAYS: `5. Consolidate and update release notes in root changelog.md and manifests`
@@ -32,7 +32,7 @@ ${Input Text Verbatim}
 # Actionable Items Must Follow Non-Negotiable
 
 1. Write spec and plan first adhering to 02-spec/16-generic-release/ and 01-prompts/17-release-management/02-minor-bump.md
-2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
+2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
 3. Enforce zero-storage GitHub Actions rules (zero routine artifact uploads)
 4. Execute minor version bump via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"
 5. Consolidate and update release notes in root changelog.md and manifests
@@ -44,4 +44,5 @@ ${Input Text Verbatim}
 
 ## Additional Instructions
 
-[/plan](slashCommand;plan) first before doing the work to reduce the credits.
+- [/plan](slashCommand;plan) first before doing the work to reduce the credits.
+- [/learn](slashCommand;learn) from [gitmap](file;.cursor/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
