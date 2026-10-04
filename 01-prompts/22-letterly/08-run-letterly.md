@@ -27,7 +27,6 @@ ${Input Text Verbatim}
 3. If dependencies or compilers are missing, fall back to gitmap aum install or ./local-install.ps1, then auto-rerun
 4. [Discrete run directive extracted from input]
 
-Must follow and spawn agent using
+## Must follow and spawn agent using
 
 [run](file;.agents/skills/run)
-

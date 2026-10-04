@@ -33,17 +33,17 @@ This directory hosts the canonical, production-grade prompts library (V4 archite
    - **Standard Execute & Audit Prompts:** Enforce **Top-Instruction Priority Mandate (Above Precedence / Preamble Precedence)** — instructions provided ABOVE the prompt take highest priority.
    - **Below-Steps Prompts (`*-in-below-steps.md`, `32-cg-follow-other-prompts.md`):** Enforce **Bottom-Instruction Priority Mandate (Below Precedence)** — instructions appended after the trailing `--` and `## 🚨 High Priority Instructions Below` header take highest priority.
 
-6. **Canonical V6 Parent Task N-Steps Continuous Loop (`14-execute/02-execute-parent-task-with-n-steps.md`):**
+6. **Canonical V6 Parent Task N-Steps Continuous Loop (`14-execute/02-execute-parent-task-with-n-steps-v6.md`):**
    - Pure parameterization driven entirely by header variables (`N = 300`, `A = 2`, `H = 2`, `C = 30`, `PHASE_1_BUDGET = 150`, `PHASE_2_BUDGET = 150`, `WAVES`) with zero hardcoded literal step or agent counts in the body.
    - **Mandatory Subagent Spawning Gate (`invoke_subagent`, Zero Solo Execution):** Requires spawning `A = 2` concurrent subagents (`H = 2` disjoint tasks per subagent, `TypeName: "self"` in Phase 2) across both Phase 1 discovery/spec generation and Phase 2 code execution.
    - 100% GitMap commit primacy via atomic `gitmap cpf` / `gitmap cpb` (eliminating manual `git add` and `git commit`), upstream `.gitignore` hygiene gate (R8) with automatic untracking of ignored files (`git rm --cached`), SQLite task tracking, self-contained worker briefs with language-specific rules, secrets gate, and <= 3,200-word footprint.
-   - Historical versions (V2, V3, V4, V5, and `excute-parent-old.md`) are preserved in [`06-archive/execute/`](../06-archive/execute/).
+   - Historical versions (V2, V3, V4, V5, and `excute-parent-old.md`) are preserved in [`06-archive/execute/`](../06-archive/execute/) and [`01-prompts/19-old-execute-prompts/`](19-old-execute-prompts/readme.md).
 
 ---
 
 ## Directory Index
 
-All 25 canonical prompt categories reside directly at the root of `01-prompts/`:
+All 27 canonical prompt categories reside directly at the root of `01-prompts/`:
 
 ```text
 01-prompts/
@@ -72,10 +72,8 @@ All 25 canonical prompt categories reside directly at the root of `01-prompts/`:
 ├── 22-letterly/
 ├── 23-cursor-prompts/
 ├── 24-sync/
-│   ├── 01-sync.md
-│   ├── 02-sync-other-codebase.md
-│   └── readme.md
-└── 25-ai-verification/
+├── 25-ai-verification/
+└── 26-gitmap/
 ```
 
 ---
@@ -98,15 +96,16 @@ All 25 canonical prompt categories reside directly at the root of `01-prompts/`:
 | **11** | `11-content-and-seo/` | `01-jokes-ideas-generate.md`, `03-seo-optimization.md`, `05-update-readme.md` | Content copywriting, SEO optimization, and documentation sync |
 | **12** | `12-old-plan-prompts/` | `01-plan-maximum-enforcement.md`, `05-plan-spec-steps.md` | Archived legacy planning protocols and audit workflows |
 | **13** | `13-plan-audit/` | `01-inventory-pending-tasks.md`, `02-plan-spec-steps-v2.md`, `03-audit-app-spec.md` | Task inventory, spec planning V2, and blind-AI audits |
-| **14** | `14-execute/` | `02-execute-parent-task-with-n-steps.md`, `09-parent-task-in-below-steps.md`, `14-run.md` | V6 autonomous parent task execution, continuous loops, and run orchestration |
+| **14** | `14-execute/` | `01-execute-pending-tasks.md`, `02-execute-parent-task-with-n-steps-v6.md`, `07-run.md` | Canonical V6 autonomous parent task execution, continuous loops, and run orchestration |
 | **15** | `15-cg-execute/` | `01-execute-coding-guideline-fix.md` through `20-*` | Granular coding guideline rule enforcement suite |
 | **16** | `16-ci-cd/` | `01-ci-cd-fix-with-release.md`, `02-cicd-pipeline-create.md` | CI/CD pipeline diagnosis, creation, and release integration |
 | **17** | `17-release-management/` | `01-release.md`, `02-patch-bump.md`, `03-minor-bump.md`, `04-major-bump.md` | Semantic release ceremonies, version bumps, and tags |
 | **18** | `18-insults/` | `01-raw-insults.md` | Anti-carelessness discipline and quality enforcement |
-| **19** | `19-old-execute-prompts/` | `01-execute-pending-tasks-old.md` | Archived legacy execute prompt templates |
+| **19** | `19-old-execute-prompts/` | `01-execute-robust-loop.md`, `03-execute-parent-task-with-n-steps.md`, `04-parent-task-in-below-steps.md` | Archived legacy execute prompt templates |
 | **20** | `20-ai-fix-script-prompts/` | `01-python-file-manipulator.md` | Dedicated AI utility script prompt definitions |
 | **21** | `21-temp-end-to-end-tests/` | `01-temp-end-to-end-test.md` | Isolated temporary end-to-end tests with skip-by-default guards |
 | **22** | `22-letterly/` | `01-mobile-letterly.md` through `10-execute-with-release-letterly.md` | Voice dictation prompt formatters for mobile, desktop, execution, and releases |
 | **23** | `23-cursor-prompts/` | `01-mobile-letterly-cursor.md` through `10-execute-with-release-letterly-cursor.md` | Cursor IDE prompt formatters targeting `.cursor/skills/` resolution |
 | **24** | `24-sync/` | `01-sync.md`, `02-sync-other-codebase.md` | Multi-repository synchronization engine: pull base branch, safety backup, asset mirroring with 5 boundary protections, atomic commit, and release tagging |
 | **25** | `25-ai-verification/` | `01-retrospective-ai-verification.md` | Retrospective quality audit, guideline verification, and CI validation |
+| **26** | `26-gitmap/` | `01-gitmap-core-engine.md` | GitMap AI training curriculum, streaming regex search, toolchain locator, and autonomous companion |

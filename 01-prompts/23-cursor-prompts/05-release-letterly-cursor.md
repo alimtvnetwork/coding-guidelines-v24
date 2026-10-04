@@ -6,12 +6,13 @@ Format whatever input text is provided according to the exact minor release temp
 2. Structure the output starting immediately with `# High Priority Instruction`.
 3. Put `${Input Text Verbatim}` directly beneath the high priority header.
 4. Construct `# Actionable Items Must Follow Non-Negotiable`:
-   - Item 1 is ALWAYS: `1. Write spec and plan first`
-   - Item 2: `2. Enforce zero-storage GitHub Actions rules (zero routine artifact uploads)`
-   - Item 3: `3. Execute minor version bump via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"`
-   - Item 4: `4. Consolidate and update release notes in root changelog.md and manifests`
-   - Item 5: `5. Commit atomically via gitmap cpf and push release tag to remote tracking branch`
-5. Append the mandatory release skill invocation suffix [minor-bump](file;.cursor/skills/minor-bump).
+   - Item 1 is ALWAYS: `1. Write spec and plan first adhering to 02-spec/16-generic-release/ and 01-prompts/17-release-management/02-minor-bump.md`
+   - Item 2 is ALWAYS: `2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String`
+   - Item 3 is ALWAYS: `3. Enforce zero-storage GitHub Actions rules (zero routine artifact uploads)`
+   - Item 4 is ALWAYS: `4. Execute minor version bump via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"`
+   - Item 5 is ALWAYS: `5. Consolidate and update release notes in root changelog.md and manifests`
+   - Item 6 is ALWAYS: `6. Commit atomically via gitmap cpf "<module> - release minor version" and push release tag to remote tracking branch`
+5. Append the mandatory release skill invocation suffix `[minor-bump](file;.cursor/skills/minor-bump)`.
 6. Output ONLY the resulting formatted markdown block.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
@@ -24,17 +25,17 @@ ${Input Text Verbatim}
 
 # Actionable Items Must Follow Non-Negotiable
 
-1. Write spec and plan first
-2. Enforce zero-storage GitHub Actions rules (zero routine artifact uploads)
-3. Execute minor version bump via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"
-4. Consolidate and update release notes in root changelog.md and manifests
-5. Commit atomically via gitmap cpf "<module> - release minor version"
-6. Tag release version and push to remote tracking branch
+1. Write spec and plan first adhering to 02-spec/16-generic-release/ and 01-prompts/17-release-management/02-minor-bump.md
+2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
+3. Enforce zero-storage GitHub Actions rules (zero routine artifact uploads)
+4. Execute minor version bump via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"
+5. Consolidate and update release notes in root changelog.md and manifests
+6. Commit atomically via gitmap cpf "<module> - release minor version" and push release tag to remote tracking branch
 
-Must follow and spawn agent using
+## Must follow and spawn agent using
 
 [minor-bump](file;.cursor/skills/minor-bump)
 
 ## Additional Instructions
 
-learn [/learn](slashCommand;learn) if you have to learn something and [/plan](slashCommand;plan) stuff before working please.
+[/plan](slashCommand;plan) first before doing the work to reduce the credits.

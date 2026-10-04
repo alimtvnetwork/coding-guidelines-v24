@@ -40,10 +40,10 @@ ${Input Text Verbatim}
 6. Execute minor version bump via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"
 7. Commit atomically via gitmap cpf, tag release, and loop until CI/CD is completely green
 
-Must follow and spawn agent using
+## Must follow and spawn agent using
 
 [ci-cd-fix-gitmap-release](file;.cursor/skills/ci-cd-fix-gitmap-release)
 
 ## Additional Instructions
 
-learn [/learn](slashCommand;learn) if you have to learn something and [/plan](slashCommand;plan) stuff before working please.
+[/plan](slashCommand;plan) first before doing the work to reduce the credits.

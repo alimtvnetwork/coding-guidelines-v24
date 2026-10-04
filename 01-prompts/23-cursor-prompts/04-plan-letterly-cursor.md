@@ -6,11 +6,12 @@ Format whatever input text is provided according to the exact planning template 
 2. Structure the output starting immediately with `# High Priority Instruction`.
 3. Put `${Input Text Verbatim}` directly beneath the high priority header.
 4. Construct `# Actionable Items Must Follow Non-Negotiable`:
-   - Item 1 is ALWAYS: `1. Write the plan and architectural spec first under 02-spec/21-app/<slug>/`
-   - Item 2 is ALWAYS: `2. Write the first step on task decomposition and bounded subtasks under .ai-memory/plans/subtasks/<slug>/`
-   - Item 3 is ALWAYS: `3. Enforce strict no-build and no-test rules throughout the planning phase`
-   - Item 4..N capture discrete architectural requirements from the input.
-5. Append the mandatory planning skill invocation suffix [plan-spec-steps-v2](file;.cursor/skills/plan-spec-steps-v2).
+   - Item 1 is ALWAYS: `1. Write the plan and architectural spec first under 02-spec/21-app/<slug>/ adhering to 02-spec/01-spec-authoring-guide/`
+   - Item 2 is ALWAYS: `2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String`
+   - Item 3 is ALWAYS: `3. Write the first step on task decomposition and bounded subtasks under .ai-memory/plans/subtasks/<slug>/`
+   - Item 4 is ALWAYS: `4. Enforce strict no-build and no-test rules throughout the planning phase`
+   - Item 5..N capture discrete architectural requirements from the input.
+5. Append the mandatory planning skill invocation suffix `[plan-spec-steps-v2](file;.cursor/skills/plan-spec-steps-v2)`.
 6. Output ONLY the resulting formatted markdown block.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
@@ -23,15 +24,16 @@ ${Input Text Verbatim}
 
 # Actionable Items Must Follow Non-Negotiable
 
-1. Write the plan and architectural spec first under 02-spec/21-app/<slug>/
-2. Write the first step on task decomposition and bounded subtasks under .ai-memory/plans/subtasks/<slug>/
-3. Enforce strict no-build and no-test rules throughout the planning phase
-4. Define binary acceptance criteria for every subtask
+1. Write the plan and architectural spec first under 02-spec/21-app/<slug>/ adhering to 02-spec/01-spec-authoring-guide/
+2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
+3. Write the first step on task decomposition and bounded subtasks under .ai-memory/plans/subtasks/<slug>/
+4. Enforce strict no-build and no-test rules throughout the planning phase
+5. Define binary acceptance criteria for every subtask
 
-Must follow and spawn agent using
+## Must follow and spawn agent using
 
 [plan-spec-steps-v2](file;.cursor/skills/plan-spec-steps-v2)
 
 ## Additional Instructions
 
-learn [/learn](slashCommand;learn) if you have to learn something and [/plan](slashCommand;plan) stuff before working please.
+[/plan](slashCommand;plan) first before doing the work to reduce the credits.

@@ -11,8 +11,9 @@ Format whatever input text is provided according to the exact output template be
 1. Clean the input text verbatim by removing conversational filler words (`um`, `ah`, `uh`, `like`) while strictly preserving every technical detail, requirement, file path, command, and directive.
 2. Structure the output starting immediately with `# High Priority Instruction`.
 3. Put `${Input Text Verbatim}` directly under the high priority header.
-4. Under `# Actionable Items Must Follow Non-Negotiable`, ensure the first item is ALWAYS:
-   `1. Write spec and plan first`
+4. Under `# Actionable Items Must Follow Non-Negotiable`, ensure:
+   - Item 1 is ALWAYS: `1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first`
+   - Item 2 is ALWAYS: `2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String`
    followed by discrete technical action items extracted from the input text.
 5. End with the mandatory agent invocation suffix pointing to `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)`.
 6. Output ONLY the resulting markdown block.
@@ -27,14 +28,14 @@ ${Input Text Verbatim}
 
 # Actionable Items Must Follow Non-Negotiable
 
-1. Write spec and plan first
-2. [Second actionable technical directive extracted from input]
+1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first
+2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
 3. [Third actionable technical directive extracted from input]
 
-Must follow and spawn agent using
+## Must follow and spawn agent using
 
 [execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)
 
 ## Additional Instructions
 
-learn [/learn](slashCommand;learn) if you have to learn something and [/plan](slashCommand;plan) stuff before working please.
+[/plan](slashCommand;plan) first before doing the work to reduce the credits.
