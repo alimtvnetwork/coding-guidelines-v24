@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.68.0] - 2026-10-04
+
+### Added
+- docs(sync): multi-repo sync standards, architecture spec, and agent rules
+
+---
+
 ## [v6.67.0] - 2026-10-03
 
 ### Added
