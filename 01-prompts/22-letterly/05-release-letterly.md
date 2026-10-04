@@ -15,6 +15,7 @@ Format whatever input text is provided according to the exact minor release temp
    - Item 7 is ALWAYS: `7. Commit atomically via gitmap cpf "<module> - release minor version" and push release tag to remote tracking branch`
 5. Append the mandatory release skill invocation suffix `[minor-bump](file;.agents/skills/minor-bump)`.
 6. Output ONLY the resulting formatted markdown block.
+7. Relative Paths Mandate: Only add the relative paths, never add the absolute path during your work; ensure this is respected on the release page, in release notes, changelog.md, manifests, and documentation.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
 

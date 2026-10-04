@@ -19,6 +19,7 @@ Format whatever input text is provided according to the exact execution with ret
    - Final Item is ALWAYS: `Run retrospective AI verification prompt/script (01-prompts/25-ai-verification/01-retrospective-ai-verification.md / 03-ai-scripts/47-retrospective-ai-verification.py) or skill [ai-verification](file;.cursor/skills/ai-verification) to audit specs, touched files, code quality, and CI/CD status upon task completion`
 5. Append the mandatory agent invocation suffix pointing to `[execute-parent-task-with-n-steps-v6](file;.cursor/skills/execute-parent-task-with-n-steps-v6)`.
 6. Make sure all the action items are listed and nothing pending.
+7. Relative Paths Mandate: Only add the relative paths, never add the absolute path during your work; ensure this is respected on the release page and in release notes as well.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
 

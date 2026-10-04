@@ -14,6 +14,7 @@ Format whatever input text is provided according to the exact execution with min
    - Final Item is ALWAYS: `Execute minor version bump release ceremony via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>", update changelog.md, commit atomically via gitmap cpf, tag release, and push to remote tracking branch`
 5. Append the mandatory release skill invocation suffix pointing to `[minor-bump](file;.cursor/skills/minor-bump)`.
 6. Output ONLY the resulting formatted markdown block.
+7. Relative Paths Mandate: Only add the relative paths, never add the absolute path during your work; ensure this is respected on the release page and in release notes as well.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
 

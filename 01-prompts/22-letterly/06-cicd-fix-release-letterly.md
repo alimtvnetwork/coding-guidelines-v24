@@ -16,6 +16,7 @@ Format whatever input text is provided according to the exact CI/CD fix and mino
    - Item 8: `8. Commit atomically via gitmap cpf, tag release, and loop until CI/CD is completely green`
 5. Append the mandatory skill invocation suffix `[ci-cd-fix-gitmap-release](file;.agents/skills/ci-cd-fix-gitmap-release)`.
 6. Output ONLY the resulting formatted markdown block.
+7. Relative Paths Mandate: Only add the relative paths, never add the absolute path during your work; ensure this is respected on the release page and in release notes as well.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
 

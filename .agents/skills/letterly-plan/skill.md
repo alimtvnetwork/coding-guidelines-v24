@@ -20,6 +20,7 @@ Format whatever input text is provided according to the exact planning template 
    - Item 6..N capture discrete architectural requirements from the input.
 5. Append the mandatory planning skill invocation suffix `[plan-spec-steps-v2](file;.agents/skills/plan-spec-steps-v2)`.
 6. Output ONLY the resulting formatted markdown block.
+7. Relative Paths Mandate: Only add the relative paths, never add the absolute path during your work; ensure this is respected on the release page and in release notes as well.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
 

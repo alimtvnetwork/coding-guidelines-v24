@@ -7,6 +7,7 @@ Combine the entire output into exactly ONE continuous single-line paragraph with
 3. Append `${Input Text Verbatim}`.
 4. Suffix with ` - strictly use relative git paths only; only add the relative paths, never add the absolute path during your work (this must be respected on the release page and in release notes as well), must follow the skill [ci-cd-fix-gitmap-release](file;.cursor/skills/ci-cd-fix-gitmap-release)`.
 5. Output exactly that single line with no leading "Output" or markdown code fences.
+6. Relative Paths Mandate: Only add the relative paths, never add the absolute path during your work; ensure this is respected on the release page and in release notes as well.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without filler words.
 
