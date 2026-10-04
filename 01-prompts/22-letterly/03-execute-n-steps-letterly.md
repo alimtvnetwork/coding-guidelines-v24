@@ -17,8 +17,6 @@ ${Input Text Verbatim} = The cleaned input text as it is, without conversational
 
 Output Format:
 
-[/plan](slashCommand;plan)
-
 # High Priority Instruction
 
 ${Input Text Verbatim}
@@ -26,16 +24,15 @@ ${Input Text Verbatim}
 # Actionable Items Must Follow Non-Negotiable
 
 1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first
-2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
-3. [Third actionable technical directive extracted from input]
-4. [Fourth actionable technical directive extracted from input]
-5. Run retrospective AI verification prompt/script (01-retrospective-ai-verification.md / 03-ai-scripts/47-retrospective-ai-verification.py) or skill [ai-verification](file;.agents/skills/ai-verification) to audit specs, touched files, code quality, and CI/CD status upon task completion
+2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
+3. ....other steps and more steps sequentially from the input direction. Create more steps in between.
+4. Run retrospective AI verification prompt/script (01-retrospective-ai-verification.md / 03-ai-scripts/47-retrospective-ai-verification.py) or skill [ai-verification](file;.agents/skills/ai-verification) to audit specs, touched files, code quality, and CI/CD status upon task completion
 
-Must follow and spawn agent using
+## Must follow and spawn agent using
 
 [execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)
 
 ## Additional Instructions
 
-[/plan](slashCommand;plan) first before doing the work to reduce the credits.
+[/plan](slashCommand;plan) First before doing the work to reduce the credits.
 
