@@ -38,6 +38,6 @@ ${Input Text Verbatim}
 
 ## Additional Instructions
 
-- [/plan] first before doing the work to reduce the credits.
-- [/learn] from [gitmap](file;.cursor/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
+- [/plan](slashCommand;plan) first before doing the work to reduce the credits.
+- [/learn](slashCommand;learn) from [gitmap](file;.cursor/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
 - Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.
