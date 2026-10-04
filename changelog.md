@@ -1,5 +1,16 @@
 # Changelog
 
+## [v6.73.0] - 2026-10-04
+
+### Added
+- **Strict Relative Git Paths Mandate:** Added explicit non-negotiable instruction across all 10 Letterly formatters (`01-prompts/22-letterly/`) and 10 Cursor formatters (`01-prompts/23-cursor-prompts/`) mandating strictly relative Git paths (`02-spec/...`, `.ai-memory/...`, `cmd/...`) and placing a TOTAL BAN on absolute filesystem paths and `file:///` URIs.
+- **Companion Skills Parity:** Synchronized all 20 companion skills (`.agents/skills/letterly-*/` and `.cursor/skills/letterly-*/`) to reflect the relative paths mandate and golden prompt structure.
+- **Release Documentation Hygiene:** Updated `02-spec/16-generic-release/readme.md`, `02-spec/16-generic-release/07-release-metadata.md`, and `01-prompts/17-release-management/02-minor-bump.md` to strictly enforce relative paths in `changelog.md`, release notes, and GitHub release pages.
+- **Legacy Execute Skills Purged:** Completely purged predecessor execute skills (`execute-parent-task`, `execute-parent-task-with-n-steps`, `parent-task-in-below-steps`, `parent-task-n-step-loop`) from both `.agents/skills/` and `.cursor/skills/`, leaving `execute-parent-task-with-n-steps-v6` as the sole canonical execution engine.
+- **Repository Cross-Reference Repairs:** Updated pointers in `01-prompts/13-plan-audit/02-plan-spec-steps-v2.md`, `.agents/skills/spec-authoring-and-validation/skill.md`, and `.cursor/skills/spec-authoring-and-validation/skill.md` to reference `02-execute-parent-task-with-n-steps-v6.md`.
+
+---
+
 ## [v6.72.0] - 2026-10-04
 
 ### Added
