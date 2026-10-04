@@ -28,51 +28,51 @@
 
 ## 2. Connected Repositories Inventory (43 Target Repositories)
 
-| # | Relative Folder Path | Relative Path (`../`) |
-| :---: | :--- | :--- |
-| **01** | `02-prompts/ai-empathy-prompt-tuner` | `../02-prompts/ai-empathy-prompt-tuner` |
-| **02** | `alim-cv` | `../alim-cv` |
-| **03** | `alim-karim-profile` | `../alim-karim-profile` |
-| **04** | `aukgit/alim.karim.profile` | `../aukgit/alim.karim.profile` |
-| **05** | `antigravity-manager` | `../antigravity-manager` |
-| **06** | `cat-my` | `../cat-my` |
-| **07** | `03-aukgo/core` | `../03-aukgo/core` |
-| **08** | `digital-name-card` | `../digital-name-card` |
-| **09** | `presentations-repos/flat-slide-show` | `../presentations-repos/flat-slide-show` |
-| **10** | `gitlogger-new` | `../gitlogger-new` |
-| **11** | `gitmap` | `../gitmap` |
-| **12** | `presentations-repos/global-ppt-v1` | `../presentations-repos/global-ppt-v1` |
-| **13** | `presentations-repos/hiltrax` | `../presentations-repos/hiltrax` |
-| **14** | `icon-coding-guidelines` | `../icon-coding-guidelines` |
-| **15** | `img-pdf` | `../img-pdf` |
-| **16** | `presentations-repos/ki-health-ppt` | `../presentations-repos/ki-health-ppt` |
-| **17** | `aukgit/kubernetes-training` | `../aukgit/kubernetes-training` |
-| **18** | `lara-licensing` | `../lara-licensing` |
-| **19** | `lara-publishing` | `../lara-publishing` |
-| **20** | `laravel-automation` | `../laravel-automation` |
-| **21** | `letsmarknow-ui` | `../letsmarknow-ui` |
-| **22** | `letsmarknow` | `../letsmarknow` |
-| **23** | `macro-ahk` | `../macro-ahk` |
-| **24** | `presentations-repos/maid-app-spec-presentation` | `../presentations-repos/maid-app-spec-presentation` |
-| **25** | `movie-cli` | `../movie-cli` |
-| **26** | `03-aukgo/pathhelper` | `../03-aukgo/pathhelper` |
-| **27** | `presentations-repos/presentation-aug-2026-plans-alim` | `../presentations-repos/presentation-aug-2026-plans-alim` |
-| **28** | `02-prompts/prompts-connect` | `../02-prompts/prompts-connect` |
-| **29** | `punam-case-studies-v1` | `../punam-case-studies-v1` |
-| **30** | `presentations-repos/rasia-logo` | `../presentations-repos/rasia-logo` |
-| **31** | `scripts-fixer` | `../scripts-fixer` |
-| **32** | `presentations-repos/slides-spec` | `../presentations-repos/slides-spec` |
-| **33** | `spec-builder` | `../spec-builder` |
-| **34** | `web-system/sweet-digs-finder` | `../web-system/sweet-digs-finder` |
-| **35** | `ui-prompts-cat` | `../ui-prompts-cat` |
-| **36** | `presentations-repos/white-presentation-v1` | `../presentations-repos/white-presentation-v1` |
-| **37** | `workflowy-ui` | `../workflowy-ui` |
-| **38** | `workflowy` | `../workflowy` |
-| **39** | `wp-exam` | `../wp-exam` |
-| **40** | `wp-git-log` | `../wp-git-log` |
-| **41** | `wp-html-automate` | `../wp-html-automate` |
-| **42** | `wp-link-manager` | `../wp-link-manager` |
-| **43** | `wp-onboarding` | `../wp-onboarding` |
+| # | Relative Folder Path |
+| :---: | :--- |
+| **01** | `02-prompts/ai-empathy-prompt-tuner` |
+| **02** | `alim-cv` |
+| **03** | `alim-karim-profile` |
+| **04** | `aukgit/alim.karim.profile` |
+| **05** | `antigravity-manager` |
+| **06** | `cat-my` |
+| **07** | `03-aukgo/core` |
+| **08** | `digital-name-card` |
+| **09** | `presentations-repos/flat-slide-show` |
+| **10** | `gitlogger-new` |
+| **11** | `gitmap` |
+| **12** | `presentations-repos/global-ppt-v1` |
+| **13** | `presentations-repos/hiltrax` |
+| **14** | `icon-coding-guidelines` |
+| **15** | `img-pdf` |
+| **16** | `presentations-repos/ki-health-ppt` |
+| **17** | `aukgit/kubernetes-training` |
+| **18** | `lara-licensing` |
+| **19** | `lara-publishing` |
+| **20** | `laravel-automation` |
+| **21** | `letsmarknow-ui` |
+| **22** | `letsmarknow` |
+| **23** | `macro-ahk` |
+| **24** | `presentations-repos/maid-app-spec-presentation` |
+| **25** | `movie-cli` |
+| **26** | `03-aukgo/pathhelper` |
+| **27** | `presentations-repos/presentation-aug-2026-plans-alim` |
+| **28** | `02-prompts/prompts-connect` |
+| **29** | `punam-case-studies-v1` |
+| **30** | `presentations-repos/rasia-logo` |
+| **31** | `scripts-fixer` |
+| **32** | `presentations-repos/slides-spec` |
+| **33** | `spec-builder` |
+| **34** | `web-system/sweet-digs-finder` |
+| **35** | `ui-prompts-cat` |
+| **36** | `presentations-repos/white-presentation-v1` |
+| **37** | `workflowy-ui` |
+| **38** | `workflowy` |
+| **39** | `wp-exam` |
+| **40** | `wp-git-log` |
+| **41** | `wp-html-automate` |
+| **42** | `wp-link-manager` |
+| **43** | `wp-onboarding` |
 
 ---
 

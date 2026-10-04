@@ -102,4 +102,21 @@ To survive massive checklists and complex codebases, you MUST operate using thes
     - Feature: `gitmap cpf "<module> - <summary>"`
     - Bug Fix: `gitmap cpb "<module> - <summary>"`
 
+## 11. Multi-Repository Synchronization & Boundary Invariants
+
+When synchronizing canonical assets (prompts, skills, shared specs, scripts) across connected repositories:
+
+- **Pre-Change Safety Protocol (Pull & Backup):**
+  1. Detect the base branch and pull latest changes: `git pull origin <base_branch> --no-rebase`.
+  2. Create and push a safety backup branch before making changes: `git checkout -b backup/sync-<timestamp>` and `git push origin backup/sync-<timestamp>`.
+  3. Return to the base branch: `git checkout <base_branch>` before applying asset updates.
+
+- **The 5 Non-Negotiable Boundaries:**
+  1. **Spec 21 Exclusion (TOTAL BAN):** NEVER synchronize, copy, or touch `02-spec/21-*` through `02-spec/25-*` (private application domain specs, issues, db, and UI designs). Only shared specifications `02-spec/01-*` through `02-spec/20-*` are synchronized.
+  2. **Additive-Only AI Scripts:** Brand-new AI scripts (`03-ai-scripts/`, `.agents/scripts/`) that do not exist in the target repository are copied cleanly. Existing scripts modified by the target repository must NEVER be overwritten.
+  3. **Bump Script Protection (IMMUTABLE):** NEVER overwrite version bump scripts or manifests (`bump*`, `bump_versions.py`, `bump-version.mjs`, `version.json`). Each repository maintains custom SemVer targets and release logic.
+  4. **Memory & Plans Protection (TOTAL ISOLATION):** NEVER modify, sync, or mirror `.ai-memory/memory/` or `.ai-memory/plans/` in target repositories.
+  5. **Zero Secrets Leakage:** NEVER synchronize `.env` files, tokens, or credentials across repositories. Secrets reside strictly in `repo-secrets` via `gitmap rs`.
+
+
 
