@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.70.0] - 2026-10-04
+
+### Added
+- docs(assets): add ai-verification-plan-tag-removal screenshot and golden prompt sync
+
+---
+
 ## [v6.69.0] - 2026-10-04
 
 ### Added

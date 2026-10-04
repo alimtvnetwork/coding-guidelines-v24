@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"><img alt="Version" src="https://img.shields.io/badge/version-6.69.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"><img alt="Version" src="https://img.shields.io/badge/version-6.70.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
 
 </p>
 
@@ -36,7 +36,7 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FOLDERS -->24<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->6.69.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-10-04<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FOLDERS -->24<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->6.70.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-10-04<!-- /STAMP:UPDATED -->
   <!-- STAMP:FILES -->706<!-- /STAMP:FILES -->
   <!-- STAMP:LINES -->169,973<!-- /STAMP:LINES -->
 </p>
