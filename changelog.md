@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.69.0] - 2026-10-04
+
+### Added
+- feat(aum): enforce gitmap search primacy, ban rg, and add sqlite schema inspection
+
+---
+
 ## [v6.68.0] - 2026-10-04
 
 ### Added
