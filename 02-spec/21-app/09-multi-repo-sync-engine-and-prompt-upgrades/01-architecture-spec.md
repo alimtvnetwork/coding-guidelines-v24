@@ -24,7 +24,7 @@
    - **Bump Script Protection:** NEVER overwrite target repository version bump scripts.
    - **Memory & Plans Protection:** NEVER overwrite or touch `.ai-memory/memory/` or `.ai-memory/plans/` in target repositories.
    - **Zero Secrets Leakage:** Never synchronize `.env` or credentials across repositories (`repo-secrets` via `gitmap rs`).
-   - **Strict Relative Git Paths Mandate:** All file paths, markdown links, citations, subtask paths, release pages, release notes, changelogs, and memory logs MUST be strictly relative paths starting from the git repository root. Only add the relative paths, never add the absolute path during your work. This MUST be respected on the release page and in release notes as well (TOTAL BAN on `file:///` URIs and absolute filesystem paths).
+   - **Strict Relative Git Paths Mandate:** All file paths, markdown links, citations, subtask paths, release pages, release notes, changelogs, and memory logs MUST be strictly relative paths starting from the git repository root: only relative file or folder names only. Only add the relative paths, never add the absolute path during your work. This MUST be respected on the release page and in release notes as well (TOTAL BAN on `file:///` URIs and absolute filesystem paths).
 
 ---
 
