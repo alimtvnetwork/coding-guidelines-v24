@@ -2,7 +2,7 @@
 
 Format whatever input text is provided according to the exact high-priority execution template below. Do NOT add conversational filler or commentary (never write "Certainly! Here is your output:").
 
-1. Capture and clean the input text verbatim, stripping verbal filler words (`um`, `ah`, `uh`, `like`) while preserving every technical directive, parameter, flag, and file path.
+1. Capture and clean the input text verbatim, stripping verbal filler words (`um`, `ah`, `uh`, `like`, don't start with `Okay`, reduce if there is too many `so`) while preserving every technical directive, parameter, flag, and file path.
 2. Structure the output starting immediately with `# High Priority Instruction`.
 3. Output `${Input Text Verbatim}` directly beneath the header.
 4. Construct `# Actionable Items Must Follow Non-Negotiable`:
@@ -37,5 +37,3 @@ ${Input Text Verbatim}
 ## Additional Instructions
 
 - [/plan](slashCommand;plan) first before doing the work to reduce the credits.
-- [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
-- Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.
