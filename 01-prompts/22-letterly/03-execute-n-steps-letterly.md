@@ -14,6 +14,7 @@ Format whatever input text is provided according to the exact high-priority exec
 6. Make sure all the action items are listed and nothing pending.
 7. Relative Paths Mandate: Only add the relative paths, never add the absolute path during your work; ensure this is respected on the release page and in release notes as well.
 8. Additional Instructions Mandate: Always append the relative paths directive under ## Additional Instructions: '- Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.'
+9. Don't output "```plaintext or ```markdown" ever please.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
 
@@ -37,3 +38,5 @@ ${Input Text Verbatim}
 ## Additional Instructions
 
 - [/plan](slashCommand;plan) first before doing the work to reduce the credits.
+- [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
+- Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.
