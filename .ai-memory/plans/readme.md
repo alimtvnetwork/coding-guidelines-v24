@@ -4,6 +4,7 @@ Master directory of architectural and execution plans.
 
 ## Pending Plans
 
+- [13-slide-quiz-preview-and-presenter-chrome.md](pending/13-slide-quiz-preview-and-presenter-chrome.md): Quiz option-card chrome, default box/text shadows, botanical-light theme, presenter shortcuts, and center-stage layout (spec + file 42).
 - [02-slides-system-overhaul.md](pending/02-slides-system-overhaul.md): Full slides deck UI and system overhaul.
 - [04-guideline-prompt-and-installer-upgrade.md](pending/04-guideline-prompt-and-installer-upgrade.md): Guideline prompt and installer enhancements.
 - [09-update-prompts-and-release.md](pending/09-update-prompts-and-release.md): Update prompts and release lifecycle (deferred under WOR policy).

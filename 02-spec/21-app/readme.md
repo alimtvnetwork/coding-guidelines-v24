@@ -80,6 +80,7 @@ All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent e
 | [`10-gitmap-search-subagent-enforcement-and-sqlite-schema/`](10-gitmap-search-subagent-enforcement-and-sqlite-schema/) | GitMap Search Subagent Enforcement, Ripgrep Ban, and SQLite Task Schema Introspection | Application Spec | Active |
 | [`11-gitmap-training-and-letterly-golden-prompt-sync/`](11-gitmap-training-and-letterly-golden-prompt-sync/) | GitMap Training Engine, Golden Letterly Prompt Synchronization & Execute Archival | Application Spec | Active |
 | [`12-relative-paths-and-legacy-skills-purge/`](12-relative-paths-and-legacy-skills-purge/) | Relative Paths Mandate, Letterly Invariants & Legacy Execute Skills Purge | Application Spec | Active |
+| [`13-slide-quiz-preview-and-presenter-chrome/`](13-slide-quiz-preview-and-presenter-chrome/) | Quiz Preview Chrome, Default Shadow Pair, HUD Shortcuts & Center Stage | Application Spec | Active |
 
 ---
 

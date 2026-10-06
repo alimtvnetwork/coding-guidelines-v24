@@ -19,6 +19,8 @@ Web interfaces often suffer from washed-out hover effects where gray backgrounds
 2. **Directional Accent Indicators:** Interactive list rows and table items present a vertical accent pill (`3px` width, `border-radius: 9999px`) that expands or slides in on hover, signaling interactive readiness.
 3. **Physics-Based Cubic-Bezier Curves:** Linear transitions feel robotic. Interfaces must employ emphasized deceleration curves (`cubic-bezier(0.16, 1, 0.3, 1)`) so elements snap smoothly into place.
 
+**Paired default shadows:** Rest/hover **text-shadow** and **box-shadow** for quiz option cards, image plates, and slide chrome MUST use the semantic tokens in **`42-slide-quiz-preview-chrome-and-default-shadows.md` section 1** (`--text-shadow-rest`, `--elevation-rest`, etc.). Do not invent parallel shadow variables in feature CSS.
+
 ---
 
 ## 2. Timing Functions & Easing Tokens

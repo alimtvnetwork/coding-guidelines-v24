@@ -37,6 +37,7 @@ Before authoring components or generating code, AI agents MUST read and master t
   - Read [`29-slide-navigation-and-builder.md`](./29-slide-navigation-and-builder.md) — HUD, transitions, keys, slide builder.
   - Read [`30-slide-palette-type-and-shell.md`](./30-slide-palette-type-and-shell.md) — Dark amber palette, type scale, shell layers.
   - Read [`31-slide-controller-buttons.md`](./31-slide-controller-buttons.md) — Floating HUD controller pill, action buttons, webcam PIP overlay, timer, dots.
+  - Read [`42-slide-quiz-preview-chrome-and-default-shadows.md`](./42-slide-quiz-preview-chrome-and-default-shadows.md) — Default text/box shadow pair, presentation option cards, botanical-light quiz theme, keyboard shortcut matrix, center-stage layout.
   - Read [`32-slide-color-options.md`](./32-slide-color-options.md) — 10-step gradient precision system ($S_0$–$S_9$) across 7 flagship themes, per-slide gradient editor, pill presets, 9-cell align.
 - [ ] `/learn` **Phase 6b: Master Slide Layout Catalog & Pure DOM Typography**
   - Read [`34-slide-layout-catalog.md`](./34-slide-layout-catalog.md) — Non-Image Text Mandate and 20 master enterprise slide layouts (Title, Executive, Key Player, Split, Pricing, Steps Chain, Funnel, Hardware Tabletop, Tech Stack, etc.).
