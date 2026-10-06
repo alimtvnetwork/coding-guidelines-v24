@@ -451,6 +451,9 @@
 | `02-spec/07-design-system/39-logo-construction.md` | Logo Construction | 4.3.0 |
 | `02-spec/07-design-system/40-theme-switch.md` | Slide Theme Switch | 4.3.0 |
 | `02-spec/07-design-system/41-homepage-and-blog-sections.md` | Homepage and Blog Section Catalog | 4.1.0 |
+| `02-spec/07-design-system/42-slide-step-and-sound-system.md` | Slide Step System and Sound Synthesis | 4.3.0 |
+| `02-spec/07-design-system/43-slide-webcam-overlay.md` | Presenter Webcam PIP Overlay and Auto-Frame | 4.3.0 |
+| `02-spec/07-design-system/44-slide-presenter-inspector-and-handouts.md` | Presenter Inspector and Handout Exports | 4.3.0 |
 | `02-spec/07-design-system/97-acceptance-criteria.md` | Acceptance Criteria | 1.0.0 |
 | `02-spec/07-design-system/98-confidence-report.md` | Confidence Report | 4.3.0 |
 | `02-spec/07-design-system/99-consistency-report.md` | Consistency Report | 1.0.0 |
