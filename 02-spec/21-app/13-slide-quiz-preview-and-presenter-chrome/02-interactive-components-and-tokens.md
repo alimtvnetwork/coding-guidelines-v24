@@ -59,7 +59,7 @@ export function Checkbox(props: CheckboxPrimitive.CheckboxProps) {
 
 Legacy measured values used `#16A34A` primary on `#F4F8F5` ground with `#DCFCE7` active fill. File 42 **tightens contrast** and reduces neon glow:
 
-- Primary hue stays **142**; lightness **38%** (was 45%) for AA-friendly text pairs.
+- Primary **`142 70% 30%`** (verified ≥ **4.61:1** on background via `scripts/verify-botanical-light-contrast.mjs`).
 - Active fill uses **142 48% 94%** instead of pure mint blocks.
 - Hover shadow primary alpha **0.24** (was 0.28) to avoid muddy halos on white cards.
 - Background radial accents use **teal 160** at ≤ **4%** alpha (measured pattern from green-choice background gradients).

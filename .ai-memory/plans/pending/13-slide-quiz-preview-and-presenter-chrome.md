@@ -12,13 +12,14 @@ Unify exam quiz preview chrome (option cards, shadows, botanical-light green) wi
 
 ---
 
-## Phase 1 — Spec authoring (this turn)
+## Phase 1 — Spec authoring
 
 - [x] Create `02-spec/21-app/13-slide-quiz-preview-and-presenter-chrome/` (overview, components, HUD, AC).
 - [x] Add `02-spec/07-design-system/42-slide-quiz-preview-chrome-and-default-shadows.md`.
 - [x] Register folder in `02-spec/21-app/readme.md` and file 42 in `02-spec/07-design-system/readme.md`.
 - [x] Cross-link `29-slide-navigation-and-builder.md` and `21-css3-animations-and-interactions.md`.
 - [x] Update `98-confidence-report.md` row for quiz/slide chrome.
+- [x] v2 hardening: fault register F-01–F-13, file 42 §5.3 TS export, §5.4 key dispatch, §1.4 aliases, `40` §7 embed skins, `31` §3.2.1 HUD button, contrast script, AC-SQZ-009–012, primary **142 70% 30%**.
 
 ---
 

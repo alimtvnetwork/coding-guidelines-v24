@@ -17,6 +17,7 @@
 | [`02-interactive-components-and-tokens.md`](02-interactive-components-and-tokens.md) | Option cards, shadows, botanical-light palette, checkboxes, motion |
 | [`03-presenter-hud-shortcuts-and-layout.md`](03-presenter-hud-shortcuts-and-layout.md) | Camera button, shortcut overlay, center content, responsiveness |
 | [`04-acceptance-criteria.md`](04-acceptance-criteria.md) | Testable gates for implementers and blind agents |
+| [`05-blind-agent-fault-register.md`](05-blind-agent-fault-register.md) | Fault IDs F-01–F-13 and remediation map to file 42 v2 |
 
 ---
 
