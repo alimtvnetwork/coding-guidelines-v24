@@ -61,6 +61,6 @@ This document codifies non-negotiable cross-repository synchronization policies.
    - `SYNC_DIRS` dynamically discovers and syncs `02-spec/01-*` through `02-spec/20-*`.
    - `copy_single_file` and `mirror_directory` enforce `is_spec_21`, `is_bump_script`, target modification checks, and `is_protected_memory_or_plan` guards.
    - `EXCLUDE_NAMES` includes all `06-archive`, `21-app*` variants, as well as `plans`, `temp-agents`, `cicd-issues`, and `ambiguous-questions`.
-2. `01-prompts/23-sync/01-sync.md`: Canonical synchronization prompt detailing the 43 repository sequence and boundary rules.
+2. `01-prompts/24-sync/01-sync.md`: Canonical synchronization prompt detailing the 43 repository sequence and boundary rules.
 3. `.agents/skills/sync/skill.md` & `.cursor/skills/sync/skill.md`: Autonomous skills for running multi-repo synchronization.
 4. `.ai-memory/strictly-avoid.md`: Registered under **Cross-Repository Synchronization Hard Prohibitions — TOTAL BAN**.
