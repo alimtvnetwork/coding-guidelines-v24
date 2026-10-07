@@ -585,4 +585,40 @@ Allowed work:
 
 **Why:** Target repositories have repo-specific app specs (Spec 21), repo-specific AI script enhancements, tailored bump script mechanics, and distinct operational memory and plans that must never be clobbered by upstream sync.
 
+---
+
+## Uncommitted Work or Unpushed Code (No Push = Not Done) — TOTAL BAN
+
+🔴 **NEVER conclude a turn, claim success, or mark any task as completed or DONE while leaving uncommitted changes or unpushed commits.**
+
+If the code is not committed to Git and pushed upstream to GitHub (main/master/tracking branch), the task is strictly considered **INCOMPLETE and NOT DONE**.
+
+Forbidden:
+- ❌ Concluding an agent turn with uncommitted files or untracked changes (`git status --porcelain` non-empty).
+- ❌ Creating local commits but failing to push them upstream to GitHub (`git rev-list @{u}..HEAD --count > 0`).
+- ❌ Reporting success or task completion without confirmed upstream push.
+
+Allowed work:
+- ✅ Perform pre-commit pooling/pulling (`git pull origin <branch> --no-rebase`) before staging.
+- ✅ Atomically stage, commit, and push all changes via GitMap semantic commit commands (`gitmap cpf "<module> - <summary>"` or `gitmap cpb "<module> - <summary>"`).
+- ✅ Verify `git status --porcelain` is clean and upstream remote reflects the pushed commit before declaring completion.
+
+**Why:** Stranded uncommitted changes or unpushed local commits break team collaboration, cause silent work loss, and lead to immediate auto-reject failure.
+
+---
+
+## Mutating Non-Owned Repositories (OMIS, ZSH, Dotfiles) — TOTAL BAN
+
+🔴 **NEVER stage, commit, mutate, or push non-owned, third-party, or shell configuration repositories across the workstation or machine.**
+
+Repositories that do NOT belong to our workspace ownership MUST be strictly ignored and excluded:
+- ❌ `omis`
+- ❌ `oh-my-zsh`, `ohmyzsh`, `zsh`
+- ❌ `oh-my-posh`
+- ❌ `dotfiles`
+- ❌ Runtime and package manager repos (`homebrew`, `brew`, `.cargo`, `.rustup`, `.nvm`, `.asdf`, `.pyenv`)
+
+**Why:** Third-party and shell configuration repositories have external remotes, system-specific files, or separate governance. Modifying or auto-pushing them corrupts user environments and fails authorization checks.
+
+
 

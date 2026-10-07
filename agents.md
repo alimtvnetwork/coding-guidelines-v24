@@ -126,6 +126,11 @@ When synchronizing canonical assets (prompts, skills, shared specs, scripts) acr
 - **Search Primacy:** All AI agents, discovery subagents, and worker subagents MUST strictly use GitMap commands (`gitmap aum search`, `gitmap find`, `gitmap search`, `gitmap cat`) for all code searches and symbol discoveries.
 - **TOTAL BAN on Shell Search Tools:** TOTAL BAN on `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`, `Get-ChildItem -Recurse`, and `findstr`.
 
+## 13. Mandatory Completion Invariant ('No Push = Not Done') & Non-Owned Repository Exclusion
+
+- **Mandatory Completion Invariant ('No Push = Not Done'):** If the code is not committed to Git and pushed upstream to GitHub (main/master/tracking branch), the task is strictly considered INCOMPLETE and NOT DONE. Never conclude a turn, claim success, or mark tasks as completed while leaving uncommitted changes or unpushed local commits.
+- **Non-Owned Repository Exclusion (TOTAL BAN):** NEVER stage, commit, mutate, or push repositories that are not owned by us, including `omis`, `oh-my-zsh`, `ohmyzsh`, `zsh`, `oh-my-posh`, `dotfiles`, and system runtime packages (`homebrew`, `brew`, `.cargo`, `.rustup`, `.nvm`, `.asdf`, `.pyenv`).
+
 
 
 
