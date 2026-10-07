@@ -94,7 +94,7 @@ All 27 canonical prompt categories reside directly at the root of `01-prompts/`:
 | **06** | `06-testing-and-qa/` | `01-autonomous-qa-and-testing-v4.md` | Autonomous test suite execution and quality verification |
 | **07** | `07-bug-fix/` | `01-fix-with-rca.md` | Grounded 4-part root cause analysis and regression fix |
 | **08** | `08-dry-code/` | `01-python-dry-architecture-and-caching.md` | DRY code architecture, script enums, and caching |
-| **09** | `09-commit-and-multi-agent-code-fix/` | `01-boolean-improvements.md`, `03-commit-fix-v2.md`, `08-git-reconcile-and-resolve-conflict.md` | Atomic commits, boolean refactoring, and conflict resolution |
+| **09** | `09-commit-and-multi-agent-code-fix/` | `01-boolean-improvements.md`, `03-commit-fix-v2.md`, `08-git-reconcile-and-resolve-conflict.md`, `09-commit-and-push-all-repos.md` | Atomic commits, multi-repo sync, boolean refactoring, and conflict resolution |
 | **10** | `10-ui-and-design/` | `01-logo-create.md`, `02-react-ui-fixes-update.md`, `08-create-slide-deck.md` | Visual design, logos, slide decks, and React UI components |
 | **11** | `11-content-and-seo/` | `01-jokes-ideas-generate.md`, `03-seo-optimization.md`, `05-update-readme.md` | Content copywriting, SEO optimization, and documentation sync |
 | **12** | `12-old-plan-prompts/` | `01-plan-maximum-enforcement.md`, `05-plan-spec-steps.md` | Archived legacy planning protocols and audit workflows |
