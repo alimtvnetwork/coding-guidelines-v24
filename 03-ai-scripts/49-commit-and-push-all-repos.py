@@ -318,7 +318,6 @@ def execute_commit_and_push(
     )
 
     if audit.status == RepoStatusType.NO_COMMITS:
-        res.error_message = "Repository has no commits yet"
         return res
 
     if audit.is_detached:
@@ -375,9 +374,13 @@ def execute_commit_and_push(
             if code_push == 0:
                 res.push_status = OperationStatusType.SUCCESS
             else:
-                res.push_status = OperationStatusType.FAILED
                 err_clean = err_push.replace("\r", " ").replace("\n", " ")
-                res.error_message = f"git push failed ({err_clean[:180]})"
+                if any(kw in err_push.lower() for kw in ("permission to", "denied to", "403", "forbidden")):
+                    res.push_status = OperationStatusType.SKIPPED
+                    res.error_message = "External upstream (read-only / 403 denied)"
+                else:
+                    res.push_status = OperationStatusType.FAILED
+                    res.error_message = f"git push failed ({err_clean[:180]})"
 
     return res
 
@@ -475,7 +478,9 @@ def run_orchestration(
                 outcome_parts.append(f"CI:{matching_exec.commit_status.value}")
             if matching_exec.push_status in (OperationStatusType.SUCCESS, OperationStatusType.SIMULATED):
                 outcome_parts.append(f"PU:{matching_exec.push_status.value}")
-            if matching_exec.error_message:
+            elif matching_exec.push_status == OperationStatusType.SKIPPED and matching_exec.error_message:
+                outcome_parts.append("SKIP:external")
+            elif matching_exec.commit_status == OperationStatusType.FAILED or matching_exec.push_status == OperationStatusType.FAILED:
                 outcome_parts.append("ERR")
         outcome_str = " | ".join(outcome_parts) if outcome_parts else ("AUDIT" if is_check_only else "IDLE")
 
