@@ -25,7 +25,7 @@ The canonical orchestrator is [`02-execute-parent-task-with-n-steps-v6.md`](02-e
 
 | Prompt File | Version | Scope | Key Capabilities |
 | :--- | :--- | :--- | :--- |
-| [`01-execute-pending-tasks.md`](01-execute-pending-tasks.md) | V4 | Backlog Execution | Continuous N-step loop executing pending tasks in `.ai-memory/plans/pending/`. |
+| [`01-execute-pending-tasks.md`](01-execute-pending-tasks.md) | Canonical V6 | Backlog Execution | Parameter-driven execution loop (N=300, A=2, H=2, C=30) executing pending tasks in `.ai-memory/plans/pending/` with SQLite tracking and GitMap atomic commits. |
 | [`02-execute-parent-task-with-n-steps-v6.md`](02-execute-parent-task-with-n-steps-v6.md) | Canonical V6 | Master Orchestration | Parameter-driven execution loop (N=300, A=2, H=2, C=30) with mandatory subagents, SQLite task logging, and GitMap atomic commits. |
 | [`03-execute-batched-loop.md`](03-execute-batched-loop.md) | V4 | Batched Loop | Micro-task batched multi-agent loop with file collision matrix. |
 | [`04-execute-ai-instruction-writer.md`](04-execute-ai-instruction-writer.md) | V4 | Instruction Writer | Decomposes complex prompt requirements into subagents and modular specs. |

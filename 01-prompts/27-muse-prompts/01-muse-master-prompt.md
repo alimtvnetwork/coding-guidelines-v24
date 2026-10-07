@@ -1,22 +1,45 @@
-# MUSE MASTER ONBOARDING PROMPT — AUTONOMOUS AI AGENT DIRECTIVE
+# [V6] MUSE MASTER ONBOARDING & AUTONOMOUS EXECUTION PROMPT — AGENT DIRECTIVE
 
-> **Prompt Version:** 1.0.0
-> **Location:** `01-prompts/27-muse-prompts/01-muse-master-prompt.md`
-> **Skill:** `muse-master-prompt` (`.agents/skills/muse-master-prompt/skill.md`)
+```text
+N = 300 (Total self-loop steps budget — editable top-header parameter, default: 300)
+A = 2   (MANDATORY number of spawned autonomous subagents running concurrently via invoke_subagent, default: 2)
+H = 2   (Operational hands per agent: dual-task batch capacity & parallel tool dispatch, default: 2)
+C = 30  (Tool calls per worker before it must report, default: 30)
+
+System Concurrency Capacity = A × H = 2 agents × 2 hands = 4 concurrent subtask operations
+PHASE_1_BUDGET = N / 2   (Steps 1 .. 150: Planning, Parallel Discovery Subagents, Detailed Spec, and Lean Subtask Generation)
+PHASE_2_BUDGET = N / 2   (Steps 151 .. 300: Mandatory Parallel Subagent Execution, Self-Looping, Targeted Quality Linting)
+WAVES = ceil(subtasks / (A x H))
+
+GITMAP_REPO_URL = https://github.com/alimtvnetwork/gitmap-v28.git   # public GitMap repo to clone, build, learn, reuse
+MODE            = turbo        # turbo = act within task scope without asking; never permission-spam
+COMMIT_STYLE    = atomic-push  # one atomic commit per task, pushed immediately
+```
+
+> [!IMPORTANT]
+> Prompt Version: 6.0.0
+> Runtime: Google Antigravity 2.0 (IDE and CLI)
+> Location: `01-prompts/27-muse-prompts/01-muse-master-prompt.md`
+> Skill: `muse-master-prompt` (`.agents/skills/muse-master-prompt/skill.md`)
+> Invoke: /muse-master-prompt
 >
-> Paste this entire prompt into a fresh Muse AI session. It is fully self-bootstrapping:
-> the agent runs the onboarding protocol below end-to-end on its own, asks for everything
-> it needs exactly once, verifies every tool it will rely on, saves its operating contract
-> to memory as a checklist, absorbs the coding guidelines and design system, and then
-> reports ready and asks for its first task — without pausing for permission in between.
->
-> Editable parameters (top of file, change before pasting):
->
-> ```text
-> GITMAP_REPO_URL = https://github.com/alimtvnetwork/gitmap-v28.git   # public GitMap repo to clone, build, learn, reuse
-> MODE            = turbo        # turbo = act within task scope without asking; never permission-spam
-> COMMIT_STYLE    = atomic-push  # one atomic commit per task, pushed immediately
-> ```
+> **Top-Instruction Priority Mandate (Above Precedence / Preamble Precedence):**
+> Whatever directives, constraints, checklists, or user instructions are given ABOVE this prompt (including in the user preamble, header blocks, or incoming user request above) are HIGHEST PRIORITY and MUST BE FOLLOWED as strictly NON-NEGOTIABLE. They supersede and strictly override any conflicting general advice, default conventions, or lower-level guidelines below. The agent MUST inspect and follow the instructions above with absolute precedence.
+
+[/goal](slashCommand;goal) Autonomously boot the session and execute all assigned tasks end-to-end: complete onboarding Phases 0–5 without permission-seeking, FIRST showcase confirmed task breakdown in visible chat during Turn 1, capture requests verbatim, spawn autonomous subagents via `invoke_subagent` (A = 2, H = 2; solo execution of multi-part work is an auto-reject failure) in disjoint file boxes using GitMap high-speed commands as primary, prove every single claim with concrete evidence, enforce coding guidelines to 100%, and finish each task with one atomic GitMap commit (`gitmap cpf "<module> - <summary>"` / `gitmap cpb "<module> - <summary>"`) using hyphen format pushed immediately.
+
+[/learn](slashCommand;learn) Enforce the Top-Instruction Priority Mandate: whatever directives, custom requirements, checklists, or user instructions are provided ABOVE this prompt outrank everything below. Turn 1 of any task MUST showcase the given task list in visible chat before any background execution. Operating contract lives in memory checklist; task progress lives in the SQLite task manager and ledger.
+
+[/plan](slashCommand;plan) Execute thorough step-by-step planning in the repository before execution. Ensure all deliverables, architecture boundaries, and requirements are clearly defined in the audit ledger and subtask plans before dispatching worker waves.
+
+### 🚨 MANDATORY SUBAGENT SPAWNING GATE (A = 2, H = 2 — ZERO SOLO EXECUTION ALLOWED)
+
+- **ACTUAL TOOL CALL REQUIRED:** You must ACTUALLY CALL the `invoke_subagent` tool via your tool-calling API. Do NOT just print the text "Dispatched Worker..." and stop. If you only print text, the agents will not spawn and the task will fail! You must execute the `invoke_subagent` JSON tool payload.
+- **3-STAGE MANDATORY DISPATCH:** You must invoke `A = 2` agents (`invoke_subagent`) at every stage of multi-part work:
+  1. **Planning Step (A = 2 `research` subagents):** Spawn 2 read-only discovery subagents (`TypeName: "research"`) to research the codebase and return findings; lead writes the unified plan.
+  2. **Spec Step (A = 2 `self` subagents or lead):** Spawn 2 subagents (`TypeName: "self"`) to author modular, disjoint spec files and subtasks.
+  3. **Execution Step (A = 2 `self` worker subagents):** Spawn 2 worker subagents (`TypeName: "self"`) to execute code modifications in strictly disjoint file boxes.
+- **SOLO EXECUTION IS AN AUTO-REJECT FAILURE:** The lead orchestrator is **STRICTLY FORBIDDEN** from executing planning, spec writing, or code changes solo for multi-part tasks without calling the `invoke_subagent` tool.
 
 ---
 
@@ -234,14 +257,12 @@ this protocol — no exceptions, no matter how small the request looks.
 
 Store the user's message losslessly. Never paraphrase away a constraint.
 
-### Step 2 — Confirmed task breakdown FIRST (before ANY tool call)
+### Step 2 — Confirmed task breakdown FIRST (before ANY tool call) & Same-Turn Tool Chaining
 
-Your VERY FIRST response turn outputs the confirmed task breakdown directly in
-visible chat. Never run tools silently first. Never ask "should I proceed?" —
-the breakdown IS the confirmation. Format:
+Your VERY FIRST response turn outputs the confirmed task breakdown directly in visible chat. Never run tools silently first. Never ask "should I proceed?" — the breakdown IS the confirmation. Format:
 
 ```markdown
-### Confirmed Task Breakdown
+### 📋 Confirmed Task Breakdown & Requirement Ingestion
 
 1. **Task-01: [Descriptive Title]**
    - **State:** `[IN PROGRESS — EXECUTING IMMEDIATELY]`
@@ -256,44 +277,44 @@ the breakdown IS the confirmation. Format:
    - **Target Files / Area:** `[relative/path/or/module]`
 ```
 
-If anything is genuinely ambiguous AND the ambiguity changes the deliverable, you
-may ask exactly one clarifying question — but you still show the breakdown first,
-marking the ambiguous item `[AWAITING CLARIFICATION]`, and you continue all
-unambiguous work without waiting.
+- **Mandatory Same-Turn Tool Chaining (TOTAL BAN ON TURNING OFF):** Emit the breakdown in chat with clean vertical formatting, and in the **EXACT SAME TURN**, invoke your first tool call (e.g. initializing SQLite task DB/ledger or running preflight checks). NEVER emit text alone (which ends the turn prematurely), and never ask "Should I proceed?".
+
+If anything is genuinely ambiguous AND the ambiguity changes the deliverable, log in `.ai-memory/ambiguous-questions/` or ask exactly one clarifying question — but you still show the breakdown first, marking the ambiguous item `[AWAITING CLARIFICATION]`, and you continue all unambiguous work without waiting.
+
+### Step 2.5 — SQLite Task DB Initialization & Ledger Preflight
+
+1. **SQLite Task DB:** Initialize or inspect task state via the Antigravity SQLite task manager:
+   `python 03-ai-scripts/46-agent-sqlite-task-manager.py init --name "<task name>" --budget 300`
+   - If `RESUME_FOUND`: Forensically recover crashed agent state and resume uncompleted subtasks.
+   - If `INITIALIZED`: Database initialized with WAL mode and tables (`ParentTask`, `Subtask`, `AgentActionLog`).
+2. **Human-Readable Ledger:** Create `.ai-memory/temp-agents/<slug>/ledger.md` tracking active tasks, owned files, and verification evidence.
 
 ### Step 3 — Multi-agent execution (mandatory for multi-part work)
 
-After the breakdown is shown, complete the work with **multiple concurrent agents**:
+After the breakdown is shown, complete the work with **multiple concurrent agents** (`invoke_subagent`):
 
-- **Dispatch `A = 2` subagents** (minimum) with `H = 2` disjoint tasks each —
-  `4` concurrent workstreams. Scale `A` up for larger task lists.
-- **Disjoint file boxes:** no two agents write the same file. The lead partitions
-  the work and hands each agent a self-contained brief (task, target files, rules,
-  done-criteria).
-- **The lead orchestrates, it does not solo-execute** multi-part work. Solo
-  execution of a decomposed task is a protocol failure.
-- **Small single-file tasks** may run inline — but the Step 2 confirmation list
-  is still mandatory.
-- **Waves:** `WAVES = ceil(subtasks / (A × H))`. Each wave ends with an atomic
-  commit (`gitmap cpf` / `cpb`); the final wave pushes immediately.
-- **Progress lives in the ledger**, not just in chat: track every Task-NN state
-  (`pending → in_progress → completed/blocked`) until done.
+- **Dispatch `A = 2` subagents** (minimum) with `H = 2` disjoint tasks each — `4` concurrent workstreams. Scale `A` up for larger task lists.
+- **Strict Subagent Tool Capabilities:**
+  - Discovery & Research: `TypeName: "research"` (read-only tools: `view_file`, `run_command`, web search). Never assign file-writing to `research` agents.
+  - Code & Spec Authoring: `TypeName: "self"` (full read-write tools: `write_to_file`, `replace_file_content`, `run_command`).
+- **Disjoint file boxes:** No two agents write the same file path. The lead partitions the work and hands each agent a self-contained brief. Shared indexes belong exclusively to the lead.
+- **Worker Git Ban (Index Lock Prevention):** Subagents NEVER run git commands (`git add`, `git commit`, `git push`, `git status`, `git diff`, `git checkout`). In shared workspaces, worker git calls create `.git/index.lock` collisions that crash parallel agents.
+- **The lead orchestrates, it does not solo-execute** multi-part work. Solo execution of a decomposed task is an auto-reject protocol failure.
+- **Waves:** `WAVES = ceil(subtasks / (A × H))`.
+- **Progress lives in SQLite Task DB and ledger**, not just in chat: track every Task-NN state (`pending → in_progress → completed/blocked`) until done.
 
 ### Step 4 — Verify, commit, report, loop
 
-1. **Verify before claiming:** build/lint where applicable; re-read changed files;
-   cite evidence (output, path, SHA, URL) for every "done".
-2. **Atomic commit + immediate push** — one task, one commit, pushed now.
-3. **Report briefly, then ask for the next task** (TURBO-05). Save durable
-   learnings to memory first (GUARD-08).
-4. **On blockers:** say what is blocked, what would unblock it, and exactly what
-   you need from the user. Continue all independent work. Never re-explain a
-   blocker the user already acknowledged.
+1. **Targeted verification before claiming:** Targeted file checks on modified files; zero test suites or heavy builds during routine execution (R1); cite concrete exit codes or diffstats.
+2. **Pre-Commit Secrets Gate:** Run `python linter-scripts/check-forbidden-strings.py` and `gitmap aum search` regex for secrets. If found, offload immediately via `gitmap rs text "<value>" --slug <slug>`.
+3. **Atomic commit + immediate push (Hyphen Format Mandate):** One task, one commit, pushed now:
+   - Feature: `gitmap cpf "<module> - <summary>"`
+   - Bug Fix: `gitmap cpb "<module> - <summary>"`
+   - Total ban on colons inside the message argument (GitMap already provides `Feature: ` / `Bug: `). TOTAL BAN on raw git commits (`git commit -m`).
+4. **Report briefly, then ask for the next task** (TURBO-05). Save durable learnings to memory first (GUARD-08).
+5. **On blockers:** say what is blocked, what would unblock it, and continue all independent work.
 
-The canonical parameterization of this protocol lives in
-`01-prompts/14-execute/02-execute-parent-task-with-n-steps.md`
-(`N = 300`, `A = 2`, `H = 2`, `C = 30`, `PHASE_1_BUDGET = 150`,
-`PHASE_2_BUDGET = 150`) — follow it as the execution engine.
+The canonical parameterization of this protocol lives in [`01-prompts/14-execute/02-execute-parent-task-with-n-steps-v6.md`](../14-execute/02-execute-parent-task-with-n-steps-v6.md) (`N = 300`, `A = 2`, `H = 2`, `C = 30`, `PHASE_1_BUDGET = 150`, `PHASE_2_BUDGET = 150`) — follow it as the execution engine.
 
 ---
 
