@@ -4,7 +4,6 @@ Master directory of architectural and execution plans.
 
 ## Pending Plans
 
-- [gitmap-sync-and-agent-task-engine.md](gitmap-sync-and-agent-task-engine.md): Native Go `gitmap sync` parallel multi-repo synchronization and native SQLite agent task manager (`gitmap task`).
 - [13-slide-quiz-preview-and-presenter-chrome.md](pending/13-slide-quiz-preview-and-presenter-chrome.md): Quiz option-card chrome, default box/text shadows, botanical-light theme, presenter shortcuts, and center-stage layout (spec + file 42).
 - [02-slides-system-overhaul.md](pending/02-slides-system-overhaul.md): Full slides deck UI and system overhaul.
 - [04-guideline-prompt-and-installer-upgrade.md](pending/04-guideline-prompt-and-installer-upgrade.md): Guideline prompt and installer enhancements.
@@ -14,6 +13,7 @@ Master directory of architectural and execution plans.
 - [16-execute-folder-hardening-and-v6-49-release.md](pending/16-execute-folder-hardening-and-v6-49-release.md): Minor release v6.49.0, then the V4 fixes applied to execute prompts 01 to 09 and their Antigravity skill copies.
 ## Completed Plans
 
+- [gitmap-sync-and-agent-task-engine.md](gitmap-sync-and-agent-task-engine.md): Native Go `gitmap sync` parallel multi-repo synchronization and native SQLite agent task manager (`gitmap task`).
 - [12-relative-paths-and-legacy-skills-purge.md](completed/12-relative-paths-and-legacy-skills-purge.md): Strict relative Git paths mandate across all Letterly formatters, Cursor mirrors, companion skills, and release specs, plus permanent purge of legacy execute parent task skills from `.agents/skills/` and `.cursor/skills/`.
 
 - [01-repository-infrastructure-cicd-and-consolidation.md](completed/01-repository-infrastructure-cicd-and-consolidation.md): Repository hygiene, encoding normalization, lowercase conventions, AI scripts `<details>` documentation, CI/CD quality automation, Lovable to AI-Memory migration, and plan memory consolidation.
