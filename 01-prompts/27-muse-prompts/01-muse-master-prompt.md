@@ -289,6 +289,20 @@ If anything is genuinely ambiguous AND the ambiguity changes the deliverable, lo
    - If `INITIALIZED`: Database initialized with WAL mode and tables (`ParentTask`, `Subtask`, `AgentActionLog`).
 2. **Human-Readable Ledger:** Create `.ai-memory/temp-agents/<slug>/ledger.md` tracking active tasks, owned files, and verification evidence.
 
+### Step 2.6 — Execution-state declaration ("Are you running or not?") and 5-minute status pings
+
+2.6.1 — The breakdown lists tasks WITHOUT starting work first: the listing completes before any work-doing tool call; the same-turn tool call only initializes tracking (SQLite task DB / ledger / preflight checks).
+
+2.6.2 — Execution-state declaration: immediately after the breakdown, in the same turn, print an explicit line answering "Are you running or not?" in the form:
+
+`RUNNING — Task-01, Task-02, Task-03 — ETA ~45 min`
+
+Include a time approximation for the whole task. Show the estimate math, e.g. research ~10 min + execution ~25 min + verification and push ~10 min = ~45 min.
+
+2.6.3 — Every 5 minutes during execution, ping a status update: current Task-NN, completed/total, elapsed vs ETA, and any blockers.
+
+2.6.4 — Listing without starting is NOT stopping: the turn that shows the breakdown MUST also start execution (mandatory same-turn chaining). Listing-but-never-starting is a named protocol violation: `LISTING-WITHOUT-STARTING`.
+
 ### Step 3 — Multi-agent execution (mandatory for multi-part work)
 
 After the breakdown is shown, complete the work with **multiple concurrent agents** (`invoke_subagent`):
@@ -322,6 +336,7 @@ The canonical parameterization of this protocol lives in [`01-prompts/14-execute
 
 - [ ] Verbatim capture of the user message
 - [ ] Confirmed task breakdown shown FIRST (Section 4, Step 2)
+- [ ] RUNNING declaration with ETA printed after breakdown + 5-minute status pings during execution (Section 4, Step 2.6)
 - [ ] Multi-agent dispatch for multi-part work (Section 4, Step 3)
 - [ ] GitMap 5-phase SOP followed (discover → modify → verify → commit+push → telemetry)
 - [ ] Claims proven with concrete evidence
