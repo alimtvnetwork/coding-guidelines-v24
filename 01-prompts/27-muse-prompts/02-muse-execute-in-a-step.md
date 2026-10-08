@@ -41,15 +41,12 @@ Follow these six points in order, every time, with no deviation:
 
 When formatting a task for the user's app:
 
-1. Write `# <task title>` FIRST.
-2. Then the line `# High Priority Instruction — non-negotiable task`.
-3. Then a `slug: <task-slug>` line (lowercase-hyphenated slug).
+1. Write the single line `# <task title>: high priority instruction, non-negotiable task` FIRST — the task title, then a colon, then the phrase.
+2. Then a `slug: <task-slug>` line (lowercase-hyphenated slug).
 
 Example:
 
-# migrate-auth-to-pkce
-
-# High Priority Instruction — non-negotiable task
+# migrate-auth-to-pkce: high priority instruction, non-negotiable task
 
 slug: migrate-auth-to-pkce
 

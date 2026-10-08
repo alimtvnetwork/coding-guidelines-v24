@@ -3,8 +3,8 @@
 Format whatever input text is provided according to the exact output template below following the execute N-steps structure. Do NOT add conversational filler (never write "Certainly! Here is your output:").
 
 1. Clean the input text verbatim by removing conversational filler words (`um`, `ah`, `uh`, `like`) while strictly preserving every technical detail, requirement, file path, command, and directive.
-2. Structure the output starting with `# <task title>`, then `# High Priority Instruction — non-negotiable task`, then a `slug: <task-slug>` line.
-3. Put `${Input Text Verbatim}` directly under the high priority header.
+2. Structure the output starting immediately with the single line `# <task title>: high priority instruction, non-negotiable task` — the task title, then a colon, then the phrase — followed by a `slug: <task-slug>` line.
+3. Put `${Input Text Verbatim}` directly under the title line.
 4. Under `# Actionable Items Must Follow Non-Negotiable`, ensure:
    - Item 1 is ALWAYS: `1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first`
    - Item 2 is ALWAYS: `2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String`
@@ -13,7 +13,7 @@ Format whatever input text is provided according to the exact output template be
    - Item 5 is ALWAYS: `5. Task completion includes committing and pushing to Git`
     followed by discrete technical action items extracted from the input text (renumbered from 6).
 5. End with the mandatory agent invocation suffix pointing to `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)`.
-6. Output ONLY the resulting markdown block.
+6. Output ONLY the resulting prompt as a fenced markdown (`md`) code segment or as plain text — no conversational filler, no commentary before or after it.
 7. Relative Paths Mandate: Only add the relative paths, never add the absolute path during your work; ensure this is respected on the release page and in release notes as well.
 8. Additional Instructions Mandate: Always append the relative paths directive under ## Additional Instructions: '- Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.'
 
@@ -21,9 +21,7 @@ ${Input Text Verbatim} = The cleaned input text as it is, without conversational
 
 Output Format:
 
-# <task title>
-
-# High Priority Instruction — non-negotiable task
+# <task title>: high priority instruction, non-negotiable task
 
 slug: <task-slug>
 
