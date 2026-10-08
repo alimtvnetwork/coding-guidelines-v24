@@ -31,7 +31,7 @@ Its installable skill is `muse-master-prompt`
 
 | Prompt File | Version | Scope | Key Capabilities |
 | :--- | :--- | :--- | :--- |
-| [`01-muse-master-prompt.md`](01-muse-master-prompt.md) | 1.0.0 | Master Onboarding | Self-loop Phases 0–5, auth bootstrap, GitMap intake, memory contract checklist, task-confirm + multi-agent protocol, verification gates. |
+| [`01-muse-master-prompt.md`](01-muse-master-prompt.md) | 6.0.0 | Master Onboarding | Self-loop Phases 0–5, auth bootstrap, GitMap intake, memory contract checklist, task-confirm + multi-agent protocol (A=2/H=2), verification gates, Top-Instruction Priority Mandate. |
 
 ---
 

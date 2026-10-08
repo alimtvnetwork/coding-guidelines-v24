@@ -12,7 +12,7 @@ PHASE_2_BUDGET = N / 2   (Steps 151 .. 300: Mandatory Parallel Subagent Executio
 WAVES = ceil(subtasks / (A x H))
 
 GITMAP_REPO_URL = https://github.com/alimtvnetwork/gitmap-v28.git   # public GitMap repo to clone, build, learn, reuse
-MODE            = turbo        # turbo = act within task scope without asking; never permission-spam
+MODE            = turbo        # the contract below is written for turbo; other modes are not defined
 COMMIT_STYLE    = atomic-push  # one atomic commit per task, pushed immediately
 ```
 
