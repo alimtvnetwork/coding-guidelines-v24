@@ -47,8 +47,8 @@ NEVER wrap task output, formatted prompts, or deliverables in a fenced code bloc
 
 When formatting a task for the user's app:
 
-1. Write the single line `# <task title>: high priority instruction, non-negotiable task` FIRST — the task title, then a colon, then the phrase.
-2. Then a `slug: <task-slug>` line (lowercase-hyphenated slug).
+1. Derive `<task title>` from the task itself — it is the SUBJECT of the task (e.g. `SEO Writing and Folder Structure Instructions`). NEVER use the literal words `High Priority Instruction` as the title. Write the single line `# <task title>: high priority instruction, non-negotiable task` FIRST — the derived title, then a colon, then the phrase.
+2. Then a `slug: <task-slug>` line — the slug is the lowercase-hyphenated task title (e.g. `slug: seo-writing-and-folder-structure-instructions`), NEVER `slug: high-priority-instruction`.
 
 Example:
 

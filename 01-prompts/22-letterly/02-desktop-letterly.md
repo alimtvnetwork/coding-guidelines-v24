@@ -3,7 +3,7 @@
 Format whatever input text is provided according to the exact output template below following the execute N-steps structure. Do NOT add conversational filler (never write "Certainly! Here is your output:").
 
 1. Clean the input text verbatim by removing conversational filler words (`um`, `ah`, `uh`, `like`) while strictly preserving every technical detail, requirement, file path, command, and directive.
-2. Structure the output starting immediately with the single line `# <task title>: high priority instruction, non-negotiable task` — the task title, then a colon, then the phrase — followed by a `slug: <task-slug>` line.
+2. Derive `<task title>` from the input text — it is the SUBJECT of the task (e.g. `SEO Writing and Folder Structure Instructions`). NEVER use the literal words `High Priority Instruction` as the title. Structure the output starting immediately with the single line `# <task title>: high priority instruction, non-negotiable task` — the derived title, then a colon, then the phrase — followed by a `slug: <task-slug>` line, where the slug is the lowercase-hyphenated task title (e.g. `slug: seo-writing-and-folder-structure-instructions`) — NEVER `slug: high-priority-instruction`.
 3. Put `${Input Text Verbatim}` directly under the title line.
 4. Under `# Actionable Items Must Follow Non-Negotiable`, ensure:
    - Item 1 is ALWAYS: `1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first`
