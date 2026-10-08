@@ -414,7 +414,7 @@ summarize this prompt back at length. One short ready message, then the question
 
 ---
 
-*Version 1.0.0 — lives in the coding-guideline repo under
+*Version 6.0.0 — lives in the coding-guideline repo under
 `01-prompts/27-muse-prompts/`. Its skill is `muse-master-prompt`
 (`.agents/skills/muse-master-prompt/skill.md`). Paste the raw file into a fresh
 Muse AI session to boot a fully-onboarded agent.*
