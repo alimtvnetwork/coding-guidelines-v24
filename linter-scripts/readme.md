@@ -41,6 +41,17 @@
 | [`check-axios-version.py`](check-axios-version.py) | Python 3 | Validates approved Axios dependency versions in `package.json`. | ✅ Yes |
 | [`check-runner-dispatch-antipatterns.py`](check-runner-dispatch-antipatterns.py) | Python 3 | Audits installer runner scripts for platform-specific anti-patterns. | ✅ Yes |
 | [`validate-guidelines.py`](validate-guidelines.py) | Python 3 | General coding guidelines validator across multi-language source trees. | ✅ Yes |
+| [`check-enum-guidelines.py`](check-enum-guidelines.py) | Python 3 | Lints enum naming (`*Type` suffix), string unions, and raw rune literals. | — |
+| [`check-function-lengths.py`](check-function-lengths.py) | Python 3 | Enforces function length limits per the coding guidelines. | — |
+| [`check-interface-naming.py`](check-interface-naming.py) | Python 3 | CI/CD quality gate for Go interface naming conventions. | — |
+| [`check-markdown-header-spacing.py`](check-markdown-header-spacing.py) | Python 3 | Validates blank-line spacing around Markdown headers. | — |
+| [`check-markdown-headings.py`](check-markdown-headings.py) | Python 3 | Enforces heading conventions (every `#`–`######` heading must meet the rule). | — |
+| [`check-memory-mirror-drift.py`](check-memory-mirror-drift.py) | Python 3 | Detects drift between the `.ai-memory` core readme and its spec mirror. | — |
+| [`check-mws-error-codes.py`](check-mws-error-codes.py) | Python 3 | MWS error-code linter (FU-9); waivers in `check-mws-error-codes.waivers.txt`. | — |
+| [`check-prompt-and-spec-paths.py`](check-prompt-and-spec-paths.py) | Python 3 | Scans `01-prompts/`, spec, `.ai-memory/`, `.agents/` for relative path references. | — |
+| [`check-readme-canonicals.py`](check-readme-canonicals.py) | Python 3 | Verifies the root readme uses canonical repo slug and CDN domain in badges/install one-liners. | — |
+| [`check-root-readme.py`](check-root-readme.py) | Python 3 | Enforces root readme conventions (§9 of the spec authoring guide). | — |
+| [`check-tunable-constants.py`](check-tunable-constants.py) | Python 3 | Tunable-constants linter (FU-15). | ✅ Yes |
 
 ---
 
