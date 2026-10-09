@@ -1,7 +1,7 @@
 # Mastery Bootstrap Prompt — foolproof standalone session starter
 
-**Version:** 1.1.0
-**Date:** 2026-10-09
+**Version:** 1.2.0
+**Date:** 2026-10-10
 **Purpose:** Paste this prompt into ANY fresh Muse chat, on any machine, and get a fully working session: authenticated GitHub, built GitMap, cloned repos, loaded memory, repo chats created. No prior context required — everything is defined below, with a fallback for every step.
 
 ---
@@ -20,6 +20,39 @@
 10. **Side-chat naming:** repo-based chats are named exactly `<repo> repo` and nothing else.
 11. **App names:** the user's phone app is **Literally**; the repo's template family is **Letterly** — same format. Never relabel repo files without the user's explicit word.
 12. **Foolproof rule.** Every phase below has a check and a fallback. If a step fails, record the blocker in plain language, continue with everything that doesn't depend on it, and report all blockers at the end. Never halt the whole bootstrap on one failure. Never invent credentials, URLs, or identifiers — copy them from tool output or the lists below.
+
+---
+
+## GitMap field manual (for AI models — learn these cold)
+
+You read the skill file in Phase 3. This is the working subset you will reach for daily. Never guess flags — `gitmap <cmd> --help` is authoritative.
+
+**Pipeline errors** (CI failed? start here, in this order):
+- `gitmap pe` — error logs for the latest pipeline run in the current repo.
+- `gitmap pe -N` / `gitmap pe HEAD~N` — target a past run by offset or SHA.
+- `gitmap pe -t` — watch the live pipeline timeline until it completes (dynamic polling; use when a run is still going).
+- `gitmap pe all` (shortcut: `gitmap te all`) — aggregate errors across ALL repos at once, instead of checking them one by one.
+- `gitmap pe -v` — full raw logs including passing lines (noisy; use only when the summary isn't enough).
+- `gitmap pe history-ai [N]` — extract historical failures across N commits, formatted to train AI on past mistakes.
+- `gitmap pe -f` runs the auto-repair suite and MODIFIES files — never run it unless the user explicitly asks.
+
+**Prompt templates** (view, use, copy — the system is built in):
+- `gitmap prompt ls` — list installed templates with versions.
+- `gitmap prompt show <slug>` — print the full template text to copy. Key slugs: `mastery-bootstrap` (this prompt), `muse-master`, `letterly-desktop`.
+- `gitmap prompt add <slug> <file.md>` — install a new template from a markdown file.
+
+**Portable repo sets** (move a repo set between machines):
+- `gitmap scan export [--machine <name>] [--out <dir>]` — dump the cached repo list to `<out>/<machine-slug>/repos.json`.
+- `gitmap scan merge <folder-or-file>... [--out <file>]` — merge exports, deduped by URL.
+- `gitmap clone-from <file> --execute` — batch-clone (dry-run without `--execute`).
+
+**Agent tasks** (slug is the task ID):
+- `gitmap agent task enqueue --slug "<Title Case>"` — get-or-create; existing slug reports progress, never duplicates.
+- `gitmap agent task progress --slug "<slug>"` / `pending` / `recent` / `completed`.
+- `gitmap agent subtask add --parent <slug> --slug "<Sub>" --code <code> --title "<title>"`.
+
+**Everyday:**
+- `gitmap scan [dir]` — discover repos. `gitmap clone <url> <target>` — clone (prefix `GITHUB_TOKEN=$(gh auth token)` for private repos). `gitmap spec next` — issue a concurrency-safe spec number (run from the repo root). `gitmap py <script>` — the ONLY way to run Python. `gitmap aum search <pattern> <dir>` — the ONLY search tool.
 
 ---
 
@@ -68,18 +101,42 @@ Context that is always true (use when memory files are missing):
 
 ---
 
-## Phase 3 — GitMap build and install
+## Phase 3 — GitMap install
 
-1. Run `gitmap version`. If it prints a version, skip to Phase 4.
-2. If missing, ensure Go: check `go version`, then `~/go/bin/go version`. If neither exists, install Go 1.27+ (tarball into `~/go`, keep it under `~` so it survives VM replacement), then `export PATH="$HOME/go/bin:$PATH"`.
-3. Clone and build (plain `git clone` is correct here — gitmap doesn't exist yet):
-   - `git clone https://github.com/alimtvnetwork/gitmap-v28.git ~/workspace/repos/gitmap-v28`
-   - `cd ~/workspace/repos/gitmap-v28/cli && go build -o ~/.local/bin/gitmap .`
-   - Ensure `~/.local/bin` is on PATH (`export PATH="$HOME/.local/bin:$PATH"`, persisted via `~/.profile`).
-4. Verify: `gitmap version` must print a version. Run `gitmap login` if the build requires it.
+1. Run `gitmap version`. If it prints a version, skip to step 5.
+2. **Option A — quick installer (recommended for bootstrap):** installs the latest release binary, no Go toolchain needed:
+   - `eval "$(curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/gitmap-v28/main/install-quick.sh)"`
+   - If `curl` is missing or the download fails, fall through to Option B.
+3. **Option B — build from source** (use when developing gitmap, or when Option A fails):
+   - Ensure Go (concrete commands — run as one block):
+     ```
+     export PATH="$HOME/go/bin:$PATH"
+     go version || ~/go/bin/go version || {
+       curl -fsSL https://go.dev/dl/go1.27.1.linux-amd64.tar.gz -o /tmp/go.tar.gz &&
+       mkdir -p ~/go && tar -C ~ -xzf /tmp/go.tar.gz &&
+       export PATH="$HOME/go/bin:$PATH" && go version
+     }
+     ```
+     (Tarball goes into `~/go`, kept under `~` so it survives VM replacement.)
+   - Get the source (plain `git clone` is correct here — gitmap doesn't exist yet; if the dir already exists, `git -C` pull instead):
+     ```
+     if [ -d ~/workspace/repos/gitmap-v28/.git ]; then
+       git -C ~/workspace/repos/gitmap-v28 pull
+     else
+       git clone https://github.com/alimtvnetwork/gitmap-v28.git ~/workspace/repos/gitmap-v28
+     fi
+     ```
+   - Build and install (same shell — the PATH export above must still be active, or use `~/go/bin/go` directly):
+     ```
+     mkdir -p ~/.local/bin
+     cd ~/workspace/repos/gitmap-v28/cli && go build -o ~/.local/bin/gitmap .
+     export PATH="$HOME/.local/bin:$PATH"   # persist via ~/.profile as well
+     ```
+4. Verify: `command -v gitmap && gitmap version` must print a path and a version. Run `gitmap login` if a command requires auth (it supports `gitmap login --token <PAT>` on non-interactive shells).
 5. **Learn GitMap from its skill file** (mandatory — this is the operating manual for every gitmap command):
    - Read `~/workspace/repos/gitmap-v28/.agents/skills/gitmap/SKILL.md` end to end: command cheat sheet, the mandatory command-replacement matrix, operational guardrails.
    - From now on, every gitmap invocation follows that skill. When in doubt about a subcommand, check the skill before guessing flags.
+   - Discover prompt templates any agent can reuse: `gitmap prompt ls` (list), `gitmap prompt show <slug>` (view full text to copy). Useful slugs: `mastery-bootstrap` (this prompt), `muse-master`, `letterly-desktop`.
 
 ---
 
