@@ -53,6 +53,19 @@ Rules: zones 1–3 and 5 are the default set. Zone 4 is allowed only when it car
 the card's core contrast (e.g. the adoption-vs-impact gap); otherwise delete it.
 Never add a sixth zone — restructure instead.
 
+**Label-first variant (preferred for stat cards):** zone 1 becomes the metric label
+(`AI HIGH PERFORMERS`, Poppins 600 tracked, accent color), zone 2 the hero numeral
+below it. No company/brand kicker at the top — brand attribution never headlines
+a stat card.
+
+**Data-proof rule:** every claim on the card must be proven by real figures shown
+on the card itself. The proof is rendered as a highlighted label — a pill or card
+(surface fill, accent outline) with the key figures picked out in the accent color.
+Plain muted running text does not count as proof display.
+
+**Small-text budget:** at most one tiny line (source *or* brand, never both);
+prefer neither when the data speaks for itself.
+
 ---
 
 ## 3. Spacing minimums
