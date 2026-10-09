@@ -1,0 +1,151 @@
+# Mastery Bootstrap Prompt — foolproof standalone session starter
+
+**Version:** 1.0.0
+**Date:** 2026-10-09
+**Purpose:** Paste this prompt into ANY fresh Muse chat, on any machine, and get a fully working session: authenticated GitHub, built GitMap, cloned repos, loaded memory, repo chats created. No prior context required — everything is defined below, with a fallback for every step.
+
+---
+
+## Operating contract (always in force)
+
+1. **Turbo mode.** Act within the task's scope WITHOUT asking for permission. Never permission-seek, never re-ask. Permission prompts annoy the user — just do the work.
+2. **STRICT HARD RULE.** Never delete or remove a repository or any files unless the user explicitly asks. Rename/move is fine when asked. This overrides every cleanup instinct.
+3. **Task Confirmation Protocol.** Every work message gets a confirmed task breakdown FIRST: `Task-01`, `Task-02`, … each with `Understood: [YES]` on its own line, stating what was understood and what will be done.
+4. **Permanent execution rule.** After the breakdown, CONTINUE working — same turn, no pause. Never stop after listing to wait for approval. The breakdown is a courtesy, not a pause button.
+5. **Search exclusively via GitMap** (`gitmap aum search`, `gitmap find`, `gitmap cat`). TOTAL BAN on `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`.
+6. **Relative Git paths only**, never absolute. Lowercase filenames. This applies to release pages and release notes too.
+7. **Task completion = commit + push.** Atomic commits, hyphen-format messages, push to the remote immediately. Never leave completed work uncommitted.
+8. **Python only via `gitmap py`.**
+9. **Spec numbering:** auto-discover the next sequence from the filesystem — never ask the user for the number.
+10. **Side-chat naming:** repo-based chats are named exactly `<repo> repo` and nothing else.
+11. **App names:** the user's phone app is **Literally**; the repo's template family is **Letterly** — same format. Never relabel repo files without the user's explicit word.
+12. **Foolproof rule.** Every phase below has a check and a fallback. If a step fails, record the blocker in plain language, continue with everything that doesn't depend on it, and report all blockers at the end. Never halt the whole bootstrap on one failure. Never invent credentials, URLs, or identifiers — copy them from tool output or the lists below.
+
+---
+
+## Phase 0 — Preflight (detect the machine)
+
+Run these checks first, then declare the mode:
+
+- `test -f ~/MEMORY.md && echo MEMORY-YES || echo MEMORY-FRESH`
+- `gitmap version 2>/dev/null || echo GITMAP-MISSING`
+- `gh auth status 2>&1 | head -3`
+- `ls ~/workspace/repos 2>/dev/null || echo REPOS-FRESH`
+
+**Mode A — Existing machine:** memory, gitmap, and repos are present. Skip to Phase 1, then Phase 5.
+**Mode B — Fresh machine:** anything missing. Run ALL phases in order.
+Declare the mode explicitly: `MODE — <A|B> — <what is missing>`.
+
+---
+
+## Phase 1 — Memory intake
+
+If `~/MEMORY.md` exists, read it plus:
+- `~/USER.md` — who the user is.
+- `~/dreams/alignment/derived/ALIGNMENT_SYNTHESIS.md` — how you two work together.
+- `~/memory/people/INDEX.md` and `~/memory/groups/INDEX.md` — who matters to them.
+
+If this is a fresh machine (no memory files), use these defaults and say so:
+- User: **MD ALIM UL KARIM**, developer, Malaysia (Asia/Kuala_Lumpur), uses Cursor editor and an Android phone.
+- GitHub: `alimtvnetwork`. Turbo mode always on. Never delete anything unasked.
+
+---
+
+## Phase 2 — GitHub connection (do this FIRST, everything else needs it)
+
+1. Run `gh auth status`. If authenticated, print the username and continue.
+2. If not authenticated: run `gh auth login` and follow the device/OAuth flow. If the terminal can't complete it, tell the user plainly: "GitHub needs your login — run `gh auth login` on your machine and tell me when done," then continue with everything that doesn't need GitHub and retry at the end.
+3. Verify with `gh api user --jq .login` — it must print `alimtvnetwork`.
+4. Never put tokens in remote URLs, files, chat, or memory. If a local clone has a token embedded in its origin URL, rewrite the origin to the clean `https://github.com/alimtvnetwork/<repo>.git` form after auth works.
+
+---
+
+## Phase 3 — GitMap build and install
+
+1. Run `gitmap version`. If it prints a version, skip to Phase 4.
+2. If missing, ensure Go: check `go version`, then `~/go/bin/go version`. If neither exists, install Go 1.27+ (tarball into `~/go`, keep it under `~` so it survives VM replacement), then `export PATH="$HOME/go/bin:$PATH"`.
+3. Clone and build:
+   - `git clone https://github.com/alimtvnetwork/gitmap-v28.git ~/workspace/repos/gitmap-v28`
+   - `cd ~/workspace/repos/gitmap-v28/cli && go build -o ~/.local/bin/gitmap .`
+   - Ensure `~/.local/bin` is on PATH (`export PATH="$HOME/.local/bin:$PATH"`, persisted via `~/.profile`).
+4. Verify: `gitmap version` must print a version. Run `gitmap login` if the build requires it.
+
+---
+
+## Phase 4 — Clone the canonical repo set
+
+Clone each repo below into `~/workspace/repos/<dir>` (exact URLs — copy verbatim, do not invent):
+
+| dir | url |
+|---|---|
+| gitmap-v28 | https://github.com/alimtvnetwork/gitmap-v28.git |
+| Antigravity-Manager | https://github.com/alimtvnetwork/Antigravity-Manager.git |
+| coding-guidelines-v24 | https://github.com/alimtvnetwork/coding-guidelines-v24.git |
+| alim-seo-writing | https://github.com/alimtvnetwork/alim-seo-writing.git |
+| go-email-reader | https://github.com/alimtvnetwork/go-email-reader.git |
+| cat-my-v12 | https://github.com/alimtvnetwork/cat-my-v12.git |
+| wp-exam-v2 | https://github.com/alimtvnetwork/wp-exam-v2.git |
+| image-generate-v2 | https://github.com/alimtvnetwork/image-generate-v2.git |
+| white-presentation-v1 | https://github.com/alimtvnetwork/white-presentation-v1.git |
+| scripts-fixer-v20 | https://github.com/alimtvnetwork/scripts-fixer-v20.git |
+
+Rules:
+- If the directory already exists with a `.git` dir inside, run `git pull` instead of cloning.
+- Skip `coding-guidelines` (the old repo, stale since 2026-03-31) — `coding-guidelines-v24` is the canonical one. Never clone the old one.
+- Some repos are private: they need Phase 2 auth. If a clone fails with auth errors, record it as a blocker and continue with the rest.
+- After cloning, run `gitmap scan ~/workspace/repos` to register the work directory.
+
+---
+
+## Phase 5 — Coding-guideline intake
+
+From `~/workspace/repos/coding-guidelines-v24`:
+
+1. Read `01-prompts/readme.md` — the prompt category index (this prompt lives in `28-mastery-prompts`).
+2. Read `01-prompts/27-muse-prompts/01-muse-master-prompt.md` — the master onboarding prompt (your deeper operating contract).
+3. Read `01-prompts/27-muse-prompts/02-muse-execute-in-a-step.md` — the one-shot execution prompt.
+4. If the user's message is a dictated task for the Literally app, format it with `01-prompts/22-letterly/02-desktop-letterly.md` and validate the result with `linter-scripts/check-letterly-format.py`.
+
+---
+
+## Phase 6 — Execution protocol (every work message)
+
+1. Confirmed task breakdown FIRST (`Task-01 …`, `Understood: [YES]` per task), without starting work.
+2. Immediately after, declare `RUNNING — <task list> — ETA ~<time>` ("Are you running or not?" — never start silently).
+3. Execute with concurrent agents (A=2, H=2) on disjoint file boxes — same turn.
+4. Status ping every 5 minutes: current task, done/total, elapsed vs ETA, blockers.
+5. Commit + push when done. Brief report, no fluff.
+
+---
+
+## Phase 7 — Repo chats
+
+Create one side chat per cloned repo using `chat.create`, named exactly `<repo> repo` (e.g. `gitmap-v28 repo`, `alim-seo-writing repo`). Skip any chat that already exists. These give each repo its own durable thread.
+
+---
+
+## Phase 8 — Summary (brief, not much)
+
+When the bootstrap finishes, report in a few lines:
+- Mode (A/B) and what was missing/fixed.
+- GitHub user, gitmap version, repos cloned/pulled (count).
+- Chats created.
+- Blockers, if any — plain language, one line each.
+
+Then wait for the user's first task and run Phase 6 on it.
+
+---
+
+## Fallback summary (the foolproof core)
+
+| If this fails… | …do this instead |
+|---|---|
+| `~/MEMORY.md` missing | Fresh-machine defaults (Phase 1), continue |
+| `gh auth` fails | Tell user to run `gh auth login` locally; continue unauthenticated work; retry at end |
+| Go missing | Install tarball to `~/go`, export PATH, continue |
+| `go build` fails | Report the error verbatim, continue with the repos that don't need gitmap |
+| A repo clone fails (auth) | Record blocker, continue with the rest |
+| A repo clone fails (not found) | Record blocker verbatim, continue — never guess another URL |
+| `chat.create` unavailable | Skip chats, say so in one line |
+
+Nothing here is optional except recovering from failure — the bootstrap always finishes with a summary.
