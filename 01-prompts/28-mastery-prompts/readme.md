@@ -30,7 +30,7 @@ New versions go here as new files. Existing prompts are never modified.
 
 | Prompt File | Version | Scope | Key Capabilities |
 | :--- | :--- | :--- | :--- |
-| [`01-mastery-bootstrap-prompt.md`](01-mastery-bootstrap-prompt.md) | 1.0.0 | Standalone Bootstrap | Turbo-mode operating contract, Phase 0 preflight (fresh/existing machine), memory intake with fresh-machine defaults, GitHub auth, Go + GitMap build/install, 10-repo canonical clone set, guideline intake, Phase 6 execution protocol (breakdown → RUNNING+ETA → A=2/H=2 → 5-min pings → commit+push), repo side-chat creation, full fallback table. |
+| [`01-mastery-bootstrap-prompt.md`](01-mastery-bootstrap-prompt.md) | 1.1.0 | Standalone Bootstrap | Turbo-mode operating contract, Phase 0 preflight (fresh/existing machine), full memory intake (MEMORY/USER/AGENTS/SOUL/TOOLS/IDENTITY/alignment/people/groups/repo legend), GitHub auth, Go + GitMap build/install, **GitMap skill-file intake** (mandatory SKILL.md read), 10-repo canonical clone set **via `gitmap clone`** (GITHUB_TOKEN pattern for private repos), guideline intake, Phase 6 execution protocol (breakdown → RUNNING+ETA → A=2/H=2 → 5-min pings → commit+push), repo side-chat creation, full fallback table. |
 
 ---
 

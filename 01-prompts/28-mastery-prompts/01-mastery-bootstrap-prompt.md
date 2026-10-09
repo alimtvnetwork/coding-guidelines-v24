@@ -1,6 +1,6 @@
 # Mastery Bootstrap Prompt — foolproof standalone session starter
 
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Date:** 2026-10-09
 **Purpose:** Paste this prompt into ANY fresh Muse chat, on any machine, and get a fully working session: authenticated GitHub, built GitMap, cloned repos, loaded memory, repo chats created. No prior context required — everything is defined below, with a fallback for every step.
 
@@ -40,14 +40,22 @@ Declare the mode explicitly: `MODE — <A|B> — <what is missing>`.
 
 ## Phase 1 — Memory intake
 
-If `~/MEMORY.md` exists, read it plus:
-- `~/USER.md` — who the user is.
-- `~/dreams/alignment/derived/ALIGNMENT_SYNTHESIS.md` — how you two work together.
-- `~/memory/people/INDEX.md` and `~/memory/groups/INDEX.md` — who matters to them.
+Read ALL of these (skip only the ones that don't exist — fresh machine):
 
-If this is a fresh machine (no memory files), use these defaults and say so:
-- User: **MD ALIM UL KARIM**, developer, Malaysia (Asia/Kuala_Lumpur), uses Cursor editor and an Android phone.
+- `~/MEMORY.md` — curated long-term memory: facts, preferences, commitments.
+- `~/USER.md` — who the user is.
+- `~/AGENTS.md` — the operating manual: workspace conventions, tool quirks, hard-won lessons (including GitMap usage lessons). Read this carefully.
+- `~/SOUL.md` — persona: how to come across.
+- `~/TOOLS.md` — local tool notes (Go toolchain location, gitmap binary, symlinks).
+- `~/IDENTITY.md` — the assistant's identity.
+- `~/dreams/alignment/derived/ALIGNMENT_SYNTHESIS.md` — how you two work together.
+- `~/memory/people/INDEX.md` and `~/memory/groups/INDEX.md` — who matters to them; read the individual pages for anyone relevant to the current task.
+- `~/workspace/repos/README.md` — the repo legend: what each cloned repo is and which side chat belongs to it.
+
+Context that is always true (use when memory files are missing):
+- User: **MD ALIM UL KARIM**, developer, Malaysia (timezone **Asia/Kuala_Lumpur**), uses Cursor editor and an Android phone.
 - GitHub: `alimtvnetwork`. Turbo mode always on. Never delete anything unasked.
+- Layout: `~/.local/bin` holds the `gitmap` binary (must be on PATH); `~/go/bin` holds the Go toolchain; `~/workspace/repos` is the handpicked work directory and gitmap's default scan root.
 
 ---
 
@@ -64,17 +72,26 @@ If this is a fresh machine (no memory files), use these defaults and say so:
 
 1. Run `gitmap version`. If it prints a version, skip to Phase 4.
 2. If missing, ensure Go: check `go version`, then `~/go/bin/go version`. If neither exists, install Go 1.27+ (tarball into `~/go`, keep it under `~` so it survives VM replacement), then `export PATH="$HOME/go/bin:$PATH"`.
-3. Clone and build:
+3. Clone and build (plain `git clone` is correct here — gitmap doesn't exist yet):
    - `git clone https://github.com/alimtvnetwork/gitmap-v28.git ~/workspace/repos/gitmap-v28`
    - `cd ~/workspace/repos/gitmap-v28/cli && go build -o ~/.local/bin/gitmap .`
    - Ensure `~/.local/bin` is on PATH (`export PATH="$HOME/.local/bin:$PATH"`, persisted via `~/.profile`).
 4. Verify: `gitmap version` must print a version. Run `gitmap login` if the build requires it.
+5. **Learn GitMap from its skill file** (mandatory — this is the operating manual for every gitmap command):
+   - Read `~/workspace/repos/gitmap-v28/.agents/skills/gitmap/SKILL.md` end to end: command cheat sheet, the mandatory command-replacement matrix, operational guardrails.
+   - From now on, every gitmap invocation follows that skill. When in doubt about a subcommand, check the skill before guessing flags.
 
 ---
 
-## Phase 4 — Clone the canonical repo set
+## Phase 4 — Clone the canonical repo set (MUST use `gitmap clone`)
 
-Clone each repo below into `~/workspace/repos/<dir>` (exact URLs — copy verbatim, do not invent):
+Clone with gitmap, never plain `git clone` — gitmap registers the repos, handles auth, and keeps its cache consistent. Ensure `~/.local/bin` is on PATH first.
+
+For each repo below, run (exact URLs — copy verbatim, do not invent):
+
+```
+gitmap clone <url> ~/workspace/repos/<dir>
+```
 
 | dir | url |
 |---|---|
@@ -90,9 +107,11 @@ Clone each repo below into `~/workspace/repos/<dir>` (exact URLs — copy verbat
 | scripts-fixer-v20 | https://github.com/alimtvnetwork/scripts-fixer-v20.git |
 
 Rules:
-- If the directory already exists with a `.git` dir inside, run `git pull` instead of cloning.
+- Private repos need a token for git: prefix the command — `GITHUB_TOKEN=$(gh auth token) gitmap clone <url> ~/workspace/repos/<dir>`. The `gh` token works for git operations.
+- If the directory already exists with a `.git` dir inside, run `git -C ~/workspace/repos/<dir> pull` instead of cloning.
+- If a clone hangs waiting for credentials, kill it — it means auth is missing. Fix Phase 2 first, never retry blindly.
 - Skip `coding-guidelines` (the old repo, stale since 2026-03-31) — `coding-guidelines-v24` is the canonical one. Never clone the old one.
-- Some repos are private: they need Phase 2 auth. If a clone fails with auth errors, record it as a blocker and continue with the rest.
+- If a clone fails with auth errors, record it as a blocker and continue with the rest.
 - After cloning, run `gitmap scan ~/workspace/repos` to register the work directory.
 
 ---
