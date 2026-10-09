@@ -12,7 +12,8 @@ Format whatever input text is provided according to the exact output template be
    - Item 3 is ALWAYS: `3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well`
    - Item 4 is ALWAYS: ``4. Use `gitmap` AI agents to enter data``
    - Item 5 is ALWAYS: `5. Task completion includes committing and pushing to Git`
-    followed by discrete technical action items extracted from the input text (renumbered from 6).
+   - Item 6 is ALWAYS: ``6. Give every Task-NN in the confirmed task breakdown a `Slug:` sub-item derived from the root slug (`<root-slug> - Task NN`, e.g. `Slug: SEO Writing and Folder Structure Instructions - Task 01`) so GitMap can create and verify subtasks under the root task``
+    followed by discrete technical action items extracted from the input text (renumbered from 7).
 6. End with the mandatory agent invocation suffix pointing to `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)`.
 7. Output ONLY the resulting prompt as plain markdown text. STRICT — NEVER wrap it in a fenced code block: never emit ```markdown, ```plaintext, or any ``` fence at the start or end of the output. `#` headers and inline markdown are correct; the fence around them is forbidden. No conversational filler, no commentary before or after it.
 8. Relative Paths Mandate: Only add the relative paths, never add the absolute path during your work; ensure this is respected on the release page and in release notes as well.
@@ -35,7 +36,8 @@ ${Input Text Verbatim}
 3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well
 4. Use `gitmap` AI agents to enter data
 5. Task completion includes committing and pushing to Git
-6. [extracted actionable technical directive from input]
+6. Give every Task-NN in the confirmed task breakdown a `Slug:` sub-item derived from the root slug (`<root-slug> - Task NN`, e.g. `Slug: SEO Writing and Folder Structure Instructions - Task 01`) so GitMap can create and verify subtasks under the root task
+7. [extracted actionable technical directive from input]
 
 ## Must follow and spawn agent using
 
