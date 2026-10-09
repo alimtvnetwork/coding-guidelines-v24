@@ -29,6 +29,7 @@
 | [`check-error-management.py`](check-error-management.py) | Python 3 | Audits `AppError` wrapping, HTTP error models, and universal error envelopes across Go/TS/Python. | ✅ Yes |
 | [`check-forbidden-strings.py`](check-forbidden-strings.py) | Python 3 | TOML-driven scanner (`forbidden-strings.toml`) enforcing renamed symbols and deprecated naming patterns. | ✅ Yes |
 | [`check-forbidden-spec-paths.py`](check-forbidden-spec-paths.py) | Python 3 | Blocks deprecated or uppercase `.md` paths and ensures consolidated spec structure. | ✅ Yes |
+| [`check-letterly-format.py`](check-letterly-format.py) | Python 3 | Validates the Letterly/Literally formatter output shape: no fenced blocks, subject-derived single-line title, `## slug` subheader after the verbatim input, fixed actionable items 1–6, and the agent-suffix link. | ✅ Yes |
 | [`check-spec-folder-refs.py`](check-spec-folder-refs.py) | Python 3 | Validates folder-level references in specifications and guides against stale directory names. | ✅ Yes |
 | [`check-spec-cross-links.py`](check-spec-cross-links.py) | Python 3 | Validates cross-specification markdown links using `spec-cross-links.allowlist`. | ✅ Yes |
 | [`check-placeholder-comments.py`](check-placeholder-comments.py) | Python 3 | Blocks placeholder comments (`// TODO`, `/* fill here */`, `[N]`) across all specification files. | ✅ Yes |
