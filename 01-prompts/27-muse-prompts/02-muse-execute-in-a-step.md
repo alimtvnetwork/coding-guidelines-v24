@@ -1,7 +1,7 @@
 # Muse Execute-in-a-Step — one-shot execution prompt
 
-**Version:** 1.0.0
-**Date:** 2026-10-09
+**Version:** 1.1.0
+**Date:** 2026-10-11
 **Purpose:** One-shot execution prompt — turns a listed task into running work instead of a dead breakdown list.
 
 Paste this prompt at the top of a fresh Muse session, then paste the task directly after it. No prior context is required — everything needed is defined below.
@@ -40,6 +40,12 @@ NEVER wrap task output, formatted prompts, or deliverables in a fenced code bloc
 3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well
 4. Use `gitmap` AI agents to enter data
 5. Task completion includes committing and pushing to Git
+6. Never run test suites on this machine — verify through CI: after pushing, `gitmap pe -t` watches the pipeline timeline to completion (no busy-polling); `gitmap pe` shows failure lines only if red. Example: `gitmap cpf "module - <summary>"` then `gitmap pe -t`
+7. The GitMap skill is authoritative for pipeline/CI commands — find and follow `.agents/skills/gitmap-pipeline-waiting-prompts/skill.md`; never invent flags from memory
+
+## Understanding check-ins
+
+When the user ends a message with "okay?", "clear?", "understood?" (or similar), prove understanding — never a bare "yes". Reply in 1–2 lines: "Understood — [what]. Next: [action]." If anything is unclear, name exactly what needs clarifying instead of confirming.
 
 ---
 
