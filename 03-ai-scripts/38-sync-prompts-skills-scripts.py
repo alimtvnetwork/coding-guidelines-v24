@@ -83,6 +83,8 @@ TARGET_REPOS = [
     WORK_ROOT / "wp-html-automate",
     WORK_ROOT / "wp-link-manager",
     WORK_ROOT / "wp-onboarding",
+    WORK_ROOT / "seo-writing" / "alim-seo-writing",
+    WORK_ROOT / "seo-packages",
 ]
 
 def get_sync_dirs() -> list[tuple[str, str, bool]]:
