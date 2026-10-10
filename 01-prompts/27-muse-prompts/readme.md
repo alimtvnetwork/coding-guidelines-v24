@@ -33,6 +33,7 @@ Its installable skill is `muse-master-prompt`
 | :--- | :--- | :--- | :--- |
 | [`01-muse-master-prompt.md`](01-muse-master-prompt.md) | 6.0.0 | Master Onboarding | Self-loop Phases 0–5, auth bootstrap, GitMap intake, memory contract checklist, task-confirm + multi-agent protocol (A=2/H=2), verification gates, Top-Instruction Priority Mandate. |
 | [`02-muse-execute-in-a-step.md`](02-muse-execute-in-a-step.md) | 1.0.0 | Execute-in-a-Step | Breakdown-first listing, RUNNING + ETA declaration ("Are you running or not?"), 5-minute status pings, commit+push completion, both prompts as MD code blocks for Literally. |
+| [`03-muse-master-with-repos.md`](03-muse-master-with-repos.md) | 1.0.0 | Repo-Aware Master | Compact paste-and-go prompt: embedded 11-repo registry (which request → which repo + how), routing rules, 8-step execution protocol (parse → route → confirm → locate → execute → verify → ship → report), fallback table. |
 
 ---
 
