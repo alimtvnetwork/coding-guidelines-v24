@@ -65,12 +65,22 @@ without confirmation; never delete.
 - **Target Files:** `01-prompts/27-muse-prompts/`
 
 ### Task-06: commit + release + CI green (lead)
-- **State:** `[IN PROGRESS]`
+- **State:** `[DONE]` (2026-10-17: chore commit `e9a64db6` for 16 regenerated
+  files pushed; feature commit `b35ca859` via `gitmap cpf` pushed and verified
+  via `git ls-remote`; minor release v6.74.0 published via
+  `bump_versions.py --type minor --create-release` — tag + GitHub release live,
+  merged back to main as `00e90ed5`, pushed. CI status: Spec Verification
+  Coverage ✅, Validate version.json ✅, Release ✅; CI ❌ and Installer Tests ❌
+  — BOTH failures are PRE-EXISTING on main (same two workflows red at
+  10:54/10:56/14:48 UTC 2026-10-16, hours before this task started; failing
+  files are 9 stale old plan docs with broken relative links + 2 fix-repo
+  installer assertions — none are this task's files). Not fixed: out of scope,
+  reported as follow-up.)
 - **Understood:** `[YES]` — `gitmap cpf`, minor release via `bump_versions.py --create-release`, CI green via `gh`.
 - **Target Files:** repo root (`version.json` via script)
 
 ### Task-07: final report (lead)
-- **State:** `[TODO]`
+- **State:** `[DONE]` — full report delivered to parent with breakdown, SHAs, release tag, CI status, paths, verification notes, follow-ups.
 
 ## Wave plan
 
