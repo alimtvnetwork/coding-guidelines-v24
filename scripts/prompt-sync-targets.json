@@ -1,0 +1,10 @@
+{
+  "description": "Target registry for 03-ai-scripts/50-sync-prompts-skills-to-targets.py. These repos receive canonical 01-prompts/ + .agents/skills/ + .cursor/skills/ from coding-guidelines-v24. 02-spec/ is NEVER synced (fail-safe default-deny).",
+  "targets": [
+    {
+      "name": "story-telling-v1",
+      "note": "Bengali kids storytelling channel (ছোট গল্পের দেশ). Example target: does not need spec.",
+      "path": "~/workspace/repos/story-telling-v1"
+    }
+  ]
+}
