@@ -725,7 +725,7 @@ def sync_repo(target: Path, is_dry_run: bool = False, is_no_push: bool = False) 
     # 6. Commit changes on base branch and push
     run_cmd("git add -A", target)
     commit_msg = (
-        "feat(sync): sync canonical prompts, skills, gitmap agent standards, and purge deprecated 46 task manager"
+        "feat(sync) - sync canonical prompts, skills, gitmap agent standards, and purge deprecated 46 task manager"
     )
     code, out, err = run_cmd(f'git commit -m "{commit_msg}"', target)
 
@@ -796,7 +796,7 @@ def sync_repo(target: Path, is_dry_run: bool = False, is_no_push: bool = False) 
 
     if is_ver_updated:
         run_cmd("git add -A", target)
-        run_cmd(f'git commit -m "chore(version): bump to {release_tag}"', target)
+        run_cmd(f'git commit -m "chore(version) - bump to {release_tag}"', target)
 
     run_cmd(
         f'git tag -a {release_tag} -m "Release {release_tag} - Synchronize prompts, skills, AI scripts, and coding guidelines"',
@@ -809,7 +809,7 @@ def sync_repo(target: Path, is_dry_run: bool = False, is_no_push: bool = False) 
 
     # Merge back into base branch and push
     run_cmd(f"git checkout {base_branch}", target)
-    run_cmd(f'git merge {release_branch} -m "chore(release): merge {release_tag} [skip ci]"', target)
+    run_cmd(f'git merge {release_branch} -m "chore(release) - merge {release_tag} [skip ci]"', target)
 
     if not is_no_push:
         p_code, p_out, p_err = run_cmd(f"git push origin {base_branch}", target)
