@@ -28,8 +28,8 @@ Its installable skill is `muse-master-prompt`
 ## Muse Memory IO (Memory Re-sync Protocol)
 
 The master prompts [`01-muse-master-prompt.md`](01-muse-master-prompt.md)
-(6.1.1) and [`05-muse-master-prompt-v2.md`](05-muse-master-prompt-v2.md)
-(6.2.1) carry a "Muse Memory IO" section (§11). The private vault repo
+(6.1.2) and [`05-muse-master-prompt-v2.md`](05-muse-master-prompt-v2.md)
+(6.2.2) carry a "Muse Memory IO" section (§11). The private vault repo
 `alimtvnetwork/repo-cache` holds a 7-day rolling condensed memory digest
 under its `12-muse-ai/` folder (sequenced `README.md`, `01-overview.md` →
 `05-conventions.md`, `chat-seeds/*.md`); the last-read watermark is tracked
@@ -48,7 +48,10 @@ Two standing rules travel with the protocol:
   hardcoded in prompts. Pointers only, never secret values.
 - **EMAIL RULE:** when a memory-IO read shows go-email-reader setup is needed,
   ask the user ONLY for the email password — account, address, and server
-  config come from the encrypted store; never re-ask for non-secret info.
+  config resolve from repo-secrets `11-go-email-reader/` (pointers only, never
+  hardcoded); set the ★ default sender via `default --email`. Standing user
+  pre-approval: all go-email-reader SMTP sending is approved up front — never
+  ask per-send.
 
 ---
 
@@ -56,7 +59,7 @@ Two standing rules travel with the protocol:
 
 | Prompt File | Version | Scope | Key Capabilities |
 | :--- | :--- | :--- | :--- |
-| [`01-muse-master-prompt.md`](01-muse-master-prompt.md) | 6.1.0 | Master Onboarding | Self-loop Phases 0–5, GitMap reinstall guard, auth bootstrap, GitMap intake via skills, memory contract checklist, CI-only test verification (`gitmap pe -t`), task-confirm + multi-agent protocol (A=2/H=2), understanding check-ins, Top-Instruction Priority Mandate. |
+| [`01-muse-master-prompt.md`](01-muse-master-prompt.md) | 6.1.2 | Master Onboarding | Self-loop Phases 0–5, GitMap reinstall guard, auth bootstrap, GitMap intake via skills, memory contract checklist, CI-only test verification (`gitmap pe -t`), task-confirm + multi-agent protocol (A=2/H=2), understanding check-ins, Top-Instruction Priority Mandate. |
 | [`02-muse-execute-in-a-step.md`](02-muse-execute-in-a-step.md) | 1.1.0 | Execute-in-a-Step | Breakdown-first listing, RUNNING + ETA declaration ("Are you running or not?"), 5-minute status pings, commit+push completion, CI-only verification, GitMap skill authority, understanding check-ins. |
 | [`03-muse-master-with-repos.md`](03-muse-master-with-repos.md) | 1.1.0 | Repo-Aware Master | Compact paste-and-go prompt: embedded 10-repo registry (which request → which repo + how), routing rules, 8-step execution protocol (parse → route → confirm → locate → execute → verify → ship → report), GitMap reinstall + CI-only verification, fallback table. |
 | [`04-muse-master-with-repos-v2.md`](04-muse-master-with-repos-v2.md) | 1.3.1 | Repo-Aware Master v2 | 14-repo registry (added minecraft-alim-alima), pull-first + no-wait checklist, large-file 15 MB split rule, repo-cache NN-sequence convention, explicit commit instructions (gitmap cpf + ls-remote verify). |
