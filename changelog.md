@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.79.0] - 2026-10-17
+
+### Added
+- gitmap fleet update and CI/CD pipeline verification - all workflows green
+
+---
+
 ## [v6.78.0] - 2026-10-17
 
 ### Added
