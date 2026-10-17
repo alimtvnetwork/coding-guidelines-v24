@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.76.0] - 2026-10-17
+
+### Added
+- letterly-mobile - add task name and slug subheaders and heatmap commands
+
+---
+
 ## [v6.75.0] - 2026-10-17
 
 ### Added
