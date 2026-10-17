@@ -2,7 +2,7 @@
 
 > Plan ID: `25-ssh-identity-format-and-gitmap-skills-update`
 > Specification: `02-spec/21-app/20-ssh-identity-format-and-gitmap-skills-update/`
-> Status: In Progress
+> Status: Completed
 > Execution Engine: V6 Parameter-Driven Engine (`N=300`, `A=2`, `H=2`, `C=30`)
 
 ---
@@ -21,7 +21,7 @@
 ## 2. Checklist & Subtasks
 
 - [x] Subtask 1: Author architecture spec and plan.
-- [ ] Subtask 2: Update `01-muse-master-prompt.md`, `muse-master-prompt` skills, and onboarding spec with SSH identity format.
-- [ ] Subtask 3: Update `gitmap` skills in `.agents` and `.cursor` with latest commands.
-- [ ] Subtask 4: Regenerate sync assets, run linters, and commit/push `coding-guidelines`.
-- [ ] Subtask 5: Execute live fleet synchronization across all 43 repositories and verify completion.
+- [x] Subtask 2: Update `01-muse-master-prompt.md`, `muse-master-prompt` skills, and onboarding spec with SSH identity format.
+- [x] Subtask 3: Update `gitmap` skills in `.agents` and `.cursor` with latest commands.
+- [x] Subtask 4: Regenerate sync assets, run linters, and commit/push `coding-guidelines`.
+- [x] Subtask 5: Execute live fleet synchronization across all 43 repositories and verify completion.
