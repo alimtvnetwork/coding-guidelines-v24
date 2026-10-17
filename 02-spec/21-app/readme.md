@@ -84,6 +84,7 @@ All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent e
 | [`15-muse-prompts-execute-in-a-step/`](15-muse-prompts-execute-in-a-step/) | Muse Prompts Execute-in-a-Step Update: RUNNING+ETA Declaration, 5-Minute Pings, New Prompt & Letterly Template | Application Spec | Active |
 | [`16-unified-muse-master-prompt-v6/`](16-unified-muse-master-prompt-v6/) | Unified Muse Master Onboarding & Execution Prompt: SSH Auth, GitMap Fleet Scan, Clone & Pull-All, V6 Engine | Application Spec | Active |
 | [`17-multi-repo-skills-sync/`](17-multi-repo-skills-sync/) | Multi-Repository Skills Synchronization, Non-Destructive Fleet Deployment & 43-Repo Catalog | Application Spec | Active |
+| [`18-gitmap-agent-task-engine-and-python-sqlite-purge/`](18-gitmap-agent-task-engine-and-python-sqlite-purge/) | GitMap Agent Task Engine & Python SQLite Purge, Ad-Hoc Script Ban & Fleet Sync | Application Spec | Active |
 | [`gitmap-sync-and-agent-task-engine/`](gitmap-sync-and-agent-task-engine/) | GitMap Fleet Synchronization & Native SQLite Agent Task Engine | Application Spec | Active |
 | [`coding-guideline-skills-sync-and-prompt-updates/`](coding-guideline-skills-sync-and-prompt-updates/) | GitMap Skills Re-read, Prompts+Skills Sync Mechanism & Pull-First Prompt Versions | Application Spec | Active |
 

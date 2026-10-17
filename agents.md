@@ -131,6 +131,12 @@ When synchronizing canonical assets (prompts, skills, shared specs, scripts) acr
 - **Mandatory Completion Invariant ('No Push = Not Done'):** If the code is not committed to Git and pushed upstream to GitHub (main/master/tracking branch), the task is strictly considered INCOMPLETE and NOT DONE. Never conclude a turn, claim success, or mark tasks as completed while leaving uncommitted changes or unpushed local commits.
 - **Non-Owned Repository Exclusion (TOTAL BAN):** NEVER stage, commit, mutate, or push repositories that are not owned by us, including `omis`, `oh-my-zsh`, `ohmyzsh`, `zsh`, `oh-my-posh`, `dotfiles`, and system runtime packages (`homebrew`, `brew`, `.cargo`, `.rustup`, `.nvm`, `.asdf`, `.pyenv`).
 
+## 14. GitMap Agent Task Engine Primacy & Strict Python SQLite Ban
+
+- **Native GitMap Agent Commands:** All multi-agent task tracking, claiming, status checks, in-flight action logging, and crash autopsy MUST use native compiled `gitmap agent` subcommands (`gitmap agent task init`, `gitmap agent task status`, `gitmap agent task ls`, `gitmap agent task pending`, `gitmap agent subtask add`, `gitmap agent subtask ls`, `gitmap agent subtask claim`, `gitmap agent subtask complete`, `gitmap agent subtask fail`, `gitmap agent log`, `gitmap agent diagnose`, `gitmap agent crashed`, `gitmap agent temp-clear`).
+- **TOTAL BAN on Python SQLite Scripts & Inline Queries:** TOTAL BAN on executing `python 03-ai-scripts/46-agent-sqlite-task-manager.py` and TOTAL BAN on raw `python -c "import sqlite3..."` or ad-hoc Python DB queries. All database operations are natively handled by compiled GitMap Go binaries with WAL mode in <1ms.
+
+
 
 
 

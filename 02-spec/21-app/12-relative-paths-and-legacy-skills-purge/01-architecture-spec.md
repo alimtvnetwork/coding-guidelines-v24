@@ -26,7 +26,7 @@ In all these latterly prompts, can you please add one more line to only add the 
 
 ### 3.2 Why Legacy Execute Skills Must Be Purged
 - **Skill Redundancy & Confusion:** The existence of multiple execute skills (`execute-parent-task`, `execute-parent-task-with-n-steps`, `parent-task-in-below-steps`, `parent-task-n-step-loop`) alongside `execute-parent-task-with-n-steps-v6` leads autonomous agents to inadvertently select legacy workflows lacking parameterization, SQLite logging, or GitMap search primacy.
-- **Canonical V6 Supremacy:** Canonical V6 (`execute-parent-task-with-n-steps-v6`) incorporates SQLite task management (`46-agent-sqlite-task-manager.py`), mandatory subagent dispatch (`A = 2, H = 2`), GitMap search primacy (`gitmap aum search`, `gitmap find`), and secrets gates. Older skills are completely obsolete and retired.
+- **Canonical V6 Supremacy:** Canonical V6 (`execute-parent-task-with-n-steps-v6`) incorporates SQLite task management (`gitmap agent`), mandatory subagent dispatch (`A = 2, H = 2`), GitMap search primacy (`gitmap aum search`, `gitmap find`), and secrets gates. Older skills are completely obsolete and retired.
 - **Clean Registry Surface:** Purging older skill directories from `.agents/skills/` and `.cursor/skills/` ensures that any AI agent querying available skills sees only the active, canonical V6 skill.
 
 ---

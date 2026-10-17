@@ -3,7 +3,7 @@
 > **Spec ID:** `02-spec/21-app/10-gitmap-search-subagent-enforcement-and-sqlite-schema/01-architecture-spec.md`  
 > **Status:** APPROVED  
 > **Author:** Lead Systems Architect & Spec Subagent 01  
-> **Target Subsystems:** `01-prompts/14-execute/`, `01-prompts/22-letterly/`, `01-prompts/23-cursor-prompts/`, `.agents/skills/`, `.cursor/skills/`, `03-ai-scripts/46-agent-sqlite-task-manager.py`, `AGENTS.md`  
+> **Target Subsystems:** `01-prompts/14-execute/`, `01-prompts/22-letterly/`, `01-prompts/23-cursor-prompts/`, `.agents/skills/`, `.cursor/skills/`, `gitmap agent`, `AGENTS.md`  
 > **Database:** `.ai-memory/temp-agents/<nn>-<slug>/agent-task.db`  
 
 ---
@@ -78,7 +78,7 @@ To ensure complete compliance across all agent lifecycles, search operations are
 ### 2.1. Operational Rules by Tier
 
 #### Tier 1: Lead Orchestrator
-- Responsible for parsing user requests, orchestrating planning, initializing the SQLite run ledger via `03-ai-scripts/46-agent-sqlite-task-manager.py`, and assigning strictly disjoint owned files.
+- Responsible for parsing user requests, orchestrating planning, initializing the SQLite run ledger via `gitmap agent task init`, and assigning strictly disjoint owned files.
 - When generating prompts for subagents, the Lead Orchestrator **must inject the Mandatory Search Primacy Block** into every subagent payload.
 
 #### Tier 2: Research & Discovery Subagents
@@ -124,7 +124,7 @@ Invoking any banned command violates core repository rules.
 
 ## 3. SQLite Task Manager Architecture & Schema Formalization
 
-To provide ACID-compliant coordination for multi-agent execution while completely avoiding Windows file-locking collisions, `03-ai-scripts/46-agent-sqlite-task-manager.py` maintains an isolated SQLite database at:
+To provide ACID-compliant coordination for multi-agent execution while completely avoiding Windows file-locking collisions, `gitmap agent` maintains an isolated SQLite database at:
 `.ai-memory/temp-agents/<nn>-<slug>/agent-task.db`.
 
 ### 3.1. Database Engine & Concurrency Primitives
@@ -195,27 +195,27 @@ In accordance with global coding guidelines:
 ### 3.4. JSON Serialization & Strict Relative Path Validation
 The `OwnedFilesJson` column in `Subtask` stores an array of relative file paths assigned to a specific subagent.
 To prevent guideline violations:
-1. Every path in `OwnedFilesJson` must be a normalized, forward-slash relative path from the repository root (e.g., `03-ai-scripts/46-agent-sqlite-task-manager.py`).
+1. Every path in `OwnedFilesJson` must be a normalized, forward-slash relative path from the repository root (e.g., `cmd/main.go`).
 2. Absolute filesystem paths (e.g. drive letters or root slashes) and URI schemes (such as `file:` URIs) are strictly prohibited and must be rejected by `cmd_add_subtasks` input validation.
 3. Subtasks must possess mutually disjoint owned file lists to eliminate concurrent write collisions.
 
 ---
 
-## 4. SQLite Task Manager `schema` Command Specification
+## 4. SQLite Task Manager `status` and `schema` Command Specification
 
-To allow agents, CI/CD runners, and developers to inspect the database schema without external SQLite tools, `03-ai-scripts/46-agent-sqlite-task-manager.py` must expose a dedicated `schema` command.
+To allow agents, CI/CD runners, and developers to inspect the database schema without external SQLite tools, `gitmap agent` exposes dedicated status and inspection commands.
 
 ### 4.1. CLI Invocation Syntax
 
 ```bash
-# Display formatted human-readable summary table
-python 03-ai-scripts/46-agent-sqlite-task-manager.py schema [--db <path-to-db>]
+# Display formatted human-readable summary table and schema
+gitmap agent task status
 
 # Display complete SQLite DDL statements
-python 03-ai-scripts/46-agent-sqlite-task-manager.py schema [--db <path-to-db>] --ddl
+gitmap agent task status --ddl
 
 # Display structured machine-readable JSON schema metadata
-python 03-ai-scripts/46-agent-sqlite-task-manager.py schema [--db <path-to-db>] --json
+gitmap agent task status --json
 ```
 
 ### 4.2. Flag Specifications

@@ -63,7 +63,7 @@ To guarantee safe concurrent execution without file lock collisions, work is par
 
 **Verification command:**
 ```bash
-python 03-ai-scripts/46-agent-sqlite-task-manager.py status --db .ai-memory/temp-agents/04-coding-guidelines-actionable-checklists/agent-task.db
+gitmap agent task status
 ```
 **Expected:** exit 0. All subtasks completed cleanly.
 

@@ -15,7 +15,7 @@ In distributed multi-agent workflows and monorepo/meta-repo architectures, 43+ c
 ### 1.2 Identified Bottlenecks
 1. **Python Script Overhead:** The current synchronization process relies on `03-ai-scripts/38-sync-prompts-skills-scripts.py`. While functional, running a Python interpreter with file I/O walks and sequential git subprocess spawning across 43 repositories introduces latency and requires Python runtime dependencies.
 2. **Configuration Inflexibility:** Target repositories are hardcoded in the Python script. Users cannot easily pass an ad-hoc JSON manifest of project URLs, folder paths, or dynamic workspace modes without modifying Python code.
-3. **Agent Task Manager Latency:** Agent state tracking and SQLite task coordination rely on `03-ai-scripts/46-agent-sqlite-task-manager.py`. Invoking `python` repeatedly for every claim, add, complete, and status check incurs Python VM bootstrap overhead (~200ms per invocation).
+3. **Legacy Agent Task Script Overhead:** Agent state tracking previously relied on legacy Python SQLite scripts (`46-agent-sqlite-task-manager.py`). Invoking `python` repeatedly for every claim, add, complete, and status check incurred Python VM bootstrap overhead (~200ms per invocation) and risked script absence. Native `gitmap agent` replaces this with compiled sub-millisecond Go commands.
 4. **Tool Disunity:** AI agents currently alternate between native `gitmap` CLI commands and multiple Python helper scripts. Bringing fleet synchronization and SQLite agent task tracking natively into `gitmap` unifies the autonomous toolchain into a single compiled Go binary.
 
 ---

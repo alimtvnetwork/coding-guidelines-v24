@@ -4,6 +4,7 @@ Master directory of architectural and execution plans.
 
 ## Pending Plans
 
+- [23-gitmap-agent-task-engine-and-python-sqlite-purge.md](pending/23-gitmap-agent-task-engine-and-python-sqlite-purge.md): Complete eradication of legacy Python SQLite task scripts and ad-hoc `python -c "import sqlite3..."` in favor of native compiled Go `gitmap agent` CLI commands, companion skills hardening, and non-destructive fleet synchronization.
 - [13-slide-quiz-preview-and-presenter-chrome.md](pending/13-slide-quiz-preview-and-presenter-chrome.md): Quiz option-card chrome, default box/text shadows, botanical-light theme, presenter shortcuts, and center-stage layout (spec + file 42).
 - [02-slides-system-overhaul.md](pending/02-slides-system-overhaul.md): Full slides deck UI and system overhaul.
 - [04-guideline-prompt-and-installer-upgrade.md](pending/04-guideline-prompt-and-installer-upgrade.md): Guideline prompt and installer enhancements.

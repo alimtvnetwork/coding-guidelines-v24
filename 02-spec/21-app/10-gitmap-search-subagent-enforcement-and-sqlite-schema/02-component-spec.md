@@ -129,15 +129,15 @@ You are Worker <NN> for task <nn>-<slug>. You have no prior chat context; this b
 ### Concurrency-Safe SQLite Action Logging (CRASH FORENSICS MANDATE):
 - Worker subtasks are tracked in the run database: `<databasePath>`.
 - Step 1: Claim assigned subtask atomically:
-  `python 03-ai-scripts/46-agent-sqlite-task-manager.py claim --db <databasePath> --agent "Worker <NN>"`
+  `gitmap agent subtask claim --agent "Worker <NN>"`
 - Step 2: BEFORE touching or modifying any owned file, you MUST log your in-flight action:
-  `python 03-ai-scripts/46-agent-sqlite-task-manager.py log-action --db <databasePath> --subtask-id <id> --agent "Worker <NN>" --action "write_to_file" --file "<path>" --details "<action description>"`
+  `gitmap agent log --subtask <id> --agent "Worker <NN>" --action "write_to_file" --file "<path>" --details "<action description>"`
   *(Note: This guarantees that if a tool execution crashes or the session is interrupted, the database permanently records the exact file you were touching and what caused the crash!)*
 - Step 3: Run targeted validation on modified files only.
 - Step 4: When your subtask passes targeted checks, mark completion in the database:
-  `python 03-ai-scripts/46-agent-sqlite-task-manager.py complete --db <databasePath> --subtask-id <id> --agent "Worker <NN>" --evidence "PASS exit 0, <files>"`
+  `gitmap agent subtask complete <id> --agent "Worker <NN>" --evidence "PASS exit 0, <files>"`
 - Step 5: If blocked or failing, record the failure:
-  `python 03-ai-scripts/46-agent-sqlite-task-manager.py fail --db <databasePath> --subtask-id <id> --agent "Worker <NN>" --reason "<reason>"`
+  `gitmap agent subtask fail <id> --agent "Worker <NN>" --reason "<reason>"`
 
 ### Output Contract:
 Write your subtask output to .ai-memory/plans/subtasks/<nn>-<slug>/01-<name>.json and reply with this JSON block, once per subtask, then stop:
@@ -238,7 +238,7 @@ To establish an unassailable meta-rule across all repositories and AI sessions, 
 - **Subagent Enforcement Mandate:**
   - Lead orchestrators must inject the GitMap search directive and the explicit ripgrep ban into every subagent prompt brief dispatched via `invoke_subagent`.
   - Research subagents (`TypeName: "research"`) are read-only and must never attempt to create or write files.
-  - Worker subagents (`TypeName: "self"`) must log in-flight actions to the SQLite task database (`03-ai-scripts/46-agent-sqlite-task-manager.py log-action`) before modifying files.
+  - Worker subagents (`TypeName: "self"`) must log in-flight actions to the SQLite task database (`gitmap agent log`) before modifying files.
 ```
 
 ---
