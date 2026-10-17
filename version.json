@@ -7,11 +7,11 @@
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.77.0",
+  "Version": "6.78.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "11ff79a01bb75ee0e0cb8da4f2887c5a52f35d4e",
+  "LastCommitSha": "03ddd32265e366d758f3415ee9dba97e0e439908",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -56,20 +56,20 @@
     "${TARGET_PREFIX}/19-plan-spec-steps-v2.md",
     "${TARGET_PREFIX}/20-audit-app-spec.md"
   ],
-  "version": "6.77.0",
+  "version": "6.78.0",
   "updated": "2026-10-18",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "11ff79a01bb75ee0e0cb8da4f2887c5a52f35d4e",
-    "shortSha": "11ff79a",
-    "branch": "release/v6.77.0"
+    "sha": "03ddd32265e366d758f3415ee9dba97e0e439908",
+    "shortSha": "03ddd32",
+    "branch": "release/v6.78.0"
   },
   "stats": {
-    "totalFiles": 752,
-    "totalLines": 175926,
+    "totalFiles": 754,
+    "totalLines": 175995,
     "totalFolders": 24,
-    "totalBytes": 7029596,
+    "totalBytes": 7037044,
     "rootFiles": 6
   },
   "folders": [
@@ -329,9 +329,9 @@
       "status": null,
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 69,
-      "lineCount": 10354,
-      "byteCount": 665248
+      "fileCount": 71,
+      "lineCount": 10423,
+      "byteCount": 672696
     },
     {
       "path": "22-app-issues",

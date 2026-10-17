@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.78.0] - 2026-10-17
+
+### Added
+- letterly-mobile - place input text immediately after header colon before checklist
+
+---
+
 ## [v6.77.0] - 2026-10-17
 
 ### Added
