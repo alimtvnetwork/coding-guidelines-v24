@@ -72,7 +72,7 @@ WAVES = ceil(subtasks / (A x H))
      - Bug Fix: `gitmap cpb "<module> - <summary>"`
    - Large files & repo-cache sequence (always in force):
      - `repo-cache/NN-<slug>`: `NN` is a sequence number (`01`, `02`, …) — a user-written `xx` means "the next sequence number", never a literal `xx` folder.
-     - Videos over 15 MB never live raw in git: `split -b 3m -d <name>.mp4 <folder>/<name>.part` → `<name>.part00…` + `README.txt` (Windows `copy /b`, macOS/Linux `cat <name>.part* > <name>.mp4` reassembly); verify byte-identical (`cmp`/`sha256sum`) BEFORE `git rm` of the original. Never `zip -s` split archives — proven corrupt in this environment.
+     - Videos over 15 MB never live raw in git. Standing DISTRIBUTED-FILE rule: they must be standard split-archives openable in any archive program — 7-Zip multi-volume: `7z a -v3m -mx=0 <folder>/<name>.7z <name>.mp4` → `<name>.7z.001`, `.7z.002`, … + `README.txt`; the user double-clicks `<name>.7z.001` in 7-Zip/WinRAR and extracts. NEVER custom byte-split `.partNN` chunks needing manual reassembly, and never `zip -s` split archives (proven corrupt in this environment). Verify BEFORE `git rm` of the original: `7z t <name>.7z.001` clean, plus extract-to-temp + `cmp` byte-identical against the original.
      - After every push: verify with `git ls-remote origin <branch>` and require a clean `git status`.
    - Report briefly and ask for the next task.
 
@@ -109,3 +109,23 @@ carry POINTERS only, never secret values.
 **EMAIL RULE:** when a memory-IO read shows go-email-reader setup is needed,
 ask the user ONLY for the email password — account, address, and server config
 come from the encrypted store. Never re-ask for non-secret info.
+
+**Which email / how to include / default sender:** resolve from the repo-secrets
+vault (`alimtvnetwork/repo-secrets`, folder `11-go-email-reader/`) — never
+hardcode addresses (PRIVATE ITEMS RULE):
+- `01-email-setup.json` → the account to add (email, alias, IMAP/SMTP host, port,
+  TLS mode). Pass server overrides explicitly on `add` — auto-detect guesses
+  `smtp.<domain>` and is wrong for custom hosts.
+- Set it as the ★ default sender: `go-email-reader default --email <addr>`
+  (requires v1.1.0+; backed by `is_default` in the accounts table). `send` /
+  `read` / `test` / `notify` fall back to the default when `--from` / `--email`
+  is omitted.
+- `02-default-notifier.json` → the default notifier (recipient):
+  `go-email-reader notifier set --email <addr>`.
+
+**STANDING SMTP PRE-APPROVAL (user order 2026-10-17):** the user pre-approves
+ALL go-email-reader email sending (`send`, `notify`, `forward`,
+`watch --notify`). Do NOT ask for per-send approval — reading this rule IS the
+approval, granted altogether up front, so no approval is sought later.
+(Password handling still follows the iron rule: `GER_PASSWORD` env or masked
+prompt; never in files, logs, or chat.)

@@ -376,6 +376,7 @@ The canonical parameterization of this protocol lives in [`01-prompts/14-execute
 - **Multi-language enums:** keep every language implementation in sync.
 - **Tests:** never run without the owner's explicit command (GUARD-03).
 - **Artifacts:** never commit test outputs, binaries, caches, or build products.
+- **Distributed files (large files in git):** any file too large for git (e.g. video > 15 MB) must ALWAYS be stored as a standard split-archive openable in any archive program — 7-Zip multi-volume (`7z a -v3m -mx=0 <name>.7z <file>` → `<name>.7z.001`, `.7z.002`, …). NEVER custom byte-split `.partNN` chunks needing manual reassembly; the user must be able to double-click the first volume and extract. Info-ZIP `zip -s` splits are corrupt in this VM — never use them. Always verify: extract to temp + `cmp` against the original (and `7z t`) BEFORE deleting the original.
 
 ---
 
@@ -486,9 +487,29 @@ When a memory-IO read shows go-email-reader setup is needed, ask the user ONLY
 for the email password — account, address, and server config come from the
 encrypted store. Never re-ask for non-secret info.
 
+**Which email / how to include / default sender:** resolve from the repo-secrets
+vault (`alimtvnetwork/repo-secrets`, folder `11-go-email-reader/`) — never
+hardcode addresses (PRIVATE ITEMS RULE):
+- `01-email-setup.json` → the account to add (email, alias, IMAP/SMTP host, port,
+  TLS mode). Pass server overrides explicitly on `add` — auto-detect guesses
+  `smtp.<domain>` and is wrong for custom hosts.
+- Set it as the ★ default sender: `go-email-reader default --email <addr>`
+  (requires v1.1.0+; backed by `is_default` in the accounts table). `send` /
+  `read` / `test` / `notify` fall back to the default when `--from` / `--email`
+  is omitted.
+- `02-default-notifier.json` → the default notifier (recipient):
+  `go-email-reader notifier set --email <addr>`.
+
+**STANDING SMTP PRE-APPROVAL (user order 2026-10-17):** the user pre-approves
+ALL go-email-reader email sending (`send`, `notify`, `forward`,
+`watch --notify`). Do NOT ask for per-send approval — reading this rule IS the
+approval, granted altogether up front, so no approval is sought later.
+(Password handling still follows the iron rule: `GER_PASSWORD` env or masked
+prompt; never in files, logs, or chat.)
+
 ---
 
-*Version 6.1.1 — lives in the coding-guideline repo under
+*Version 6.1.2 — lives in the coding-guideline repo under
 `01-prompts/27-muse-prompts/`. Its skill is `muse-master-prompt`
 (`.agents/skills/muse-master-prompt/skill.md`). Paste the raw file into a fresh
 Muse AI session to boot a fully-onboarded agent.*

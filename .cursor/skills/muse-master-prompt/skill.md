@@ -70,6 +70,10 @@ WAVES = ceil(subtasks / (A x H))
    - Commit and push atomically via GitMap using hyphen format (no colons in arguments):
      - Feature: `gitmap cpf "<module> - <summary>"`
      - Bug Fix: `gitmap cpb "<module> - <summary>"`
+   - Large files & repo-cache sequence (always in force):
+     - `repo-cache/NN-<slug>`: `NN` is a sequence number (`01`, `02`, …) — a user-written `xx` means "the next sequence number", never a literal `xx` folder.
+     - Videos over 15 MB never live raw in git. Standing DISTRIBUTED-FILE rule: they must be standard split-archives openable in any archive program — 7-Zip multi-volume: `7z a -v3m -mx=0 <folder>/<name>.7z <name>.mp4` → `<name>.7z.001`, `.7z.002`, … + `README.txt`; the user double-clicks `<name>.7z.001` in 7-Zip/WinRAR and extracts. NEVER custom byte-split `.partNN` chunks needing manual reassembly, and never `zip -s` split archives (proven corrupt in this environment). Verify BEFORE `git rm` of the original: `7z t <name>.7z.001` clean, plus extract-to-temp + `cmp` byte-identical against the original.
+     - After every push: verify with `git ls-remote origin <branch>` and require a clean `git status`.
    - Report briefly and ask for the next task.
 
 ### 3. Muse Memory IO (Memory Re-sync Protocol)
