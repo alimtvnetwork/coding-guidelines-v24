@@ -66,8 +66,16 @@ param(
     [string]$LogDir = "",
     [switch]$ShowFixRepoLog,
     [int]$MaxFixRepoLogs = -1,
-    [string]$PinnedByReleaseInstall = ""
+    [string]$PinnedByReleaseInstall = "",
+    [switch]$General
 )
+
+if ($General) {
+    if ($ConfigFile -eq "install-config.json") {
+        $ConfigFile = "general-install-config.json"
+    }
+    $RunFixRepo = $false
+}
 
 # Env-var equivalent so wrapper scripts can opt in without threading the flag.
 if (-not $RunFixRepo) {
@@ -258,7 +266,11 @@ if ([string]::IsNullOrEmpty($Branch)) {
 }
 if ([string]::IsNullOrEmpty($Dest)) { $Dest = (Get-Location).Path }
 if ($Folders.Count -eq 0) {
-    $Folders = if ($config -and $config.folders) { @($config.folders) } else { @("02-spec", "linters", "linter-scripts", "scripts/fix-repo", "scripts/visibility-change", ".ai-memory/coding-guidelines", ".ai-memory/what-to-read.md", "version.json") }
+    if ($General) {
+        $Folders = if ($config -and $config.folders) { @($config.folders) } else { @(".ai-memory", "01-prompts", "03-ai-scripts", ".agents/skills", ".cursor/skills", "02-spec/01-spec-authoring-guide", "02-spec/21-app", "assets") }
+    } else {
+        $Folders = if ($config -and $config.folders) { @($config.folders) } else { @("02-spec", "linters", "linter-scripts", "scripts/fix-repo", "scripts/visibility-change", ".ai-memory/coding-guidelines", ".ai-memory/what-to-read.md", "version.json") }
+    }
 }
 
 $ref = if ($Version) { $Version } else { $Branch }
@@ -490,7 +502,7 @@ try {
 
     # Top-level files: copy each from archive root into Dest. Missing files
     # are warned (not fatal) so installer remains forward-compatible.
-    $topLevelFiles = @("fix-repo.sh", "fix-repo.ps1", "visibility-change.sh", "visibility-change.ps1", ".gitattributes", ".gitignore")
+    $topLevelFiles = if ($General) { @(".gitattributes", ".gitignore") } else { @("fix-repo.sh", "fix-repo.ps1", "visibility-change.sh", "visibility-change.ps1", ".gitattributes", ".gitignore") }
     foreach ($tlf in $topLevelFiles) {
         $srcFile = Join-Path $archiveRoot.FullName $tlf
         if (-not (Test-Path $srcFile)) {
@@ -527,7 +539,7 @@ try {
     # ── Verify required files (spec §8: exit 4 on missing required path) ──
     # Required files MUST exist in Dest after install. Skipped under -DryRun.
     if (-not $DryRun) {
-        $requiredFiles = @("fix-repo.sh", "fix-repo.ps1")
+        $requiredFiles = if ($General) { @(".gitignore") } else { @("fix-repo.sh", "fix-repo.ps1") }
         $missing = @()
         foreach ($rf in $requiredFiles) {
             if (-not (Test-Path (Join-Path $Dest $rf))) { $missing += $rf }

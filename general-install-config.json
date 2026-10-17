@@ -1,0 +1,15 @@
+{
+  "repo": "alimtvnetwork/coding-guidelines-v24",
+  "branch": "main",
+  "folders": [
+    ".ai-memory",
+    "01-prompts",
+    "03-ai-scripts",
+    ".agents/skills",
+    ".cursor/skills",
+    "02-spec/01-spec-authoring-guide",
+    "02-spec/21-app",
+    "assets"
+  ],
+  "files": []
+}

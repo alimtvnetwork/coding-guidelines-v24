@@ -353,13 +353,18 @@ You are Worker <NN> for task nn-<slug>. You have no prior chat context; this bri
   Inspect tables, positive boolean fields, and JSON payload specifications before claiming or logging actions.
 - Claim assigned subtask atomically:
   `gitmap agent subtask claim --agent "Worker <NN>"`
-- BEFORE touching or modifying any owned file, you MUST log your in-flight action:
-  `gitmap agent log --subtask <id> --agent "Worker <NN>" --action "write_to_file" --file "<path>" --details "<action description>"`
-  *(Note: This guarantees that if a tool execution crashes or the session is interrupted, the database permanently records the exact file you were touching and what caused the crash!)*
+- BEFORE touching, inspecting, or modifying any file, you MUST log your in-flight action and reasoning for GitMap heat map tracking and crash forensics:
+  * File Read/Inspection (exploration reasoning):
+    `gitmap agent log --subtask <id> --agent "Worker <NN>" --action "read_file" --file "<path>" --details "Reasoning: <why this file is being inspected and what information is sought>"`
+  * File Modification (editing decision & rationale):
+    `gitmap agent log --subtask <id> --agent "Worker <NN>" --action "write_to_file" --file "<path>" --details "Decision: <why this file is being modified and planned refactor/fix>"`
+  *(Note: This guarantees that GitMap indexes full cognitive heat map telemetry and if a tool execution crashes, the database permanently records the exact file and reasoning trace).*
 - When your subtask passes targeted checks, mark completion in the database:
   `gitmap agent subtask complete <id> --agent "Worker <NN>" --evidence "PASS exit 0, <files>"`
 - If blocked or failing, record the failure:
   `gitmap agent subtask fail <id> --agent "Worker <NN>" --reason "<reason>"`
+- Inspect live heat map and file contention:
+  `gitmap heatmap` (or `gitmap agent heatmap`)
 *(Note: Native compiled Go engine `gitmap agent` executes in <1ms without Python VM overhead).*
 
 ### Output Contract:

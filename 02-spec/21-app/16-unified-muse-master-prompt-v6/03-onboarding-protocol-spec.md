@@ -156,15 +156,16 @@ gitmap login --web
 ```
 The agent provides the one-time code and device authentication URL, waiting until the user approves in their browser.
 
-#### Execution for Option (b) — SSH Key Generation:
+#### Execution for Option (b) — SSH Key Generation & File Delivery Protocol:
 
-1. **Interactive Variable Ingestion:**
+1. **Identity Token & Variable Auto-Discovery:**
    The SSH key comment token and Git author identity MUST strictly follow:
    `<email>-muse<muse-sequence>-<operator-name>`
    *(e.g., `alex.tone@company.com-muse-10-opRoden` or `alex.john@company.com-muse-10-opRoden`)*
 
-   If `<email>`, `<muse-sequence>`, or `<operator-name>` are unknown, **STOP AND ASK THE OPERATOR** directly before executing key generation:
-   > *"Please provide the 3 SSH identity variables: (1) your email address, (2) Muse sequence number, and (3) operator name (format: `<email>-muse<sequence>-<operator-name>`)."*
+   - **Auto-Discovery:** Muse should first attempt to retrieve its account email automatically via `git config user.email` or `gh api user --jq .email`.
+   - **Operator Prompt Fallback:** If `<email>`, `<muse-sequence>`, or `<operator-name>` are unknown, **STOP AND ASK THE OPERATOR** directly before executing key generation:
+     > *"Please provide the missing SSH identity variables: (1) email address, (2) Muse sequence number, and (3) operator name (format: `<email>-muse<sequence>-<operator-name>`)."*
 
 2. **Git User Configuration & Key Generation Sequence:**
 ```bash
@@ -172,26 +173,27 @@ The agent provides the one-time code and device authentication URL, waiting unti
 git config --global user.email "<email>"
 git config --global user.name "<operator-name> (Muse <muse-sequence>)"
 
-# 2. Start agent
-eval "$(ssh-agent -s)"
+# 2. Preferred GitMap SSH command (creates and registers key with exact identity):
+gitmap ssh create "<email>-muse<muse-sequence>-<operator-name>" -y
+# Or standard SSH keygen:
+ssh-keygen -t ed25519 -C "<email>-muse<muse-sequence>-<operator-name>" -f ~/.ssh/id_ed25519 -N ""
+eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
 
-# 3. Check or generate ed25519 key with exact comment token
-if [ ! -f ~/.ssh/id_ed25519 ]; then
-  ssh-keygen -t ed25519 -C "<email>-muse<muse-sequence>-<operator-name>" -N "" -f ~/.ssh/id_ed25519
-fi
+# 3. Add to GitHub via CLI if authorized:
+gh ssh-key add ~/.ssh/id_ed25519.pub --title "<email>-muse<muse-sequence>-<operator-name>" --type authentication || true
 
-# 4. Add key to agent
-ssh-add ~/.ssh/id_ed25519
-
-# 5. Display public key for GitHub registration
-cat ~/.ssh/id_ed25519.pub
-
-# 6. Add to GitHub via CLI (if token available) or prompt user
-gh ssh-key add ~/.ssh/id_ed25519.pub --title "<email>-muse<muse-sequence>-<operator-name>" || true
-
-# 7. Verify SSH connectivity
+# 4. Verify SSH connectivity
 ssh -T git@github.com
 ```
+
+3. **MANDATORY KEY DELIVERY FILE PROTOCOL (Anti-Corruption Rule):**
+> [!CRITICAL]
+> **TOTAL BAN ON PASTING KEYS, TOKENS, OR LONG STRINGS AS CHAT TEXT:**
+> Chat formatting and terminal text wrapping frequently inject unintended line breaks into base64 SSH public keys, corrupting the key payload and causing GitHub to reject it with `Key is not in a proper SSH format`.
+> - **Deliver as Downloadable File:** Muse MUST ALWAYS deliver the generated key as a file path on disk: `~/.ssh/id_ed25519.pub` or copied into the repository workspace at `.ai-memory/ssh/<identity>.pub` so the operator can download or read it without line break corruption.
+> - **Clipboard Copy via GitMap:** Alternatively, use `gitmap ssh copy "<identity>"` to copy the exact raw string directly to the clipboard.
+> - **Explicit Key Type Designation:** ALWAYS declare the exact key type in the report:
+>   - **Key Type:** **Authentication Key** (tell the operator explicitly to choose "Authentication Key" in GitHub Settings -> SSH and GPG keys, NOT "Signing Key" unless specifically generating GPG commit signing keys).
 
 ### 4.4 Hard Gate Rule
 The agent is **STRICTLY PROHIBITED** from advancing to Step 3 until `gh auth status` or `ssh -T git@github.com` succeeds. Cloning without authentication will result in authentication prompts or failed clone cascades.

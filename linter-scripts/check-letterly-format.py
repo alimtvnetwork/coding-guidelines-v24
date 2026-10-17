@@ -19,8 +19,8 @@ Checks, in order:
      (never ``high-priority-instruction``, never "High Priority Instruction").
   4. Slot order: title < ``## slug`` < ``# Actionable Items`` <
      ``## Must follow`` < ``## Additional Instructions``.
-  5. Fixed actionable items 1-6 present verbatim (item 1 allows a substituted
-     slug in place of the ``<slug>`` placeholder).
+  5. Fixed actionable items 1-7 present verbatim (item 1 checks pull first,
+     item 2 allows a substituted slug in place of the ``<slug>`` placeholder).
   6. Mandatory agent-invocation suffix link present.
   7. ``## Additional Instructions`` carries the /plan and /learn directives.
 
@@ -44,12 +44,13 @@ ADDITIONAL_HEADER = "## Additional Instructions"
 AGENT_LINK = "[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)"
 
 FIXED_ITEM_PREFIXES = [
-    "1. Write spec under 02-spec/21-app/",
-    "2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String",
-    "3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well",
-    "4. Use `gitmap` AI agents to enter data",
-    "5. Task completion includes committing and pushing to Git",
-    "6. Give every Task-NN in the confirmed task breakdown a `Slug:` sub-item",
+    "1. Git pull BEFORE starting any work — first try `gitmap pull",
+    "2. Write spec under 02-spec/21-app/",
+    "3. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String",
+    "4. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well",
+    "5. Use `gitmap` AI agents to enter data",
+    "6. Task completion includes committing and pushing to Git",
+    "7. Give every Task-NN in the confirmed task breakdown a `Slug:` sub-item",
 ]
 
 
@@ -182,7 +183,7 @@ def check_fixed_items(numbered, actionable_lineno):
         if lineno <= actionable_lineno:
             continue
         stripped = line.strip()
-        m = re.match(r"^([1-6])\.\s", stripped)
+        m = re.match(r"^([1-7])\.\s", stripped)
         if m:
             items[int(m.group(1))] = (lineno, stripped)
         if stripped.startswith("## "):
@@ -193,8 +194,11 @@ def check_fixed_items(numbered, actionable_lineno):
             continue
         lineno, text = items[idx]
         if idx == 1:
-            if not text.startswith(prefix) or "enqueue plan task in .ai-memory/plans/" not in text:
+            if not text.startswith(prefix) or "resolve any merge conflicts" not in text:
                 violations.append(f"line {lineno}: fixed item 1 text was modified")
+        elif idx == 2:
+            if not text.startswith(prefix) or "enqueue plan task in .ai-memory/plans/" not in text:
+                violations.append(f"line {lineno}: fixed item 2 text was modified")
         elif not text.startswith(prefix):
             violations.append(f"line {lineno}: fixed item {idx} text was modified")
     return violations

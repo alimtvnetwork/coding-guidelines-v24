@@ -34,13 +34,14 @@ SEO Writing and Folder Structure Instructions
 
 # Actionable Items Must Follow Non-Negotiable
 
-1. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first
-2. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
-3. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well
-4. Use `gitmap` AI agents to enter data
-5. Task completion includes committing and pushing to Git
-6. Give every Task-NN in the confirmed task breakdown a `Slug:` sub-item derived from the root slug (`<root-slug> - Task NN`, e.g. `Slug: SEO Writing and Folder Structure Instructions - Task 01`) so GitMap can create and verify subtasks under the root task
-7. Follow the existing article writing pattern from the first one or two articles
+1. Git pull BEFORE starting any work — first try `gitmap pull <repo path>` (or run `gitmap pull` in repository folder); if that fails, fall back to regular `git pull` and resolve any merge conflicts so the repository is completely up to date and clean before starting.
+2. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first
+3. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
+4. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well
+5. Use `gitmap` AI agents to enter data
+6. Task completion includes committing and pushing to Git
+7. Give every Task-NN in the confirmed task breakdown a `Slug:` sub-item derived from the root slug (`<root-slug> - Task NN`, e.g. `Slug: SEO Writing and Folder Structure Instructions - Task 01`) so GitMap can create and verify subtasks under the root task
+8. Follow the existing article writing pattern from the first one or two articles
 
 ## Must follow and spawn agent using
 
@@ -87,7 +88,7 @@ Hi there. When you started with the SEO writing, before that there was only one 
 
 MISSING_ITEM = "\n".join(
     line for line in VALID.splitlines()
-    if not line.startswith("4. Use `gitmap` AI agents to enter data")
+    if not line.startswith("5. Use `gitmap` AI agents to enter data")
 ) + "\n"
 
 
@@ -130,7 +131,7 @@ class TestCheckLetterlyFormat(unittest.TestCase):
     def test_missing_fixed_item_fails(self):
         proc = run_validator(MISSING_ITEM)
         self.assertEqual(proc.returncode, 1)
-        self.assertIn("fixed actionable item 4 is missing", proc.stdout)
+        self.assertIn("fixed actionable item 5 is missing", proc.stdout)
 
 
 if __name__ == "__main__":

@@ -65,6 +65,7 @@ trap report_installer_failure ERR
 
 # ── Defaults ──────────────────────────────────────────────────────
 CONFIG_FILE="install-config.json"
+GENERAL=false
 REPO=""
 BRANCH=""
 VERSION=""
@@ -221,11 +222,17 @@ while [[ $# -gt 0 ]]; do
       MAX_FIX_REPO_LOGS="$2"
       [[ "$MAX_FIX_REPO_LOGS" =~ ^[0-9]+$ ]] || { err "--max-fix-repo-logs requires a non-negative integer (got: $2)"; exit 1; }
       shift 2 ;;
+    --general)        GENERAL=true; shift ;;
     --pinned-by-release-install) PINNED_BY_RELEASE_INSTALL="$2"; shift 2 ;;
     -h|--help)        usage ;;
     *) err "Unknown option: $1"; exit 1 ;;
   esac
 done
+
+if $GENERAL; then
+  [[ "$CONFIG_FILE" == "install-config.json" ]] && CONFIG_FILE="general-install-config.json"
+  RUN_FIX_REPO=false
+fi
 
 # Offline mode forbids any network operation (spec §5.3, §8 exit 2).
 if $OFFLINE; then
@@ -283,12 +290,20 @@ fi
 REPO="${REPO:-alimtvnetwork/coding-guidelines-v24}"
 BRANCH="${BRANCH:-main}"
 DEST="${DEST:-$(pwd)}"
-[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("02-spec" "linters" "linter-scripts" "scripts/fix-repo" "scripts/visibility-change" ".ai-memory/coding-guidelines" ".ai-memory/what-to-read.md" "version.json")
+if [[ ${#FOLDERS[@]} -eq 0 ]]; then
+  if $GENERAL; then
+    FOLDERS=(".ai-memory" "01-prompts" "03-ai-scripts" ".agents/skills" ".cursor/skills" "02-spec/01-spec-authoring-guide" "02-spec/21-app" "assets")
+  else
+    FOLDERS=("02-spec" "linters" "linter-scripts" "scripts/fix-repo" "scripts/visibility-change" ".ai-memory/coding-guidelines" ".ai-memory/what-to-read.md" "version.json")
+  fi
+fi
 
-# Top-level files always pulled alongside the folders. These are repo-root
-# scripts (not contained in any installed folder) that users need locally to
-# run repository hygiene tasks (fix-repo) and visibility toggles.
-TOP_LEVEL_FILES=("fix-repo.sh" "fix-repo.ps1" "visibility-change.sh" "visibility-change.ps1")
+# Top-level files always pulled alongside the folders.
+if $GENERAL; then
+  TOP_LEVEL_FILES=(".gitattributes" ".gitignore")
+else
+  TOP_LEVEL_FILES=("fix-repo.sh" "fix-repo.ps1" "visibility-change.sh" "visibility-change.ps1")
+fi
 
 # Ref = tag if --version, else branch
 REF="$BRANCH"
@@ -590,7 +605,11 @@ done
 # Top-level files: copy each from the archive root into DEST (same name).
 # Missing files are warned (not fatal) so installer remains forward-compatible
 # with repos that omit a script.
-TOP_LEVEL_FILES=("fix-repo.sh" "fix-repo.ps1" "visibility-change.sh" "visibility-change.ps1" ".gitattributes" ".gitignore")
+if $GENERAL; then
+  TOP_LEVEL_FILES=(".gitattributes" ".gitignore")
+else
+  TOP_LEVEL_FILES=("fix-repo.sh" "fix-repo.ps1" "visibility-change.sh" "visibility-change.ps1" ".gitattributes" ".gitignore")
+fi
 for tlf in "${TOP_LEVEL_FILES[@]}"; do
   src="$ARCHIVE_ROOT/$tlf"
   if [[ ! -f "$src" ]]; then
@@ -636,7 +655,11 @@ echo ""
 # ── Verify required files (spec §8: exit 4 on missing required path) ──
 # Required files MUST exist in DEST after install. Skipped under --dry-run
 # since no files were actually written.
-REQUIRED_FILES=("fix-repo.sh" "fix-repo.ps1")
+if $GENERAL; then
+  REQUIRED_FILES=(".gitignore")
+else
+  REQUIRED_FILES=("fix-repo.sh" "fix-repo.ps1")
+fi
 verify_required_files() {
   local missing=()
   local f

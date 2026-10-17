@@ -43,7 +43,7 @@ COMMIT_STYLE               = atomic-push
 
 - [ ] `/goal` **Preamble Reporting Invariant:** After EVERY step, REPORT BACK: what you did plus the verification output. Never skip a report, never silently advance. If a step is already satisfied, verify it and report that.
 - [ ] `/goal` **Step 1: Install or Update GitMap & Prerequisite Check:** Verify/install GitMap (Linux/macOS curl, Windows PowerShell irm `irm https://raw.githubusercontent.com/alimtvnetwork/gitmap-v28/main/install.ps1 | iex`), update gitmap (`gitmap update`), source build fallback (`cd ~/workspace/repos/gitmap-v28 && git pull --ff-only && cd cli && go build -o ~/.local/bin/gitmap .` requiring Go 1.26+), check `gh --version`, and REPORT gitmap version.
-- [ ] `/goal` **Step 2: Login Before Cloning & Hard Gate Protocol:** Check `gh auth status`. If not logged in, pick ONE (a. Browser login, b. SSH keygen formatted as `<email>-muse<muse-sequence>-<operator-name>` with Git user config). Ask operator for missing variables before generation. Hard gate stopping until login succeeds. Fast-path bypass if already authenticated. REPORT `gh auth status`.
+- [ ] `/goal` **Step 2: Login Before Cloning & Hard Gate Protocol:** Check `gh auth status`. If not logged in, pick ONE (a. Browser login, b. SSH keygen formatted as `<email>-muse<muse-sequence>-<operator-name>` using `gitmap ssh create` with account email auto-discovery or operator prompt fallback, downloadable file delivery protocol banning chat text pasting, and explicit Authentication vs Signing Key designation). Hard gate stopping until login succeeds. Fast-path bypass if already authenticated. REPORT `gh auth status`.
 - [ ] `/goal` **Step 3: Clone Default Repositories & Establish Side Chats:** Clone 8 default repos table (`gitmap-v28`, `Antigravity-Manager`, `cat-my-v12`, `alim-seo-writing`, `story-telling-v1`, `coding-guidelines-v24`, `repo-cache`, `repo-secrets`), create 5 side chats seeded from `chat-seeds/<name>.md`, define 3 vault/infra repos without side chats, discover secondary repos via `12-muse-ai/02-repos.md` with explicit user approval gate, and REPORT.
 - [ ] `/goal` **Step 4: Pull All Handpicked Repositories:** Run `cd ~/workspace/repos && gitmap pa`. Verify clean, conflict-free working trees, and REPORT pull summary.
 - [ ] `/learn` **Step 5: Read Master Prompt, Custom Skills & Ingest Operating Contract:** Read `01-muse-master-prompt.md` and custom skills (`.agents/skills/muse-master-prompt/`, `.agents/skills/gitmap/`). Ingest TURBO-01..05, GUARD-01..09, obey execution contract for steps 6–9, enforce total ban on fenced code blocks around prompt formatters, and REPORT restating contract.
@@ -169,14 +169,15 @@ If any step fails, halt immediately, surface the diagnostic context under CODE R
      gitmap login --web
      ```
      Provide one-time code and device authentication URL, waiting until the user approves in browser.
-   - **Option (b): SSH Key Generation & Display (Standardized Identity Format)**
-     1. **Interactive Variable Ingestion:**
+   - **Option (b): SSH Key Generation & File Delivery Protocol (Standardized Identity Format)**
+     1. **Identity Token & Variable Auto-Discovery:**
         The SSH key comment and Git user identity MUST strictly follow:
         `<email>-muse<muse-sequence>-<operator-name>`
         *(e.g., `alex.tone@company.com-muse-10-opRoden` or `alex.john@company.com-muse-10-opRoden`)*
 
-        If `<email>`, `<muse-sequence>`, or `<operator-name>` are unknown, **STOP AND ASK THE OPERATOR** directly before generating the key:
-        > *"Please provide the 3 SSH identity variables: (1) your email address, (2) Muse sequence number, and (3) operator name (format: `<email>-muse<sequence>-<operator-name>`)."*
+        - **Auto-Discovery:** Muse should first attempt to retrieve its account email automatically via `git config user.email` or `gh api user --jq .email`.
+        - **Operator Prompt Fallback:** If `<email>`, `<muse-sequence>`, or `<operator-name>` are missing or unknown, **STOP AND ASK THE OPERATOR** directly before generating the key:
+          > *"Please provide the missing SSH identity variables: (1) email address, (2) Muse sequence number, and (3) operator name (format: `<email>-muse<sequence>-<operator-name>`)."*
 
      2. **Git User Configuration & Key Generation:**
         ```bash
@@ -184,17 +185,26 @@ If any step fails, halt immediately, surface the diagnostic context under CODE R
         git config --global user.email "<email>"
         git config --global user.name "<operator-name> (Muse <muse-sequence>)"
 
-        # 2. Start ssh-agent and generate Ed25519 keypair
-        eval "$(ssh-agent -s)"
+        # 2. Preferred GitMap SSH command (creates and registers key with exact identity):
+        gitmap ssh create "<email>-muse<muse-sequence>-<operator-name>" -y
+        # Or standard SSH keygen:
         ssh-keygen -t ed25519 -C "<email>-muse<muse-sequence>-<operator-name>" -f ~/.ssh/id_ed25519 -N ""
-        ssh-add ~/.ssh/id_ed25519
-        cat ~/.ssh/id_ed25519.pub
+        eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
 
-        # 3. Add to GitHub via CLI if authorized, or display in chat for manual addition
-        gh ssh-key add ~/.ssh/id_ed25519.pub --title "<email>-muse<muse-sequence>-<operator-name>" || true
+        # 3. Add to GitHub via CLI if authorized:
+        gh ssh-key add ~/.ssh/id_ed25519.pub --title "<email>-muse<muse-sequence>-<operator-name>" --type authentication || true
         ```
 
-     3. **Verify SSH Connection:**
+     3. **MANDATORY KEY DELIVERY FILE PROTOCOL (Anti-Corruption Rule):**
+        > [!CRITICAL]
+        > **TOTAL BAN ON PASTING KEYS, TOKENS, OR LONG STRINGS AS CHAT TEXT:**
+        > Chat formatting and terminal text wrapping frequently inject unintended line breaks into base64 SSH public keys, corrupting the key payload and causing GitHub to reject it with `Key is not in a proper SSH format`.
+        > - **Deliver as Downloadable File:** Muse MUST ALWAYS deliver the generated key as a file path on disk: `~/.ssh/id_ed25519.pub` or copied into the repository workspace at `.ai-memory/ssh/<identity>.pub` so the operator can download or read it without line break corruption.
+        > - **Clipboard Copy via GitMap:** Alternatively, use `gitmap ssh copy "<identity>"` to copy the exact raw string directly to the clipboard.
+        > - **Explicit Key Type Designation:** ALWAYS declare the exact key type in the report:
+        >   - **Key Type:** **Authentication Key** (tell the operator explicitly to choose "Authentication Key" in GitHub Settings -> SSH and GPG keys, NOT "Signing Key" unless specifically generating GPG commit signing keys).
+
+     4. **Verify SSH Connection:**
         ```bash
         ssh -T git@github.com
         ```
