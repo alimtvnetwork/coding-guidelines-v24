@@ -101,9 +101,20 @@ To survive massive checklists and complex codebases, you MUST operate using thes
   - Execution with verification must embed both `execute-parent-task-with-n-steps-v6` and `ai-verification`.
 
 - **GitMap Commit Formatting:**
-  - In all GitMap commit commands (`gitmap cpf`, `gitmap cpb`, `gitmap cpr`), NEVER include colons inside the message argument. GitMap automatically provides `Feature: ` or `Bug: `. Format messages strictly with hyphens:
+  - In all GitMap commit commands (`gitmap cpf`, `gitmap cpb`, `gitmap cpc`, `gitmap cpr`), NEVER include colons inside the message argument. GitMap automatically provides `Feature: `, `Bug: `, or chore prefixes. Format messages strictly with hyphens:
     - Feature: `gitmap cpf "<module> - <summary>"`
     - Bug Fix: `gitmap cpb "<module> - <summary>"`
+    - Chore / Maintenance: `gitmap cpc "<module> - <summary>"`
+    - Release: `gitmap cpr "<module> - <summary>"`
+
+  - **GitMap Semantic & Flat Commit Suite:**
+    - **Flat Commit Syntax:** `gitmap commit "<message>"` (alias: `gitmap cm "<message>"`).
+    - **Mechanics:** 1-step auto-stage (`git add -A`) and local commit without semantic prefixing ('Feature: ', 'Bug: ') and without remote push.
+    - **Chore Commit:** `gitmap cpc "<module> - <summary>"` stages all files, commits with chore prefix, and pushes upstream.
+    - **Operational Distinction:**
+      - Flat local commits (`gitmap commit`, `gitmap cm`) create instant local checkpoints during active iteration and micro-batches without altering commit message prefixes and without touching network remotes or triggering CI/CD webhooks.
+      - Semantic auto-pushing commits (`gitmap cpf`, `gitmap cpb`, `gitmap cpc`, `gitmap cpr`) enforce structured prefixes, validate format, and push directly to GitHub tracking branches.
+    - **Mandatory Completion Invariant Reminder:** Flat commits are strictly for intermediate local iteration. Under Section 13 ('No Push = Not Done'), every task completion mandates a semantic auto-pushing commit (`gitmap cpf "<module> - <summary>"`) or an explicit remote push (`gitmap push`). Leaving unpushed local flat commits upon task completion violates the completion invariant.
 
 ## 11. Multi-Repository Synchronization & Boundary Invariants
 
