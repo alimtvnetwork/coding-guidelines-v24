@@ -3,8 +3,7 @@
 > Category: `21-app`
 > Status: Active
 > Architecture: Self-Bootstrapping Autonomous Agent Directive & Execution Engine
-> Reference Prompt: `01-prompts/27-muse-prompts/01-muse-master-prompt.md` (v6.3.0)
-> Mirror Prompt: `01-prompts/27-muse-prompts/05-muse-master-prompt-v2.md` (v6.3.0)
+> Canonical Prompt: `01-prompts/27-muse-prompts/01-muse-master-prompt.md` (v6.4.0)
 > Canonical Engine: `01-prompts/14-execute/02-execute-parent-task-with-n-steps-v6.md`
 
 ---

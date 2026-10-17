@@ -34,11 +34,10 @@ Its installable skill is `muse-master-prompt`
 
 | Prompt File | Version | Scope | Key Capabilities | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| [`01-muse-master-prompt.md`](01-muse-master-prompt.md) | 6.3.0 | Unified Master Prompt | Consolidated V6 directive: SSH auth primacy + fast-path bypass, GitMap quick-install & update first, `gitmap scan`, 14+ repo fleet clone & pull-all (`gitmap pa`), conflict prevention, dedicated side chats (`<repo> repo`, `all summary`), repo-cache sequence, task confirmation first, RUNNING+ETA, 5-minute pings, multi-agent dispatch (A=2, H=2), Worker Git Ban, 15 MB 7-Zip split, GitMap hyphen atomic push, CI telemetry (`gitmap pe -t`), and Muse Memory IO. | **Active (Canonical)** |
-| [`02-muse-execute-in-a-step.md`](02-muse-execute-in-a-step.md) | 1.1.0 | Execute-in-a-Step | Consolidated into 01-muse-master-prompt.md: breakdown-first, RUNNING+ETA, 5-minute status pings, commit+push completion. | Consolidated |
-| [`03-muse-master-with-repos.md`](03-muse-master-with-repos.md) | 1.1.0 | Repo-Aware Master | Consolidated into 01-muse-master-prompt.md: embedded repo registry, routing rules, 8-step execution protocol. | Consolidated |
-| [`04-muse-master-with-repos-v2.md`](04-muse-master-with-repos-v2.md) | 1.3.1 | Repo-Aware Master v2 | Consolidated into 01-muse-master-prompt.md: 14-repo registry, pull-first, 15 MB split rule, repo-cache sequence. | Consolidated |
-| [`05-muse-master-prompt-v2.md`](05-muse-master-prompt-v2.md) | 6.3.0 | Master Prompt v2 Mirror | Synchronized mirror of 01-muse-master-prompt.md: full unified V6 directive. | Active Mirror |
+| [`01-muse-master-prompt.md`](01-muse-master-prompt.md) | 6.4.0 | Unified Master Prompt | Consolidated V6 directive: SSH auth primacy + fast-path bypass, GitMap quick-install & update first, `gitmap scan`, 14+ repo fleet clone & pull-all (`gitmap pa`), conflict prevention, dedicated side chats (`<repo> repo`, `all summary`), repo-cache sequence, task confirmation first, RUNNING+ETA, 5-minute pings, multi-agent dispatch (A=2, H=2), Worker Git Ban, 15 MB 7-Zip split, GitMap hyphen atomic push, CI telemetry (`gitmap pe -t`), and Muse Memory IO. | **Active (Canonical)** |
+
+> [!NOTE]
+> All prior Muse prompts (`02-muse-execute-in-a-step.md`, `03-muse-master-with-repos.md`, `04-muse-master-with-repos-v2.md`, and `05-muse-master-prompt-v2.md`) have been completely consolidated into the single authoritative `01-muse-master-prompt.md` above and permanently purged from the repository.
 
 ---
 
@@ -47,9 +46,5 @@ Its installable skill is `muse-master-prompt`
 ```text
 01-prompts/27-muse-prompts/
 ├── 01-muse-master-prompt.md       # UNIFIED master prompt (paste into a fresh Muse session)
-├── 02-muse-execute-in-a-step.md   # [consolidated into 01] one-shot execution prompt
-├── 03-muse-master-with-repos.md   # [consolidated into 01] repo-aware compact master
-├── 04-muse-master-with-repos-v2.md # [consolidated into 01] repo-aware master v2
-├── 05-muse-master-prompt-v2.md   # synchronized mirror of unified master prompt
 └── readme.md                      # this index
 ```

@@ -46,7 +46,7 @@ COMMIT_STYLE               = atomic-push
 - [ ] `/goal` **Step 2: Login Before Cloning & Hard Gate Protocol:** Check `gh auth status`. If not logged in, pick ONE (a. Browser login, b. SSH keygen `ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N ""` and show in chat for user to add). Hard gate stopping until login succeeds. Fast-path bypass if already authenticated. REPORT `gh auth status`.
 - [ ] `/goal` **Step 3: Clone Default Repositories & Establish Side Chats:** Clone 8 default repos table (`gitmap-v28`, `Antigravity-Manager`, `cat-my-v12`, `alim-seo-writing`, `story-telling-v1`, `coding-guidelines-v24`, `repo-cache`, `repo-secrets`), create 5 side chats seeded from `chat-seeds/<name>.md`, define 3 vault/infra repos without side chats, discover secondary repos via `12-muse-ai/02-repos.md` with explicit user approval gate, and REPORT.
 - [ ] `/goal` **Step 4: Pull All Handpicked Repositories:** Run `cd ~/workspace/repos && gitmap pa`. Verify clean, conflict-free working trees, and REPORT pull summary.
-- [ ] `/learn` **Step 5: Read Master Prompt, Custom Skills & Ingest Operating Contract:** Read `01-muse-master-prompt.md` / `05-muse-master-prompt-v2.md` and custom skills (`.agents/skills/muse-master-prompt/`, `.agents/skills/gitmap/`). Ingest TURBO-01..05, GUARD-01..09, obey execution contract for steps 6–9, enforce total ban on fenced code blocks around prompt formatters, and REPORT restating contract.
+- [ ] `/learn` **Step 5: Read Master Prompt, Custom Skills & Ingest Operating Contract:** Read `01-muse-master-prompt.md` and custom skills (`.agents/skills/muse-master-prompt/`, `.agents/skills/gitmap/`). Ingest TURBO-01..05, GUARD-01..09, obey execution contract for steps 6–9, enforce total ban on fenced code blocks around prompt formatters, and REPORT restating contract.
 - [ ] `/learn` **Step 6: Memory Synchronization & Vault Training:** Read `repo-cache/12-muse-ai/README.md`, run `gitmap llm train muse --days 7`, ingest DECISION TRACE and SINCE LAST READ, read sequenced digest files (`01-overview.md` through `05-conventions.md`), and REPORT.
 - [ ] `/goal` **Step 7: Connect Email via go-email-reader:** Verify configuration in `repo-secrets/11-go-email-reader/`. Enforce password-only prompt rule (never ask for host/port/user if defined, only prompt for missing password), standing SMTP pre-approval, configure default sender and notifier, log to `04-conversation/`, and REPORT.
 - [ ] `/goal` **Step 8: Scan Everything into GitMap:** Run `gitmap scan ~/workspace/repos` after cloning to index all repositories, branches, and trees into `gitmap.db`, and REPORT scan summary.
@@ -254,7 +254,7 @@ If any step fails, halt immediately, surface the diagnostic context under CODE R
 ### Step 5: Read Master Prompt, Custom Skills & Ingest Operating Contract
 
 1. **Read Master Prompt & Skills:**
-   - Read canonical master prompt (`01-muse-master-prompt.md` / `05-muse-master-prompt-v2.md`).
+   - Read canonical master prompt (`01-muse-master-prompt.md`).
    - Read custom skills: `.agents/skills/muse-master-prompt/` and `.agents/skills/gitmap/`.
 
 2. **Ingest Operating Contract (TURBO & GUARD Invariants):**

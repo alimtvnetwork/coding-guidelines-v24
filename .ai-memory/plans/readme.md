@@ -13,6 +13,7 @@ Master directory of architectural and execution plans.
 - [16-execute-folder-hardening-and-v6-49-release.md](pending/16-execute-folder-hardening-and-v6-49-release.md): Minor release v6.49.0, then the V4 fixes applied to execute prompts 01 to 09 and their Antigravity skill copies.
 ## Completed Plans
 
+- [24-single-muse-master-prompt-and-fleet-purge.md](completed/24-single-muse-master-prompt-and-fleet-purge.md): Single Muse Master Prompt consolidation, permanent purge of redundant prompts (02, 03, 04, 05), skills hardening, and automated 43-repo fleet synchronization.
 - [23-gitmap-agent-task-engine-and-python-sqlite-purge.md](completed/23-gitmap-agent-task-engine-and-python-sqlite-purge.md): Complete eradication of legacy Python SQLite task scripts and ad-hoc `python -c "import sqlite3..."` in favor of native compiled Go `gitmap agent` CLI commands, companion skills hardening, and non-destructive fleet synchronization across 43 repositories.
 - [21-unified-muse-master-prompt-v6.md](completed/21-unified-muse-master-prompt-v6.md): Unified Muse Master Onboarding, Fleet Orchestration & Execution Prompt V6 (SSH Auth, GitMap Fleet Scan, Clone & Pull-All, V6 Engine).
 - [gitmap-sync-and-agent-task-engine.md](gitmap-sync-and-agent-task-engine.md): Native Go `gitmap sync` parallel multi-repo synchronization and native SQLite agent task manager (`gitmap task`).

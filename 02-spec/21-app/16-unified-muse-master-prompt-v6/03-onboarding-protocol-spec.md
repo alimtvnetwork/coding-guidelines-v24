@@ -5,8 +5,7 @@
 > Architecture: Self-Bootstrapping Autonomous Agent Directive & Execution Engine
 > Reference: `02-spec/21-app/16-unified-muse-master-prompt-v6/01-overview-and-architecture.md`
 > Acceptance Criteria: `02-spec/21-app/16-unified-muse-master-prompt-v6/02-acceptance-criteria.md`
-> Canonical Engine: `01-prompts/14-execute/02-execute-parent-task-with-n-steps-v6.md`
-> Master Prompts: `01-prompts/27-muse-prompts/01-muse-master-prompt.md`, `01-prompts/27-muse-prompts/05-muse-master-prompt-v2.md`
+> Master Prompt: `01-prompts/27-muse-prompts/01-muse-master-prompt.md`
 
 ---
 
@@ -301,7 +300,7 @@ If any repository reports diverged branches or uncommitted changes:
 ## 7. Step 5: Read Master Prompt, Custom Skills & Ingest Operating Contract
 
 ### 7.1 Objective & Rationale
-The agent must ground its operational behavior by reading the canonical master prompt (`05-muse-master-prompt-v2.md` or `01-muse-master-prompt.md`) and custom skills (`.agents/skills/muse-master-prompt/skill.md`, `.agents/skills/gitmap/`). It must ingest the execution contract governing steps 6–9 and all downstream tasks.
+The agent must ground its operational behavior by reading the canonical master prompt (`01-muse-master-prompt.md`) and custom skills (`.agents/skills/muse-master-prompt/skill.md`, `.agents/skills/gitmap/`). It must ingest the execution contract governing steps 6–9 and all downstream tasks.
 
 ### 7.2 Core Contract Directives (TURBO & GUARD Invariants)
 
@@ -328,7 +327,7 @@ When generating or outputting prompt formatters, templates, or instructions, **N
 
 ```markdown
 ### 🚀 Step 5 Report: Read Master Prompt, Custom Skills & Ingest Contract
-- **Action Executed:** Read `05-muse-master-prompt-v2.md` and `.agents/skills/muse-master-prompt/skill.md`. Ingested TURBO-01..05, GUARD-01..09, and V6 engine parameters (`N=300`, `A=2`, `H=2`, `C=30`).
+- **Action Executed:** Read `01-muse-master-prompt.md` and `.agents/skills/muse-master-prompt/skill.md`. Ingested TURBO-01..05, GUARD-01..09, and V6 engine parameters (`N=300`, `A=2`, `H=2`, `C=30`).
 - **Verification Output:** Operating contract active. Fenced code block ban on prompt formatters acknowledged.
 - **Status:** `[PASS]`
 - **Next Step:** `Step 6: Memory Sync & Vault Training`
