@@ -1,6 +1,6 @@
 # MUSE MASTER PROMPT — REPO-AWARE COMPACT EDITION
 
-> Prompt Version: 1.3.0
+> Prompt Version: 1.3.1
 > Date: 2026-10-17
 > Location: `01-prompts/27-muse-prompts/04-muse-master-with-repos-v2.md`
 > Purpose: Paste this into ANY fresh Muse chat. The agent instantly knows the
@@ -46,6 +46,7 @@ Local work set lives at `~/workspace/repos/`. Route every request to exactly one
 | `wp-exam-v2` | WP exam lab | Standard clone/build flow |
 | `cat-my-v12` | **Cat Malaysia** — CAT exam lab | Has dedicated side chat "cat-my-v12 repo" |
 | `story-telling-v1` | Bengali kids' storytelling for the ছোট গল্পের দেশ channel | Local `~/workspace/repos/story-telling-v1`; audio-first pipeline: story → audio → user listens → video only after approval; keep voice/style choices in `.ai-memory` |
+| `minecraft-alim-alima` | Minecraft YouTube channel brand assets (banner, logo, thumbnails) | Private repo; sequenced `assets/` (01-05); keep ALL key content in YouTube 1546x423 safe zone; PNG/JPG are Git LFS-tracked (`~/.local/bin` on PATH); has dedicated side chat "minecraft-alim-alima repo" |
 | `macro-ahk` | AHK macro automation | Macro automation repo; read the repo readme and `.ai-memory/plans/` for active work before touching anything |
 | `scripts-fixture` | fixture scripts, including Rust installers | `~/workspace/repos/scripts-fixture`; Rust fixture at `scripts/44-install-rust`; set repo-local git identity before committing |
 
