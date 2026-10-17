@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.75.0] - 2026-10-17
+
+### Added
+- letterly-muse - git pull first, ssh file delivery, heatmap logging, dual installers
+
+---
+
 ## [v6.73.0] - 2026-10-04
 
 ### Added
