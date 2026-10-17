@@ -82,6 +82,7 @@ All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent e
 | [`12-relative-paths-and-legacy-skills-purge/`](12-relative-paths-and-legacy-skills-purge/) | Relative Paths Mandate, Letterly Invariants & Legacy Execute Skills Purge | Application Spec | Active |
 | [`13-slide-quiz-preview-and-presenter-chrome/`](13-slide-quiz-preview-and-presenter-chrome/) | Quiz Preview Chrome, Default Shadow Pair, HUD Shortcuts & Center Stage | Application Spec | Active |
 | [`15-muse-prompts-execute-in-a-step/`](15-muse-prompts-execute-in-a-step/) | Muse Prompts Execute-in-a-Step Update: RUNNING+ETA Declaration, 5-Minute Pings, New Prompt & Letterly Template | Application Spec | Active |
+| [`16-unified-muse-master-prompt-v6/`](16-unified-muse-master-prompt-v6/) | Unified Muse Master Onboarding & Execution Prompt: SSH Auth, GitMap Fleet Scan, Clone & Pull-All, V6 Engine | Application Spec | Active |
 | [`gitmap-sync-and-agent-task-engine/`](gitmap-sync-and-agent-task-engine/) | GitMap Fleet Synchronization & Native SQLite Agent Task Engine | Application Spec | Active |
 | [`coding-guideline-skills-sync-and-prompt-updates/`](coding-guideline-skills-sync-and-prompt-updates/) | GitMap Skills Re-read, Prompts+Skills Sync Mechanism & Pull-First Prompt Versions | Application Spec | Active |
 

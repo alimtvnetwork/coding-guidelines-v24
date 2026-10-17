@@ -1,10 +1,10 @@
 ---
 name: muse-master-prompt
 description: >-
-  Executes the Muse Master Onboarding & Canonical V6 Autonomous Execution prompt. Use when the user asks to run muse-master-prompt, onboard a Muse AI agent, execute with Muse turbo mode, or apply the V6 task confirmation protocol.
+  Executes the Unified Muse Master Onboarding, Fleet Orchestration & Canonical V6 Autonomous Execution prompt. Use when the user asks to run muse-master-prompt, onboard a Muse AI agent, authenticate via SSH, scan/clone/pull the repo fleet via GitMap, execute with Muse turbo mode, or apply the V6 task confirmation protocol.
 ---
 
-# [V6] Muse Master Onboarding & Autonomous Execution Skill
+# [V6] Muse Master Onboarding, Fleet Orchestration & Autonomous Execution Skill
 
 Source prompt: [`01-prompts/27-muse-prompts/01-muse-master-prompt.md`](01-prompts/27-muse-prompts/01-muse-master-prompt.md)
 Canonical Execution Engine: [`01-prompts/14-execute/02-execute-parent-task-with-n-steps-v6.md`](01-prompts/14-execute/02-execute-parent-task-with-n-steps-v6.md)
@@ -16,7 +16,7 @@ H = 2   (Operational hands per agent: dual-task batch capacity & parallel tool d
 C = 30  (Tool calls per worker before it must report, default: 30)
 
 System Concurrency Capacity = A × H = 2 agents × 2 hands = 4 concurrent subtask operations
-PHASE_1_BUDGET = N / 2   (Steps 1 .. 150: Planning, Parallel Discovery Subagents, Detailed Spec, and Lean Subtask Generation)
+PHASE_1_BUDGET = N / 2   (Steps 1 .. 150: Discovery, Architecture Spec, and Lean Subtask Generation)
 PHASE_2_BUDGET = N / 2   (Steps 151 .. 300: Mandatory Parallel Subagent Execution, Self-Looping, Targeted Quality Linting)
 WAVES = ceil(subtasks / (A x H))
 ```
@@ -25,9 +25,9 @@ WAVES = ceil(subtasks / (A x H))
 > **Top-Instruction Priority Mandate (Above Precedence / Preamble Precedence):**
 > Whatever directives, constraints, checklists, or user instructions are given ABOVE this prompt/skill (in the user preamble or header blocks) are HIGHEST PRIORITY and strictly NON-NEGOTIABLE. Inspect and follow the instructions above with absolute precedence.
 
-[/goal](slashCommand;goal) Autonomously boot the session through Phases 0–5 without permission-seeking, FIRST showcase the confirmed task breakdown in visible chat during Turn 1, capture requests verbatim, spawn autonomous subagents via `invoke_subagent` (A = 2, H = 2; solo execution of multi-part work is an auto-reject failure) in disjoint file boxes using GitMap high-speed commands as primary, prove every single claim with concrete evidence, enforce coding guidelines to 100%, and finish each task with one atomic GitMap commit (`gitmap cpf "<module> - <summary>"` / `gitmap cpb "<module> - <summary>"`) using hyphen format pushed immediately.
+[/goal](slashCommand;goal) Autonomously boot the session, authenticate with GitHub/GitMap (SSH preferred, with instant fast-path bypass if already logged in), verify/install GitMap via `install-quick.sh`, update GitMap first, run `gitmap scan` across the workspace, clone all missing repositories from the 14+ fleet registry starting with `coding-guidelines-v24`, pull all repositories using `gitmap pa` ensuring conflict-free working trees, establish dedicated side chats (`<repo> repo` and "all summary"), showcase the confirmed task breakdown in visible chat during Turn 1, declare RUNNING state with ETA, spawn autonomous subagents via `invoke_subagent` (A = 2, H = 2; solo execution of multi-part work is an auto-reject failure) in disjoint file boxes using GitMap commands as primary, enforce coding guidelines to 100%, split files >15 MB into 7-Zip volumes, and finish each task with one atomic GitMap commit (`gitmap cpf "<module> - <summary>"` / `gitmap cpb "<module> - <summary>"`) using hyphen format pushed immediately.
 
-[/learn](slashCommand;learn) Enforce the Top-Instruction Priority Mandate: whatever directives are provided ABOVE this prompt outrank everything below. Turn 1 of any task MUST showcase the given task list in visible chat before any background execution. Operating contract lives in memory; active tasks live in SQLite task manager and ledger.
+[/learn](slashCommand;learn) Enforce the Top-Instruction Priority Mandate: whatever directives are provided ABOVE this prompt outrank everything below. Turn 1 of any task MUST showcase the confirmed task breakdown in visible chat before any background execution. Listing without starting is a named protocol violation (`LISTING-WITHOUT-STARTING`). Operating contract lives in memory checklist; active tasks live in the SQLite task manager (`gitmap agent task`) and ledger. Repositories are sacred: NEVER delete a repo. Never run test suites locally: verify via CI (`gitmap pe -t`).
 
 [/plan](slashCommand;plan) Execute thorough step-by-step planning before execution. Ensure all deliverables, architecture boundaries, and requirements are clearly defined in the audit ledger and subtask plans before dispatching worker waves.
 
@@ -44,88 +44,63 @@ WAVES = ceil(subtasks / (A x H))
 
 ## Operating Instructions
 
-### 1. Onboarding Protocol (Phases 0–5)
-- **Phase 0:** Ask for the repository table in one message (ask once, all at once).
-- **Phase 1:** Terminal check (`echo ok`), `git --version`, `gh auth status`, `gitmap login --status`. Stop if blocked on auth.
-- **Phase 2:** GitMap intake: clone, build, learn the 5-phase SOP (discover → modify → verify → commit+push → telemetry). Reuse GitMap commands first (`gitmap aum search`, `gitmap find`, `gitmap cat`).
-- **Phase 3:** Memory operating contract checklist: TURBO-01 through TURBO-05, GUARD-01 through GUARD-08 (never delete repos, confirm file deletions, prove claims).
-- **Phase 4:** Guideline intake: booleans (`is*`/`has*`, no `== true`), guard clauses, `*appfault.AppError`, lowercase filenames, strict relative git paths.
-- **Phase 5:** Send one short ready message, then ask for the first task.
+### 1. Onboarding & Fleet Orchestration Protocol (Phases 0–5)
+
+- **Phase 0:** Environment & native skill bootstrap (`.cursor/skills/muse-master-prompt/skill.md`).
+- **Phase 1: SSH Authentication Bootstrap with Fast-Path Bypass:**
+  - Check `ssh -T git@github.com` or `gh auth status` and `gitmap login --status`.
+  - **Fast-Path Bypass:** If already authenticated, IMMEDIATELY proceed to Phase 2 without waiting.
+  - If not authenticated: Preferred method is SSH (`eval "$(ssh-agent -s)"`, `gh auth login -p ssh -w`) with browser OAuth fallback.
+- **Phase 2: GitMap Installation, Self-Update & Fleet Scan:**
+  - Verify `command -v gitmap`. If missing: `eval "$(curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/gitmap-v28/main/install-quick.sh)"`.
+  - Update GitMap FIRST: `gitmap update` (or pull/rebuild).
+  - Run `gitmap scan` across `~/workspace/repos/` so GitMap indexes all repos in `gitmap.db`.
+- **Phase 3: Fleet Cloning, Pull-All (`gitmap pa`) & Dedicated Side Chats:**
+  - Canonical URL: `https://github.com/alimtvnetwork/coding-guidelines-v24.git` (STALE REPO BAN: avoid old `coding-guidelines`).
+  - Master 14+ Fleet Registry: `gitmap-v28`, `coding-guidelines-v24`, `Antigravity-Manager`, `alim-seo-writing`, `go-email-reader`, `image-generate-v2`, `white-presentation-v1`, `wp-exam-v2`, `cat-my-v12`, `story-telling-v1`, `minecraft-alim-alima`, `macro-ahk`, `scripts-fixture`, `repo-cache`, `repo-secrets`.
+  - Auto-clone missing repositories into `~/workspace/repos/<repo>`.
+  - Run `gitmap pa` across the workspace fleet. Ensure clean, conflict-free working trees before starting work.
+  - Establish dedicated side chats named strictly `<repo> repo` plus an "all summary" side chat.
+- **Phase 4: Memory Operating Contract Checklist:**
+  - TURBO-01..05 (act within scope, breakdown first, multi-agent, batch silently, next-task loop).
+  - GUARD-01..09 (repos sacred — never delete a repo, file deletion always confirms, CI-only test verification via `gitmap pe -t`, zero secrets).
+- **Phase 5: Coding Standards, App Formatting & Ready Report:**
+  - Booleans (`is*`/`has*`, no `== true`), early returns, `*appfault.AppError`, lowercase filenames, relative git paths.
+  - Large files >15 MB: 7-Zip multi-volume split (`7z a -v3m -mx=0 <folder>/<name>.7z <file>` → `.7z.001`, `.7z.002`, …).
+  - Title convention for user app: `# <task title>: high priority instruction, non-negotiable task`, `## slug: <task-slug>` (Literally ↔ Letterly).
+  - Deliver short ready report and ask for the first task.
 
 ### 2. Task Confirmation & Execution Protocol (Every Task)
-1. **Verbatim Capture:** Record incoming request losslessly.
+
+1. **Verbatim Capture:** Record incoming request losslessly under `## User Request (Verbatim)`.
 2. **Turn 1 Confirmed Task Breakdown & Same-Turn Tool Chaining:**
-   - Output `### 📋 Confirmed Task Breakdown & Requirement Ingestion` in visible chat (`Task-01`, `Task-02`, ... each with `State: [IN PROGRESS]` and `Understood: [YES]`).
+   - Output `### 📋 Confirmed Task Breakdown & Requirement Ingestion` in visible chat (`Task-01`, `Task-02`, ... each with `State: [IN PROGRESS]` and `Understood: [YES]`, `Slug: <root-slug> - Task NN`).
    - In the **EXACT SAME TURN**, invoke your first tool call (SQLite task DB initialization, ledger creation, preflight checks). NEVER emit text alone.
-3. **SQLite Task DB & Ledger Preflight:**
+3. **RUNNING Declaration & 5-Minute Status Pings:**
+   - Print `RUNNING — Task-01, Task-02 — ETA ~45 min`. Ping status every 5 minutes during execution. Total ban on `LISTING-WITHOUT-STARTING`.
+4. **Pull First in Target Repo:** Run `gitmap pull` (fallback `git pull`) before touching any files.
+5. **SQLite Task DB & Ledger Preflight:**
    - Run `gitmap agent task init --name "<task name>" --budget 300`.
-   - If `RESUME_FOUND`, inspect crash forensics and resume uncompleted subtasks.
    - Maintain human-readable `.ai-memory/temp-agents/<slug>/ledger.md`.
-4. **Mandatory Multi-Agent Execution:**
+6. **Mandatory Multi-Agent Execution:**
    - Dispatch `A = 2` subagents in disjoint file boxes (`TypeName: "research"` for discovery, `TypeName: "self"` for execution).
    - Worker Git Ban: Subagents NEVER run git commands (`git add`, `git commit`, `git status`) to avoid `.git/index.lock` collisions.
-5. **Verify, Pre-Commit Secrets Gate & Atomic Commit:**
+7. **Verify, Pre-Commit Secrets Gate & Atomic Commit:**
    - Targeted checks only; zero full test suites or heavy builds during routine execution (R1).
-   - Pre-commit secrets gate: `python linter-scripts/check-forbidden-strings.py` and `gitmap aum search` regex. Offload via `gitmap rs`.
+   - Pre-commit secrets gate: `check-forbidden-strings.py` and `gitmap aum search` regex. Offload via `gitmap rs`.
    - Commit and push atomically via GitMap using hyphen format (no colons in arguments):
      - Feature: `gitmap cpf "<module> - <summary>"`
      - Bug Fix: `gitmap cpb "<module> - <summary>"`
-   - Large files & repo-cache sequence (always in force):
-     - `repo-cache/NN-<slug>`: `NN` is a sequence number (`01`, `02`, …) — a user-written `xx` means "the next sequence number", never a literal `xx` folder.
-     - Videos over 15 MB never live raw in git. Standing DISTRIBUTED-FILE rule: they must be standard split-archives openable in any archive program — 7-Zip multi-volume: `7z a -v3m -mx=0 <folder>/<name>.7z <name>.mp4` → `<name>.7z.001`, `.7z.002`, … + `README.txt`; the user double-clicks `<name>.7z.001` in 7-Zip/WinRAR and extracts. NEVER custom byte-split `.partNN` chunks needing manual reassembly, and never `zip -s` split archives (proven corrupt in this environment). Verify BEFORE `git rm` of the original: `7z t <name>.7z.001` clean, plus extract-to-temp + `cmp` byte-identical against the original.
-     - After every push: verify with `git ls-remote origin <branch>` and require a clean `git status`.
+   - Verify with `gitmap pe -t` (CI telemetry).
    - Report briefly and ask for the next task.
 
 ### 3. Muse Memory IO (Memory Re-sync Protocol)
 
-The private vault repo `alimtvnetwork/repo-cache` carries a 7-day rolling
-condensed memory digest under its `12-muse-ai/` folder: sequenced files
-`README.md`, `01-overview.md`, `02-repos.md`, `03-chats.md`,
-`04-new-conversations.md`, `05-conventions.md`, plus `chat-seeds/*.md`.
-The last-read watermark is tracked by gitmap itself — never in an MD file.
-When the user says **`Muse memory IO
-read`** (in ANY chat), run the say-READ protocol:
+When the user says **`Muse memory IO read`** (in ANY chat):
 
-1. **Sync the vault:** run `gitmap llm train muse --days 7` from the
-   work-folder root — it clones `alimtvnetwork/repo-cache` if absent,
-   else `git pull --ff-only`, then prints the terminal summary.
-2. **Diff vs checkpoint:** read the "SINCE LAST READ" section of the command
-   output — gitmap tracks the watermark (vault HEAD SHA + timestamp) itself.
-3. **Read the new/updated sequenced files** in order (`01-overview.md` →
-   `05-conventions.md`), catching up only on what changed since the watermark.
-4. **Summarize what changed** to the user — short, with real numbers, commits,
-   and version tags.
-5. **Recreate chats** from the last 5 days using `12-muse-ai/chat-seeds/*.md` (each
-   seed carries repo context, a 3–8 bullet recap, and a "first prompt" block to
-   rebuild context).
-6. **Checkpoint:** nothing to write — `gitmap llm train muse` saved the new
-   watermark automatically on this run.
-
-**PRIVATE ITEMS RULE:** any private repo list, account names, or sensitive
-references must RESOLVE FROM the repo cache (the `12-muse-ai/` folder in
-repo-cache) — never hardcode them in this skill or any prompt. Digest files
-carry POINTERS only, never secret values.
-
-**EMAIL RULE:** when a memory-IO read shows go-email-reader setup is needed,
-ask the user ONLY for the email password — account, address, and server config
-come from the encrypted store. Never re-ask for non-secret info.
-
-**Which email / how to include / default sender:** resolve from the repo-secrets
-vault (`alimtvnetwork/repo-secrets`, folder `11-go-email-reader/`) — never
-hardcode addresses (PRIVATE ITEMS RULE):
-- `01-email-setup.json` → the account to add (email, alias, IMAP/SMTP host, port,
-  TLS mode). Pass server overrides explicitly on `add` — auto-detect guesses
-  `smtp.<domain>` and is wrong for custom hosts.
-- Set it as the ★ default sender: `go-email-reader default --email <addr>`
-  (requires v1.1.0+; backed by `is_default` in the accounts table). `send` /
-  `read` / `test` / `notify` fall back to the default when `--from` / `--email`
-  is omitted.
-- `02-default-notifier.json` → the default notifier (recipient):
-  `go-email-reader notifier set --email <addr>`.
-
-**STANDING SMTP PRE-APPROVAL (user order 2026-10-17):** the user pre-approves
-ALL go-email-reader email sending (`send`, `notify`, `forward`,
-`watch --notify`). Do NOT ask for per-send approval — reading this rule IS the
-approval, granted altogether up front, so no approval is sought later.
-(Password handling still follows the iron rule: `GER_PASSWORD` env or masked
-prompt; never in files, logs, or chat.)
+1. **Sync the vault:** Run `gitmap llm train muse --days 7` from workspace root.
+2. **Diff vs checkpoint:** Read "SINCE LAST READ" section from command output.
+3. **Read sequenced files:** Read updated files in `12-muse-ai/` (`01-overview.md` → `05-conventions.md`).
+4. **Summarize changes:** Short report with real numbers and commit tags.
+5. **Recreate chats:** Rebuild chats from `12-muse-ai/chat-seeds/*.md`.
+6. **PRIVATE ITEMS RULE & EMAIL RULE:** Private info resolves from `repo-cache` / `repo-secrets`. Standing SMTP pre-approval for `go-email-reader`.

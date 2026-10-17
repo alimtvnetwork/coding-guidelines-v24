@@ -2,68 +2,43 @@
 
 > [!IMPORTANT]
 > Category: `27-muse-prompts`
-> Architecture: Self-Bootstrapping Autonomous Onboarding Directive
-> Scope: Muse AI Session Bootstrapping, Operating Contract, and Multi-Agent Execution
+> Architecture: Self-Bootstrapping Autonomous Onboarding & Fleet Execution Directive (V6 Engine)
+> Scope: Muse AI Session Bootstrapping, Authentication (SSH Primacy), Fleet Scan, Auto-Cloning, Pull-All, Operating Contract, and Multi-Agent Execution
 
 ---
 
 ## Overview
 
-The `27-muse-prompts` prompt category houses the master onboarding prompt for
+The `27-muse-prompts` prompt category houses the unified master onboarding and execution prompt for
 Muse AI sessions. Pasting the master prompt into a fresh Muse chat boots a
-fully-onboarded autonomous agent: repository intake, terminal + GitHub auth
-bootstrap, GitMap clone/build/learn, a memory operating-contract checklist
-(turbo mode, strict no-delete guards), coding-guideline and design-system
-intake — and then the standing **Task Confirmation & Multi-Agent Execution
-Protocol**: every user message that is work gets a confirmed task breakdown
-first (`Understood: [YES]` per task), then multiple concurrent agents complete it.
+fully-onboarded autonomous agent:
+1. **Authentication Bootstrap with SSH Primacy:** Fast-path bypass if already logged in; preferred SSH configuration (`gh auth login -p ssh -w`) or browser OAuth fallback.
+2. **GitMap Installation, Self-Update & Fleet Scan:** Auto-installs GitMap via `install-quick.sh`, updates GitMap first, and executes `gitmap scan` across the workspace to register all repositories and branches into SQLite (`gitmap.db`).
+3. **Repository Fleet Orchestration & Cloning:** Canonical starting point URL `https://github.com/alimtvnetwork/coding-guidelines-v24.git` (with explicit ban on stale `coding-guidelines`), 14+ repository registry, auto-cloning missing repos, pull-all via `gitmap pa` ensuring conflict-free trees, and establishing dedicated side chats (`<repo> repo` and "all summary").
+4. **Memory Operating Contract Checklist:** Turbo mode (act, don't ask), strict no-delete guards (repos are sacred, file deletion always confirms), CI-only test verification (`gitmap pe -t`).
+5. **Coding Guidelines, Formatting & Large File Split:** Booleans (`is*`/`has*`, no `== true`), early returns, `*appfault.AppError`, lowercase filenames, relative paths, large-file 15 MB 7-Zip multi-volume split (`7z a -v3m -mx=0`), and title convention (`# <title>: high priority instruction, non-negotiable task`, `## slug: <task-slug>`).
+6. **Task Confirmation & Multi-Agent Execution Protocol (V6 Engine):** Verbatim capture, confirmed task breakdown FIRST (`Task-01`, `Task-02`, ... each with `Understood: [YES]`), RUNNING + ETA declaration, 5-minute status pings, SQLite task DB init (`gitmap agent task init`), pull first (`gitmap pull` / `git pull`), mandatory multi-agent dispatch (`invoke_subagent`, A=2, H=2, disjoint file boxes, Worker Git Ban).
+7. **Verification, Pre-Commit Secrets Gate & Atomic Push:** Targeted checks only (R1 zero build/test ban), pre-commit secrets gate (`check-forbidden-strings.py` and `gitmap aum search` -> `gitmap rs`), atomic commit via GitMap hyphen format (`gitmap cpf "<module> - <summary>"`), immediate push, and CI telemetry (`gitmap pe -t`).
+8. **Muse Memory IO (Memory Re-sync Protocol):** 7-day memory digest under `12-muse-ai/` in `repo-cache`, re-sync via `gitmap llm train muse --days 7`, chat-seeds recreation, and standing SMTP pre-approval for `go-email-reader`.
 
-The canonical execution engine it delegates to is
-[`02-execute-parent-task-with-n-steps.md`](../14-execute/02-execute-parent-task-with-n-steps.md)
+The canonical execution engine it embodies is
+[`02-execute-parent-task-with-n-steps-v6.md`](../14-execute/02-execute-parent-task-with-n-steps-v6.md)
 (Canonical V6: `N = 300`, `A = 2`, `H = 2`, `C = 30`).
 
 Its installable skill is `muse-master-prompt`
 (`.agents/skills/muse-master-prompt/skill.md`, mirrored in `.cursor/skills/`).
 
-## Muse Memory IO (Memory Re-sync Protocol)
-
-The master prompts [`01-muse-master-prompt.md`](01-muse-master-prompt.md)
-(6.1.2) and [`05-muse-master-prompt-v2.md`](05-muse-master-prompt-v2.md)
-(6.2.2) carry a "Muse Memory IO" section (§11). The private vault repo
-`alimtvnetwork/repo-cache` holds a 7-day rolling condensed memory digest
-under its `12-muse-ai/` folder (sequenced `README.md`, `01-overview.md` →
-`05-conventions.md`, `chat-seeds/*.md`); the last-read watermark is tracked
-by gitmap itself, never in an MD file.
-
-When the user says **`Muse memory IO read`** (in ANY chat), the session runs
-the say-READ protocol: `gitmap llm train muse --days 7` from the work-folder
-root (clone-or-pull + terminal summary), read the SINCE LAST READ section,
-read the new/updated sequenced files, summarize changes, and recreate the
-last-5-days chats from `12-muse-ai/chat-seeds/*.md`.
-
-Two standing rules travel with the protocol:
-
-- **PRIVATE ITEMS RULE:** private repo lists, account names, and sensitive
-  references resolve FROM the repo cache (`12-muse-ai/` in repo-cache) — never
-  hardcoded in prompts. Pointers only, never secret values.
-- **EMAIL RULE:** when a memory-IO read shows go-email-reader setup is needed,
-  ask the user ONLY for the email password — account, address, and server
-  config resolve from repo-secrets `11-go-email-reader/` (pointers only, never
-  hardcoded); set the ★ default sender via `default --email`. Standing user
-  pre-approval: all go-email-reader SMTP sending is approved up front — never
-  ask per-send.
-
 ---
 
 ## Directory Index & Catalog
 
-| Prompt File | Version | Scope | Key Capabilities |
-| :--- | :--- | :--- | :--- |
-| [`01-muse-master-prompt.md`](01-muse-master-prompt.md) | 6.1.2 | Master Onboarding | Self-loop Phases 0–5, GitMap reinstall guard, auth bootstrap, GitMap intake via skills, memory contract checklist, CI-only test verification (`gitmap pe -t`), task-confirm + multi-agent protocol (A=2/H=2), understanding check-ins, Top-Instruction Priority Mandate. |
-| [`02-muse-execute-in-a-step.md`](02-muse-execute-in-a-step.md) | 1.1.0 | Execute-in-a-Step | Breakdown-first listing, RUNNING + ETA declaration ("Are you running or not?"), 5-minute status pings, commit+push completion, CI-only verification, GitMap skill authority, understanding check-ins. |
-| [`03-muse-master-with-repos.md`](03-muse-master-with-repos.md) | 1.1.0 | Repo-Aware Master | Compact paste-and-go prompt: embedded 10-repo registry (which request → which repo + how), routing rules, 8-step execution protocol (parse → route → confirm → locate → execute → verify → ship → report), GitMap reinstall + CI-only verification, fallback table. |
-| [`04-muse-master-with-repos-v2.md`](04-muse-master-with-repos-v2.md) | 1.3.1 | Repo-Aware Master v2 | 14-repo registry (added minecraft-alim-alima), pull-first + no-wait checklist, large-file 15 MB split rule, repo-cache NN-sequence convention, explicit commit instructions (gitmap cpf + ls-remote verify). |
-| [`05-muse-master-prompt-v2.md`](05-muse-master-prompt-v2.md) | 6.2.2 | Master Prompt v2 | V6 agent directive (N=300/A=2/H=2), self-loop onboarding Phases 0–5, turbo ask/don't-ask matrix, large-file 15 MB split rule + repo-cache sequence in the commit gate. |
+| Prompt File | Version | Scope | Key Capabilities | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| [`01-muse-master-prompt.md`](01-muse-master-prompt.md) | 6.3.0 | Unified Master Prompt | Consolidated V6 directive: SSH auth primacy + fast-path bypass, GitMap quick-install & update first, `gitmap scan`, 14+ repo fleet clone & pull-all (`gitmap pa`), conflict prevention, dedicated side chats (`<repo> repo`, `all summary`), repo-cache sequence, task confirmation first, RUNNING+ETA, 5-minute pings, multi-agent dispatch (A=2, H=2), Worker Git Ban, 15 MB 7-Zip split, GitMap hyphen atomic push, CI telemetry (`gitmap pe -t`), and Muse Memory IO. | **Active (Canonical)** |
+| [`02-muse-execute-in-a-step.md`](02-muse-execute-in-a-step.md) | 1.1.0 | Execute-in-a-Step | Consolidated into 01-muse-master-prompt.md: breakdown-first, RUNNING+ETA, 5-minute status pings, commit+push completion. | Consolidated |
+| [`03-muse-master-with-repos.md`](03-muse-master-with-repos.md) | 1.1.0 | Repo-Aware Master | Consolidated into 01-muse-master-prompt.md: embedded repo registry, routing rules, 8-step execution protocol. | Consolidated |
+| [`04-muse-master-with-repos-v2.md`](04-muse-master-with-repos-v2.md) | 1.3.1 | Repo-Aware Master v2 | Consolidated into 01-muse-master-prompt.md: 14-repo registry, pull-first, 15 MB split rule, repo-cache sequence. | Consolidated |
+| [`05-muse-master-prompt-v2.md`](05-muse-master-prompt-v2.md) | 6.3.0 | Master Prompt v2 Mirror | Synchronized mirror of 01-muse-master-prompt.md: full unified V6 directive. | Active Mirror |
 
 ---
 
@@ -71,8 +46,10 @@ Two standing rules travel with the protocol:
 
 ```text
 01-prompts/27-muse-prompts/
-├── 01-muse-master-prompt.md   # the master prompt (paste into a fresh Muse session)
-├── 02-muse-execute-in-a-step.md   # one-shot execution prompt (breakdown → RUNNING+ETA → 5-min pings → commit+push)
-├── 03-muse-master-with-repos.md   # repo-aware compact master (embedded repo registry + routing)
-└── readme.md                   # this index
+├── 01-muse-master-prompt.md       # UNIFIED master prompt (paste into a fresh Muse session)
+├── 02-muse-execute-in-a-step.md   # [consolidated into 01] one-shot execution prompt
+├── 03-muse-master-with-repos.md   # [consolidated into 01] repo-aware compact master
+├── 04-muse-master-with-repos-v2.md # [consolidated into 01] repo-aware master v2
+├── 05-muse-master-prompt-v2.md   # synchronized mirror of unified master prompt
+└── readme.md                      # this index
 ```
