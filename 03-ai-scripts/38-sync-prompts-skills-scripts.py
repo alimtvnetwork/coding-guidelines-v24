@@ -83,8 +83,6 @@ TARGET_REPOS = [
     WORK_ROOT / "wp-html-automate",
     WORK_ROOT / "wp-link-manager",
     WORK_ROOT / "wp-onboarding",
-    WORK_ROOT / "seo-writing" / "alim-seo-writing",
-    WORK_ROOT / "seo-packages",
 ]
 
 def get_sync_dirs() -> list[tuple[str, str, bool]]:
@@ -443,53 +441,11 @@ def mirror_directory(
         dst.mkdir(parents=True, exist_ok=True)
 
     # 1. Clean stale files/dirs in dst that are no longer in src.
-    #    Skipped for additive trees and for skill roots so repo-local skills survive.
-    if not is_additive_only and not keeps_local_skill_dirs(dst):
-        if dst.exists():
-            for root, dirs, files in os.walk(dst, topdown=False):
-                rel_root = Path(root).relative_to(dst)
-                src_root = src / rel_root
+    # User Mandate & Non-Destructive Invariant: Under NO circumstances should any additional file
+    # created or updated by the target repository on its own be removed. The sync engine must be
+    # strictly non-destructive for repo-owned files: only update/replace canonical assets and add
+    # new canonical assets. Stale file deletion in target repositories is strictly disabled.
 
-                for f in files:
-                    dst_file = Path(root) / f
-                    src_file = src_root / f
-
-                    if f in EXCLUDE_NAMES:
-                        continue
-
-                    if dst_file.suffix.lower() in EXCLUDE_EXTS:
-                        continue
-
-                    if is_spec_21(dst_file):
-                        continue
-
-                    if is_protected_memory_or_plan(dst_file):
-                        continue
-
-                    if not src_file.exists():
-                        if not is_dry_run:
-                            dst_file.unlink(missing_ok=True)
-
-                        removed += 1
-
-                for d in dirs:
-                    dst_dir = Path(root) / d
-                    src_dir = src_root / d
-
-                    if d in EXCLUDE_NAMES:
-                        continue
-
-                    if is_spec_21(dst_dir):
-                        continue
-
-                    if is_protected_memory_or_plan(dst_dir):
-                        continue
-
-                    if not src_dir.exists():
-                        if not is_dry_run:
-                            shutil.rmtree(dst_dir, ignore_errors=True)
-
-                        removed += 1
 
     # 2. Copy files from src to dst
     for root, dirs, files in os.walk(src):
