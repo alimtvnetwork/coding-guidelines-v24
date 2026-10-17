@@ -79,7 +79,7 @@ WAVES = ceil(subtasks / (A x H))
 ### 3. Muse Memory IO (Memory Re-sync Protocol)
 
 The private vault repo `alimtvnetwork/repo-secrets` carries a 7-day rolling
-condensed memory digest under its `Muse/` folder: sequenced files
+condensed memory digest under its `12-muse-ai/` folder: sequenced files
 `README.md`, `01-overview.md`, `02-repos.md`, `03-chats.md`,
 `04-new-conversations.md`, `05-conventions.md`, plus `chat-seeds/*.md`.
 The last-read watermark is tracked by gitmap itself — never in an MD file.
@@ -95,14 +95,14 @@ read`** (in ANY chat), run the say-READ protocol:
    `05-conventions.md`), catching up only on what changed since the watermark.
 4. **Summarize what changed** to the user — short, with real numbers, commits,
    and version tags.
-5. **Recreate chats** from the last 5 days using `Muse/chat-seeds/*.md` (each
+5. **Recreate chats** from the last 5 days using `12-muse-ai/chat-seeds/*.md` (each
    seed carries repo context, a 3–8 bullet recap, and a "first prompt" block to
    rebuild context).
 6. **Checkpoint:** nothing to write — `gitmap llm train muse` saved the new
    watermark automatically on this run.
 
 **PRIVATE ITEMS RULE:** any private repo list, account names, or sensitive
-references must RESOLVE FROM the repo cache (the `Muse/` folder in
+references must RESOLVE FROM the repo cache (the `12-muse-ai/` folder in
 repo-secrets) — never hardcode them in this skill or any prompt. Digest files
 carry POINTERS only, never secret values.
 
