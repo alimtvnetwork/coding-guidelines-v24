@@ -174,7 +174,8 @@ All AI agents operating within GitMap-managed repositories MUST strictly adhere 
 - `gitmap agent subtask claim-files` — Pre-declares file leases for collision and contention tracking.
 - `gitmap agent log --subtask <id> --agent <name> --action <action> --file <path> --details <desc>` — Logs in-flight agent action for crash forensics.
 - `gitmap agent subtask complete <id> --agent <name> --evidence <evidence>` — Marks subtask completed.
-- `gitmap agent subtask fail <id> --agent <name> --reason <reason>` — Marks subtask failed with reason.
+- `gitmap agent subtask join --subtask <id> --agent <name> --role "Assistant: <focus>"` — Dynamically joins an in-flight subtask as a collaborative assistant for parallel reading, caller analysis, or verification without file collisions.
+- `gitmap agent task tree` — Renders hierarchical task swarm tree (Lead Orchestrator -> Branch Coordinators -> Leaf Workers & Dynamic Assistants).
 - `gitmap agent diagnose` — Performs deep autopsy and diagnostic reporting on agent task runs.
 - `gitmap agent crashed` — Detects crashed or abandoned agent tasks.
 - `gitmap agent temp-clear` — Safely deletes ephemeral `.ai-memory/temp-agents/` directory.

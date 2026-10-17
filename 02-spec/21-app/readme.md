@@ -88,6 +88,7 @@ All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent e
 | [`19-single-muse-master-prompt-and-fleet-purge/`](19-single-muse-master-prompt-and-fleet-purge/) | Single Muse Master Prompt Consolidation, Legacy Prompt Deletion & Fleet Purge | Application Spec | Active |
 | [`20-ssh-identity-format-and-gitmap-skills-update/`](20-ssh-identity-format-and-gitmap-skills-update/) | SSH Key Identity Format, Git User Config, Interactive Variable Prompts & GitMap Skills | Application Spec | Active |
 | [`21-letterly-muse-ssh-heatmap-general-installer/`](21-letterly-muse-ssh-heatmap-general-installer/) | Letterly Pull-First Sequencing, Muse SSH Delivery Protocol, Heat Map Tracking & Dual Installers | Application Spec | Active |
+| [`22-mobile-letterly-tree-swarm-dynamic-join/`](22-mobile-letterly-tree-swarm-dynamic-join/) | Mobile Letterly Formatter Modernization, Tree Swarm Hierarchy & Dynamic Task Join | Application Spec | Active |
 | [`gitmap-sync-and-agent-task-engine/`](gitmap-sync-and-agent-task-engine/) | GitMap Fleet Synchronization & Native SQLite Agent Task Engine | Application Spec | Active |
 | [`coding-guideline-skills-sync-and-prompt-updates/`](coding-guideline-skills-sync-and-prompt-updates/) | GitMap Skills Re-read, Prompts+Skills Sync Mechanism & Pull-First Prompt Versions | Application Spec | Active |
 
