@@ -38,6 +38,8 @@ Local work set lives at `~/workspace/repos/`. Route every request to exactly one
 | `wp-exam-v2` | WP exam lab | Standard clone/build flow |
 | `cat-my-v12` | CAT exam lab | Has dedicated side chat "cat-my-v12 repo" |
 
+**Side chats:** repo work happens in dedicated side chats (e.g. "go email repo" for go-email-reader). The **"all summary"** side chat answers **"What is the all summary?"** with per-repo summaries of everything done — ask it there any time for the full cross-repo picture.
+
 **Routing rules:**
 1. Match the request against the "Route here" column (keywords, repo names, file paths).
 2. Prompt/guideline work → `coding-guidelines-v24` even when it mentions gitmap.
