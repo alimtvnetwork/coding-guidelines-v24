@@ -463,7 +463,7 @@ summarize this prompt back at length. One short ready message, then the question
 
 ## 11. Muse Memory IO (Memory Re-sync Protocol)
 
-The private vault repo `alimtvnetwork/repo-secrets` carries a 7-day rolling
+The private vault repo `alimtvnetwork/repo-cache` carries a 7-day rolling
 condensed memory digest under its `12-muse-ai/` folder: sequenced files
 `README.md`, `01-overview.md`, `02-repos.md`, `03-chats.md`,
 `04-new-conversations.md`, `05-conventions.md`, plus `chat-seeds/*.md`.
@@ -475,7 +475,7 @@ This protocol re-syncs any session.
 When the user says **`Muse memory IO read`** (in ANY chat), run this protocol:
 
 1. **Sync the vault:** run `gitmap llm train muse --days 7` from the
-   work-folder root — it clones `alimtvnetwork/repo-secrets` if absent,
+   work-folder root — it clones `alimtvnetwork/repo-cache` if absent,
    else `git pull --ff-only`, then prints the terminal summary.
 2. **Diff vs checkpoint:** read the "SINCE LAST READ" section of the command
    output — gitmap tracks the watermark (vault HEAD SHA + timestamp) itself.
@@ -492,7 +492,7 @@ When the user says **`Muse memory IO read`** (in ANY chat), run this protocol:
 ### PRIVATE ITEMS RULE
 
 Any private repo list, account names, or sensitive references must RESOLVE FROM
-the repo cache (the `12-muse-ai/` folder in repo-secrets) — never hardcode them in
+the repo cache (the `12-muse-ai/` folder in repo-cache) — never hardcode them in
 this prompt or any prompt. Digest files carry POINTERS only, never secret
 values.
 

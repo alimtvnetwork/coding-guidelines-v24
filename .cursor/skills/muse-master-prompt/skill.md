@@ -74,7 +74,7 @@ WAVES = ceil(subtasks / (A x H))
 
 ### 3. Muse Memory IO (Memory Re-sync Protocol)
 
-The private vault repo `alimtvnetwork/repo-secrets` carries a 7-day rolling
+The private vault repo `alimtvnetwork/repo-cache` carries a 7-day rolling
 condensed memory digest under its `12-muse-ai/` folder: sequenced files
 `README.md`, `01-overview.md`, `02-repos.md`, `03-chats.md`,
 `04-new-conversations.md`, `05-conventions.md`, plus `chat-seeds/*.md`.
@@ -83,7 +83,7 @@ When the user says **`Muse memory IO
 read`** (in ANY chat), run the say-READ protocol:
 
 1. **Sync the vault:** run `gitmap llm train muse --days 7` from the
-   work-folder root — it clones `alimtvnetwork/repo-secrets` if absent,
+   work-folder root — it clones `alimtvnetwork/repo-cache` if absent,
    else `git pull --ff-only`, then prints the terminal summary.
 2. **Diff vs checkpoint:** read the "SINCE LAST READ" section of the command
    output — gitmap tracks the watermark (vault HEAD SHA + timestamp) itself.
@@ -99,7 +99,7 @@ read`** (in ANY chat), run the say-READ protocol:
 
 **PRIVATE ITEMS RULE:** any private repo list, account names, or sensitive
 references must RESOLVE FROM the repo cache (the `12-muse-ai/` folder in
-repo-secrets) — never hardcode them in this skill or any prompt. Digest files
+repo-cache) — never hardcode them in this skill or any prompt. Digest files
 carry POINTERS only, never secret values.
 
 **EMAIL RULE:** when a memory-IO read shows go-email-reader setup is needed,

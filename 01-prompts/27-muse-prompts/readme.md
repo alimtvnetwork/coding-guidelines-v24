@@ -30,7 +30,7 @@ Its installable skill is `muse-master-prompt`
 The master prompts [`01-muse-master-prompt.md`](01-muse-master-prompt.md)
 (6.1.1) and [`05-muse-master-prompt-v2.md`](05-muse-master-prompt-v2.md)
 (6.2.1) carry a "Muse Memory IO" section (§11). The private vault repo
-`alimtvnetwork/repo-secrets` holds a 7-day rolling condensed memory digest
+`alimtvnetwork/repo-cache` holds a 7-day rolling condensed memory digest
 under its `12-muse-ai/` folder (sequenced `README.md`, `01-overview.md` →
 `05-conventions.md`, `chat-seeds/*.md`); the last-read watermark is tracked
 by gitmap itself, never in an MD file.
@@ -44,7 +44,7 @@ last-5-days chats from `12-muse-ai/chat-seeds/*.md`.
 Two standing rules travel with the protocol:
 
 - **PRIVATE ITEMS RULE:** private repo lists, account names, and sensitive
-  references resolve FROM the repo cache (`12-muse-ai/` in repo-secrets) — never
+  references resolve FROM the repo cache (`12-muse-ai/` in repo-cache) — never
   hardcoded in prompts. Pointers only, never secret values.
 - **EMAIL RULE:** when a memory-IO read shows go-email-reader setup is needed,
   ask the user ONLY for the email password — account, address, and server
