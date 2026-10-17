@@ -1,7 +1,7 @@
 # Plan — gitmap-update-and-cicd-check
 
 parent spec: `02-spec/21-app/gitmap-update-and-cicd-check/readme.md`
-status: Phase 2 dispatched (2026-10-18)
+status: Phase 3 complete (2026-10-18) — all tasks DONE, evidence verified by lead, indexes updated
 
 ## Phase 1 — plan + spec (lead, done 2026-10-18)
 
@@ -34,4 +34,16 @@ Stop conditions: SSH/API auth failure, CI red unfixable after RCA, release block
 
 ## Follow-ups
 
-(none yet)
+1. gitmap-v28: prior tag v6.570.2 existed while version.json stayed 6.570.1 (version/tag sync slip); 6.571.0 re-syncs. Suggest a pre-release guard asserting version.json == tag. (from C1)
+2. No GitHub token / `gh` auth on this VM — releases are tag-based (no release pages, no asset uploads); matches existing convention for these repos. (from C1)
+3. Antigravity-Manager: pre-existing version/tag inconsistency NOT fixed (out of scope) — tag v4.226.3 points at a commit whose version.json says 4.226.1; changelog head was v4.226.1 while tags jumped. Owner should reconcile. (from C2)
+4. go-email-reader: no CI workflows (pe -t "green" is vacuous); no GitHub Release page for v1.2.0 (no release.yml, gh not authed); NO icon asset exists — confirmed by lead 2026-10-18. If user wants one, use the `logo-and-icon-design` skill. (from C2)
+5. repo-cache `.gitmap/last_error.log` documents the known `gitmap llm train` internal pull quirk (`fatal: Cannot fast-forward to multiple branches`, E9000, `llm/llm_train_muse.go:253`) — route to gitmap-v28 track as a CLI defect. (from C2)
+
+## Phase 3 — consolidation (lead, done 2026-10-18)
+
+1. Both ledgers collected; every DONE cites evidence (paths/diffstats/exit codes) — verified.
+2. Release tags confirmed on origin via `git ls-remote --tags`: gitmap-v28 v6.571.0, coding-guidelines-v24 v6.79.0, Antigravity-Manager v4.227.0, go-email-reader v1.2.0.
+3. gitmap CLI: v6.566.4 installed durably at `~/.local/bin/gitmap-cli/gitmap` + `~/workspace/tools/bin/gitmap` (Go 1.26.9 toolchain at `~/workspace/tools/go`); `gitmap scan ~/workspace/repos` = 9 repos, 13 projects; `gitmap pa` = 9 pulled, 0 conflicts.
+4. Indexes updated: `.ai-memory/plans/readme.md`, `02-spec/21-app/readme.md`.
+5. Final atomic commit + push of consolidation files.

@@ -62,6 +62,7 @@ All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent e
 
 | File / Folder | Title | Type | Status |
 |:---|:---|:---|:---|
+| [`gitmap-update-and-cicd-check/`](gitmap-update-and-cicd-check/) | GitMap Update and CICD Check — CLI reinstall, fleet scan, CI-green sweep, minor releases (v6.571.0 / v6.79.0 / v4.227.0 / v1.2.0) | Application Spec | Active |
 | [`readme.md`](readme.md) | App Specifications Root Index & Standards | Standard Index | Active |
 | [`02-prompts-v1-v2-and-gitmap-benchmarks.md`](02-prompts-v1-v2-and-gitmap-benchmarks.md) | AI Prompts V1/V2 Architecture & GitMap Discovery Benchmarks | Application Spec | Active |
 | [`03-multi-repo-prompts-skills-sync-audit.md`](03-multi-repo-prompts-skills-sync-audit.md) | Multi-Repository Prompts V1/V2 & Skills Synchronization Audit | Application Spec | Active |
