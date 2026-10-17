@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.77.0] - 2026-10-17
+
+### Added
+- letterly-mobile - tree swarm dynamic join and professional mobile formatter
+
+---
+
 ## [v6.76.0] - 2026-10-17
 
 ### Added
