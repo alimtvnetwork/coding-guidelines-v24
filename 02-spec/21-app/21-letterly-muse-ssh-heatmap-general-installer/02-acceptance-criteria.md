@@ -23,7 +23,7 @@
 
 ## 4. Heat Map & In-Flight Action Decision Logging
 - [ ] **AC-16**: `01-prompts/14-execute/02-execute-parent-task-with-n-steps-v6.md`, `.agents/skills/execute-parent-task-with-n-steps-v6/skill.md`, and `.cursor/skills/execute-parent-task-with-n-steps-v6/skill.md` mandate logging file reads and modifications with reasoning via `gitmap agent log`.
-- [ ] **AC-17**: `gitmap heatmap` command in `D:\work\gitmap` renders touched files, action counts, and agent reasoning.
+- [ ] **AC-17**: `gitmap heatmap` command in `gitmap` renders touched files, action counts, and agent reasoning.
 
 ## 5. Dual Installers (Coding Guidelines vs General Repository)
 - [ ] **AC-18**: `install.ps1` and `install.sh` support `-General` / `--general` switch.

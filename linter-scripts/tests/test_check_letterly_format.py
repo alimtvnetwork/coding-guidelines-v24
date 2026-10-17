@@ -29,8 +29,8 @@ VALID = """# SEO Writing and Folder Structure Instructions: high priority instru
 
 Hi there. When you started with the SEO writing, before that there was only one or two article write. Follow that article writing pattern.
 
-## slug
-SEO Writing and Folder Structure Instructions
+## task: SEO Writing and Folder Structure Instructions
+## slug: seo-writing-and-folder-structure-instructions
 
 # Actionable Items Must Follow Non-Negotiable
 
@@ -61,13 +61,13 @@ LITERAL_TITLE = VALID.replace(
     "# High Priority Instruction: high priority instruction, non-negotiable task",
     1,
 ).replace(
-    "## slug\nSEO Writing and Folder Structure Instructions",
-    "slug: high-priority-instruction",
+    "## task: SEO Writing and Folder Structure Instructions\n## slug: seo-writing-and-folder-structure-instructions",
+    "## task: High Priority Instruction\n## slug: high-priority-instruction",
     1,
 )
 
 OLD_SLUG_LINE = VALID.replace(
-    "## slug\nSEO Writing and Folder Structure Instructions",
+    "## task: SEO Writing and Folder Structure Instructions\n## slug: seo-writing-and-folder-structure-instructions",
     "slug: seo-writing-and-folder-structure-instructions",
     1,
 )
@@ -75,11 +75,11 @@ OLD_SLUG_LINE = VALID.replace(
 SLUG_BEFORE_INPUT = VALID.replace(
     """Hi there. When you started with the SEO writing, before that there was only one or two article write. Follow that article writing pattern.
 
-## slug
-SEO Writing and Folder Structure Instructions
+## task: SEO Writing and Folder Structure Instructions
+## slug: seo-writing-and-folder-structure-instructions
 """,
-    """## slug
-SEO Writing and Folder Structure Instructions
+    """## task: SEO Writing and Folder Structure Instructions
+## slug: seo-writing-and-folder-structure-instructions
 
 Hi there. When you started with the SEO writing, before that there was only one or two article write. Follow that article writing pattern.
 """,
@@ -90,6 +90,14 @@ MISSING_ITEM = "\n".join(
     line for line in VALID.splitlines()
     if not line.startswith("5. Use `gitmap` AI agents to enter data")
 ) + "\n"
+
+MISSING_TASK_HEADER = VALID.replace("## task: SEO Writing and Folder Structure Instructions\n", "", 1)
+
+UPPERCASE_SLUG = VALID.replace(
+    "## slug: seo-writing-and-folder-structure-instructions",
+    "## slug: SEO-Writing-And-Folder-Structure-Instructions",
+    1,
+)
 
 
 def run_validator(body: str) -> subprocess.CompletedProcess:
@@ -121,7 +129,7 @@ class TestCheckLetterlyFormat(unittest.TestCase):
     def test_old_slug_line_fails(self):
         proc = run_validator(OLD_SLUG_LINE)
         self.assertEqual(proc.returncode, 1)
-        self.assertIn("single-line form is forbidden", proc.stdout)
+        self.assertIn("old `slug: <value>` without `##` is forbidden", proc.stdout)
 
     def test_slug_before_input_fails(self):
         proc = run_validator(SLUG_BEFORE_INPUT)
@@ -132,6 +140,16 @@ class TestCheckLetterlyFormat(unittest.TestCase):
         proc = run_validator(MISSING_ITEM)
         self.assertEqual(proc.returncode, 1)
         self.assertIn("fixed actionable item 5 is missing", proc.stdout)
+
+    def test_missing_task_header_fails(self):
+        proc = run_validator(MISSING_TASK_HEADER)
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("missing `## task: <task title>` subheader", proc.stdout)
+
+    def test_uppercase_slug_fails(self):
+        proc = run_validator(UPPERCASE_SLUG)
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("slug value must be lowercase-hyphenated", proc.stdout)
 
 
 if __name__ == "__main__":

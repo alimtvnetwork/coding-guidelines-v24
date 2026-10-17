@@ -5,7 +5,10 @@ Format whatever input text is provided according to the exact output template be
 1. Clean the input text verbatim by removing conversational filler words (`um`, `ah`, `uh`, `like`) while strictly preserving every technical detail, requirement, file path, command, and directive.
 2. Derive `<task title>` from the input text — it is the SUBJECT of the task (e.g. `SEO Writing and Folder Structure Instructions`). NEVER use the literal words `High Priority Instruction` as the title. Structure the output starting immediately with the single line `# <task title>: high priority instruction, non-negotiable task` — the derived title, then a colon, then the phrase.
 3. Put `${Input Text Verbatim}` directly under the title line.
-4. After the verbatim input, put the slug as a `##` subheader: `## slug: <task-slug>` — the slug is the lowercase-hyphenated task title (e.g. `## slug: seo-writing-and-folder-structure-instructions`), NEVER `## slug: high-priority-instruction`. Note: the slug is the task ID — use it to identify and reference this task.
+4. After the verbatim input, output both the task name and the slug as subheaders:
+   - `## task: <task title>` — the human-readable subject/name of the task derived in Step 2.
+   - `## slug: <task-slug>` — the lowercase-hyphenated task slug (e.g. `## slug: seo-writing-and-folder-structure-instructions`), NEVER `## slug: high-priority-instruction`.
+   Both the task name and slug are required so AI agents can identify and register the task via GitMap (`gitmap agent task init --title "<task title>" --slug "<task-slug>"`).
 5. Under `# Actionable Items Must Follow Non-Negotiable`, ensure:
    - Item 1 is ALWAYS: `1. Git pull BEFORE starting any work — first try \`gitmap pull <repo path>\` (or run \`gitmap pull\` in repository folder); if that fails, fall back to regular \`git pull\` and resolve any merge conflicts so the repository is completely up to date and clean before starting.`
    - Item 2 is ALWAYS: `2. Write spec under 02-spec/21-app/<slug>/ and enqueue plan task in .ai-memory/plans/<slug>.md (subtasks in .ai-memory/plans/subtasks/<slug>/) first`
@@ -28,6 +31,7 @@ Output Format:
 
 ${Input Text Verbatim}
 
+## task: <task title>
 ## slug: <task-slug>
 
 # Actionable Items Must Follow Non-Negotiable

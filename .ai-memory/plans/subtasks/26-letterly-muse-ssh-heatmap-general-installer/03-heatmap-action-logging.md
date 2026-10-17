@@ -7,8 +7,8 @@ Embed granular in-flight action logging (`gitmap agent log`) with explicit reaso
 - `01-prompts/14-execute/02-execute-parent-task-with-n-steps-v6.md`
 - `.agents/skills/execute-parent-task-with-n-steps-v6/skill.md`
 - `.cursor/skills/execute-parent-task-with-n-steps-v6/skill.md`
-- `D:\work\gitmap` (CLI command `gitmap heatmap`)
+- `gitmap` (CLI command `gitmap heatmap`)
 
 ## Acceptance Criteria
 - Mandatory file access action logging: `gitmap agent log --subtask <id> --agent "<name>" --action "<read|modify|plan>" --file "<relative-path>" --details "<reasoning>"`.
-- `gitmap heatmap` command in `D:\work\gitmap` displays active file touches and reasoning.
+- `gitmap heatmap` command in `gitmap` displays active file touches and reasoning.

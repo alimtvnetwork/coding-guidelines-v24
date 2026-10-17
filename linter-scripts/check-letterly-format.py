@@ -14,11 +14,12 @@ Checks, in order:
      ``# <task title>: high priority instruction, non-negotiable task``
      where <task title> is derived from the input subject and is NEVER the
      literal words "High Priority Instruction".
-  3. Slug block: a bare ``## slug`` subheader line (no colon, no trailing
-     value), with the slug VALUE on the next non-empty line in Title Case
-     (never ``high-priority-instruction``, never "High Priority Instruction").
-  4. Slot order: title < ``## slug`` < ``# Actionable Items`` <
-     ``## Must follow`` < ``## Additional Instructions``.
+  3. Task & Slug blocks:
+     - ``## task: <task title>`` — human-readable task subject
+     - ``## slug: <task-slug>`` — lowercase-hyphenated slug
+       (never ``high-priority-instruction``, never "High Priority Instruction").
+  4. Slot order: title < verbatim input < ``## task:`` < ``## slug:`` <
+     ``# Actionable Items`` < ``## Must follow`` < ``## Additional Instructions``.
   5. Fixed actionable items 1-7 present verbatim (item 1 checks pull first,
      item 2 allows a substituted slug in place of the ``<slug>`` placeholder).
   6. Mandatory agent-invocation suffix link present.
@@ -92,51 +93,65 @@ def _find_header(numbered, header):
     return None
 
 
-def check_slug_block(numbered):
+def check_task_and_slug_blocks(numbered):
     violations = []
+    task_lineno = None
     slug_lineno = None
+    task_value = None
+    slug_value = None
     for lineno, line in numbered:
         stripped = line.strip()
-        if stripped == "## slug":
+        if stripped.startswith("## task:"):
+            task_lineno = lineno
+            task_value = stripped[len("## task:"):].strip()
+        elif stripped == "## task":
+            violations.append(f"line {lineno}: `## task:` must include the task title (`## task: <task title>`)")
+            task_lineno = lineno
+        elif stripped.startswith("## slug:"):
             slug_lineno = lineno
-            break
-        if stripped.startswith("## slug"):
-            violations.append(
-                f"line {lineno}: slug label must be a bare `## slug` subheader "
-                f"(no colon, no trailing value; found `{stripped}`)"
-            )
+            slug_value = stripped[len("## slug:"):].strip()
+        elif stripped == "## slug":
+            violations.append(f"line {lineno}: use `## slug: <task-slug>` format on a single line")
             slug_lineno = lineno
-            break
-        if re.match(r"^slug\s*:", stripped):
+        elif re.match(r"^slug\s*:", stripped):
             violations.append(
-                f"line {lineno}: old `slug: <value>` single-line form is forbidden; "
-                "use a `## slug` subheader with the value on the next line"
+                f"line {lineno}: old `slug: <value>` without `##` is forbidden; "
+                "use `## slug: <task-slug>`"
             )
-    if slug_lineno is None and not violations:
-        return ["missing `## slug` subheader"], None
-    value = None
-    if slug_lineno is not None and not any(v.startswith(f"line {slug_lineno}: old") for v in violations):
-        after = [(n, l) for n, l in numbered if n > slug_lineno]
-        if not after:
-            violations.append("`## slug` subheader has no value line after it")
-        else:
-            value_lineno, value = after[0][0], after[0][1].strip()
-            if not value:
-                violations.append(f"line {value_lineno}: slug value line is empty")
-            elif value.lower() == "high priority instruction":
-                violations.append(
-                    f"line {value_lineno}: slug must be the Title Case task title, "
-                    'never the literal words "High Priority Instruction"'
-                )
-            elif re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", value):
-                violations.append(
-                    f"line {value_lineno}: slug value must be Title Case "
-                    f"(found hyphenated-lowercase `{value}`)"
-                )
-    return violations, slug_lineno
+
+    if task_lineno is None:
+        violations.append("missing `## task: <task title>` subheader")
+    else:
+        if not task_value:
+            violations.append(f"line {task_lineno}: task title value is empty")
+        elif task_value.lower() == "high priority instruction":
+            violations.append(
+                f"line {task_lineno}: task title must be derived from input subject, "
+                'never the literal words "High Priority Instruction"'
+            )
+
+    if slug_lineno is None:
+        violations.append("missing `## slug: <task-slug>` subheader")
+    else:
+        if not slug_value:
+            violations.append(f"line {slug_lineno}: slug value is empty")
+        elif slug_value.lower() == "high priority instruction":
+            violations.append(
+                f"line {slug_lineno}: slug must never be literal words \"High Priority Instruction\""
+            )
+        elif slug_value == "high-priority-instruction":
+            violations.append(
+                f"line {slug_lineno}: slug must be derived from task subject, never `high-priority-instruction`"
+            )
+        elif not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug_value):
+            violations.append(
+                f"line {slug_lineno}: slug value must be lowercase-hyphenated (found `{slug_value}`)"
+            )
+
+    return violations, task_lineno, slug_lineno
 
 
-def check_slot_order(numbered, slug_lineno):
+def check_slot_order(numbered, task_lineno, slug_lineno):
     violations = []
     title_lineno = numbered[0][0] if numbered else None
     actionable = _find_header(numbered, ACTIONABLE_HEADER)
@@ -151,7 +166,8 @@ def check_slot_order(numbered, slug_lineno):
             violations.append(f"missing {name} section")
     ordered = [
         ("title line", title_lineno),
-        ("`## slug`", slug_lineno),
+        ("`## task:`", task_lineno),
+        ("`## slug:`", slug_lineno),
         ("`# Actionable Items`", actionable),
         ("`## Must follow`", must_follow),
         ("`## Additional Instructions`", additional),
@@ -160,15 +176,16 @@ def check_slot_order(numbered, slug_lineno):
     for (prev_name, prev_n), (name, n) in zip(present, present[1:]):
         if n < prev_n:
             violations.append(f"slot order violated: {name} (line {n}) appears before {prev_name} (line {prev_n})")
-    if title_lineno is not None and slug_lineno is not None:
+    first_sub = task_lineno if task_lineno is not None else slug_lineno
+    if title_lineno is not None and first_sub is not None:
         between = [
             line for n, line in numbered
-            if title_lineno < n < slug_lineno
+            if title_lineno < n < first_sub
             and line.strip() and not line.strip().startswith("#")
         ]
         if not between:
             violations.append(
-                f"`## slug` (line {slug_lineno}) must come after the verbatim input, "
+                f"`## task:` / `## slug:` (line {first_sub}) must come after the verbatim input, "
                 f"not directly after the title line (line {title_lineno})"
             )
     return violations
@@ -220,9 +237,9 @@ def validate(text):
     violations = []
     violations.extend(check_no_fences(numbered))
     violations.extend(check_title(numbered))
-    slug_violations, slug_lineno = check_slug_block(numbered)
+    slug_violations, task_lineno, slug_lineno = check_task_and_slug_blocks(numbered)
     violations.extend(slug_violations)
-    violations.extend(check_slot_order(numbered, slug_lineno))
+    violations.extend(check_slot_order(numbered, task_lineno, slug_lineno))
     actionable_lineno = _find_header(numbered, ACTIONABLE_HEADER)
     violations.extend(check_fixed_items(numbered, actionable_lineno))
     violations.extend(check_suffix_and_instructions(text))

@@ -13,9 +13,9 @@
 2. **Mobile Prompt Single-Line Output**: Ensure mobile Letterly prompts output strictly ONE continuous single-line paragraph with zero newlines.
 3. **Muse SSH Key Generation & Identity Token**: Implement `<email>-muse<muse-sequence>-<operator-name>` identity, account email ingestion (or prompt fallback), and `gitmap ssh create` command.
 4. **Muse Key Delivery Protocol (Fix Format Error)**: Total ban on pasting keys in chat; require downloadable file delivery (`~/.ssh/<identity>.pub`) and explicit key type designation (Authentication vs Signing).
-5. **Agent Heat Map & Action Decision Logging**: Mandate `gitmap agent log` in `execute-parent-task-with-n-steps-v6` and enhance `gitmap heatmap` command in `D:\work\gitmap`.
+5. **Agent Heat Map & Action Decision Logging**: Mandate `gitmap agent log` in `execute-parent-task-with-n-steps-v6` and enhance `gitmap heatmap` command in `gitmap`.
 6. **Dual Installers**: Create `general-install-config.json`, `general-install.ps1`, and `general-install.sh`, and update `install.ps1` with `-General` support.
-7. **GitMap General Installation Command**: Implement `gitmap cg install general` / `gitmap cd general` in `D:\work\gitmap`.
+7. **GitMap General Installation Command**: Implement `gitmap cg install general` / `gitmap cd general` in `gitmap`.
 
 ---
 
@@ -23,7 +23,7 @@
 
 - [x] Subtask 1: Letterly prompts and skills re-sequencing (Item 1 pull first, Item 2 spec, Item 3 gitmap search, Item 4 relative paths), create `letterly-git-pull-first` skill, enforce mobile one-liner, and update `check-letterly-format.py`.
 - [x] Subtask 2: Muse master prompt and onboarding spec updates (SSH identity format, account email auto-ingestion, gitmap ssh create commands, key delivery file protocol, key type designation).
-- [x] Subtask 3: Heat map action logging in `execute-parent-task-with-n-steps-v6` and `gitmap heatmap` CLI command in `D:\work\gitmap`.
+- [x] Subtask 3: Heat map action logging in `execute-parent-task-with-n-steps-v6` and `gitmap heatmap` CLI command in `gitmap`.
 - [x] Subtask 4: Dual installers: `general-install-config.json`, `general-install.ps1`, `general-install.sh`, and `install.ps1` `-General` flag.
 - [x] Subtask 5: GitMap CLI integration for `gitmap cg install general` / `gitmap cd general`.
 - [x] Subtask 6: Linter validation, tests, consolidation, and release ceremony.
