@@ -70,6 +70,10 @@ WAVES = ceil(subtasks / (A x H))
    - Commit and push atomically via GitMap using hyphen format (no colons in arguments):
      - Feature: `gitmap cpf "<module> - <summary>"`
      - Bug Fix: `gitmap cpb "<module> - <summary>"`
+   - Large files & repo-cache sequence (always in force):
+     - `repo-cache/NN-<slug>`: `NN` is a sequence number (`01`, `02`, …) — a user-written `xx` means "the next sequence number", never a literal `xx` folder.
+     - Videos over 15 MB never live raw in git: `split -b 3m -d <name>.mp4 <folder>/<name>.part` → `<name>.part00…` + `README.txt` (Windows `copy /b`, macOS/Linux `cat <name>.part* > <name>.mp4` reassembly); verify byte-identical (`cmp`/`sha256sum`) BEFORE `git rm` of the original. Never `zip -s` split archives — proven corrupt in this environment.
+     - After every push: verify with `git ls-remote origin <branch>` and require a clean `git status`.
    - Report briefly and ask for the next task.
 
 ### 3. Muse Memory IO (Memory Re-sync Protocol)

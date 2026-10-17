@@ -17,7 +17,7 @@ COMMIT_STYLE    = atomic-push  # one atomic commit per task, pushed immediately
 ```
 
 > [!IMPORTANT]
-> Prompt Version: 6.2.1
+> Prompt Version: 6.2.2
 > Date: 2026-10-17
 > Runtime: Google Antigravity 2.0 (IDE and CLI)
 > Location: `01-prompts/27-muse-prompts/05-muse-master-prompt-v2.md`
@@ -352,6 +352,7 @@ After the breakdown is shown, complete the work with **multiple concurrent agent
    - Feature: `gitmap cpf "<module> - <summary>"`
    - Bug Fix: `gitmap cpb "<module> - <summary>"`
    - Total ban on colons inside the message argument (GitMap already provides `Feature: ` / `Bug: `). TOTAL BAN on raw git commits (`git commit -m`).
+   - **Large-file & repo-cache gate:** `repo-cache/NN-<slug>` uses sequence numbers (`01`, `02`, …) — a user-written `xx` means "the next sequence number", never a literal `xx` folder. Videos over 15 MB never live raw in git: split with `split -b 3m -d <name>.mp4 <folder>/<name>.part` (+ `README.txt` with reassembly instructions), verify byte-identical (`cmp`/`sha256sum`) BEFORE `git rm` of the original, then commit the parts. Never `zip -s` split archives — proven corrupt in this environment. After push: `git ls-remote origin <branch>` + clean `git status`.
 4. **Report briefly, then ask for the next task** (TURBO-05). Save durable learnings to memory first (GUARD-08).
 5. **On blockers:** say what is blocked, what would unblock it, and continue all independent work.
 

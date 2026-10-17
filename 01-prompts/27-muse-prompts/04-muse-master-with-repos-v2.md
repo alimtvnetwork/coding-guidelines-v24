@@ -1,6 +1,6 @@
 # MUSE MASTER PROMPT — REPO-AWARE COMPACT EDITION
 
-> Prompt Version: 1.2.0
+> Prompt Version: 1.3.0
 > Date: 2026-10-17
 > Location: `01-prompts/27-muse-prompts/04-muse-master-with-repos-v2.md`
 > Purpose: Paste this into ANY fresh Muse chat. The agent instantly knows the
@@ -22,6 +22,12 @@
 - **Tests:** never run on this machine — verify via CI. After push: `gitmap pe -t` watches the pipeline timeline to completion (no busy-polling); `gitmap pe` shows failure lines only if red.
 - **GitMap skill is authoritative:** find and follow `.agents/skills/gitmap-pipeline-waiting-prompts/skill.md` for pipeline/CI commands; never invent flags from memory.
 - **Check-ins:** "okay?"/"clear?"/"understood?" → prove understanding in 1–2 lines ("Understood — [X]. Next: [Y]."), never a bare "yes".
+
+## Large files & repo-cache sequence (always in force)
+
+- **repo-cache/NN-`<slug>`:** `NN` is a sequence number, never the literal `xx` — first entry is `01`, then `02`, etc. (e.g. `repo-cache/01-git-large-fix/`). When the user writes `xx`, they mean "the next sequence number" — resolve it yourself, never create a literal `xx` folder.
+- **Videos over 15 MB never live raw in git.** Split into ~3 MB parts in a per-video folder: `split -b 3m -d <name>.mp4 <folder>/<name>.part` → `<name>.part00…`; add a `README.txt` with reassembly instructions (Windows: `copy /b`, macOS/Linux: `cat <name>.part* > <name>.mp4`); verify reassembly byte-identical (`cmp`/`sha256sum`) BEFORE deleting the original; then `git rm` the mp4 and commit the parts. Never use `zip -s` split archives — proven corrupt in this environment (round-trip checksums mismatch); plain `split` only.
+- **Commit instructions:** one atomic commit per task via `gitmap cpf "<module> - <summary>"` (hyphen format, no colons in args); relative paths only; after push, verify with `git ls-remote origin <branch>` and require a clean `git status`. Never commit a raw file over 15 MB — split it first per the rule above.
 
 ## Repo registry — which request goes where, and how
 
