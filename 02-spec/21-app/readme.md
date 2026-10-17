@@ -94,6 +94,7 @@ All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent e
 | [`gitmap-sync-and-agent-task-engine/`](gitmap-sync-and-agent-task-engine/) | GitMap Fleet Synchronization & Native SQLite Agent Task Engine | Application Spec | Active |
 | [`coding-guideline-skills-sync-and-prompt-updates/`](coding-guideline-skills-sync-and-prompt-updates/) | GitMap Skills Re-read, Prompts+Skills Sync Mechanism & Pull-First Prompt Versions | Application Spec | Active |
 | [`coding-guideline-and-skill-optimization/`](coding-guideline-and-skill-optimization/) | Icon Generation Modernization, Flat Commit Integration, Skill Archival & 400-Step Lifecycle | Application Spec | Active |
+| [`muse-prompt-and-git-repository-fix-instructions/`](muse-prompt-and-git-repository-fix-instructions/) | Muse Git Repository Fix & Repo-Cache Troubleshooting, 3-Agent Swarm Concurrency & V6 Extreme Understood Mandate | Application Spec | Active |
 
 ---
 
