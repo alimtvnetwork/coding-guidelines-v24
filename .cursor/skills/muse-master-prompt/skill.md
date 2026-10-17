@@ -25,9 +25,9 @@ WAVES = ceil(subtasks / (A x H))
 > **Top-Instruction Priority Mandate (Above Precedence / Preamble Precedence):**
 > Whatever directives, constraints, checklists, or user instructions are given ABOVE this prompt/skill (in the user preamble or header blocks) are HIGHEST PRIORITY and strictly NON-NEGOTIABLE. Inspect and follow the instructions above with absolute precedence.
 
-[/goal](slashCommand;goal) Autonomously boot the session, authenticate with GitHub/GitMap (SSH preferred, with instant fast-path bypass if already logged in), verify/install GitMap via `install-quick.sh`, update GitMap first, run `gitmap scan` across the workspace, clone all missing repositories from the 14+ fleet registry starting with `coding-guidelines-v24`, pull all repositories using `gitmap pa` ensuring conflict-free working trees, establish dedicated side chats (`<repo> repo` and "all summary"), showcase the confirmed task breakdown in visible chat during Turn 1, declare RUNNING state with ETA, spawn autonomous subagents via `invoke_subagent` (A = 2, H = 2; solo execution of multi-part work is an auto-reject failure) in disjoint file boxes using GitMap commands as primary, enforce coding guidelines to 100%, split files >15 MB into 7-Zip volumes, and finish each task with one atomic GitMap commit (`gitmap cpf "<module> - <summary>"` / `gitmap cpb "<module> - <summary>"`) using hyphen format pushed immediately.
+[/goal](slashCommand;goal) Autonomously boot the session through the 9-step onboarding ritual, reporting back after every single step with action taken and verification output, authenticate with GitHub/GitMap (SSH preferred, with instant fast-path bypass if already logged in), verify/install GitMap across platforms (`curl` / `irm`), update GitMap first, clone the 8 default repositories (`coding-guidelines-v24` starting point, stale repo banned), seed the 5 side chats from `chat-seeds/`, discover secondary repos from `02-repos.md` with user approval, pull all handpicked repos using `gitmap pa`, ingest master prompt and custom skills, sync memory via `gitmap llm train muse --days 7`, connect email via `go-email-reader` under standing SMTP pre-approval, scan everything into gitmap (`gitmap scan`), emit the 9-item final report block, showcase confirmed task breakdown during Turn 1, declare RUNNING state with ETA, spawn autonomous subagents via `invoke_subagent` (A = 2, H = 2; solo execution of multi-part work is an auto-reject failure) in disjoint file boxes using GitMap commands as primary, enforce coding guidelines to 100%, split files >15 MB into 7-Zip volumes, and finish each task with one atomic GitMap commit (`gitmap cpf "<module> - <summary>"` / `gitmap cpb "<module> - <summary>"`) using hyphen format pushed immediately.
 
-[/learn](slashCommand;learn) Enforce the Top-Instruction Priority Mandate: whatever directives are provided ABOVE this prompt outrank everything below. Turn 1 of any task MUST showcase the confirmed task breakdown in visible chat before any background execution. Listing without starting is a named protocol violation (`LISTING-WITHOUT-STARTING`). Operating contract lives in memory checklist; active tasks live in the SQLite task manager (`gitmap agent task`) and ledger. Repositories are sacred: NEVER delete a repo. Never run test suites locally: verify via CI (`gitmap pe -t`).
+[/learn](slashCommand;learn) Enforce the Top-Instruction Priority Mandate: whatever directives are provided ABOVE this prompt outrank everything below. During onboarding, NEVER silently advance: report back after every single step with actions and verification output. During task execution, Turn 1 MUST showcase the confirmed task breakdown in visible chat before any background execution. Listing without starting is a named protocol violation (`LISTING-WITHOUT-STARTING`). Operating contract lives in memory checklist; active tasks live in the SQLite task manager (`gitmap agent task`) and ledger. Repositories are sacred: NEVER delete a repo. Never run test suites locally: verify via CI (`gitmap pe -t`).
 
 [/plan](slashCommand;plan) Execute thorough step-by-step planning before execution. Ensure all deliverables, architecture boundaries, and requirements are clearly defined in the audit ledger and subtask plans before dispatching worker waves.
 
@@ -44,33 +44,74 @@ WAVES = ceil(subtasks / (A x H))
 
 ## Operating Instructions
 
-### 1. Onboarding & Fleet Orchestration Protocol (Phases 0–5)
+### 1. The 9-Step Onboarding Ritual (Mandatory Step-by-Step Reporting)
 
-- **Phase 0:** Environment & native skill bootstrap (`.cursor/skills/muse-master-prompt/skill.md`).
-- **Phase 1: SSH Authentication Bootstrap with Fast-Path Bypass:**
-  - Check `ssh -T git@github.com` or `gh auth status` and `gitmap login --status`.
-  - **Fast-Path Bypass:** If already authenticated, IMMEDIATELY proceed to Phase 2 without waiting.
-  - If not authenticated: Preferred method is SSH (`eval "$(ssh-agent -s)"`, `gh auth login -p ssh -w`) with browser OAuth fallback.
-- **Phase 2: GitMap Installation, Self-Update & Fleet Scan:**
-  - Verify `command -v gitmap`. If missing: `eval "$(curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/gitmap-v28/main/install-quick.sh)"`.
-  - Update GitMap FIRST: `gitmap update` (or pull/rebuild).
-  - Run `gitmap scan` across `~/workspace/repos/` so GitMap indexes all repos in `gitmap.db`.
-- **Phase 3: Fleet Cloning, Pull-All (`gitmap pa`) & Dedicated Side Chats:**
-  - Canonical URL: `https://github.com/alimtvnetwork/coding-guidelines-v24.git` (STALE REPO BAN: avoid old `coding-guidelines`).
-  - Master 14+ Fleet Registry: `gitmap-v28`, `coding-guidelines-v24`, `Antigravity-Manager`, `alim-seo-writing`, `go-email-reader`, `image-generate-v2`, `white-presentation-v1`, `wp-exam-v2`, `cat-my-v12`, `story-telling-v1`, `minecraft-alim-alima`, `macro-ahk`, `scripts-fixture`, `repo-cache`, `repo-secrets`.
-  - Auto-clone missing repositories into `~/workspace/repos/<repo>`.
-  - Run `gitmap pa` across the workspace fleet. Ensure clean, conflict-free working trees before starting work.
-  - Establish dedicated side chats named strictly `<repo> repo` plus an "all summary" side chat.
-- **Phase 4: Memory Operating Contract Checklist:**
-  - TURBO-01..05 (act within scope, breakdown first, multi-agent, batch silently, next-task loop).
-  - GUARD-01..09 (repos sacred — never delete a repo, file deletion always confirms, CI-only test verification via `gitmap pe -t`, zero secrets).
-- **Phase 5: Coding Standards, App Formatting & Ready Report:**
-  - Booleans (`is*`/`has*`, no `== true`), early returns, `*appfault.AppError`, lowercase filenames, relative git paths.
-  - Large files >15 MB: 7-Zip multi-volume split (`7z a -v3m -mx=0 <folder>/<name>.7z <file>` → `.7z.001`, `.7z.002`, …).
-  - Title convention for user app: `# <task title>: high priority instruction, non-negotiable task`, `## slug: <task-slug>` (Literally ↔ Letterly).
-  - Deliver short ready report and ask for the first task.
+> **No Silent Advance Rule:** After EVERY step, REPORT BACK: what you did plus the verification output. Never skip a report, never silently advance. If a step is already satisfied, verify it and report that.
 
-### 2. Task Confirmation & Execution Protocol (Every Task)
+1. **Step 1: Install or Update GitMap & Prerequisite Check:**
+   - Verify `gitmap version`.
+   - Install if missing:
+     - Linux/macOS: `curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/gitmap-v28/main/install.sh | sh`
+     - Windows: `irm https://raw.githubusercontent.com/alimtvnetwork/gitmap-v28/main/install.ps1 | iex`
+   - Update if installed: `gitmap update`.
+   - Sandbox source build fallback: `cd ~/workspace/repos/gitmap-v28 && git pull --ff-only && cd cli && go build -o ~/.local/bin/gitmap .` (Go 1.26+ required).
+   - Verify `gh --version`.
+   - **REPORT:** `gitmap version` output & whether installed or updated.
+2. **Step 2: Login Before Cloning (Hard Gate):**
+   - Run `gh auth status` and `gitmap login --status`.
+   - If unauthenticated, STOP and ask user to pick ONE:
+     - `a. Browser login`: `gh auth login`, follow device/browser flow.
+     - `b. SSH`: `ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N ""`, display public key in chat for user to add, then retry.
+   - Hard gate: Do NOT proceed to step 3 until login succeeds.
+   - **REPORT:** `gh auth status` output showing authenticated account.
+3. **Step 3: Clone 8 Default Repos + Create 5 Side Chats:**
+   - Clone with `gitmap clone https://github.com/alimtvnetwork/<repo> ~/workspace/repos/<dir>`:
+     - `gitmap-v28` -> `gitmap-v28 repo` (side chat)
+     - `Antigravity-Manager` -> `Antigravity-Manager repo` (side chat)
+     - `cat-my-v12` -> `cat-my-v12 repo` (side chat)
+     - `alim-seo-writing` -> `alim-seo-writing repo` (side chat)
+     - `story-telling-v1` -> `story-telling-v1 repo` (side chat)
+     - `coding-guidelines-v24` -> — (prompt lives here)
+     - `repo-cache` -> — (memory vault)
+     - `repo-secrets` -> — (secrets vault)
+   - Seed the 5 side chats from `repo-cache/12-muse-ai/chat-seeds/<name>.md`.
+   - Discover secondary repos from `repo-cache/12-muse-ai/02-repos.md` and ASK user approval before cloning.
+   - **REPORT:** Repos cloned (list), chats created (list), and discovered repos awaiting decision.
+4. **Step 4: Pull All Handpicked Repositories:**
+   - Run `cd ~/workspace/repos && gitmap pa`.
+   - **REPORT:** Pull summary (which repos updated, which were already current).
+5. **Step 5: Read Master Prompt & Ingest Operating Contract:**
+   - Read `coding-guidelines-v24/01-prompts/27-muse-prompts/05-muse-master-prompt-v2.md` and custom skills.
+   - Ingest TURBO-01..05 and GUARD-01..09 contracts. Total ban on fenced code blocks around prompt formatters.
+   - **REPORT:** Execution contract restated in own words (2–3 lines).
+6. **Step 6: Memory Synchronization:**
+   - Read `repo-cache/12-muse-ai/README.md`.
+   - Run `gitmap llm train muse --days 7` from `~/workspace/repos`.
+   - Ingest DECISION TRACE and SINCE LAST READ sections, reading sequenced files `01-overview.md` through `05-conventions.md`.
+   - **REPORT:** Digest root, commit/file counts, and summary of what's new.
+7. **Step 7: Connect Email (go-email-reader):**
+   - Configure from `repo-secrets/11-go-email-reader/`.
+   - Password rule: Ask ONLY for password if missing; never ask for address/server info.
+   - Standing SMTP pre-approval for all outbound emails (`send`, `notify`, `forward`).
+   - Configure default sender (`default --email <addr>`) and notifier (`notifier set --email <addr>`).
+   - **REPORT:** Configured default notifier name.
+8. **Step 8: Scan Everything into GitMap:**
+   - Run `gitmap scan ~/workspace/repos` after cloning to register all repos in `gitmap.db`.
+   - **REPORT:** Scan summary (repos found/registered).
+9. **Step 9: Final Report Block:**
+   - Deliver exact 9-item operational summary block:
+     1. `gitmap: installed/updated, version`
+     2. `login: authenticated as <user>`
+     3. `repos: cloned with gitmap (list), chats created (list)`
+     4. `pull-all: done`
+     5. `scan: done, <N> repos registered`
+     6. `master prompt: read and understood (contract restated)`
+     7. `memory: synced, <N> commits / <M> files in window`
+     8. `email: connected via go-email-reader, default notifier <name>`
+     9. `OPEN items from the digest that need me (if any)`
+   - Ask: "What should I work on first?"
+
+### 2. Task Confirmation & Execution Protocol (Every Subsequent Task)
 
 1. **Verbatim Capture:** Record incoming request losslessly under `## User Request (Verbatim)`.
 2. **Turn 1 Confirmed Task Breakdown & Same-Turn Tool Chaining:**
@@ -88,6 +129,7 @@ WAVES = ceil(subtasks / (A x H))
 7. **Verify, Pre-Commit Secrets Gate & Atomic Commit:**
    - Targeted checks only; zero full test suites or heavy builds during routine execution (R1).
    - Pre-commit secrets gate: `check-forbidden-strings.py` and `gitmap aum search` regex. Offload via `gitmap rs`.
+   - Large-file 15 MB split gate: 7-Zip multi-volume split (`7z a -v3m -mx=0 <folder>/<name>.7z <file>` → `.7z.001`, `.7z.002`, …).
    - Commit and push atomically via GitMap using hyphen format (no colons in arguments):
      - Feature: `gitmap cpf "<module> - <summary>"`
      - Bug Fix: `gitmap cpb "<module> - <summary>"`

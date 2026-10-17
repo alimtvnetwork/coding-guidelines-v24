@@ -29,6 +29,6 @@ Consolidate all separate Muse prompts in category `27-muse-prompts` (`01-muse-ma
 
 ## 3. Subtasks Breakdown
 
-- [01-spec-and-architecture.md](subtasks/19-unified-muse-master-prompt-v6/01-spec-and-architecture.md): Authored canonical architecture spec and acceptance criteria in `02-spec/21-app/16-unified-muse-master-prompt-v6/`.
-- [02-unified-master-prompt.md](subtasks/19-unified-muse-master-prompt-v6/02-unified-master-prompt.md): Author the consolidated master prompt in `01-prompts/27-muse-prompts/01-muse-master-prompt.md` and harmonize `05-muse-master-prompt-v2.md`.
-- [03-skills-and-catalogs.md](subtasks/19-unified-muse-master-prompt-v6/03-skills-and-catalogs.md): Update companion skills and sync index catalogs.
+- [01-spec-and-architecture.md](../subtasks/19-unified-muse-master-prompt-v6/01-spec-and-architecture.md): Authored canonical architecture spec and acceptance criteria in `02-spec/21-app/16-unified-muse-master-prompt-v6/`.
+- [02-unified-master-prompt.md](../subtasks/19-unified-muse-master-prompt-v6/02-unified-master-prompt.md): Author the consolidated master prompt in `01-prompts/27-muse-prompts/01-muse-master-prompt.md` and harmonize `05-muse-master-prompt-v2.md`.
+- [03-skills-and-catalogs.md](../subtasks/19-unified-muse-master-prompt-v6/03-skills-and-catalogs.md): Update companion skills and sync index catalogs.
