@@ -157,25 +157,39 @@ gitmap login --web
 The agent provides the one-time code and device authentication URL, waiting until the user approves in their browser.
 
 #### Execution for Option (b) — SSH Key Generation:
+
+1. **Interactive Variable Ingestion:**
+   The SSH key comment token and Git author identity MUST strictly follow:
+   `<email>-muse<muse-sequence>-<operator-name>`
+   *(e.g., `alex.tone@company.com-muse-10-opRoden` or `alex.john@company.com-muse-10-opRoden`)*
+
+   If `<email>`, `<muse-sequence>`, or `<operator-name>` are unknown, **STOP AND ASK THE OPERATOR** directly before executing key generation:
+   > *"Please provide the 3 SSH identity variables: (1) your email address, (2) Muse sequence number, and (3) operator name (format: `<email>-muse<sequence>-<operator-name>`)."*
+
+2. **Git User Configuration & Key Generation Sequence:**
 ```bash
-# 1. Start agent
+# 1. Configure Git global user identity
+git config --global user.email "<email>"
+git config --global user.name "<operator-name> (Muse <muse-sequence>)"
+
+# 2. Start agent
 eval "$(ssh-agent -s)"
 
-# 2. Check or generate ed25519 key
+# 3. Check or generate ed25519 key with exact comment token
 if [ ! -f ~/.ssh/id_ed25519 ]; then
-  ssh-keygen -t ed25519 -C "muse-agent" -N "" -f ~/.ssh/id_ed25519
+  ssh-keygen -t ed25519 -C "<email>-muse<muse-sequence>-<operator-name>" -N "" -f ~/.ssh/id_ed25519
 fi
 
-# 3. Add key to agent
+# 4. Add key to agent
 ssh-add ~/.ssh/id_ed25519
 
-# 4. Display public key for GitHub registration
+# 5. Display public key for GitHub registration
 cat ~/.ssh/id_ed25519.pub
 
-# 5. Add to GitHub via CLI (if token available) or prompt user
-gh ssh-key add ~/.ssh/id_ed25519.pub --title "muse-agent" || true
+# 6. Add to GitHub via CLI (if token available) or prompt user
+gh ssh-key add ~/.ssh/id_ed25519.pub --title "<email>-muse<muse-sequence>-<operator-name>" || true
 
-# 6. Verify SSH connectivity
+# 7. Verify SSH connectivity
 ssh -T git@github.com
 ```
 
