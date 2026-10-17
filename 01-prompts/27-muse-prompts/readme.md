@@ -32,13 +32,14 @@ The master prompts [`01-muse-master-prompt.md`](01-muse-master-prompt.md)
 (6.2.1) carry a "Muse Memory IO" section (§11). The private vault repo
 `alimtvnetwork/repo-secrets` holds a 7-day rolling condensed memory digest
 under its `Muse/` folder (sequenced `README.md`, `01-overview.md` →
-`05-conventions.md`, `chat-seeds/*.md`, Muse/last-read.md checkpoint).
+`05-conventions.md`, `chat-seeds/*.md`); the last-read watermark is tracked
+by gitmap itself, never in an MD file.
 
 When the user says **`Muse memory IO read`** (in ANY chat), the session runs
-the say-READ protocol: clone (or `git pull --ff-only`) repo-secrets into the
-work-folder root, diff vs the Muse/last-read.md checkpoint, read the
-new/updated sequenced files, summarize changes, recreate the last-5-days chats
-from `Muse/chat-seeds/*.md`, and update the checkpoint.
+the say-READ protocol: `gitmap llm train muse --days 7` from the work-folder
+root (clone-or-pull + terminal summary), read the SINCE LAST READ section,
+read the new/updated sequenced files, summarize changes, and recreate the
+last-5-days chats from `Muse/chat-seeds/*.md`.
 
 Two standing rules travel with the protocol:
 

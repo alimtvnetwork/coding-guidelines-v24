@@ -450,25 +450,28 @@ summarize this prompt back at length. One short ready message, then the question
 The private vault repo `alimtvnetwork/repo-secrets` carries a 7-day rolling
 condensed memory digest under its `Muse/` folder: sequenced files
 `README.md`, `01-overview.md`, `02-repos.md`, `03-chats.md`,
-`04-new-conversations.md`, `05-conventions.md`, plus `chat-seeds/*.md` and the
-Muse/last-read.md read checkpoint. This protocol re-syncs any session.
+`04-new-conversations.md`, `05-conventions.md`, plus `chat-seeds/*.md`.
+The last-read watermark is tracked by gitmap itself — never in an MD file.
+This protocol re-syncs any session.
 
 ### The "say READ" trigger
 
 When the user says **`Muse memory IO read`** (in ANY chat), run this protocol:
 
-1. **Sync the vault:** clone `alimtvnetwork/repo-secrets` into the work-folder
-   root if absent; otherwise `git pull --ff-only` in it.
-2. **Diff vs checkpoint:** read Muse/last-read.md (the last-read checkpoint)
-   and diff against the sequenced files' current state.
+1. **Sync the vault:** run `gitmap llm train muse --days 7` from the
+   work-folder root — it clones `alimtvnetwork/repo-secrets` if absent,
+   else `git pull --ff-only`, then prints the terminal summary.
+2. **Diff vs checkpoint:** read the "SINCE LAST READ" section of the command
+   output — gitmap tracks the watermark (vault HEAD SHA + timestamp) itself.
 3. **Read the new/updated sequenced files** in order (`01-overview.md` →
-   `05-conventions.md`), catching up only on what changed since the checkpoint.
+   `05-conventions.md`), catching up only on what changed since the watermark.
 4. **Summarize what changed** to the user — short, with real numbers, commits,
    and version tags.
 5. **Recreate chats** from the last 5 days using `Muse/chat-seeds/*.md` (each
    seed carries repo context, a 3–8 bullet recap, and a "first prompt" block to
    rebuild context).
-6. **Update the checkpoint** in Muse/last-read.md with the new read date.
+6. **Checkpoint:** nothing to write — `gitmap llm train muse` saved the new
+   watermark automatically on this run.
 
 ### PRIVATE ITEMS RULE
 
