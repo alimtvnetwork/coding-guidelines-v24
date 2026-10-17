@@ -25,6 +25,30 @@ The canonical execution engine it delegates to is
 Its installable skill is `muse-master-prompt`
 (`.agents/skills/muse-master-prompt/skill.md`, mirrored in `.cursor/skills/`).
 
+## Muse Memory IO (Memory Re-sync Protocol)
+
+The master prompts [`01-muse-master-prompt.md`](01-muse-master-prompt.md)
+(6.1.1) and [`05-muse-master-prompt-v2.md`](05-muse-master-prompt-v2.md)
+(6.2.1) carry a "Muse Memory IO" section (§11). The private vault repo
+`alimtvnetwork/repo-secrets` holds a 7-day rolling condensed memory digest
+under its `Muse/` folder (sequenced `README.md`, `01-overview.md` →
+`05-conventions.md`, `chat-seeds/*.md`, Muse/last-read.md checkpoint).
+
+When the user says **`Muse memory IO read`** (in ANY chat), the session runs
+the say-READ protocol: clone (or `git pull --ff-only`) repo-secrets into the
+work-folder root, diff vs the Muse/last-read.md checkpoint, read the
+new/updated sequenced files, summarize changes, recreate the last-5-days chats
+from `Muse/chat-seeds/*.md`, and update the checkpoint.
+
+Two standing rules travel with the protocol:
+
+- **PRIVATE ITEMS RULE:** private repo lists, account names, and sensitive
+  references resolve FROM the repo cache (`Muse/` in repo-secrets) — never
+  hardcoded in prompts. Pointers only, never secret values.
+- **EMAIL RULE:** when a memory-IO read shows go-email-reader setup is needed,
+  ask the user ONLY for the email password — account, address, and server
+  config come from the encrypted store; never re-ask for non-secret info.
+
 ---
 
 ## Directory Index & Catalog
