@@ -98,6 +98,7 @@ All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent e
 | [`cg-execute-folder-synchronization-and-heatmap-integration/`](cg-execute-folder-synchronization-and-heatmap-integration/) | Coding Guidelines V6 Upgrade, Data Schema Verification & GitMap Heatmap Integration | Application Spec | Active |
 | [`letterly-prompts-heatmap-one-liner-integration/`](letterly-prompts-heatmap-one-liner-integration/) | Letterly Prompts Heatmap Telemetry One-Liner Integration & Dual Cursor Parity | Application Spec | Active |
 | [`cd-execute-prompt-and-skill-synchronization/`](cd-execute-prompt-and-skill-synchronization/) | CD Execute Prompt & Skill Synchronization: Map Dispatch & Handler Lookup, RCA & Step 0 Heatmap/RC Checks, V6 Suite Upgrade & Fleet Sync | Application Spec | Active |
+| [`mime-and-media-type-enum-architecture/`](mime-and-media-type-enum-architecture/) | MIME & Media Type Enum Architecture: Strongly-Typed Enum Standards, Blob/Clipboard/Header Refactoring, CG Execute Updates & Fleet Sync | Application Spec | Active |
 
 ---
 
