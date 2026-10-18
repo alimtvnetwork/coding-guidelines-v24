@@ -1,0 +1,20 @@
+{
+  "subtaskId": "sub-034500-task-04",
+  "taskCode": "Task-04",
+  "status": "DONE",
+  "agent": "Lead",
+  "checks": {
+    "checkRelativePaths": "PASS: 0 absolute paths or file:/// URIs across 3716 tracked files",
+    "checkForbiddenStrings": "PASS: 0 forbidden strings or secrets found",
+    "checkPromptsLoaded": "PASS: 263 prompts on disk in sync with 01-prompts/ index",
+    "checkParity": "PASS: 100% byte parity across 18 companion skill pairs (.agents/skills/ and .cursor/skills/) and 37 dual-prompt pairs (01-prompts/15-cg-execute/ and 01-prompts/v4/15-cg-execute/)",
+    "checkSequenceIntegrity": "PASS: zero sequence integrity or link errors across task files"
+  },
+  "acceptanceCriteria": {
+    "ac1": "All 37 prompts modernized with V6 orchestration, Step 0 Data Schema Verification, and GitMap Heatmap suite",
+    "ac2": "All 18 companion skills updated with PascalCase columns, 3-Tier DB Location tables, and executable inspection commands",
+    "ac3": "app-db-architecture column naming corrected from camelCase to PascalCase",
+    "ac4": "Zero external repo sync performed (strict local completion invariant)",
+    "ac5": "All linters exit 0 cleanly"
+  }
+}

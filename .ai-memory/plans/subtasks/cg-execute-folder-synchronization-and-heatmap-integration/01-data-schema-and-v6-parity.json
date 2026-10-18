@@ -1,0 +1,24 @@
+{
+  "task": "Task-01",
+  "status": "DONE",
+  "subtaskId": "sub-034446-task-01",
+  "agent": "Worker 01",
+  "filesChanged": [
+    "03-ai-scripts/47-upgrade-cg-execute-to-v6.py"
+  ],
+  "checks": "python 03-ai-scripts/47-upgrade-cg-execute-to-v6.py --verify -> exit 0 (37 prompts verified with 100% V6 parity); python linter-scripts/check-relative-paths.py -> exit 0; python linter-scripts/check-boolean-guidelines.py -> exit 0",
+  "acceptance": {
+    "ac1": "PASS: Header parameters standardized to N = 400, A = 3, H = 2, C = 30, Capacity = 6, Tree Swarm Hierarchy across upgrade templates",
+    "ac2": "PASS: Extreme Understood Turn-1 Showcase injected featuring 5 Mandatory Pillars and 4-part verification schema",
+    "ac3": "PASS: Step 0 Preflight & Data Schema Verification Gate embedded (gitmap agent task init --budget 400, --json, --ddl) with total ban on raw Python SQLite scripts",
+    "ac4": "PASS: Phase 1 Step 3 Brain & Comprehensive Roadmap Creation mandate injected as mandatory planning gate",
+    "ac5": "PASS: Section 3 GitMap High-Speed Command Primacy table enriched with full GitMap Heatmap suite (log, discuss, query, agent task)",
+    "ac6": "PASS: Section 7.2 Worker Brief enriched with Rule 9 Mandatory Heatmap Telemetry, 5-part Heatmap suite, and 3-Tier Database Location table",
+    "ac7": "PASS: Section 7.4 Immediate Dynamic Respawn & Join Protocol embedded for 100% duty cycle concurrency pinned at A = 3 active subagents",
+    "ac8": "PASS: Section 12 Banned Operations Checklist enriched with HEATMAP TELEMETRY & CONTENTION INSPECTION checkbox",
+    "ac9": "PASS: GitMap hyphen commit format without colons ('<module> - <summary>') and Mandatory Completion Invariant ('No Push = Not Done') enforced",
+    "ac10": "PASS: Prompt 31 suffix precedence preserved (Bottom-Instruction Priority Mandate and trailing divider anchor)"
+  },
+  "assumptions": [],
+  "blockers": []
+}

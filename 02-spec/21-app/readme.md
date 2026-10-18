@@ -95,6 +95,7 @@ All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent e
 | [`coding-guideline-skills-sync-and-prompt-updates/`](coding-guideline-skills-sync-and-prompt-updates/) | GitMap Skills Re-read, Prompts+Skills Sync Mechanism & Pull-First Prompt Versions | Application Spec | Active |
 | [`coding-guideline-and-skill-optimization/`](coding-guideline-and-skill-optimization/) | Icon Generation Modernization, Flat Commit Integration, Skill Archival & 400-Step Lifecycle | Application Spec | Active |
 | [`muse-prompt-and-git-repository-fix-instructions/`](muse-prompt-and-git-repository-fix-instructions/) | Muse Git Repository Fix & Repo-Cache Troubleshooting, 3-Agent Swarm Concurrency & V6 Extreme Understood Mandate | Application Spec | Active |
+| [`cg-execute-folder-synchronization-and-heatmap-integration/`](cg-execute-folder-synchronization-and-heatmap-integration/) | Coding Guidelines V6 Upgrade, Data Schema Verification & GitMap Heatmap Integration | Application Spec | Active |
 
 ---
 
