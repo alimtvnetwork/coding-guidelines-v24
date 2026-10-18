@@ -21,6 +21,7 @@ Format whatever input text is provided according to the exact high-priority exec
 9. Additional Instructions Mandate: Always append the relative paths directive under ## Additional Instructions: '- Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.'
 10. Step Budget Mandate: Execute within the 400-step lifecycle budget (Phase 1: 100 plan, Phase 2: 150 intermediate/archival, Phase 3: 150 implementation/sync).
 11. Don't output "```plaintext or ```markdown" ever please.
+12. Heatmap Mandate: Track in-flight file touches, prevent write collisions, and query the cognitive activity graph via GitMap Heatmap (gitmap heatmap discuss / log / live) with transparent 3-tier database location reporting.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
 
@@ -50,4 +51,5 @@ ${Input Text Verbatim}
 - Execute within the 400-step lifecycle budget: Phase 1 (Steps 1..100) planning and spec authoring, Phase 2 (Steps 101..250) sanitization, archival, and prerequisites, Phase 3 (Steps 251..400) worker swarm implementation, targeted checks, fleet synchronization, and atomic push.
 - [/plan](slashCommand;plan) first before doing the work to reduce the credits.
 - [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
+- Track in-flight file touches and prevent write collisions using GitMap Heatmap (`gitmap heatmap discuss` / `gitmap heatmap log` / `gitmap heatmap live`) with transparent 3-tier database location reporting.
 - Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.

@@ -26,3 +26,13 @@ This directory contains deterministic prompt transformation templates specifical
 4. **Standard Cursor Suffix:** All prompt files in this directory strictly carry the `-letterly-cursor.md` file suffix.
 5. **Strict Relative Git Paths Only:** Only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well.
 6. **400-Step Lifecycle Budget:** All execution prompts declare a continuous 400-step lifecycle budget self-loop (Phase 1: 100 plan, Phase 2: 150 intermediate/archival, Phase 3: 150 implementation/sync).
+7. **Heatmap Telemetry & Collision Prevention:** All formatters enforce tracking in-flight file touches, avoiding write collisions across concurrent subagents, and querying cognitive graphs via GitMap Heatmap (`gitmap heatmap discuss` / `gitmap heatmap log` / `gitmap heatmap live`) with transparent 3-tier database location reporting.
+
+## GitMap Heatmap One-Liner Integration
+
+All 11 prompts integrate the standardized GitMap Heatmap one-liner to track in-flight file touches, avoid write collisions across concurrent subagents ($A = 3$, Capacity = 6), and query cognitive activity graphs with transparent 3-tier database location reporting:
+
+- **Desktop Formatters (`02`, `03`, `04`, `05`, `06`, `08`, `09`, `10`, `11`):** Numbered Heatmap Mandate rule in the prompt specification plus an actionable directive bullet under `## Additional Instructions`.
+- **Mobile Formatters (`01`, `07`):** Embedded single-line directive within Step 7 and continuous single-line output template.
+- **Commands:** `gitmap heatmap discuss` / `gitmap heatmap log` / `gitmap heatmap live`.
+

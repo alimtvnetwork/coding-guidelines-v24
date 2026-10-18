@@ -1,0 +1,23 @@
+{
+  "subtaskId": "sub-040806-task-03",
+  "taskCode": "Task-03",
+  "title": "Quality Verification, Linters and Local Atomic Commit",
+  "agent": "Lead",
+  "status": "completed",
+  "evidence": "PASS exit 0, all 11 Letterly prompts and 11 Cursor mirrors updated with heatmap one-liner, golden tests and all linters passing cleanly",
+  "checks": {
+    "test_check_letterly_format": "PASS (8/8 tests exit 0)",
+    "check_relative_paths": "PASS (0 absolute paths across 3727 files, exit 0)",
+    "check_forbidden_strings": "PASS (0 forbidden strings or secrets, exit 0)",
+    "check_prompts_loaded": "PASS (263 prompts verified, exit 0)",
+    "check_sequence_integrity": "PASS (0 broken references in task deliverables)"
+  },
+  "acceptanceCriteria": {
+    "ac1": "All 11 prompts in 01-prompts/22-letterly/ contain GitMap Heatmap one-liner",
+    "ac2": "All 11 prompts in 01-prompts/23-cursor-prompts/ contain GitMap Heatmap one-liner with .cursor/skills/ links",
+    "ac3": "Mobile formatters embed heatmap concept in single-line paragraph",
+    "ac4": "Desktop formatters embed heatmap concept in ## Additional Instructions",
+    "ac5": "All linters and format tests exit 0",
+    "ac6": "Strict local completion invariant maintained (0 fleet sync)"
+  }
+}

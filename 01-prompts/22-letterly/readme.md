@@ -30,3 +30,12 @@ For Cursor environments requiring `.cursor/skills/` resolution, see [`../23-curs
 4. **Standard Letterly Suffix:** All prompt files in this directory strictly carry the `-letterly.md` file suffix.
 5. **Strict Relative Git Paths Only:** Only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well.
 6. **400-Step Lifecycle Budget:** All execution prompts declare a continuous 400-step lifecycle budget self-loop (Phase 1: 100 plan, Phase 2: 150 intermediate/archival, Phase 3: 150 implementation/sync).
+7. **Heatmap Telemetry & Write Collision Mandate:** All Letterly formatters embed the GitMap Heatmap one-liner (`gitmap heatmap discuss` / `gitmap heatmap log` / `gitmap heatmap live`) to track in-flight file touches, prevent write collisions across parallel agent swarms ($A = 3$, Capacity = 6), and transparently report 3-tier database locations.
+
+## GitMap Heatmap One-Liner Integration
+
+All 11 Letterly formatters enforce GitMap Heatmap integration:
+- **Desktop & Multi-Line Formatters (`02`–`06`, `08`–`11`):** Include the `Heatmap Mandate` in the numbered instructions and embed `- Track in-flight file touches and prevent write collisions using GitMap Heatmap (\`gitmap heatmap discuss\` / \`gitmap heatmap log\` / \`gitmap heatmap live\`) with transparent 3-tier database location reporting.` under `## Additional Instructions`.
+- **Mobile Single-Line Formatters (`01`, `07`):** Embed `track file touches and prevent write collisions using GitMap Heatmap (gitmap heatmap discuss / log / live); ` within the continuous single-line directives.
+- **3-Tier Database Reporting:** Enforces transparency across Host Root (`~/.gitmap/agent-root.db`), Repo-Cache (`repo-cache/.heatmap/<ai-slug>/<repo-slug>/heatmap.db`), and Local Task DB (`.ai-memory/temp-agents/<slug>/agent-task.db`).
+

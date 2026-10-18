@@ -22,6 +22,7 @@ Format whatever input text is provided according to the exact planning template 
 8. Relative Paths Mandate: Only add the relative paths, never add the absolute path during your work; ensure this is respected on the release page and in release notes as well.
 9. Additional Instructions Mandate: Always append the relative paths directive under ## Additional Instructions: '- Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.'
 10. Step Budget Mandate: Execute within the 400-step lifecycle budget, dedicating Phase 1 (Steps 1..100) to planning, spec authoring under 02-spec/21-app/<slug>/, and subtask decomposition under .ai-memory/plans/subtasks/<slug>/.
+11. Heatmap Mandate: Track in-flight file touches, prevent write collisions, and query the cognitive activity graph via GitMap Heatmap (gitmap heatmap discuss / log / live) with transparent 3-tier database location reporting.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
 
@@ -53,4 +54,5 @@ ${Input Text Verbatim}
 - Execute within the 400-step lifecycle budget: allocate Phase 1 (Steps 1..100) for planning, spec authoring, and subtask decomposition.
 - [/plan](slashCommand;plan) first before doing the work to reduce the credits.
 - [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
+- Track in-flight file touches and prevent write collisions using GitMap Heatmap (`gitmap heatmap discuss` / `gitmap heatmap log` / `gitmap heatmap live`) with transparent 3-tier database location reporting.
 - Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.

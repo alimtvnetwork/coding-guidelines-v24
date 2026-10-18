@@ -1,0 +1,27 @@
+{
+  "subtaskId": "sub-040806-task-02",
+  "taskCode": "Task-02",
+  "title": "Cursor Prompts Suite Heatmap One-Liner Mirror",
+  "agent": "Worker 02",
+  "status": "completed",
+  "evidence": "PASS exit 0, all 11 cursor prompts updated with heatmap one-liner",
+  "filesModified": [
+    "01-prompts/23-cursor-prompts/01-mobile-letterly-cursor.md",
+    "01-prompts/23-cursor-prompts/02-desktop-letterly-cursor.md",
+    "01-prompts/23-cursor-prompts/03-execute-n-steps-letterly-cursor.md",
+    "01-prompts/23-cursor-prompts/04-plan-letterly-cursor.md",
+    "01-prompts/23-cursor-prompts/05-release-letterly-cursor.md",
+    "01-prompts/23-cursor-prompts/06-cicd-fix-release-letterly-cursor.md",
+    "01-prompts/23-cursor-prompts/07-mobile-cicd-fix-letterly-cursor.md",
+    "01-prompts/23-cursor-prompts/08-run-letterly-cursor.md",
+    "01-prompts/23-cursor-prompts/09-execute-with-verification-letterly-cursor.md",
+    "01-prompts/23-cursor-prompts/10-execute-with-release-letterly-cursor.md",
+    "01-prompts/23-cursor-prompts/11-git-pull-first-letterly-cursor.md",
+    "01-prompts/23-cursor-prompts/readme.md"
+  ],
+  "validation": {
+    "relativePathsCheck": "PASS (exit 0)",
+    "checkLetterlyFormatTests": "PASS (8 tests, exit 0)",
+    "templateParity": "100% template alignment with 01-prompts/22-letterly/ preserving file;.cursor/skills/ links"
+  }
+}

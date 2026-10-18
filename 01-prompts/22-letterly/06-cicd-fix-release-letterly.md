@@ -24,6 +24,7 @@ Format whatever input text is provided according to the exact CI/CD fix and mino
 8. Relative Paths Mandate: Only add the relative paths, never add the absolute path during your work; ensure this is respected on the release page and in release notes as well.
 9. Additional Instructions Mandate: Always append the relative paths directive under ## Additional Instructions: '- Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.'
 10. Step Budget Mandate: Execute within the 400-step lifecycle budget (Phase 1: 100 plan/diagnosis, Phase 2: 150 intermediate fixes/rca, Phase 3: 150 verification/bump/push).
+11. Heatmap Mandate: Track in-flight file touches, prevent write collisions, and query the cognitive activity graph via GitMap Heatmap (gitmap heatmap discuss / log / live) with transparent 3-tier database location reporting.
 
 ${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
 
@@ -57,4 +58,5 @@ ${Input Text Verbatim}
 - Execute within the 400-step lifecycle budget: 100 plan, 150 intermediate/archival, 150 implementation/sync.
 - [/plan](slashCommand;plan) first before doing the work to reduce the credits.
 - [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap live telemetry, pipeline self-healing, and toolchain caching.
+- Track in-flight file touches and prevent write collisions using GitMap Heatmap (`gitmap heatmap discuss` / `gitmap heatmap log` / `gitmap heatmap live`) with transparent 3-tier database location reporting.
 - Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.

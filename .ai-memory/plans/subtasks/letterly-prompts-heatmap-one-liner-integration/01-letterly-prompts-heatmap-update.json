@@ -1,0 +1,27 @@
+{
+  "subtaskId": "sub-040806-task-01",
+  "taskCode": "Task-01",
+  "title": "Letterly Prompts Suite Heatmap One-Liner Update",
+  "agent": "Worker 01",
+  "status": "completed",
+  "evidence": "PASS exit 0, all 11 letterly prompts updated with heatmap one-liner",
+  "ownedFiles": [
+    "01-prompts/22-letterly/01-mobile-letterly.md",
+    "01-prompts/22-letterly/02-desktop-letterly.md",
+    "01-prompts/22-letterly/03-execute-n-steps-letterly.md",
+    "01-prompts/22-letterly/04-plan-letterly.md",
+    "01-prompts/22-letterly/05-release-letterly.md",
+    "01-prompts/22-letterly/06-cicd-fix-release-letterly.md",
+    "01-prompts/22-letterly/07-mobile-cicd-fix-letterly.md",
+    "01-prompts/22-letterly/08-run-letterly.md",
+    "01-prompts/22-letterly/09-execute-with-verification-letterly.md",
+    "01-prompts/22-letterly/10-execute-with-release-letterly.md",
+    "01-prompts/22-letterly/11-git-pull-first-letterly.md",
+    "01-prompts/22-letterly/readme.md"
+  ],
+  "validation": {
+    "test_check_letterly_format": "PASS (8 tests, exit 0)",
+    "check_relative_paths": "PASS (exit 0)",
+    "check_prompts_loaded": "PASS (exit 0)"
+  }
+}
