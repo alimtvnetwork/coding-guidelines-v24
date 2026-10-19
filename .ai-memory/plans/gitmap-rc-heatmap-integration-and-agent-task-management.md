@@ -7,7 +7,7 @@
 ## Execution Subtasks
 
 1. [x] **Subtask 01:** Architecture spec in `02-spec/21-app/gitmap-rc-heatmap-integration-and-agent-task-management/` and plan setup.
-2. [ ] **Subtask 02:** Enhance `01-prompts/14-execute/02-execute-parent-task-with-n-steps-v6.md` with RC heatmap commands, auto-creation of RC structure, task existence/resume diagnostics, prompt MD5 hash verification, and roadmap loop overview.
-3. [ ] **Subtask 03:** Update Letterly (`01-prompts/22-letterly/09-execute-with-verification-letterly.md`, `03-execute-n-steps-letterly.md`), CD/CG-execute, and Muse prompts with RC heatmap and agent continuation commands.
-4. [ ] **Subtask 04:** Synchronize skills across `.agents/skills/` and `.cursor/skills/` (`execute-parent-task-with-n-steps-v6`, `gitmap`, `muse-master-prompt`).
-5. [ ] **Subtask 05:** Verification, regression check, and minor version bump release ceremony (`v6.81.0`).
+2. [x] **Subtask 02:** Enhance `01-prompts/14-execute/02-execute-parent-task-with-n-steps-v6.md` with RC heatmap commands, auto-creation of RC structure, task existence/resume diagnostics, prompt MD5 hash verification, and roadmap loop overview.
+3. [x] **Subtask 03:** Update Letterly (`01-prompts/22-letterly/09-execute-with-verification-letterly.md`, `03-execute-n-steps-letterly.md`), CD/CG-execute, and Muse prompts with RC heatmap and agent continuation commands.
+4. [x] **Subtask 04:** Synchronize skills across `.agents/skills/` and `.cursor/skills/` (`execute-parent-task-with-n-steps-v6`, `gitmap`, `muse-master-prompt`).
+5. [x] **Subtask 05:** Verification, regression check, and minor version bump release ceremony (`v6.81.0`).
