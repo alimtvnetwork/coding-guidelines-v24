@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.80.0] - 2026-10-19
+
+### Added
+- Add generic Muse master prompt with GitMap suite, heatmap telemetry, and runner scripts
+
+---
+
 ## [v6.79.0] - 2026-10-17
 
 ### Added
