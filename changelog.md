@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.82.0] - 2026-10-19
+
+### Added
+- Upgrade Muse prompts to 400 steps with powerful write-execute directives and audit prompt-skill parity
+
+---
+
 ## [v6.81.0] - 2026-10-19
 
 ### Added
