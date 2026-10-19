@@ -122,10 +122,8 @@ WAVES = ceil(subtasks / (A x H))
 3. **RUNNING Declaration & 5-Minute Status Pings:**
    - Print `RUNNING — Task-01, Task-02 — ETA ~45 min`. Ping status every 5 minutes during execution. Total ban on `LISTING-WITHOUT-STARTING`.
 4. **Pull First in Target Repo:** Run `gitmap pull` (fallback `git pull`) before touching any files.
-5. **Heatmap Preflight & In-Flight Action Telemetry:** Check active write leases via `gitmap agent heatmap` to enforce One Owner Per File; log all cognitive exploration and edit decisions with rationale via `gitmap heatmap log` into `.ai-memory/heatmap.db`.
-6. **SQLite Task DB & Ledger Preflight:**
-   - Run `gitmap agent task init --name "<task name>" --budget 300`.
-   - Maintain human-readable `.ai-memory/temp-agents/<slug>/ledger.md`.
+5. **RC Heatmap Preflight, Automatic Creation & Roadmap Linkage:** If `repo-cache` (`rc`) or `.ai-memory/heatmap.db` does not exist, GitMap auto-provisions the split-db structure; check active write leases via `gitmap agent heatmap` (or `gitmap rc heatmap status`) to enforce One Owner Per File; link roadmap to `gitmap rc heatmap tree` for dynamic join without redundant reads; log all exploration and edit decisions with rationale via `gitmap heatmap log` into `.ai-memory/heatmap.db`.
+6. **SQLite Task DB, Existence Check & Prompt MD5 Hash Verification:** Run `gitmap agent task init --name "<task name>" --budget 300`. If task already exists, report parent task ID, active subagents, subtasks status, and touched files. Verify prompt MD5 hash to resume seamlessly or ingest updated directives. Maintain human-readable `.ai-memory/temp-agents/<slug>/ledger.md`.
 7. **Mandatory Multi-Agent Execution:**
    - Dispatch `A = 3` subagents in disjoint file boxes (`TypeName: "research"` for discovery, `TypeName: "self"` for execution) with immediate dynamic respawn.
    - Worker Git Ban: Subagents NEVER run git commands (`git add`, `git commit`, `git status`) to avoid `.git/index.lock` collisions.

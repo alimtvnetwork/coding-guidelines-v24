@@ -7,11 +7,11 @@
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.80.0",
+  "Version": "6.81.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "8a804cfd53beb693ca76e77789a3a2c77f872c53",
+  "LastCommitSha": "8e59f2080488dd2cdf9027fa33e9a340efbe635c",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -56,20 +56,20 @@
     "${TARGET_PREFIX}/19-plan-spec-steps-v2.md",
     "${TARGET_PREFIX}/20-audit-app-spec.md"
   ],
-  "version": "6.80.0",
+  "version": "6.81.0",
   "updated": "2026-10-19",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "8a804cfd53beb693ca76e77789a3a2c77f872c53",
-    "shortSha": "8a804cf",
-    "branch": "release/v6.80.0"
+    "sha": "8e59f2080488dd2cdf9027fa33e9a340efbe635c",
+    "shortSha": "8e59f20",
+    "branch": "main"
   },
   "stats": {
-    "totalFiles": 776,
-    "totalLines": 180364,
+    "totalFiles": 777,
+    "totalLines": 180426,
     "totalFolders": 24,
-    "totalBytes": 7309445,
+    "totalBytes": 7313943,
     "rootFiles": 6
   },
   "folders": [
@@ -329,9 +329,9 @@
       "status": null,
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 91,
-      "lineCount": 14256,
-      "byteCount": 926294
+      "fileCount": 92,
+      "lineCount": 14318,
+      "byteCount": 930792
     },
     {
       "path": "22-app-issues",

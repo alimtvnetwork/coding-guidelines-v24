@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.81.0] - 2026-10-19
+
+### Added
+- GitMap RC heatmap integration, agent task existence reporting, and prompt MD5 hash verification
+
+---
+
 ## [v6.80.0] - 2026-10-19
 
 ### Added

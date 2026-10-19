@@ -517,10 +517,13 @@ Initialize task tracking: `gitmap agent task init --name "<task name>" --budget 
 ### Step 2.7 — Pull First in Target Repo
 Before modifying ANY file, run `gitmap pull` (fallback `git pull`) in that repository. Never edit before pull succeeds.
 
-### Step 2.8 — Heatmap Preflight & In-Flight Action Telemetry
-1. **Contention & Lease Hotspot Check:** Before editing shared files, inspect active write leases via `gitmap agent heatmap` (or `gitmap heatmap status`) to enforce the One Owner Per File invariant and avoid write contention across agents.
-2. **Mandatory Action Logging:** Log all cognitive decisions with rationale via `gitmap heatmap log -t <task-slug> -a "READ"|"EDIT" -f "<path>" -r "Reasoning: <rationale>"` into `.ai-memory/heatmap.db`.
-3. **Live Diagnostics:** Monitor activity streams via `gitmap heatmap live` and hierarchy via `gitmap heatmap tree`.
+### Step 2.8 — RC Heatmap Preflight, Roadmap Linkage & Action Telemetry
+1. **Automatic RC & Heatmap Creation:** If `repo-cache` (`rc`) or `.ai-memory/heatmap.db` does not exist, GitMap automatically provisions the required split-db structure linked to the active mission and folder.
+2. **Contention & Lease Hotspot Check:** Before editing shared files, inspect active write leases via `gitmap agent heatmap` (or `gitmap rc heatmap status` / `gitmap heatmap status`) to enforce the One Owner Per File invariant and avoid write contention across agents.
+3. **Mandatory Action Logging:** Log all cognitive decisions with rationale via `gitmap heatmap log -t <task-slug> -a "READ"|"EDIT" -f "<path>" -r "Reasoning: <rationale>"` into `.ai-memory/heatmap.db`.
+4. **Roadmap-Connected Heatmap for Dynamic Join:** Newly spawned or joining subagents (`gitmap agent subtask join`) inspect `gitmap rc heatmap status` and `gitmap rc heatmap tree` to discover where prior agents read/edited and what roadmap tasks remain, eliminating redundant reads.
+5. **Task Existence & Prompt MD5 Hash Verification:** Verify whether the task was previously initialized (`gitmap agent task init`), display active subagents and touched files, and verify the prompt MD5 hash to confirm task identity or ingest prompt instruction changes.
+6. **Live Diagnostics & RC Suite:** Monitor activity streams via `gitmap rc heatmap live` / `gitmap heatmap live`, hierarchy via `gitmap rc heatmap tree`, and run read-only queries via `gitmap rc heatmap query "<sql>"`.
 
 ### Step 3 — Mandatory Multi-Agent Dispatch (`A = 3, H = 2`) & Dynamic Respawn
 - Dispatch `A = 3` subagents via `invoke_subagent` in disjoint file boxes (System Concurrency Capacity: 3 × 2 = 6 operations).
