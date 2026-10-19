@@ -134,8 +134,15 @@ When synchronizing canonical assets (prompts, skills, shared specs, scripts) acr
 
 ## 12. GitMap High-Speed Search Primacy & Strict Shell Search Ban (Total Ban on rg, ripgrep, Select-String)
 
-- **Search Primacy:** All AI agents, discovery subagents, and worker subagents MUST strictly use GitMap commands (`gitmap aum search`, `gitmap find`, `gitmap search`, `gitmap cat`) for all code searches and symbol discoveries.
-- **TOTAL BAN on Shell Search Tools:** TOTAL BAN on `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`, `Get-ChildItem -Recurse`, and `findstr`.
+- **Search Primacy:** All AI agents, discovery subagents, and worker subagents MUST strictly use GitMap commands (`gitmap aum search`, `gitmap find`, `gitmap search`, `gitmap cat`, `gitmap lf`, `gitmap ff`, `gitmap ffa`) for all code searches, symbol discoveries, and directory listings.
+- **TOTAL BAN on Shell Search & File Traversal Tools:** TOTAL BAN on `Get-ChildItem` (all variants: bare `Get-ChildItem`, `-Path`, `-Filter`, `-Recurse`, etc.), `dir`, `ls` in shell, `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`, and `findstr`.
+- **Ban on Deceptive Tool Summaries:** Explicitly banned from using deceptive tool summaries or action titles (e.g., naming a step 'GitMap find...' or 'Search files' while executing `Get-ChildItem`, `dir`, or `Select-String` underneath). The underlying command executed MUST strictly be a GitMap command.
+- **Canonical GitMap Command Suite:**
+  - Directory file inventory: `gitmap lf <dir>` (e.g. `gitmap lf src-tauri/src/modules/repo_db`) or `gitmap find "*.*" <dir>`
+  - Live streaming code/symbol search: `gitmap aum search "<pattern>" [dir] [-e <.ext>] [-r] [-i]` (e.g. `gitmap aum search "conversation_id" src-tauri/src/modules/repo_db -e .rs`, `gitmap aum search -r "func.*AppError" pkg -e .go`)
+  - Substring and glob file finder: `gitmap find "<pattern>" [dir]`, `gitmap ff <name>`, `gitmap ffa <substr>`
+  - Zero-disk file streaming: `gitmap cat <filepath>`
+  - PowerShell command runner: `gitmap pwsh "<command>"` or `gitmap ps "<command>"`
 
 ## 13. Mandatory Completion Invariant ('No Push = Not Done') & Non-Owned Repository Exclusion
 
@@ -147,7 +154,13 @@ When synchronizing canonical assets (prompts, skills, shared specs, scripts) acr
 - **Native GitMap Agent Commands:** All multi-agent task tracking, claiming, status checks, in-flight action logging, and crash autopsy MUST use native compiled `gitmap agent` subcommands (`gitmap agent task init`, `gitmap agent task status`, `gitmap agent task ls`, `gitmap agent task pending`, `gitmap agent subtask add`, `gitmap agent subtask ls`, `gitmap agent subtask claim`, `gitmap agent subtask complete`, `gitmap agent subtask fail`, `gitmap agent log`, `gitmap agent diagnose`, `gitmap agent crashed`, `gitmap agent temp-clear`).
 - **TOTAL BAN on Python SQLite Scripts & Inline Queries:** TOTAL BAN on executing `python 03-ai-scripts/46-agent-sqlite-task-manager.py` and TOTAL BAN on raw `python -c "import sqlite3..."` or ad-hoc Python DB queries. All database operations are natively handled by compiled GitMap Go binaries with WAL mode in <1ms.
 
+## 15. GitMap Cognitive Heatmap Telemetry Primacy & Multi-Agent Activity Observation
 
-
-
-
+- **Mandatory Cognitive Action Logging:** Enforce mandatory cognitive action logging across all AI agent sessions:
+  - **Step 0 Preflight Inspection:** `gitmap heatmap status` and `gitmap heatmap tables`
+  - **Pre-Action Intent Logging:** Before reading or editing files, agents MUST run:
+    `gitmap heatmap log --task <task> --action <READ|EDIT|CREATE|DELETE|ANALYZE> --file <path> --state <EXPLORATION|SPECIFICATION|EXECUTION|VERIFICATION> --expected "<goal>"`
+  - **Post-Action Closure:** Upon completing an action or receiving subagent findings, run:
+    `gitmap heatmap update --id <id> --outcome "<outcome>" --met true`
+  - **Phase 3 Verification Audit:** Run `gitmap heatmap tree --task <task>` and `gitmap heatmap status --task <task>` to verify 100% action closure.
+  - **Companion Repo-Cache Telemetry:** `gitmap rc heatmap <status|tables|query|view|tree|live|sync>` for multi-AI synchronization.
