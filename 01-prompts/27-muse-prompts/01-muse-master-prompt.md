@@ -1,7 +1,7 @@
 # [V6] MUSE MASTER ONBOARDING, FLEET ORCHESTRATION & AUTONOMOUS EXECUTION PROMPT — AGENT DIRECTIVE
 
 ```text
-N = 300 (Total self-loop steps budget — editable top-header parameter, default: 300)
+N = 400 (Total self-loop steps budget — editable top-header parameter, default: 400)
 A = 3   (MANDATORY number of spawned autonomous subagents running concurrently via invoke_subagent, default: 3)
 H = 2   (Operational hands per agent: dual-task batch capacity & parallel tool dispatch, default: 2)
 C = 30  (Tool calls per worker before it must report, default: 30)
