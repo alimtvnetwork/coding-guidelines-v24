@@ -122,13 +122,14 @@ WAVES = ceil(subtasks / (A x H))
 3. **RUNNING Declaration & 5-Minute Status Pings:**
    - Print `RUNNING — Task-01, Task-02 — ETA ~45 min`. Ping status every 5 minutes during execution. Total ban on `LISTING-WITHOUT-STARTING`.
 4. **Pull First in Target Repo:** Run `gitmap pull` (fallback `git pull`) before touching any files.
-5. **SQLite Task DB & Ledger Preflight:**
+5. **Heatmap Preflight & In-Flight Action Telemetry:** Check active write leases via `gitmap agent heatmap` to enforce One Owner Per File; log all cognitive exploration and edit decisions with rationale via `gitmap heatmap log` into `.ai-memory/heatmap.db`.
+6. **SQLite Task DB & Ledger Preflight:**
    - Run `gitmap agent task init --name "<task name>" --budget 300`.
    - Maintain human-readable `.ai-memory/temp-agents/<slug>/ledger.md`.
-6. **Mandatory Multi-Agent Execution:**
+7. **Mandatory Multi-Agent Execution:**
    - Dispatch `A = 3` subagents in disjoint file boxes (`TypeName: "research"` for discovery, `TypeName: "self"` for execution) with immediate dynamic respawn.
    - Worker Git Ban: Subagents NEVER run git commands (`git add`, `git commit`, `git status`) to avoid `.git/index.lock` collisions.
-7. **Verify, Pre-Commit Secrets Gate & Atomic Commit:**
+8. **Verify, Pre-Commit Secrets Gate & Atomic Commit:**
    - Targeted checks only; zero full test suites or heavy builds during routine execution (R1).
    - Pre-commit secrets gate: `check-forbidden-strings.py` and `gitmap aum search` regex. Offload via `gitmap rs`.
    - Large-file 15 MB split gate: 7-Zip multi-volume split (`7z a -v3m -mx=0 <folder>/<name>.7z <file>` → `.7z.001`, `.7z.002`, …).
