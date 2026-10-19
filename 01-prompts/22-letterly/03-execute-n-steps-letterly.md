@@ -1,22 +1,19 @@
 # Execute N-Steps — Letterly Prompt Formatter
 
-Format whatever input text is provided according to the exact high-priority execution template below. Do NOT add conversational filler or commentary (never write "Certainly! Here is your output:").
+Format input text according to exact high-priority execution template below without conversational filler or commentary.
 
-1. Capture and clean the input text verbatim, stripping verbal filler words (`um`, `ah`, `uh`, `like`, don't start with `Okay`, reduce if there are too many `so`) while strictly preserving every technical directive, parameter, flag, and file path.
-2. Derive `<task title>` from the input text — it is the SUBJECT of the task (e.g. `SEO Writing and Folder Structure Instructions`). Structure the output starting immediately with `# <task title>: high priority instruction, non-negotiable task`.
-3. Output `${Input Text Verbatim}` directly beneath the title line.
-4. After the verbatim input, output both the task name and the slug as subheaders:
-   - `## task: <task title>` — the human-readable subject/name of the task.
-   - `## slug: <task-slug>` — the lowercase-hyphenated task slug (e.g. `## slug: seo-writing-and-folder-structure-instructions`), NEVER `## slug: high-priority-instruction`.
-   Both the task name and slug are required so AI agents can identify and register the task via GitMap (`gitmap agent task init --title "<task title>" --slug "<task-slug>"`).
-5. Construct `# Actionable Items Must Follow Non-Negotiable`: include fixed items 1-4 verbatim as defined in Output Format below (pull first, spec/plan enqueue, GitMap search primacy, relative Git paths mandate), followed by discrete technical directives extracted from input text as items 5..N. Ensure all action items are listed and nothing pending.
-6. Append the mandatory agent invocation suffix pointing to `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)`.
-7. Output ONLY the resulting prompt as plain markdown text. STRICT — NEVER wrap in fenced code blocks (never emit ```markdown, ```plaintext, or ``` fences). No conversational filler or commentary before or after.
-8. Relative Paths Mandate: Only add relative paths (`02-spec/...`, `.ai-memory/...`, `cmd/...`), never add absolute paths, and ensure this is respected on the release page and in release notes. Always append this directive under `## Additional Instructions`.
-9. Step Budget Mandate: Execute within the 400-step lifecycle budget (Phase 1: 100 plan, Phase 2: 150 intermediate/archival, Phase 3: 150 implementation/sync).
-10. Heatmap Mandate: Track in-flight file touches, prevent write collisions, and query the cognitive activity graph via GitMap RC Heatmap (`gitmap rc heatmap status` / `tree` / `live` / `sync`) with transparent 3-tier database location reporting.
+1. Clean input text verbatim, stripping verbal fillers (`um`, `ah`, `uh`, `like`, leading `Okay`, excess `so`) while strictly preserving technical directives, parameters, flags, and file paths.
+2. Derive `<task title>` as task subject (e.g. `SEO Writing and Folder Structure Instructions`). Output line 1: `# <task title>: high priority instruction, non-negotiable task`.
+3. Output `${Input Text Verbatim}` directly beneath title.
+4. Output task name and slug subheaders:
+   - `## task: <task title>`
+   - `## slug: <task-slug>` (lowercase-hyphenated, e.g. `## slug: seo-writing-and-folder-structure-instructions`).
+5. Construct `# Actionable Items Must Follow Non-Negotiable`: include fixed items 1-4 verbatim (pull first, spec/plan enqueue, GitMap search primacy, relative Git paths mandate), followed by discrete technical directives extracted from input text as items 5..N.
+6. Append mandatory agent invocation suffix pointing to `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)`.
+7. Output plain markdown only. Never wrap in fenced code blocks (no ```markdown or ``` fences).
+8. Relative Paths: Only add relative paths (`02-spec/...`, `.ai-memory/...`, `cmd/...`); never add absolute paths.
 
-${Input Text Verbatim} = The cleaned input text as it is, without conversational filler words.
+${Input Text Verbatim} = Cleaned input text without verbal filler words.
 
 Output Format:
 
@@ -41,8 +38,7 @@ ${Input Text Verbatim}
 
 ## Additional Instructions
 
-- Execute within the 400-step lifecycle budget: Phase 1 (Steps 1..100) planning and spec authoring, Phase 2 (Steps 101..250) sanitization, archival, and prerequisites, Phase 3 (Steps 251..400) worker swarm implementation, targeted checks, fleet synchronization, and atomic push.
-- [/plan](slashCommand;plan) first before doing the work to reduce the credits.
+- [/plan](slashCommand;plan) first before doing work to reduce credits.
 - [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
-- Track in-flight file touches and prevent write collisions using GitMap RC Heatmap (`gitmap rc heatmap status` / `gitmap rc heatmap tree` / `gitmap rc heatmap live` / `gitmap rc heatmap sync`) with transparent 3-tier database location reporting.
-- Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.
+- Track in-flight file touches and prevent write collisions using GitMap RC Heatmap (`gitmap rc heatmap status` / `gitmap rc heatmap tree` / `gitmap rc heatmap live` / `gitmap rc heatmap sync`).
+- Only add relative paths, never add absolute paths during work; this must be respected on release page and in release notes as well.

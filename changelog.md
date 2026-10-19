@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.83.0] - 2026-10-19
+
+### Added
+- Decouple step budgets and muse persona from Letterly prompt formatters and compact text
+
+---
+
 ## [v6.82.0] - 2026-10-19
 
 ### Added
