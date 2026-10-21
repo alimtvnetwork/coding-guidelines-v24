@@ -39,6 +39,7 @@ Updated: 2026-04-27
 - 🔴 Zero-Storage GitHub Actions Mandate: TOTAL BAN on `actions/upload-artifact` in routine CI/CD workflows to prevent exhausting the 0.5 GB account storage quota. Direct all diagnostic outputs to `$GITHUB_STEP_SUMMARY` and stdout.
 - 🔴 Go Interface Mandatory `-er` Suffix: ALL Go interface names must end in `er` (`ViewManager`, `DbExecutor`, `SqlExecutor`). Interface names ending in `-or` or `Interface` are strictly forbidden.
 - 🔴 Mandatory 30-Commit Git Audit & 20-Task Register: TOTAL BAN on writing memory without inspecting the last 30 commits (`git log -n 30 --oneline`) and verifying the compact 20-task recent completion register in `.ai-memory/plans/readme.md`. See [Write Prompts 30-Commit Git Audit & Recent 20-Task Register](learned/14-write-prompts-git-audit-and-recent-tasks-register.md).
+- 🔴 CODE RED: In-Flight Build Ban & Unrequested Local Test Suites Ban: Every time you write code, you don't build the code. Never run all tests locally or full build unless explicitly asked. Only do E2E testing if explicitly asked. Do CI/CD verification only if asked.
 
 - [Project Context & Learned Guidelines](learned/01-project-context-and-guidelines.md) — Comprehensive ingestion of repo identity, CODE RED rules, coding guidelines, error philosophy, and active plans.
 - [Pluggable Logger & Uber Zap Architecture](learned/02-logger-swapping-and-uber-zap-architecture.md) — Architecture and code samples for dynamic Log Changer, Formatter/Writer pipeline, context.Context tracing, and Uber Zap integration.
@@ -131,4 +132,5 @@ Updated: 2026-04-27
 - [Session 2026-09-19 Memory Retrieval & Git History v2](learned/15-memory-retrieval-git-history-and-project-context-ingestion-v2.md) — 10 recent commits reviewed (.ai-memory rename, GitMap integration, WP exam quiz feature, code dry optimizations). CODE RED and naming rules re-affirmed.
 - [Session 2026-09-21 Codebase Comprehension & Skills Set Expansion](learned/16-codebase-comprehension-and-skill-set-generation.md) — Full codebase architectural mapping and authoring of 6 Antigravity skills.
 - [Session 2026-09-22 Screenshot & Base64 Ingestion Protocol](learned/17-screenshot-printscreen-base64-ingestion-protocol.md) — Standardized screenshot/print screen base64 conversion to filesystem image files and relative referencing across execute prompts, spec writing prompts, and UI skills.
+- [In-Flight Build/Test Ban Invariants & Dedicated E2E Engine](learned/22-build-test-ban-invariants-and-e2e-execution-engine.md) — Architectural invariants banning unrequested intermediate builds, local test suites, and remote CI/CD waiting in V6 prompts; dedicated E2E prompt architecture and fleet sync invariants.
 

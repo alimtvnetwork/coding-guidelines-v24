@@ -620,5 +620,54 @@ Repositories that do NOT belong to our workspace ownership MUST be strictly igno
 
 **Why:** Third-party and shell configuration repositories have external remotes, system-specific files, or separate governance. Modifying or auto-pushing them corrupts user environments and fails authorization checks.
 
+---
+
+## In-Flight Code Compilation / Intermediate Build Checks — TOTAL BAN
+
+🔴 **Every time you write code, you don't build the code.**
+
+Forbidden:
+- ❌ Running `go build`, `npm run build`, `vite build`, `cargo build`, or compiler checks after writing or modifying code.
+- ❌ Attempting full build verification during routine development or guideline turns.
+
+Allowed work:
+- ✅ Use fast, file-scoped targeted linters (`check-relative-paths.py`, `guideline-autofixer.py --check-only`).
+- ✅ Build verification is performed only when explicitly commanded by the user or in dedicated E2E verification prompts (`08-execute-with-e2e.md`).
+
+**Why:** Continuous intermediate building wastes execution steps, triggers platform tool timeouts, and consumes excessive compute tokens on simple changes.
+
+---
+
+## Unrequested Full Test Suites & Local E2E Testing — TOTAL BAN
+
+🔴 **Never run all tests locally or full build unless explicitly asked.**
+
+Forbidden:
+- ❌ Running `go test ./...`, `npm test`, `pytest`, or `03-ai-scripts/06-cicd-local-runner.py` during routine turns.
+- ❌ Running unrequested end-to-end (E2E) flows or full test suites on routine changes.
+
+Allowed work:
+- ✅ Only do end-to-end testing based on mentioned test cases if explicitly asked by the user.
+- ✅ Full local test suites are executed exclusively when using `08-execute-with-e2e.md` or when the user explicitly commands test execution.
+
+**Why:** Running extensive test suites on routine turns exhausts context budgets and slows delivery.
+
+---
+
+## Unrequested Remote CI/CD Pipeline Monitoring / Waiting — TOTAL BAN
+
+🔴 **Do CI/CD verification only if asked; if not asked explicitly, don't do it.**
+
+Forbidden:
+- ❌ Monitoring, querying, or sleeping on remote CI/CD pipelines (`gitmap pe`, `gitmap pe -t`, `gitmap pipeline-ai`, GitHub Actions) after committing and pushing code in routine turns.
+- ❌ Waiting for CI/CD results when the user did not explicitly request pipeline verification.
+
+Allowed work:
+- ✅ Conclude the turn immediately upon a successful atomic push via GitMap (`gitmap cpf` / `gitmap cpb`).
+- ✅ Perform CI/CD verification only when the user prompt explicitly requests watching or verifying the remote pipeline.
+
+**Why:** Unrequested CI/CD monitoring burns hundreds of tokens and wait cycles when the code has already been pushed cleanly.
+
+
 
 
