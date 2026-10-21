@@ -99,6 +99,7 @@ All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent e
 | [`letterly-prompts-heatmap-one-liner-integration/`](letterly-prompts-heatmap-one-liner-integration/) | Letterly Prompts Heatmap Telemetry One-Liner Integration & Dual Cursor Parity | Application Spec | Active |
 | [`cd-execute-prompt-and-skill-synchronization/`](cd-execute-prompt-and-skill-synchronization/) | CD Execute Prompt & Skill Synchronization: Map Dispatch & Handler Lookup, RCA & Step 0 Heatmap/RC Checks, V6 Suite Upgrade & Fleet Sync | Application Spec | Active |
 | [`mime-and-media-type-enum-architecture/`](mime-and-media-type-enum-architecture/) | MIME & Media Type Enum Architecture: Strongly-Typed Enum Standards, Blob/Clipboard/Header Refactoring, CG Execute Updates & Fleet Sync | Application Spec | Active |
+| [`execute-prompt-update-and-e2e-testing-prompt-creation/`](execute-prompt-update-and-e2e-testing-prompt-creation/) | In-Flight Build/Test Ban Invariants, Execute with E2E Prompt & Fleet Sync | Application Spec | Active |
 
 ---
 

@@ -1,0 +1,22 @@
+{
+  "task": "Subtask-03",
+  "title": "Create 08-execute-with-e2e.md Prompts with Mandatory E2E and Release Minor Bump",
+  "status": "DONE",
+  "agent": "Worker 02",
+  "filesChanged": [
+    "01-prompts/14-execute/08-execute-with-e2e.md",
+    "01-prompts/v4/14-execute/08-execute-with-e2e.md"
+  ],
+  "checks": "python linter-scripts/check-relative-paths.py -> exit 0, 3809 files scanned",
+  "acceptance": {
+    "ac1": "PASS - Authored 01-prompts/14-execute/08-execute-with-e2e.md based on V6 architecture with inverted Rule R1 and automated minor release ceremony.",
+    "ac2": "PASS - Mirrored 01-prompts/v4/14-execute/08-execute-with-e2e.md.",
+    "ac3": "PASS - Turn 1 mandate requires displaying git log -n 5 --oneline and inventorying recent test cases/suites alongside 5 Pillars.",
+    "ac4": "PASS - Rule R1 inverted to explicitly mandate running all local test suites (go test ./..., npm test, pytest) to 100% green.",
+    "ac5": "PASS - Audit log review requires inspecting heatmap.db and SQLite task engine (gitmap agent log, gitmap heatmap tree).",
+    "ac6": "PASS - Automated release finalization executes minor version bump ceremony upon 100% green tests and pushes via GitMap.",
+    "ac7": "PASS - Strict relative Git paths and lowercase filenames verified."
+  },
+  "assumptions": [],
+  "blockers": []
+}
