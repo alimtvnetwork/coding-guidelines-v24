@@ -4,6 +4,7 @@ Master directory of architectural and execution plans.
 
 ## Pending Plans
 
+- [03-execute-n-steps-letterly-prompt-formatter.md](pending/03-execute-n-steps-letterly-prompt-formatter.md): Letterly gold standard alignment, mobile one-liner, fleet synchronization; 2026-10-23 addendum COMPLETE — SQL repository pattern & enum actions instruction (spec 04), new skill `sql-repository-pattern-and-enum-actions`, fleet patch releases, coding-guidelines-v24 v6.84.0.
 - [06-cg-execute-golang-pointers-and-mutation-reduce.md](pending/06-cg-execute-golang-pointers-and-mutation-reduce.md): Golang pointer reduction and mutation elimination prompt (Prompt 39), companion skills across Antigravity and Cursor, master catalog updates, quality verification linters, and multi-repository synchronization across 43 connected repositories.
 - [05-improvements-folder-prompts.md](pending/05-improvements-folder-prompts.md): Check pending improvements dashboard prompt, implement next 10 improvements fast-forwarding engine, companion skills across Antigravity and Cursor, V6 parent task execution checkpoints, master catalog updates, and multi-repository synchronization across 43 connected repositories.
 - [04-next-100-ideas-for-improvements.md](pending/04-next-100-ideas-for-improvements.md): Autonomous ideation flywheel prompt, companion skills (Antigravity & Cursor), master catalog updates, and multi-repository synchronization across 43 connected repositories.

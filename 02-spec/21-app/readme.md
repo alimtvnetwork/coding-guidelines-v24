@@ -46,3 +46,4 @@ When authoring specifications in an application repository:
 | [`04-next-100-ideas-for-improvements/`](04-next-100-ideas-for-improvements/) | Next 100 Ideas for Improvements Prompt, Skills & Fleet Synchronization | Active Task Spec | Active |
 | [`05-improvements-folder-prompts/`](05-improvements-folder-prompts/) | Improvements Folder Prompts: Check Pending & Implement Next 10 Improvements Spec, Skills & Fleet Sync | Active Task Spec | Active |
 | [`06-cg-execute-golang-pointers-and-mutation-reduce/`](06-cg-execute-golang-pointers-and-mutation-reduce/) | Golang Pointer Reduction & Mutation Elimination Prompt, Companion Skills & Fleet Sync | Active Task Spec | Active |
+| [`03-execute-n-steps-letterly-prompt-formatter/`](03-execute-n-steps-letterly-prompt-formatter/) | Letterly Prompt Formatter — gold standard alignment, mobile one-liner, fleet sync, SQL repository pattern & enum actions (spec 04, 2026-10-23) | Active Task Spec | Active |
