@@ -1,0 +1,86 @@
+# Plan: Coding Guideline and Prompt Execution Improvement
+
+## Task Information
+- **Title:** Coding Guideline and Prompt Execution Improvement
+- **Slug:** `coding-guideline-and-prompt-execution-improvement` (Sequence Prefix: `24-coding-guideline-and-prompt-execution-improvement`)
+- **Status:** ACTIVE
+- **Target Files:**
+  - `01-prompts/22-letterly/*.md`
+  - `01-prompts/23-cursor-prompts/*.md`
+  - `01-prompts/27-muse-prompts/02-muse-generic.md`
+  - `01-prompts/v4/14-execute/02-execute-parent-task-with-n-steps-v6.md`
+  - `.agents/skills/execute-parent-task-with-n-steps-v6/skill.md`
+  - `linter-scripts/tests/test_check_letterly_format.py`
+  - `AGENTS.md`
+  - `.agents/skills/gitmap/skill.md`
+  - `.agents/skills/gitmap-*/skill.md`
+  - `02-spec/21-app/24-coding-guideline-and-prompt-execution-improvement/`
+  - `.ai-memory/plans/subtasks/coding-guideline-and-prompt-execution-improvement/`
+
+---
+
+## User Request (Verbatim)
+
+```text
+Few of the serious issues in the coding guideline and especially in the latterly execute prompt, execute in n steps. The problem here is that in the prompt, in one step it says, "Try to make the plan to reduce credit." Try to take that line out. We don't need the reduction of the credit. We want the work plan for improved work or less friction. That should be the plan's main motto, not the reduction of the credit. The second thing is that when it writes about the planning, there's no need to include the execute steps. When it talks about the plans in the point number two, it gives the slug, right? So there is one more point. The slug needs to be written as XX hyphen and the slug. The XX would be the sequence of that folder. So that needs to be clarified. One more point about the `gitmap` skills. The `gitmap` skills actually refers to the command, but it does not refer or shows how the command works. So the problem is every time the AI needs to run the help command in order to understand how that command works. So I request you to add some sample so that the AI knows how to use that command effectively. Does this make sense? Can you please improve some of the parts in the `gitmap` skills, latterly prompt, execute in steps, things like that.
+
+## task: Coding Guideline and Prompt Execution Improvement
+## slug: coding-guideline-and-prompt-execution-improvement
+
+# Actionable Items Must Follow Non-Negotiable
+
+1. Git pull BEFORE starting any work — first try `gitmap pull <repo path>` (or run `gitmap pull` in repository folder); if that fails, fall back to regular `git pull` and resolve any merge conflicts so the repository is completely up to date and clean before starting.
+2. Write spec under 02-spec/21-app/coding-guideline-and-prompt-execution-improvement/ and enqueue plan task in .ai-memory/plans/coding-guideline-and-prompt-execution-improvement.md (subtasks in .ai-memory/plans/subtasks/coding-guideline-and-prompt-execution-improvement/) first
+3. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
+4. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well
+5. Remove the line "Try to make the plan to reduce credit" from the prompt execution steps.
+6. Ensure the plan's main motto is focused on improved work or less friction, not credit reduction.
+7. Clarify that the slug should be written as XX hyphen and the slug, where XX is the sequence of that folder.
+8. Add examples to `gitmap` skills to demonstrate how commands work, reducing the need for AI to run help commands.
+```
+
+---
+
+## Objectives & Work Streams
+
+1. **Work Stream 1: Prompt Execution Improvement (Motto & Planning Decoupling)**
+   - Remove "reduce credits" / "reduce credit" across all Letterly prompt formatters, Cursor mirrors, Muse prompts, and V6 execution prompts.
+   - Re-anchor the plan directive motto to:
+     `[/plan](slashCommand;plan) first before doing work for improved work or less friction.`
+   - Decouple planning from execution steps: Actionable Item 2 mandates architectural specification and task decomposition without premature execution steps, build calls, or test runs.
+
+2. **Work Stream 2: Sequential Slug Mandate (`XX-<slug>`)**
+   - Clarify in Letterly formatters, V6 prompts, and `AGENTS.md` Section 10 that directory slugs in `02-spec/21-app/` and primary plans in `.ai-memory/plans/pending/` MUST use the zero-padded sequential prefix `XX-<slug>` (e.g. `24-coding-guideline-and-prompt-execution-improvement`).
+   - Standardize Actionable Item 2 template:
+     `2. Write spec under 02-spec/21-app/XX-<slug>/ and enqueue plan task in .ai-memory/plans/pending/XX-<slug>.md (subtasks in .ai-memory/plans/subtasks/XX-<slug>/) first, where XX is the zero-padded sequence of that folder.`
+
+3. **Work Stream 3: GitMap Skills Real-World Example Enrichment**
+   - Augment `.agents/skills/gitmap/skill.md` with 12 comprehensive categories of copy-pasteable real-world examples with flags, arguments, and expected behavior.
+   - Remove `--help` deflections and fix outdated/hallucinated subcommands and flags in companion skills (`gitmap-developer-hygiene-and-agy`, `gitmap-scanner-and-cloner`, `gitmap-split-db-engine`, `gitmap-ssh-cluster-fleet`).
+
+---
+
+## Subtask Allocation (Tree Swarm Hierarchy)
+
+| Task ID | Title | Owner | Status | Owned Files |
+| :--- | :--- | :--- | :--- | :--- |
+| `Task-01` | Prompt Execution Standards & Credit Removal | Worker 01 | PENDING | `01-prompts/22-letterly/*`, `01-prompts/23-cursor-prompts/*`, `01-prompts/27-muse-prompts/02-muse-generic.md`, `linter-scripts/tests/test_check_letterly_format.py` |
+| `Task-02` | Slug Convention (`XX-<slug>`) & Planning Decoupling | Worker 02 | PENDING | `AGENTS.md`, `01-prompts/22-letterly/01-mobile-letterly.md`, `01-prompts/23-cursor-prompts/01-mobile-letterly-cursor.md`, `01-prompts/v4/14-execute/02-execute-parent-task-with-n-steps-v6.md`, `.agents/skills/execute-parent-task-with-n-steps-v6/skill.md` |
+| `Task-03` | GitMap Skills Examples & Companion Alignment | Worker 03 | PENDING | `.agents/skills/gitmap/skill.md`, `.agents/skills/gitmap-developer-hygiene-and-agy/skill.md`, `.agents/skills/gitmap-scanner-and-cloner/skill.md`, `.agents/skills/gitmap-split-db-engine/skill.md`, `.agents/skills/gitmap-ssh-cluster-fleet/skill.md` |
+
+---
+
+## Verification & Completion Gates
+
+1. **G1: No Credit Reduction Language in Prompts:**
+   `gitmap aum search "reduce credit" 01-prompts` returns zero hits.
+2. **G2: Slug & Planning Decoupling:**
+   `AGENTS.md` and Letterly templates mandate `XX-<slug>` and planning isolation.
+3. **G3: GitMap Examples Enriched:**
+   `.agents/skills/gitmap/skill.md` contains comprehensive practical command examples across 12 categories.
+4. **G4: Relative Path & Lowercase Hygiene:**
+   Zero absolute paths and 100% lowercase filenames.
+5. **G5: Secrets Gate:**
+   Verified clean of tokens and credentials.
+6. **G6: Upstream Atomic Push:**
+   `gitmap cpf "prompt-execution - improve planning philosophy slug convention and gitmap skill examples"`.

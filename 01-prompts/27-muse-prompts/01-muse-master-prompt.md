@@ -531,7 +531,7 @@ Before modifying ANY file, run `gitmap pull` (fallback `git pull`) in that repos
 - Dispatch `A = 3` subagents via `invoke_subagent` in disjoint file boxes (System Concurrency Capacity: 3 × 2 = 6 operations).
 - **3-Stage Dispatch Protocol:**
   1. Planning & Exploration: 3 × `research` subagents (`TypeName: "research"`) for read-only exploration and symbol discovery via `gitmap aum search`.
-  2. Modular Spec Authoring: 3 × `self` subagents (`TypeName: "self"`) for disjoint specification authoring (`02-spec/21-app/<slug>/`) and subtasks (`.ai-memory/plans/subtasks/<slug>/`).
+  2. Modular Spec Authoring: 3 × `self` subagents (`TypeName: "self"`) for disjoint specification authoring (`02-spec/21-app/XX-<slug>/`) and subtasks (`.ai-memory/plans/subtasks/XX-<slug>/`).
   3. Bounded Execution: 3 × `self` worker subagents (`TypeName: "self"`) for surgical, disjoint file modifications.
 - **Immediate Dynamic Respawn:** When any subagent completes or reports via `send_message`, the Lead Orchestrator immediately claims the next subtask and spawns the replacement subagent to maintain 100% saturation across all 3 slots.
 - **Dynamic Join Fallback:** When remaining pending subtasks are fewer than 3 (`pending_count < A`), available subagents dynamically join running subtasks (`gitmap agent subtask join`) to assist with parallel reading, AST linting, and reference mapping under strict disjoint write ownership (Rule: One Owner Per File; primary retains exclusive write lock).
