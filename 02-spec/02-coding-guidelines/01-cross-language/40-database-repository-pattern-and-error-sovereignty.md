@@ -104,10 +104,20 @@ func FindTask(db *sql.DB, id string) *Task {
 }
 ```
 
-#### ✅ MANDATORY: Monadic Result Return Sovereignty (`result.Wrap[T]`)
+#### ✅ MANDATORY: Monadic Result Return Sovereignty with DRY `types.go` Reuse
 ```go
-// ✅ MANDATORY: Return strongly-typed monadic result.Wrap[Task] directly to caller
-func FindTask(db *sql.DB, id string) result.Wrap[Task] {
+// Step 1: In pkg/task/types.go (in the package where it is defined)
+type (
+	// TaskWrap is the canonical single reusable result container for Task.
+	TaskWrap = result.Wrap[Task]
+
+	// TaskSliceWrap is the canonical single reusable collection container for Task.
+	TaskSliceWrap = result.WrapSlice[Task]
+)
+
+// Step 2: In pkg/task/repository.go
+// ✅ MANDATORY: Return strongly-typed TaskWrap directly to caller — zero leaked generic brackets
+func FindTask(db *sql.DB, id string) TaskWrap {
 	var task Task
 	err := db.QueryRow("SELECT ...", id).Scan(&task.Id)
 	if err != nil {
@@ -117,8 +127,8 @@ func FindTask(db *sql.DB, id string) result.Wrap[Task] {
 	return result.OkWrap(task)
 }
 
-// ✅ MANDATORY: Return strongly-typed result.WrapSlice[Task] for list queries
-func ListTasks(db *sql.DB) result.WrapSlice[Task] {
+// ✅ MANDATORY: Return strongly-typed TaskSliceWrap for list queries
+func ListTasks(db *sql.DB) TaskSliceWrap {
 	rows, err := db.Query("SELECT ...")
 	if err != nil {
 		return result.FailWrapSlice[Task](apperror.WrapSimple(err, "ListTasks"))
