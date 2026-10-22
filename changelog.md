@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.84.0] - 2026-10-22
+
+### Added
+- Routine release v6.84.0
+
+---
+
 ## [v6.83.0] - 2026-10-19
 
 ### Added
