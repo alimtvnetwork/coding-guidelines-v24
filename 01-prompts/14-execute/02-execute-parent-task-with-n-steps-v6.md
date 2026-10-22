@@ -605,11 +605,11 @@ You are Worker <NN> for task nn-<slug>. You have no prior chat context; this bri
   `gitmap heatmap view <table> [--limit <n>]` / `gitmap heatmap rc view <table>`
 *(Note: Supports tri-alias routing parity: `gitmap heatmap rc ...`, `gitmap rc heatmap ...`, `gitmap heatmap rc-heatmap ...`).*
 
-- When your subtask passes targeted checks, mark completion in the database:
-  `gitmap agent subtask complete <id> --agent "Worker <NN>" --evidence "PASS exit 0, <files>"`
-- If blocked or failing, record the failure:
-  `gitmap agent subtask fail <id> --agent "Worker <NN>" --reason "<reason>"`
-*(Note: Native compiled Go engine `gitmap agent` executes in <1ms without Python VM overhead).*
+- When your subtask passes targeted checks, mark completion in the database with structured JSON output:
+  `gitmap agent subtask complete <id> --agent "Worker <NN>" --evidence "PASS exit 0, <files>" --json`
+- If blocked or failing, record the failure with structured JSON output:
+  `gitmap agent subtask fail <id> --agent "Worker <NN>" --reason "<reason>" --json`
+*(Note: Native compiled Go engine `gitmap agent` executes in <1ms without Python VM overhead; always provide `--json` for deterministic, machine-readable AI swarm responses).*
 
 ### Output Contract:
 Write your subtask output to .ai-memory/plans/subtasks/nn-<slug>/01-<name>.json and reply with this JSON block, once per subtask, then stop:
