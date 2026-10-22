@@ -28,7 +28,7 @@ Output Format:
 ${Input Text Verbatim}
 
 ## task: <task title>
-## slug: <task-slug>
+## slug: <task-slug>  (should not contain `xx-` here. )
 
 # Actionable Items Must Follow Non-Negotiable
 
@@ -45,7 +45,7 @@ ${Input Text Verbatim}
 
 ## Additional Instructions
 
-- [/plan](slashCommand;plan) first before doing work for improved work or less friction, faster work and more pure and effective work.
+- [/plan](slashCommand;plan) first before doing work for improved work or less friction, faster execution for AI and coding without errors and following Coding Guidelines.
 - [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
 - Track in-flight file touches, prevent write collisions, and query cognitive graph via GitMap RC Heatmap (`gitmap rc heatmap status` / `gitmap rc heatmap tree` / `gitmap rc heatmap live` / `gitmap rc heatmap sync`). If RC does not exist, auto-provision it linked to mission folder; connect roadmap to heatmap command so newly spawned subagents join dynamically without redundant reads; verify prior task existence and prompt MD5 hash before initialization.
 - Only add relative paths, never add absolute paths during work; this must be respected on release page and in release notes as well.
