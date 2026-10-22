@@ -31,12 +31,12 @@ Output Format:
 ${Input Text Verbatim}
 
 ## task: <task title>
-## slug: XX-<task-slug>
+## slug: <task-slug>
 
 # Actionable Items Must Follow Non-Negotiable
 
 1. Git pull BEFORE starting any work — first try `gitmap pull <repo path>` (or run `gitmap pull` in repository folder); if that fails, fall back to regular `git pull` and resolve any merge conflicts so the repository is completely up to date and clean before starting.
-2. Write spec and plan first under 02-spec/21-app/XX-<slug>/ and .ai-memory/plans/pending/XX-<slug>.md (where XX is zero-padded folder sequence)
+2. Write spec under 02-spec/21-app/XX-<slug>/ and enqueue plan task in .ai-memory/plans/pending/XX-<slug>.md (subtasks in .ai-memory/plans/subtasks/XX-<slug>/) first, (xx should be figured out by the folder structure and running AI tools, xx  is sequence 01, 02)
 3. Inspect live CI/CD pipeline errors and execution timeline using gitmap pe -t (or gitmap pipeline fix)
 4. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well
 5. Perform grounded 4-part Root Cause Analysis (RCA) on exact failing step and log
@@ -51,7 +51,7 @@ ${Input Text Verbatim}
 
 ## Additional Instructions
 
-- [/plan](slashCommand;plan) first before doing work for improved work or less friction.
+- [/plan](slashCommand;plan) first before doing work for improved work or less friction, faster work and more pure and effective work.
 - [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap live telemetry, pipeline self-healing, and toolchain caching.
 - Track in-flight file touches and prevent write collisions using GitMap RC Heatmap (`gitmap rc heatmap status` / `gitmap rc heatmap tree` / `gitmap rc heatmap live` / `gitmap rc heatmap sync`).
 - Only add relative paths, never add absolute paths during work; this must be respected on release page and in release notes as well.

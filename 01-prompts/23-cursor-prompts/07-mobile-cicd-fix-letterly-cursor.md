@@ -1,6 +1,6 @@
-# Mobile CI/CD Fix Mode (Cursor) — Letterly Prompt Formatter
+# Mobile CI/CD Fix Mode — Letterly Prompt Formatter
 
-Combine output into exactly ONE continuous single-line paragraph with zero newlines, using Cursor skill format without conversational filler.
+Combine output into exactly ONE continuous single-line paragraph with zero newlines and zero conversational filler.
 
 1. Clean input text verbatim, stripping verbal fillers (`um`, `ah`, `uh`).
 2. Derive `<task title>` as task subject (e.g. `CI/CD Pipeline Fix`). Derive `<task-slug>` as lowercase-hyphenated task title (e.g. `cicd-pipeline-fix`).

@@ -93,8 +93,10 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 
 - **Execution Formatter Standards (Letterly & Cursor):**
   - Line 1 of generated execution prompts must begin directly with `# High Priority Instruction`.
+  - Header slug in Letterly execution prompt templates must be formatted as `## slug: <task-slug>`.
   - Slash command suggestions such as `[/plan](slashCommand;plan)` belong strictly under `## Additional Instructions` at the bottom of execution prompts, and are strictly prohibited on verification audit prompts.
-  - Item 1/2 of Actionable Items must explicitly mandate writing specs in `02-spec/21-app/XX-<slug>/` and enqueueing plan tasks in `.ai-memory/plans/pending/XX-<slug>.md` (with subtasks in `.ai-memory/plans/subtasks/XX-<slug>/`), where `XX` is the zero-padded sequential number of that folder.
+  - The plan directive motto under `## Additional Instructions` must explicitly state: `[/plan](slashCommand;plan) first before doing work for improved work or less friction, faster work and more pure and effective work.`
+  - Item 1/2 of Actionable Items must explicitly mandate writing specs in `02-spec/21-app/XX-<slug>/` and enqueueing plan tasks in `.ai-memory/plans/pending/XX-<slug>.md` (with subtasks in `.ai-memory/plans/subtasks/XX-<slug>/`), where `XX` is the zero-padded sequential number of that folder (e.g. `xx is sequence 01, 02`).
   - When writing about planning (Actionable Item 2 and Phase 1), there is NO NEED to include execute steps. Planning is strictly dedicated to architecture, specification, boundaries, and task decomposition (NO-BUILD, NO-TEST, NO-CODE-CHANGES). Execution steps belong strictly to subsequent phases.
   - Item 2 of Actionable Items must explicitly mandate searching codebase exclusively via GitMap (`gitmap aum search`, `gitmap find`, `gitmap cat`, `gitmap ps`) with a total ban on `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`.
   - Item 3 of Actionable Items must explicitly mandate strictly relative Git paths (`02-spec/...`, `.ai-memory/...`, `cmd/...`): only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well.

@@ -27,12 +27,12 @@ Output Format:
 ${Input Text Verbatim}
 
 ## task: <task title>
-## slug: XX-<task-slug>
+## slug: <task-slug>
 
 # Actionable Items Must Follow Non-Negotiable
 
 1. Git pull BEFORE starting any work — first try `gitmap pull`; if that fails, fall back to regular `git pull` in the current repository/folder. Do not start any work before the pull succeeds.
-2. Write spec under 02-spec/21-app/XX-<slug>/ and enqueue plan task in .ai-memory/plans/pending/XX-<slug>.md (subtasks in .ai-memory/plans/subtasks/XX-<slug>/) first, where XX is the zero-padded sequence of that folder
+2. Write spec under 02-spec/21-app/XX-<slug>/ and enqueue plan task in .ai-memory/plans/pending/XX-<slug>.md (subtasks in .ai-memory/plans/subtasks/XX-<slug>/) first, (xx should be figured out by the folder structure and running AI tools, xx  is sequence 01, 02)
 3. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String
 4. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well
 5. ....other steps and more steps sequentially from the input direction. Create more steps in between.
@@ -43,7 +43,7 @@ ${Input Text Verbatim}
 
 ## Additional Instructions
 
-- [/plan](slashCommand;plan) first before doing work for improved work or less friction.
+- [/plan](slashCommand;plan) first before doing work for improved work or less friction, faster work and more pure and effective work.
 - [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
 - Track in-flight file touches and prevent write collisions using GitMap RC Heatmap (`gitmap rc heatmap status` / `gitmap rc heatmap tree` / `gitmap rc heatmap live` / `gitmap rc heatmap sync`).
 - Only add relative paths, never add absolute paths during work; this must be respected on release page and in release notes as well.
