@@ -104,20 +104,40 @@ func FindTask(db *sql.DB, id string) *Task {
 }
 ```
 
-#### ✅ MANDATORY: Pure Error Return Sovereignty
+#### ✅ MANDATORY: Monadic Result Return Sovereignty (`result.Wrap[T]`)
 ```go
-// ✅ MANDATORY: Return strongly-typed *apperror.AppError directly to caller
-func FindTask(db *sql.DB, id string) (*Task, *apperror.AppError) {
+// ✅ MANDATORY: Return strongly-typed monadic result.Wrap[Task] directly to caller
+func FindTask(db *sql.DB, id string) result.Wrap[Task] {
 	var task Task
 	err := db.QueryRow("SELECT ...", id).Scan(&task.Id)
 	if err != nil {
-		return nil, apperror.WrapSimple(err, "FindTask")
+		return result.FailWrap[Task](apperror.WrapSimple(err, "FindTask"))
 	}
 
-	return &task, nil
+	return result.OkWrap(task)
+}
+
+// ✅ MANDATORY: Return strongly-typed result.WrapSlice[Task] for list queries
+func ListTasks(db *sql.DB) result.WrapSlice[Task] {
+	rows, err := db.Query("SELECT ...")
+	if err != nil {
+		return result.FailWrapSlice[Task](apperror.WrapSimple(err, "ListTasks"))
+	}
+	defer rows.Close()
+
+	tasks := make([]Task, 0)
+	for rows.Next() {
+		var task Task
+		if scanErr := rows.Scan(&task.Id); scanErr != nil {
+			return result.FailWrapSlice[Task](apperror.WrapSimple(scanErr, "ListTasks.Scan"))
+		}
+		tasks = append(tasks, task)
+	}
+
+	return result.OkWrapSlice(tasks)
 }
 ```
-*The outer command orchestrator or root dispatcher receives the error, logs it to `finishCommandAudit`, and decides whether to display an error or exit.*
+*The outer command orchestrator receives the single Result object, inspects `res.HasError()`, passes structured errors to `finishCommandAudit`, and decides whether to display an error or exit.*
 
 ---
 
