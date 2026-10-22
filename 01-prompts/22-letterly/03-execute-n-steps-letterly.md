@@ -22,7 +22,7 @@ Output Format:
 ${Input Text Verbatim}
 
 ## task: <task title>
-## slug: <task-slug>
+## slug: <task-slug> (should not contain `xx-` here. )
 
 # Actionable Items Must Follow Non-Negotiable
 
