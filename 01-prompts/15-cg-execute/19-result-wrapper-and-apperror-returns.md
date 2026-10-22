@@ -48,14 +48,22 @@ WAVES = ceil(subtasks / (A x H))
 
 In enterprise Go architecture, functions must NEVER return multi-value error tuples such as `(T, error)`, `([]T, error)`, or `(map[K]V, error)`. Bare error tuples cause error dual-handling, accidental nil dereferences, unhandled error states, and unstandardized callers.
 
-All fallible operations MUST return a single monadic container from `cli/result` (or `pkg/appfault` / `pkg/result`):
+All fallible operations MUST return a single monadic container from `cli/result` (or `pkg/appfault` / `pkg/result`). The canonical type is `result.Wrap[T]`.
 
-| Container Type | Canonical Alias | Payload Representation | Primary Constructor Helpers |
+> [!WARNING]
+> **TOTAL BAN ON `result.Result` & ANONYMOUS SLICE WRAPPERS:**
+> Writing `result.Result` creates package stutter and is strictly banned.
+> Never write `result.Result[[]model.ScanRecord]`. This pattern violates three core rules:
+> 1. **Package Stutter:** `result.Result` repeats the package name. Always use `result.Wrap`.
+> 2. **Leaking Raw Generic Brackets:** Raw generic brackets `[...]` in function signatures create copy-paste boilerplate across implementation files.
+> 3. **Wrapping Anonymous Slices:** Wrapping `[]model.ScanRecord` directly creates loose slice signatures. Always declare a dedicated slice collection type `type ScanRecordSlice = []model.ScanRecord` and alias `type ScanRecordSliceWrap = result.Wrap[ScanRecordSlice]` in `types.go`.
+
+| Container Type | Primary Constructor Helpers | Payload Representation | Core Inspection Predicates |
 | :--- | :--- | :--- | :--- |
-| **`result.Result[T]`** | **`result.Wrap[T]`** | Single entity, scalar, or struct | `result.Ok(val)` / `result.OkWrap(val)`, `result.Fail[T](err)` / `result.FailWrap[T](err)` |
-| **`result.ResultSlice[T]`** | **`result.WrapSlice[T]`** | Slice of entities or items | `result.OkSlice(items)` / `result.OkWrapSlice(items)`, `result.FailSlice[T](err)` / `result.FailWrapSlice[T](err)` |
-| **`result.ResultMap[K, V]`** | **`result.WrapMap[K, V]`** | Keyed lookup dictionary or index | `result.OkMap(mapData)` / `result.OkWrapMap(mapData)`, `result.FailMap[K, V](err)` / `result.FailWrapMap[K, V](err)` |
-| **`*apperror.AppError`** | **`*appfault.AppError`** | Structured enterprise error | `apperror.New(...)`, `apperror.Wrap(...)`, `apperror.WrapSimple(err, op)` |
+| **`result.Wrap[T]`** | `result.WrapSuccess(val)` / `result.WrapFailure[T](err)` | Single entity, scalar, or struct | `res.IsSuccess()`, `res.IsFailure()`, `res.Data()`, `res.AppError()` |
+| **`result.WrapSlice[T]`** | `result.WrapSuccess(slice)` / `result.WrapFailure[T](err)` | Slice of entities or items | `res.IsSuccess()`, `res.IsFailure()`, `res.Data()`, `res.Count()`, `res.AppError()` |
+| **`result.WrapMap[K, V]`** | `result.WrapSuccess(mapData)` / `result.WrapFailure[T](err)` | Keyed lookup dictionary or index | `res.IsSuccess()`, `res.IsFailure()`, `res.Data()`, `res.Has(key)`, `res.Get(key)` |
+| **`*appfault.AppError`** (`*apperror.AppError`) | `appfault.New(...)`, `appfault.Wrap(...)`, `apperror.WrapSimple(err, op)` | Structured enterprise error | `err.Message()`, `err.Code()`, `err.StackTrace()` |
 
 ---
 
@@ -90,9 +98,14 @@ fmt.Println(rec.Slug)
 ##### ✅ MANDATORY: Single Monadic Container with DRY types.go Definition
 
 ```go
-// Step 1: In cli/store/types.go (in the package where it is defined)
+// Step 1: In cli/store/types.go (in the package where it is defined for 100% DRY code)
 // Declare the single reusable named type alias — NEVER leak raw generic brackets in implementation signatures!
 package store
+
+import (
+	"github.com/alimtvnetwork/gitmap-v28/cli/model"
+	"github.com/alimtvnetwork/gitmap-v28/cli/result"
+)
 
 type (
 	// ScanRecordWrap is the canonical single reusable result container for ScanRecord.
@@ -107,122 +120,153 @@ func (r *RepoRepository) FindBySlug(slug string) ScanRecordWrap {
 	row := r.conn.QueryRow(SQLSelectBySlug, slug)
 	var rec model.ScanRecord
 	if err := row.Scan(&rec.RepoId, &rec.Slug, &rec.Branch); err != nil {
-		return result.FailWrap[model.ScanRecord](apperror.WrapSimple(err, "FindBySlug"))
+		return result.WrapFailure[model.ScanRecord](apperror.WrapSimple(err, "FindBySlug"))
 	}
 
-	return result.OkWrap(rec)
+	return result.WrapSuccess(rec)
 }
 
-// ✅ MANDATORY: Clean, fluent inspection via Result guard rule
+// ✅ MANDATORY: Clean, fluent inspection via affirmative predicates (IsFailure, IsSuccess)
 res := repo.FindBySlug("gitmap")
-if res.HasError() {
-	return result.FailWrap[Output](res.Err)
+
+// Affirmative failure guard:
+if res.IsFailure() {
+	return result.WrapFailure[Output](res.AppError())
 }
-if res.IsEmpty() {
-	return result.FailWrap[Output](apperror.NewNotFound("slug not found"))
+
+// Affirmative success branch:
+if res.IsSuccess() {
+	rec := res.Data()
+	fmt.Println(rec.Slug)
 }
-rec := res.Value
-fmt.Println(rec.Slug)
 ```
 
 ---
 
-#### Pattern 2: Fallible Slice / Collection Query (`result.WrapSlice[T]`)
+#### Pattern 2: Fallible Slice / Collection Query (`ScanRecordSliceWrap`)
 
-##### ❌ ANTI-PATTERN: Multi-Value Slice Tuple
+##### ❌ ANTI-PATTERN: The Screenshot Anti-Pattern (Package Stutter & Raw Generic Slice)
 ```go
-// ❌ BANNED: Slice + error tuple return
-func (r *RepoRepository) ListDirty() ([]model.ScanRecord, error) {
-	rows, err := r.conn.Query(SQLSelectDirtyRepos)
+// ❌ STRICTLY BANNED:
+// 1. Package stutter: "result.Result" is banned; use "result.Wrap"
+// 2. Leaking raw generic brackets in implementation signature
+// 3. Wrapping an anonymous slice []model.ScanRecord instead of defining a dedicated model slice type
+func (db *DB) ListReposByBranch(branch string) result.Result[[]model.ScanRecord] {
+	rows, err := db.conn.Query(SQLSelectByBranch, branch)
 	if err != nil {
-		return nil, err
+		return result.Fail[[]model.ScanRecord](err) // ❌ Banned: bare error & unaliased generic
 	}
 	defer rows.Close()
 
-	var list []model.ScanRecord
+	var repos []model.ScanRecord
 	for rows.Next() {
 		var rec model.ScanRecord
-		_ = rows.Scan(&rec.RepoId, &rec.Slug)
-		list = append(list, rec)
+		_ = rows.Scan(&rec.RepoId, &rec.Slug) // ❌ Banned: orphaned error
+		repos = append(repos, rec)
 	}
 
-	return list, nil
+	return result.Ok[[]model.ScanRecord](repos)
+}
+
+// ❌ BANNED: Outdated caller inspection
+res := db.ListReposByBranch("main")
+if res.HasError() { // ❌ Outdated: use affirmative IsFailure()
+	return res.Err   // ❌ Banned: direct field access
+}
+for _, rec := range res.Value { // ❌ Banned: raw Value access
+	process(rec)
 }
 ```
 
-##### ✅ MANDATORY: Canonical Slice Container with DRY types.go Definition
+##### ✅ MANDATORY: Dedicated Model Slice & Canonical Container in `types.go`
 
 ```go
-// Step 1: In cli/store/types.go (in the package where it is defined)
+// Step 1: In cli/store/types.go (in the package where it is defined for 100% DRY code)
+package store
+
+import (
+	"github.com/alimtvnetwork/gitmap-v28/cli/model"
+	"github.com/alimtvnetwork/gitmap-v28/cli/result"
+)
+
 type (
-	// ScanRecordSliceWrap is the canonical single reusable collection container for ScanRecord.
-	ScanRecordSliceWrap = result.WrapSlice[model.ScanRecord]
+	// ScanRecordSlice is the dedicated model slice collection type.
+	ScanRecordSlice = []model.ScanRecord
+
+	// ScanRecordSliceWrap is the canonical single reusable collection container.
+	// Replaces banned result.Result[[]model.ScanRecord] with clean, zero-bracket signature!
+	ScanRecordSliceWrap = result.Wrap[ScanRecordSlice]
 )
 ```
 
 ```go
 // Step 2: In cli/store/repo_repository.go
 // ✅ MANDATORY: Reuses ScanRecordSliceWrap from types.go — clean, DRY single-type reuse
-func (r *RepoRepository) ListDirty() ScanRecordSliceWrap {
-	rows, err := r.conn.Query(SQLSelectDirtyRepos)
+func (db *DB) ListReposByBranch(branch string) ScanRecordSliceWrap {
+	rows, err := db.conn.Query(SQLSelectByBranch, branch)
 	if err != nil {
-		return result.FailWrapSlice[model.ScanRecord](apperror.WrapSimple(err, "ListDirty"))
+		return result.WrapFailure[ScanRecordSlice](apperror.WrapSimple(err, "ListReposByBranch"))
 	}
-
 	defer rows.Close()
 
-	records := make([]model.ScanRecord, 0)
+	var records ScanRecordSlice
 	for rows.Next() {
 		var rec model.ScanRecord
-    scanErr := rows.Scan(&rec.RepoId, &rec.Slug)
-
-		if scanErr != nil {
-			return result.FailWrapSlice[model.ScanRecord](
-          apperror.WrapSimple(scanErr, "ListDirty.Scan"))
+		if scanErr := rows.Scan(&rec.RepoId, &rec.Slug, &rec.Branch); scanErr != nil {
+			return result.WrapFailure[ScanRecordSlice](apperror.WrapSimple(scanErr, "ListReposByBranch.Scan"))
 		}
-
 		records = append(records, rec)
 	}
 
-	return result.OkWrapSlice(records)
+	return result.WrapSuccess(records)
 }
 
-// ✅ MANDATORY: Fluent caller consumption
-res := repo.ListDirty()
+// ✅ MANDATORY: Fluent caller consumption with affirmative predicates (IsFailure, IsSuccess)
+res := db.ListReposByBranch("main")
 
-if res.HasError() {
-	return result.FailWrapSlice[Output](res.Err)
+// Affirmative failure guard:
+if res.IsFailure() {
+	return result.WrapFailure[OutputSlice](res.AppError())
 }
 
-if res.IsEmpty() {
-	return result.OkWrapSlice([]Output{})
-}
-
-for _, rec := range res.Items() {
-	processRecord(rec)
+// Affirmative success branch:
+if res.IsSuccess() {
+	for _, rec := range res.Data() {
+		processRecord(rec)
+	}
 }
 ```
 
 ---
 
-#### Pattern 3: Fallible Keyed Map Lookup (`result.WrapMap[K, V]`)
+#### Pattern 3: Fallible Keyed Map Lookup (`ScanRecordMapWrap`)
 
-##### ❌ ANTI-PATTERN: Multi-Value Map Tuple
+##### ❌ ANTI-PATTERN: Multi-Value Map Tuple or Raw Generic Map Return
 ```go
-// ❌ BANNED: Map + error tuple return
+// ❌ BANNED: Map + error tuple return or raw generic result.Result[map[string]model.ScanRecord]
 func (r *RepoRepository) IndexBySlug() (map[string]model.ScanRecord, error) {
 	// ...
 	return lookup, nil
 }
 ```
 
-##### ✅ MANDATORY: Canonical Map Container with DRY types.go Definition
+##### ✅ MANDATORY: Dedicated Map Type & Canonical Container in `types.go`
 
 ```go
-// Step 1: In cli/store/types.go (in the package where it is defined)
+// Step 1: In cli/store/types.go (in the package where it is defined for 100% DRY code)
+package store
+
+import (
+	"github.com/alimtvnetwork/gitmap-v28/cli/model"
+	"github.com/alimtvnetwork/gitmap-v28/cli/result"
+)
+
 type (
-	// ScanRecordMapWrap is the canonical single reusable keyed lookup container for ScanRecord.
-	ScanRecordMapWrap = result.WrapMap[string, model.ScanRecord]
+	// ScanRecordMap is the dedicated keyed lookup dictionary type.
+	ScanRecordMap = map[string]model.ScanRecord
+
+	// ScanRecordMapWrap is the canonical single reusable keyed container.
+	ScanRecordMapWrap = result.Wrap[ScanRecordMap]
 )
 ```
 
@@ -230,29 +274,32 @@ type (
 // Step 2: In cli/store/repo_repository.go
 // ✅ MANDATORY: Reuses ScanRecordMapWrap from types.go — clean, DRY single-type reuse
 func (r *RepoRepository) IndexBySlug() ScanRecordMapWrap {
-	recordsRes := r.ListAll()
-	if recordsRes.HasError() {
-		return result.FailWrapMap[string, model.ScanRecord](recordsRes.Err)
+	recordsRes := r.ListDirty()
+	if recordsRes.IsFailure() {
+		return result.WrapFailure[ScanRecordMap](recordsRes.AppError())
 	}
 
-	lookup := make(map[string]model.ScanRecord, recordsRes.Count())
-	for _, rec := range recordsRes.Items() {
+	lookup := make(ScanRecordMap, recordsRes.Count())
+	for _, rec := range recordsRes.Data() {
 		lookup[rec.Slug] = rec
 	}
 
-	return result.OkWrapMap(lookup)
+	return result.WrapSuccess(lookup)
 }
 
-// ✅ MANDATORY: Keyed lookup caller
+// ✅ MANDATORY: Keyed lookup caller with affirmative predicates (IsFailure, IsSuccess)
 res := repo.IndexBySlug()
 
-if res.HasError() {
-	return result.FailWrap[Output](res.Err)
+// Affirmative failure guard:
+if res.IsFailure() {
+	return result.WrapFailure[Output](res.AppError())
 }
 
-if res.Has("gitmap") {
-	rec, isFound := res.Get("gitmap")
-	// use rec safely
+// Affirmative success branch:
+if res.IsSuccess() {
+	if rec, isFound := res.Data()["gitmap"]; isFound {
+		processRecord(rec)
+	}
 }
 ```
 
@@ -283,14 +330,20 @@ type (
 		IsActive    bool
 	}
 
+	// ProjectSlice is the dedicated model slice collection type.
+	ProjectSlice = []ProjectRecord
+
+	// ProjectMap is the dedicated keyed lookup dictionary type.
+	ProjectMap = map[string]ProjectRecord
+
 	// ProjectWrap is the canonical single reusable result container for ProjectRecord.
 	ProjectWrap = result.Wrap[ProjectRecord]
 
 	// ProjectSliceWrap is the canonical collection container for ProjectRecord.
-	ProjectSliceWrap = result.WrapSlice[ProjectRecord]
+	ProjectSliceWrap = result.Wrap[ProjectSlice]
 
 	// ProjectMapWrap is the canonical keyed lookup container for ProjectRecord.
-	ProjectMapWrap = result.WrapMap[string, ProjectRecord]
+	ProjectMapWrap = result.Wrap[ProjectMap]
 )
 ```
 
@@ -321,30 +374,28 @@ func (r *Result[T]) IsSuccess() bool {
 		return false
 	}
 
-	return r.Err == nil || r.Err.HasNoError()
+	return r.appError == nil
 }
 
-func (r *Result[T]) HasError() bool {
+func (r *Result[T]) IsFailure() bool {
 	if r == nil {
-		return true // Null pointer is treated as error condition
+		return true // Null pointer is treated as failure condition
 	}
 
-	return r.Err != nil && r.Err.HasError()
+	return r.appError != nil
 }
 ```
 
 ##### Inspection Predicates Cheatsheet:
-- `res.IsSuccess()`: Operation completed without error.
-- `res.IsFailure()`: Operation failed with active error.
-- `res.HasError()`: Active `*apperror.AppError` is attached (or container is nil).
+- `res.IsSuccess()`: Operation completed without error. Always use affirmative check.
+- `res.IsFailure()`: Operation failed with active error. Preferred guard check before accessing data.
+- `res.Data()` / `res.Value()`: Direct payload access (guarded by prior `IsFailure()` or `IsSuccess()` check).
+- `res.AppError()` / `res.Fault()`: Structured `*appfault.AppError` (or `*apperror.AppError`) reference.
+- `res.Count()`: Returns integer count (0 on error/empty, len on slices/maps, 1 on scalar).
+- `res.IsCountOtherThan(N)`: Fluent count check replacing verbose `if err != nil || len(...) != N`.
 - `res.IsEmpty()`: Result payload is nil, empty slice, empty map, or zero-value.
 - `res.HasRecord()`: Operation succeeded AND contains at least 1 record.
 - `res.IsDefined()`: Succeeded and contains non-zero payload.
-- `res.IsCountOtherThan(N)`: Fluent count check replacing verbose `if err != nil || len(...) != N`.
-- `res.Count()`: Returns integer count (0 on error/empty, len on slices/maps, 1 on scalar).
-- `res.Value` / `res.Data`: Direct payload access (guarded by prior `HasError()` check).
-- `res.Items()`: Returns safe slice copy (returns empty slice `[]T{}` if nil or failed).
-- `res.Err` / `res.AppError()`: Structured `*apperror.AppError` reference.
 
 ---
 
