@@ -168,14 +168,19 @@ func (r *RepoRepository) ListDirty() ScanRecordSliceWrap {
 	if err != nil {
 		return result.FailWrapSlice[model.ScanRecord](apperror.WrapSimple(err, "ListDirty"))
 	}
+
 	defer rows.Close()
 
 	records := make([]model.ScanRecord, 0)
 	for rows.Next() {
 		var rec model.ScanRecord
-		if scanErr := rows.Scan(&rec.RepoId, &rec.Slug); scanErr != nil {
-			return result.FailWrapSlice[model.ScanRecord](apperror.WrapSimple(scanErr, "ListDirty.Scan"))
+    scanErr := rows.Scan(&rec.RepoId, &rec.Slug)
+
+		if scanErr != nil {
+			return result.FailWrapSlice[model.ScanRecord](
+          apperror.WrapSimple(scanErr, "ListDirty.Scan"))
 		}
+
 		records = append(records, rec)
 	}
 
@@ -184,12 +189,15 @@ func (r *RepoRepository) ListDirty() ScanRecordSliceWrap {
 
 // ✅ MANDATORY: Fluent caller consumption
 res := repo.ListDirty()
+
 if res.HasError() {
 	return result.FailWrapSlice[Output](res.Err)
 }
+
 if res.IsEmpty() {
 	return result.OkWrapSlice([]Output{})
 }
+
 for _, rec := range res.Items() {
 	processRecord(rec)
 }
@@ -237,9 +245,11 @@ func (r *RepoRepository) IndexBySlug() ScanRecordMapWrap {
 
 // ✅ MANDATORY: Keyed lookup caller
 res := repo.IndexBySlug()
+
 if res.HasError() {
 	return result.FailWrap[Output](res.Err)
 }
+
 if res.Has("gitmap") {
 	rec, isFound := res.Get("gitmap")
 	// use rec safely
