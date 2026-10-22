@@ -4,6 +4,7 @@ Master directory of architectural and execution plans.
 
 ## Pending Plans
 
+- [01-create-prompts-for-100-improvements.md](pending/01-create-prompts-for-100-improvements.md): Create Prompts for 100 Improvements: Category 30 Improvements Prompts Suite (UI Level, Code Base, Whole System), Antigravity and Cursor companion skills, and continuous improvement flywheel architecture.
 - [24-coding-guideline-and-prompt-execution-improvement.md](pending/24-coding-guideline-and-prompt-execution-improvement.md): Coding Guideline & Prompt Execution Improvement — Motto Re-anchoring (improved work or less friction), Sequential Slug Mandate (XX-<slug>), Planning Decoupling from Execution Steps, and GitMap Skills Practical Examples Enrichment across 12 categories.
 - [13-slide-quiz-preview-and-presenter-chrome.md](pending/13-slide-quiz-preview-and-presenter-chrome.md): Quiz option-card chrome, default box/text shadows, botanical-light theme, presenter shortcuts, and center-stage layout (spec + file 42).
 - [02-slides-system-overhaul.md](pending/02-slides-system-overhaul.md): Full slides deck UI and system overhaul.
