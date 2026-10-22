@@ -157,7 +157,7 @@ If sources conflict, follow stricter one and record under `Conflicts:` in ledger
 ### 1.1 Non-Negotiable Guardrails & Rules Invariants
 
 ### 1.1.E Strict Coding Guideline Enforcement Matrix
-Every code modification executed across any subtask or wave must pass the 8-Pillar Quality Gate:
+Every code modification executed across any subtask or wave must pass the 12-Pillar Quality Gate:
 1. **Error Management:** Zero orphaned errors (`_ = err` banned). Structured errors must return `*appfault.AppError` from `pkg/appfault`.
 2. **Monadic Results:** Fallible functions return `Result[T]` or `*appfault.AppError`.
 3. **Parameter Structs:** Any function with >2–3 parameters must use a dedicated `*Params` struct.
@@ -166,6 +166,47 @@ Every code modification executed across any subtask or wave must pass the 8-Pill
 6. **File Sizing:** Files bounded within 150–300 lines (UI components <= 100 lines).
 7. **Vertical Spacing:** Mandatory blank line before `if`, after `}`, before `return`, and around multiline structs.
 8. **Positive Booleans:** Affirmative `is*`/`has*` only, zero explicit `== true`, zero mixed polarity in conditions.
+9. **Centralized Date-Time Utility (`timeutil`):**
+   - NEVER construct ad-hoc timestamp strings via `time.Now().UTC().Format(...)` or string concatenations.
+   - ALWAYS call centralized time providers: `timeutil.NowUTCISO()` in Go, `DateUtil::nowUtcIso()` in PHP, `now_utc_iso()` in Python, `nowUtcIso()` in TypeScript.
+   - Single point of change: all timestamp formats must update everywhere through utility helpers.
+10. **Zero Inline Function Calls in `if` Statements:**
+   - NEVER call functions inside conditional `if` expressions:
+     ```go
+     // ❌ FORBIDDEN
+     if err := setupSSHDirAndKey(keyPath, email, assumeYes, force); err != nil {
+         return err
+     }
+     ```
+   - ALWAYS invoke the function on a separate line above the `if`, store the result in a variable, and evaluate the simple variable in the guard clause:
+     ```go
+     // ✅ MANDATORY
+     err := setupSSHDirAndKey(
+         keyPath,
+         email,
+         assumeYes,
+         force,
+     )
+     if err != nil {
+         return err
+     }
+     ```
+11. **Multiline Parameter & Argument Formatting ($>2$ arguments):**
+   - Whenever a function declaration or invocation contains more than two arguments, format each argument on its own dedicated line with trailing commas or closing parenthesis alignment:
+     ```go
+     // ✅ MANDATORY
+     err := executePipeline(
+         context.Background(),
+         repoPath,
+         branchName,
+         true,
+     )
+     ```
+12. **Database Repository Architecture & Error Sovereignty:**
+   - Raw SQL strings (`SELECT ... FROM ...`) must NEVER reside in UI rendering files, Cobra command files, or high-level coordinators.
+   - Encapsulate all database operations within dedicated repository types (`RepoRepository`, `HeatmapRepository`) with named SQL constants.
+   - Database close operations must NEVER swallow errors: `if err := db.Close(); err != nil { log.Warn(err) }` (eliminate `_ = db.Close()`).
+   - Leaf repository methods must return `*apperror.AppError` directly, bubbling up to the top-level command dispatcher for database audit capture.
 
 ### Scope Control Rules
 - **Turn 1 Task Showcase:** In your very first response turn, you MUST showcase and list out the given task in visible chat. Running tools silently without presenting the task breakdown is strictly banned.
@@ -732,6 +773,10 @@ Confirm scripts exist via harmless workspace call before invoking (R4). Run on c
 - [ ] Multi-Line Arguments (Rule 9a/9b): Signatures and call sites with >2 arguments formatted one argument per line with trailing commas.
 - [ ] Line Endings & Encoding: Strictly Unix LF (`\n`) and UTF-8 without BOM.
 - [ ] Function Sizing: Functions <= 8 lines preferred (hard cap 15 lines).
+- [ ] Centralized Date-Time Utility (`timeutil`): All timestamp formatting uses centralized time utilities (`timeutil.NowUTCISO()`), never raw inline RFC3339 format strings or ad-hoc concatenation.
+- [ ] Zero Inline Function Calls in `if`: All function invocations decoupled onto separate lines preceding the `if` guard clause (`err := fn(...)\nif err != nil`), never inline `if err := fn(...); err != nil`.
+- [ ] Multiline Parameter & Argument Formatting: All function declarations and call sites with >2 arguments formatted vertically, one argument per line with trailing commas.
+- [ ] Database Repository Architecture & Error Sovereignty: All database SQL operations encapsulated in dedicated repository types; zero swallowed `db.Close()` errors (`_ = db.Close()`); leaf repository methods return `*apperror.AppError` directly.
 - [ ] Strict Relative Git Paths & Lowercase: Zero absolute paths (`/absolute/path/to/...`) or `file:///` URIs anywhere in the diff, ledger, plans, release notes, or release page; strictly relative paths and lowercase filenames.
 
 ---
