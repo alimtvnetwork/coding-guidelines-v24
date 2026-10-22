@@ -43,3 +43,4 @@ When authoring specifications in an application repository:
 | [`01-create-prompts-for-100-improvements/`](01-create-prompts-for-100-improvements/) | Create Prompts for 100 Improvements (UI Level, Code Base, Whole System) | Task Spec | Active |
 | [`02-detail-plans-and-improvements-for-review/`](02-detail-plans-and-improvements-for-review/) | Detail Plans and Improvements for Review (Multi-Step Roadmaps & Review-First Gate) | Task Spec | Active |
 | [`03-rename-and-sync-100-improvements-prompts-and-skills/`](03-rename-and-sync-100-improvements-prompts-and-skills/) | Rename and Sync 100 Improvements Prompts and Skills (Suite Taxonomy Upgrade, Deprecation Purge Engine, 43-Repo Fleet Synchronization) | Active Task Spec | Active |
+| [`04-next-100-ideas-for-improvements/`](04-next-100-ideas-for-improvements/) | Next 100 Ideas for Improvements Prompt, Skills & Fleet Synchronization | Active Task Spec | Active |
