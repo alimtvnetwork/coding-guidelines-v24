@@ -41,3 +41,4 @@ When authoring specifications in an application repository:
 | [`readme.md`](readme.md) | Application Specification Container Standard & Index | Standard Index | Active |
 | [`25-coding-guidelines-and-folder-structure-instructions/`](25-coding-guidelines-and-folder-structure-instructions/) | Coding Guidelines & Folder Structure Instructions (v4 Archival, Spec 21 Sanitization, Multi-Repo Leak Cleanup) | Active Task Spec | Active |
 | [`01-create-prompts-for-100-improvements/`](01-create-prompts-for-100-improvements/) | Create Prompts for 100 Improvements (UI Level, Code Base, Whole System) | Task Spec | Active |
+| [`02-detail-plans-and-improvements-for-review/`](02-detail-plans-and-improvements-for-review/) | Detail Plans and Improvements for Review (Multi-Step Roadmaps & Review-First Gate) | Task Spec | Active |
