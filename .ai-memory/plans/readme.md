@@ -4,6 +4,7 @@ Master directory of architectural and execution plans.
 
 ## Pending Plans
 
+- [03-rename-and-sync-100-improvements-prompts-and-skills.md](pending/03-rename-and-sync-100-improvements-prompts-and-skills.md): Rename 100 Improvements prompts and skills suite to next-100 and next-detail-out-100-improvements, update master catalogs, purge legacy assets from 43 connected repositories, and synchronize fleet.
 - [02-detail-plans-and-improvements-for-review.md](pending/02-detail-plans-and-improvements-for-review.md): Detail Plans and Improvements for Review: Canonical Prompt 04 in Category 30, companion Antigravity/Cursor skills, and review-first pre-execution gate with multi-step roadmaps.
 - [01-create-prompts-for-100-improvements.md](pending/01-create-prompts-for-100-improvements.md): Create Prompts for 100 Improvements: Category 30 Improvements Prompts Suite (UI Level, Code Base, Whole System), Antigravity and Cursor companion skills, and continuous improvement flywheel architecture.
 - [24-coding-guideline-and-prompt-execution-improvement.md](pending/24-coding-guideline-and-prompt-execution-improvement.md): Coding Guideline & Prompt Execution Improvement — Motto Re-anchoring (improved work or less friction), Sequential Slug Mandate (XX-<slug>), Planning Decoupling from Execution Steps, and GitMap Skills Practical Examples Enrichment across 12 categories.
