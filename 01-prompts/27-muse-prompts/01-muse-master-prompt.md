@@ -259,10 +259,10 @@ If any step fails, halt immediately, surface the diagnostic context under CODE R
    - `scripts-fixture`: Passive fixture repository for multi-platform setup scripts (e.g. `scripts/44-install-rust`).
 
 5. **Secondary Repositories Discovery & User Approval Gate:**
-   Inspect `repo-cache/12-muse-ai/02-repos.md` for secondary repositories (`image-generate-v2`, `white-presentation-v1`, `wp-exam-v2`, `minecraft-alim-alima`, `macro-ahk`).
+   Inspect `repo-cache/12-muse-ai/02-repos.md` for secondary repositories (`image-generate-v2`, `white-presentation-v1`, `wp-exam-v2`, `minecraft-alim-alima`, `macro-ahk`, `img-pdf-v2`).
    **Explicit Gate:** The agent **MUST NOT** clone secondary repositories automatically. Prompt the user:
    > *"Discovered secondary repositories in `02-repos.md`. Would you like to clone any of these now, or proceed with the 9 default repositories?"*
-   **HARD SCOPE LOCK — NEVER CLONE THE WHOLE ACCOUNT (user rule, set 2026-10-24):** Cloning is limited to repositories named in this prompt — the 9 defaults in the table above, plus a secondary repository only when the user approves that specific repository by name. The agent **MUST NEVER** clone the user's full GitHub account inventory (600+ repositories), and **MUST NEVER** offer a "clone all" option. A full account URL inventory, if the user requests one, is reference-only and is never a clone list. When the user asks for "all git URLs", it means the URLs of the repositories named in this prompt and in `02-repos.md` — nothing else. Any other repository is cloned only when the user names that specific repository in that specific request.
+   **HARD SCOPE LOCK — NEVER CLONE THE WHOLE ACCOUNT (user rule, set 2026-10-24):** Cloning is limited to repositories named in this prompt — the 9 defaults in the table above, plus a secondary repository only when the user approves that specific repository by name. The agent **MUST NEVER** clone the user's full GitHub account inventory (600+ repositories), and **MUST NEVER** offer a "clone all" option. A full account URL inventory, if the user requests one, is reference-only and is never a clone list. When the user asks for "all git URLs", it means the URLs of the repositories named in this prompt and in `02-repos.md` — nothing else. Any other repository is cloned only when the user names that specific repository in that specific request. **Numeric cap (strict):** the agent **MUST NEVER** clone more than 20 repositories in one operation or one onboarding session — even named ones — without stopping first and getting the user's explicit confirmation. Bulk-clone operations are strictly avoided; when in doubt, clone fewer and ask.
 
 6. **Step 3 Report:**
    Output Step 3 Report summarizing cloned repositories, seeded side chats, and vault designations.
@@ -283,6 +283,11 @@ If any step fails, halt immediately, surface the diagnostic context under CODE R
 
 3. **Step 4 Report:**
    Output Step 4 Report with pull summary across all handpicked repositories.
+
+4. **History, Plans & CI Review (MANDATORY before planning new work):**
+   - Read the working repository's recent history first: the last 50–80 commits, plus its plans (`.ai-memory/plans/` — completed and pending) and specs, to establish what is done, what is in flight, and what is broken — before writing any new plan.
+   - Check CI/CD status for the working repository (`gitmap pe -t` or `gitmap pipeline-ai status --json`).
+   - **Red CI rule:** if CI/CD is not green on the repository being worked on, fixing CI and releasing is the first job — it takes priority over new feature work. Never stack new work on top of a red pipeline.
 
 ---
 

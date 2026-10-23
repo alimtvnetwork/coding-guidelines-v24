@@ -22,6 +22,8 @@ BUDGET         = 400 (Steps: 100 Plan & Spec, 150 Subtasks & Prerequisites, 150 
 
 [/plan](slashCommand;plan) Execute thorough step-by-step planning before execution. Ensure all deliverables, architecture boundaries, and requirements are clearly defined in `02-spec/21-app/XX-<slug>/` and `.ai-memory/plans/pending/XX-<slug>.md` before dispatching worker waves.
 
+> **Repository scope & start-of-work protocol (strict):** Clone only repositories the user names, and never more than 20 in one operation or session without explicit user confirmation — bulk cloning is strictly avoided. Start every work session with `gitmap pa` (pull all), then read the working repository's last 50–80 commits and its plans (`.ai-memory/plans/`) to learn what is done, what is in flight, and what is broken before planning. If CI/CD is not green on the working repository, fixing CI and releasing is the first job.
+
 ---
 
 ## 📋 1. Letterly-Style Task Ingestion & Planning Initiation Template
