@@ -278,7 +278,7 @@ read_config() {
     elif [[ $i -eq 1 ]]; then [[ -z "$BRANCH" ]] && BRANCH="$line"
     else [[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS+=("$line")
     fi
-    ((i++))
+    ((i+=1))
   done <<< "$result"
 }
 
@@ -479,10 +479,10 @@ merge_file() {
         $FULL_ROLLBACK && record_overwrite_backup "$target"
         mkdir -p "$target_dir"; cp -f "$src" "$target"
       fi
-      ((OVERWROTE++))
+      ((OVERWROTE+=1))
     else
       dim "  - skip ${target#$DEST/}"
-      ((SKIPPED_FILES++))
+      ((SKIPPED_FILES+=1))
     fi
   else
     if $DRY_RUN; then
@@ -491,7 +491,7 @@ merge_file() {
       mkdir -p "$target_dir"; cp -f "$src" "$target"
       $FULL_ROLLBACK && record_new_path "$target"
     fi
-    ((WROTE_NEW++))
+    ((WROTE_NEW+=1))
   fi
 }
 
@@ -525,7 +525,7 @@ merge_folder() {
   local src="$ARCHIVE_ROOT/$folder"
   if [[ ! -e "$src" ]]; then
     warn "Folder or file '$folder' not found in $REPO@$REF - skipping"
-    ((SKIPPED_FOLDERS++))
+    ((SKIPPED_FOLDERS+=1))
     return
   fi
   step "Merging: $folder"
@@ -559,7 +559,7 @@ merge_folder() {
       if [[ -e "$dst" ]]; then
         # If target exists, only allow updating coding-guidelines.md
         if [[ "$full_rel" != *coding-guidelines.md ]]; then
-          ((SKIPPED_FILES++))
+          ((SKIPPED_FILES+=1))
           continue
         fi
       fi
@@ -595,7 +595,7 @@ merge_folder() {
     FETCHED_PATHS+=("$full_rel")
     echo "    ↳ fetched: $full_rel"
   done < <(if $is_src_file; then printf "%s\0" "$src"; else find "$src" -type f -print0; fi)
-  ((COPIED++))
+  ((COPIED+=1))
 }
 
 for folder in "${FOLDERS[@]}"; do
@@ -617,7 +617,6 @@ for tlf in "${TOP_LEVEL_FILES[@]}"; do
     continue
   fi
 
-  local srchash
   srchash="$(compute_hash "$src")"
   if check_hash_match "$tlf" "$srchash" && [[ -e "$DEST/$tlf" ]]; then
     echo "    \"$tlf\": \"$srchash\"," >> "$MANIFEST_NEW_TMP"
@@ -658,7 +657,7 @@ echo ""
 if $GENERAL; then
   REQUIRED_FILES=(".gitignore")
 else
-  REQUIRED_FILES=("fix-repo.sh" "fix-repo.ps1")
+  REQUIRED_FILES=("scripts/fix-repo/config.sh" "scripts/fix-repo/Config.ps1")
 fi
 verify_required_files() {
   local missing=()
@@ -672,8 +671,8 @@ verify_required_files() {
   for m in "${missing[@]}"; do echo "     • $m" >&2; done
   echo "" >&2
   echo "   The archive was downloaded but did NOT contain the expected" >&2
-  echo "   top-level scripts. Re-run without --version to fetch main, or" >&2
-  echo "   pin to a release that includes fix-repo.{sh,ps1}." >&2
+  echo "   payload scripts. Re-run without --version to fetch main, or" >&2
+  echo "   pin to a release that includes scripts/fix-repo/." >&2
   exit 4
 }
 $DRY_RUN || verify_required_files
@@ -723,13 +722,13 @@ restore_installed_paths() {
   step "Removing files created by this install run..."
   for target in "${INSTALLED_NEW[@]:-}"; do
     [[ -e "$target" ]] || continue
-    rm -f "$target" && ((removed++)) || warn "could not remove $target"
+    rm -f "$target" && ((removed+=1)) || warn "could not remove $target"
   done
   step "Restoring overwritten files from backups..."
   for pair in "${INSTALLED_BACKUPS[@]:-}"; do
     target="${pair%%|*}"; backup="${pair##*|}"
     [[ -f "$backup" ]] || continue
-    cp -f "$backup" "$target" && ((restored++)) || warn "could not restore $target"
+    cp -f "$backup" "$target" && ((restored+=1)) || warn "could not restore $target"
   done
   ok "Removed $removed new file(s); restored $restored overwritten file(s)"
 }

@@ -539,7 +539,7 @@ try {
     # ── Verify required files (spec §8: exit 4 on missing required path) ──
     # Required files MUST exist in Dest after install. Skipped under -DryRun.
     if (-not $DryRun) {
-        $requiredFiles = if ($General) { @(".gitignore") } else { @("fix-repo.sh", "fix-repo.ps1") }
+        $requiredFiles = if ($General) { @(".gitignore") } else { @("scripts/fix-repo/config.sh", "scripts/fix-repo/Config.ps1") }
         $missing = @()
         foreach ($rf in $requiredFiles) {
             if (-not (Test-Path (Join-Path $Dest $rf))) { $missing += $rf }
