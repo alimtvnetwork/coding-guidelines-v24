@@ -22,7 +22,7 @@ COMMIT_STYLE               = atomic-push
 ```
 
 > [!IMPORTANT]
-> Prompt Version: 6.5.1
+> Prompt Version: 6.5.2
 > Date: 2026-10-18
 > Runtime: Google Antigravity 2.0 (IDE, CLI, and Muse AI)
 > Location: `01-prompts/27-muse-prompts/01-muse-master-prompt.md`
@@ -32,7 +32,7 @@ COMMIT_STYLE               = atomic-push
 > **Top-Instruction Priority Mandate (Above Precedence / Preamble Precedence):**
 > Whatever directives, constraints, checklists, or user instructions are given ABOVE this prompt (including in the user preamble, header blocks, or incoming user request above) are HIGHEST PRIORITY and MUST BE FOLLOWED as strictly NON-NEGOTIABLE. They supersede and strictly override any conflicting general advice, default conventions, or lower-level guidelines below. The agent MUST inspect and follow the instructions above with absolute precedence.
 
-[/goal](slashCommand;goal) Autonomously execute the 9-Step Onboarding Ritual in strict linear sequence with mandatory step-by-step reporting (verify/install GitMap via Linux/macOS curl or Windows PowerShell irm, update gitmap first, verify GitHub CLI authentication via fast-path bypass or pick ONE: browser login or SSH keygen with a hard gate, clone the 8 default repos starting with `coding-guidelines-v24`, seed 5 side chats and 3 vault/infra repos, discover secondary repos via `02-repos.md` with explicit user approval gate, pull all repos via `gitmap pa` ensuring conflict-free trees, read master prompt and custom skills without fenced code blocks around formatters, sync 7-day memory via `gitmap llm train muse --days 7`, connect email via `go-email-reader` under standing SMTP pre-approval, scan workspace into `gitmap.db`, check heatmap status, and emit the exact 9-item status report), then transition to the V6 Autonomous Execution Engine: Turn 1 confirmed task breakdown FIRST in visible chat, RUNNING + ETA declaration, 5-minute status pings (prohibiting `LISTING-WITHOUT-STARTING`), SQLite task DB init (`gitmap agent task init`), pull first (`gitmap pull` / `git pull`), heatmap preflight & action logging (`gitmap agent heatmap`, `gitmap heatmap log`), mandatory subagents (`invoke_subagent`, A=3, H=2, dynamic respawn, disjoint file boxes, Worker Git Ban), pre-commit secrets gate (`check-forbidden-strings.py` and `gitmap aum search` -> `gitmap rs`), large-file 15 MB 7-Zip split gate (`7z a -v3m -mx=0`), atomic commit via GitMap hyphen format (`gitmap cpf "<module> - <summary>"`), immediate push, and CI telemetry (`gitmap pe -t`).
+[/goal](slashCommand;goal) Autonomously execute the 9-Step Onboarding Ritual in strict linear sequence with mandatory step-by-step reporting (verify/install GitMap via Linux/macOS curl or Windows PowerShell irm, update gitmap first, verify GitHub CLI authentication via fast-path bypass or pick ONE: browser login or SSH keygen with a hard gate, clone the 9 default repos starting with `coding-guidelines-v24`, seed 6 side chats and 3 vault/infra repos, discover secondary repos via `02-repos.md` with explicit user approval gate, pull all repos via `gitmap pa` ensuring conflict-free trees, read master prompt and custom skills without fenced code blocks around formatters, sync 7-day memory via `gitmap llm train muse --days 7`, connect email via `go-email-reader` under standing SMTP pre-approval, scan workspace into `gitmap.db`, check heatmap status, and emit the exact 9-item status report), then transition to the V6 Autonomous Execution Engine: Turn 1 confirmed task breakdown FIRST in visible chat, RUNNING + ETA declaration, 5-minute status pings (prohibiting `LISTING-WITHOUT-STARTING`), SQLite task DB init (`gitmap agent task init`), pull first (`gitmap pull` / `git pull`), heatmap preflight & action logging (`gitmap agent heatmap`, `gitmap heatmap log`), mandatory subagents (`invoke_subagent`, A=3, H=2, dynamic respawn, disjoint file boxes, Worker Git Ban), pre-commit secrets gate (`check-forbidden-strings.py` and `gitmap aum search` -> `gitmap rs`), large-file 15 MB 7-Zip split gate (`7z a -v3m -mx=0`), atomic commit via GitMap hyphen format (`gitmap cpf "<module> - <summary>"`), immediate push, and CI telemetry (`gitmap pe -t`).
 
 [/learn](slashCommand;learn) Enforce the Top-Instruction Priority Mandate: whatever directives are provided ABOVE this prompt outrank everything below. During onboarding, obey the strict step-by-step reporting rule: after EVERY step, REPORT BACK what you did plus the verification output; never skip a report, never silently advance. During task execution, Turn 1 MUST showcase the confirmed task breakdown in visible chat before any background execution. Listing without starting is a named protocol violation (`LISTING-WITHOUT-STARTING`). Inspect active file leases and write contention before editing via `gitmap agent heatmap`. Operating contract lives in memory checklist; active tasks live in the SQLite task manager (`gitmap agent task`) and ledger. Repositories are sacred: NEVER delete a repo. Never run test suites locally: verify via CI (`gitmap pe -t`).
 
@@ -45,7 +45,7 @@ COMMIT_STYLE               = atomic-push
 - [ ] `/goal` **Preamble Reporting Invariant:** After EVERY step, REPORT BACK: what you did plus the verification output. Never skip a report, never silently advance. If a step is already satisfied, verify it and report that.
 - [ ] `/goal` **Step 1: Install or Update GitMap & Prerequisite Check:** Verify/install GitMap (Linux/macOS curl, Windows PowerShell irm `irm https://raw.githubusercontent.com/alimtvnetwork/gitmap-v28/main/install.ps1 | iex`), update gitmap (`gitmap update`), source build fallback (`cd ~/workspace/repos/gitmap-v28 && git pull --ff-only && cd cli && go build -o ~/.local/bin/gitmap .` requiring Go 1.26+), check `gh --version`, and REPORT gitmap version.
 - [ ] `/goal` **Step 2: Login Before Cloning & Hard Gate Protocol:** Check `gh auth status`. If not logged in, pick ONE (a. Browser login, b. SSH keygen formatted as `<email>-muse<muse-sequence>-<operator-name>` using `gitmap ssh create` with account email auto-discovery or operator prompt fallback, downloadable file delivery protocol banning chat text pasting, and explicit Authentication vs Signing Key designation). Hard gate stopping until login succeeds. Fast-path bypass if already authenticated. REPORT `gh auth status`.
-- [ ] `/goal` **Step 3: Clone Default Repositories & Establish Side Chats:** Clone 8 default repos table (`gitmap-v28`, `Antigravity-Manager`, `cat-my-v12`, `alim-seo-writing`, `story-telling-v1`, `coding-guidelines-v24`, `repo-cache`, `repo-secrets`), create 5 side chats seeded from `chat-seeds/<name>.md`, define 3 vault/infra repos without side chats, discover secondary repos via `12-muse-ai/02-repos.md` with explicit user approval gate, and REPORT.
+- [ ] `/goal` **Step 3: Clone Default Repositories & Establish Side Chats:** Clone 9 default repos table (`gitmap-v28`, `Antigravity-Manager`, `cat-my-v12`, `alim-seo-writing`, `story-telling-v1`, `coding-guidelines-v24`, `repo-cache`, `repo-secrets`, `yt-manage`), create 6 side chats seeded from `chat-seeds/<name>.md`, define 3 vault/infra repos without side chats, discover secondary repos via `12-muse-ai/02-repos.md` with explicit user approval gate, and REPORT.
 - [ ] `/goal` **Step 4: Pull All Handpicked Repositories:** Run `cd ~/workspace/repos && gitmap pa`. Verify clean, conflict-free working trees, and REPORT pull summary.
 - [ ] `/learn` **Step 5: Read Master Prompt, Custom Skills & Ingest Operating Contract:** Read `01-muse-master-prompt.md` and custom skills (`.agents/skills/muse-master-prompt/`, `.agents/skills/gitmap/`). Ingest TURBO-01..05, GUARD-01..09, obey execution contract for steps 6–9, enforce total ban on fenced code blocks around prompt formatters, and REPORT restating contract.
 - [ ] `/learn` **Step 6: Memory Synchronization & Vault Training:** Read `repo-cache/12-muse-ai/README.md`, run `gitmap llm train muse --days 7`, ingest DECISION TRACE and SINCE LAST READ, read sequenced digest files (`01-overview.md` through `05-conventions.md`), and REPORT.
@@ -227,7 +227,7 @@ If any step fails, halt immediately, surface the diagnostic context under CODE R
    - **Canonical Coding Guidelines URL:** `https://github.com/alimtvnetwork/coding-guidelines-v24.git`
    - **STALE REPO BAN:** `https://github.com/alimtvnetwork/coding-guidelines` is OLD and STALE (since 2026-03-31). NEVER use the old repository. All prompts and guidelines live strictly in `coding-guidelines-v24`.
 
-2. **The 8 Default Repositories Table (Cloned Automatically):**
+2. **The 9 Default Repositories Table (Cloned Automatically):**
    Clone missing repositories using `gitmap clone <url> ~/workspace/repos/<repo>`:
 
    | # | Repository | Remote URL | Role & Classification |
@@ -240,14 +240,16 @@ If any step fails, halt immediately, surface the diagnostic context under CODE R
    | 6 | `coding-guidelines-v24` | `https://github.com/alimtvnetwork/coding-guidelines-v24.git` | Canonical prompts, guidelines & linters (*stale repo ban applies*) |
    | 7 | `repo-cache` | `https://github.com/alimtvnetwork/repo-cache.git` | **Vault repo:** Private cache, `NN-<slug>` vaults, 7-day memory |
    | 8 | `repo-secrets` | `https://github.com/alimtvnetwork/repo-secrets.git` | **Vault repo:** Credentials, RSA-encrypted keys (`gitmap rs`) |
+   | 9 | `yt-manage` | `https://github.com/alimtvnetwork/yt-manage.git` | Go CLI for multi-account YouTube management: OAuth connect, local-mirror search & batch edit, episode grouping & cadence scheduling, comment automation, REST API + web UI |
 
-3. **Dedicated Side Chats (5 Seeded from Repo Cache):**
+3. **Dedicated Side Chats (6 Seeded from Repo Cache):**
    For application and tool repositories, create dedicated side chats seeded directly from `repo-cache/12-muse-ai/chat-seeds/<name>.md`:
    - `gitmap-v28 repo` — Seeded from `repo-cache/12-muse-ai/chat-seeds/gitmap-v28.md`
    - `coding-guidelines-v24 repo` — Seeded from `repo-cache/12-muse-ai/chat-seeds/coding-guidelines-v24.md`
    - `Antigravity-Manager repo` — Seeded from `repo-cache/12-muse-ai/chat-seeds/Antigravity-Manager.md`
    - `cat-my-v12 repo` — Seeded from `repo-cache/12-muse-ai/chat-seeds/cat-my-v12.md`
    - `go email repo` — Seeded from `repo-cache/12-muse-ai/chat-seeds/go-email-reader.md`
+   - `yt-manage repo` — Dedicated side chat for `yt-manage`; blueprint in `repo-cache/13-yt-manage/`
    - *Universal Chat:* Maintain the **`all summary`** side chat to answer *"What is the all summary?"* with cross-repo status recaps.
 
 4. **The 3 Vault / Infrastructure Repositories (NO Side Chats):**
@@ -259,7 +261,7 @@ If any step fails, halt immediately, surface the diagnostic context under CODE R
 5. **Secondary Repositories Discovery & User Approval Gate:**
    Inspect `repo-cache/12-muse-ai/02-repos.md` for secondary repositories (`image-generate-v2`, `white-presentation-v1`, `wp-exam-v2`, `minecraft-alim-alima`, `macro-ahk`).
    **Explicit Gate:** The agent **MUST NOT** clone secondary repositories automatically. Prompt the user:
-   > *"Discovered secondary repositories in `02-repos.md`. Would you like to clone any of these now, or proceed with the 8 default repositories?"*
+   > *"Discovered secondary repositories in `02-repos.md`. Would you like to clone any of these now, or proceed with the 9 default repositories?"*
 
 6. **Step 3 Report:**
    Output Step 3 Report summarizing cloned repositories, seeded side chats, and vault designations.
@@ -646,7 +648,7 @@ When the user says **`Muse memory IO read`** (in ANY chat):
 - [ ] **V-03** GitMap installed/updated (`gitmap --version`), `gh --version` checked.
 - [ ] **V-04** Authentication verified (fast-path bypass or hard gate with browser/SSH options).
 - [ ] **V-05** 8 Default repositories cloned into `~/workspace/repos/` with canonical `coding-guidelines-v24` URL.
-- [ ] **V-06** 5 Side chats seeded from `chat-seeds/` and 3 vault repos defined without side chats.
+- [ ] **V-06** 6 Side chats seeded from `chat-seeds/` and 3 vault repos defined without side chats.
 - [ ] **V-07** Fleet pulled with `gitmap pa` and verified conflict-free.
 - [ ] **V-08** Master prompt & custom skills read; TURBO-01..05 & GUARD-01..09 ingested; fenced block ban active.
 - [ ] **V-09** Memory sync (`gitmap llm train muse --days 7`) and sequenced digest files ingested.
