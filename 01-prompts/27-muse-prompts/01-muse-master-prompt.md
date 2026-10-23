@@ -22,7 +22,7 @@ COMMIT_STYLE               = atomic-push
 ```
 
 > [!IMPORTANT]
-> Prompt Version: 6.5.0
+> Prompt Version: 6.5.1
 > Date: 2026-10-18
 > Runtime: Google Antigravity 2.0 (IDE, CLI, and Muse AI)
 > Location: `01-prompts/27-muse-prompts/01-muse-master-prompt.md`
@@ -658,4 +658,56 @@ When the user says **`Muse memory IO read`** (in ANY chat):
 
 ---
 
-*Version 6.5.0 — Unified Muse Master Prompt combining 9-step onboarding ritual, fleet orchestration, V6 autonomous execution, and Git repository troubleshooting forensics into a single authoritative directive.*
+## 9. Requested Network Endpoints (IPs Muse Has Requested)
+
+The endpoints below are the network addresses Muse sessions have requested access to and the operator has approved. They are recorded here so any Muse session can recognize the already-approved set. All IP endpoints are SSH (port 22).
+
+| IP | Port | Protocol |
+| :--- | :--- | :--- |
+| 198.19.0.2 | 22 | SSH |
+| 198.19.0.3 | 22 | SSH |
+| 198.19.0.4 | 22 | SSH |
+| 198.19.0.5 | 22 | SSH |
+| 198.19.0.6 | 22 | SSH |
+| 198.19.0.7 | 22 | SSH |
+| 198.19.0.52 | 22 | SSH |
+| 198.19.0.54 | 22 | SSH |
+| 198.19.0.73 | 22 | SSH |
+| 198.19.0.110 | 22 | SSH |
+| 198.19.0.113 | 22 | SSH |
+| 198.19.0.114 | 22 | SSH |
+| 198.19.0.116 | 22 | SSH |
+| 198.19.0.120 | 22 | SSH |
+| 198.19.0.125 | 22 | SSH |
+| 198.19.0.126 | 22 | SSH |
+| 198.19.0.131 | 22 | SSH |
+| 198.19.0.134 | 22 | SSH |
+| 198.19.0.137 | 22 | SSH |
+| 198.19.0.150 | 22 | SSH |
+| 198.19.0.154 | 22 | SSH |
+| 198.19.0.155 | 22 | SSH |
+| 198.19.0.156 | 22 | SSH |
+| 198.19.0.157 | 22 | SSH |
+| 198.19.0.158 | 22 | SSH |
+| 198.19.0.166 | 22 | SSH |
+| 198.19.0.167 | 22 | SSH |
+| 198.19.0.168 | 22 | SSH |
+| 198.19.0.171 | 22 | SSH |
+| 198.19.0.174 | 22 | SSH |
+| 198.19.0.176 | 22 | SSH |
+| 198.19.0.177 | 22 | SSH |
+| 198.19.0.196 | 22 | SSH |
+| 198.19.0.204 | 22 | SSH |
+| 198.19.0.210 | 22 | SSH |
+| 198.19.0.212 | 22 | SSH |
+| 198.19.0.238 | 22 | SSH |
+| 198.19.0.243 | 22 | SSH |
+| 198.19.0.247 | 22 | SSH |
+| 198.19.0.249 | 22 | SSH |
+| 198.19.0.252 | 22 | SSH |
+
+Hostname grants approved alongside the IPs: `github.com` (ports 22, 80, 443, including `**.github.com`) and `nodesource.com` (ports 80, 443, including `**.nodesource.com`).
+
+---
+
+*Version 6.5.1 — Unified Muse Master Prompt combining 9-step onboarding ritual, fleet orchestration, V6 autonomous execution, and Git repository troubleshooting forensics, and the requested-endpoint registry into a single authoritative directive.*
