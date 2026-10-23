@@ -35,8 +35,8 @@ This subtask delivers `02-spec/21-app/06-cg-execute-golang-pointers-and-mutation
 4. **Section 4 Schema Integration into the V6 Execute Prompt Structure:**
    - Formal specification of Section 4 text inserting between Section 3 (GitMap Commands) and Section 5 (Step 0 Preflight).
 5. **Symmetric Companion Skill Schemas:**
-   - Antigravity Skill (`.agents/skills/cg-golang-pointers-and-mutation-reduction/skill.md`) with `[skill](file;.agents/skills/skill)` link syntax.
-   - Cursor IDE Skill (`.cursor/skills/cg-golang-pointers-and-mutation-reduction/skill.md`) with `[skill](file;.cursor/skills/skill)` link syntax.
+   - Antigravity Skill (`.agents/skills/cg-golang-pointers-and-mutation-reduction/skill.md`) with `[skill](file;.agents/skills/<name>)` link syntax.
+   - Cursor IDE Skill (`.cursor/skills/cg-golang-pointers-and-mutation-reduction/skill.md`) with `[skill](file;.cursor/skills/<name>)` link syntax.
 6. **Concrete Production Transformation Case Studies:**
    - Case Study 1: CLI Configuration & Options Refactoring.
    - Case Study 2: Repository Scanner & File Metadata Extraction.

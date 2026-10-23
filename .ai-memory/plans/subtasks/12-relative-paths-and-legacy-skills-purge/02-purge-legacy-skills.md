@@ -1,7 +1,7 @@
 # Subtask [02]: Purge Legacy Execute Skills & Clean Repository Cross-References
 
 Traceability ID: Task-02
-Spec Reference: [02-spec/21-app/12-relative-paths-and-legacy-skills-purge/01-architecture-spec.md](../../../../02-spec/21-app/12-relative-paths-and-legacy-skills-purge/01-architecture-spec.md)
+Spec Reference: `02-spec/21-app/12-relative-paths-and-legacy-skills-purge/01-architecture-spec.md`
 Target Files:
 - `.agents/skills/execute-parent-task/`
 - `.agents/skills/execute-parent-task-with-n-steps/`

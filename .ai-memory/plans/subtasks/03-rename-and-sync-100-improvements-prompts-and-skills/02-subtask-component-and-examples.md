@@ -20,7 +20,7 @@ This subtask delivers `02-spec/21-app/03-rename-and-sync-100-improvements-prompt
    - Invoke directives and slash commands (`/next-100-ui-improvements`, `/next-100-code-improvements`, etc.).
    - Phase 0 Antigravity and Cursor skill bootstrap directives.
    - Successive wave pending plan targets (`.ai-memory/plans/pending/XX-next-*`).
-3. **Symmetric Skills Architecture:** Exact YAML frontmatter (`name`, `description`), header formatting, and IDE-detectable skill link syntax (`[skill](file;.agents/skills/skill)` vs `[skill](file;.cursor/skills/skill)`).
+3. **Symmetric Skills Architecture:** Exact YAML frontmatter (`name`, `description`), header formatting, and IDE-detectable skill link syntax (`[skill](file;.agents/skills/<name>)` vs `[skill](file;.cursor/skills/<name>)`).
 4. **Catalog & Documentation Synchronization:** Exact before/after replacements for `01-prompts/30-improvements/readme.md`, `01-prompts/readme.md`, and `.ai-memory/prompts.md`.
 5. **Fleet Synchronization & Purge Logic:** Python implementation blueprint for `03-ai-scripts/38-sync-prompts-skills-scripts.py` to automatically purge deprecated prompts and skill directories across the 43 target repositories during sync.
 6. **Binary Verification Contract:** Structured validation commands ensuring 100% path hygiene, zero stale leftovers, and zero absolute paths.
@@ -66,7 +66,7 @@ This subtask delivers `02-spec/21-app/03-rename-and-sync-100-improvements-prompt
   - `02-next-100-code-improvements.md`
   - `03-next-100-whole-system-improvements.md`
   - `04-next-detail-out-100-improvements.md`
-- **Section 4: Antigravity & Cursor Skills Architecture Transformation:** Detailed specifications for the 8 skills across `.agents/skills/` and `.cursor/skills/`, including exact YAML frontmatter, header lines, and platform-specific IDE link syntax (`[skill](file;.agents/skills/skill)` vs `[skill](file;.cursor/skills/skill)`).
+- **Section 4: Antigravity & Cursor Skills Architecture Transformation:** Detailed specifications for the 8 skills across `.agents/skills/` and `.cursor/skills/`, including exact YAML frontmatter, header lines, and platform-specific IDE link syntax (`[skill](file;.agents/skills/<name>)` vs `[skill](file;.cursor/skills/<name>)`).
 - **Section 5: Catalog & Documentation Synchronization:** Full replacement blocks for `01-prompts/30-improvements/readme.md`, `01-prompts/readme.md`, and `.ai-memory/prompts.md`.
 - **Section 6: Fleet Synchronization & Target Repository Purge Logic:** Concrete Python code blueprint for `03-ai-scripts/38-sync-prompts-skills-scripts.py`, defining pre-sync unlinking of old prompts and `shutil.rmtree` on old skill directories across all 43 target repositories.
 - **Section 7: Concrete Examples & Transformation Diff Patterns:** Three concrete before/after unified diff blocks illustrating prompt header migration, skill YAML frontmatter update, and companion skill cross-linking.

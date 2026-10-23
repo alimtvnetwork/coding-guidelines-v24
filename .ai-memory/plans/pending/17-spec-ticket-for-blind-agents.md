@@ -13,7 +13,7 @@ This plan is the work. Implement it in order. Do not redesign it.
 
 A weak agent can follow a short ticket with pass/fail checks. It cannot follow a large library that disagrees with itself.
 
-This repository is the library: coding rules, error types, and design tokens, plus linters for some of the rules. The G-Spec source is the `/spec` skill in the local gstack checkout, file `spec/SKILL.md`. Read it. Do not edit it. Do not copy that repository into this one.
+This repository is the library: coding rules, error types, and design tokens, plus linters for some of the rules. The G-Spec source is the `/spec` skill in the local gstack checkout, file spec/SKILL.md. Read it. Do not edit it. Do not copy that repository into this one.
 
 Who is affected: the next agent asked to implement a spec in this repo.
 Current gap: the authoring guide tells every module to claim a confidence score, and many files say `Ambiguity: None` while other files contradict them.
@@ -32,8 +32,8 @@ Done when: the acceptance criteria in this plan all pass.
 | Next free authoring number | none | Files `02` through `14` exist. `15` is free. `97`, `98`, `99` stay reserved |
 | Module template | `02-spec/01-spec-authoring-guide/08-non-cli-module-template.md` | Module shape. It is not a one-change ticket |
 | Plans index | `.ai-memory/plans/readme.md` | Pending list. This file is `pending/17-spec-ticket-for-blind-agents.md` |
-| G-Spec process | gstack checkout `spec/SKILL.md` around the Process and Issue Quality Standards headings | Five phases, 14 quality rules, issue headings, anti-patterns |
-| G-Spec gate | gstack checkout `spec/sections/gate-and-file.md` | Outside reviewer score plus a secret scan. Depends on bun and a local gstack install |
+| G-Spec process | gstack checkout spec/SKILL.md around the Process and Issue Quality Standards headings | Five phases, 14 quality rules, issue headings, anti-patterns |
+| G-Spec gate | gstack checkout spec/sections/gate-and-file.md | Outside reviewer score plus a secret scan. Depends on bun and a local gstack install |
 
 Do not edit the gstack checkout.
 
@@ -123,7 +123,7 @@ Keep the file at or under 300 lines, skipping blanks and comments. Comments in m
 
 ## Task B: heading checker
 
-Create `linter-scripts/check-spec-ticket-headings.py`.
+Create linter-scripts/check-spec-ticket-headings.py.
 
 Behavior:
 
@@ -195,7 +195,7 @@ Revert the implementation commit. No data migration.
 |---|---|
 | `02-spec/01-spec-authoring-guide/15-executable-spec-ticket.md` | Create the template |
 | `02-spec/01-spec-authoring-guide/16-blind-agent-reading-path.md` | Create the three-step path |
-| `linter-scripts/check-spec-ticket-headings.py` | Create the heading checker |
+| linter-scripts/check-spec-ticket-headings.py | Create the heading checker |
 | `02-spec/01-spec-authoring-guide/readme.md` | Add two inventory rows and one ambiguity sentence |
 | `02-spec/01-spec-authoring-guide/04-required-files.md` | Recommend the ticket shape, do not require it |
 | `02-spec/01-spec-authoring-guide/99-consistency-report.md` | Add the two filenames if an inventory table exists |

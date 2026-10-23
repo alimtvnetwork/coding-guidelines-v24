@@ -53,9 +53,9 @@ Orchestrate the end-to-end catalog registration, fleet-wide multi-repository syn
   - `01-prompts/30-improvements/03-find-100-improvements-in-whole-system.md`
   - `01-prompts/30-improvements/readme.md`
 - [ ] Verify that Task-03 deliverables exist and are symmetrical:
-  - `.agents/skills/find-100-improvements-in-ui-level/skill.md`
-  - `.agents/skills/find-100-improvements-in-code-base/skill.md`
-  - `.agents/skills/find-100-improvements-in-whole-system/skill.md`
+  - .agents/skills/find-100-improvements-in-ui-level/skill.md
+  - .agents/skills/find-100-improvements-in-code-base/skill.md
+  - .agents/skills/find-100-improvements-in-whole-system/skill.md
   - `.cursor/skills/find-100-improvements-in-ui-level/skill.md`
   - `.cursor/skills/find-100-improvements-in-code-base/skill.md`
   - `.cursor/skills/find-100-improvements-in-whole-system/skill.md`

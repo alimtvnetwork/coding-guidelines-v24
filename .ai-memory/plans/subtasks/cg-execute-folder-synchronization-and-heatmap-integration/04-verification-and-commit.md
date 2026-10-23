@@ -10,8 +10,8 @@
 
 ## Canonical References
 
-- Architecture Specification: [`02-spec/21-app/cg-execute-folder-synchronization-and-heatmap-integration/01-architecture-spec.md`](../../../../02-spec/21-app/cg-execute-folder-synchronization-and-heatmap-integration/01-architecture-spec.md)
-- Implementation Specification: [`02-spec/21-app/cg-execute-folder-synchronization-and-heatmap-integration/02-implementation-spec.md`](../../../../02-spec/21-app/cg-execute-folder-synchronization-and-heatmap-integration/02-implementation-spec.md)
+- Architecture Specification: `02-spec/21-app/cg-execute-folder-synchronization-and-heatmap-integration/01-architecture-spec.md`
+- Implementation Specification: `02-spec/21-app/cg-execute-folder-synchronization-and-heatmap-integration/02-implementation-spec.md`
 - Companion Subtask 03: [`03-skills-and-rc-agent.md`](03-skills-and-rc-agent.md)
 
 ---

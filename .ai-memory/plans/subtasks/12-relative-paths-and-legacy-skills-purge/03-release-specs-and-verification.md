@@ -1,7 +1,7 @@
 # Subtask [03]: Release Specs & Companion Skills Synchronization and Verification
 
 Traceability ID: Task-04, Task-05, Task-06
-Spec Reference: [02-spec/21-app/12-relative-paths-and-legacy-skills-purge/01-architecture-spec.md](../../../../02-spec/21-app/12-relative-paths-and-legacy-skills-purge/01-architecture-spec.md)
+Spec Reference: `02-spec/21-app/12-relative-paths-and-legacy-skills-purge/01-architecture-spec.md`
 Target Files:
 - `.agents/skills/letterly-*/` (all 10 skills)
 - `.cursor/skills/letterly-*/` (all 10 skills)

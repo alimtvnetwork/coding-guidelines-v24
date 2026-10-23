@@ -1,6 +1,6 @@
 # Subtask 01: Author Parameter-Driven Multi-Repository Synchronization Prompt (`01-sync-other-codebase.md`) & Category Catalog
 
-> **Parent Spec:** [`02-spec/21-app/03-sync-other-codebase/01-architecture-spec.md`](../../../../02-spec/21-app/03-sync-other-codebase/01-architecture-spec.md)  
+> **Parent Spec:** `02-spec/21-app/03-sync-other-codebase/01-architecture-spec.md`  
 > **Status:** `PENDING`  
 > **Traceability ID:** `Task-03-Subtask-01`  
 > **Target Files:**

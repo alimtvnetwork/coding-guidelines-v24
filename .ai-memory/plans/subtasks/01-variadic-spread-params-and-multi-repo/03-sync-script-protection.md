@@ -4,8 +4,8 @@
 > **Parent Task:** `01-variadic-spread-params-and-multi-repo`  
 > **Status:** READY FOR EXECUTION  
 > **Target Script:** `03-ai-scripts/38-sync-prompts-skills-scripts.py`  
-> **Specification Reference:** [02-spec/21-app/01-variadic-spread-params-and-multi-repo/02-sync-and-multi-repo-spec.md](../../../02-spec/21-app/01-variadic-spread-params-and-multi-repo/02-sync-and-multi-repo-spec.md)  
-> **Learned Architecture Reference:** [.ai-memory/memory/learned/18-cross-repository-sync-rules.md](../../memory/learned/18-cross-repository-sync-rules.md)  
+> **Specification Reference:** `02-spec/21-app/01-variadic-spread-params-and-multi-repo/02-sync-and-multi-repo-spec.md`  
+> **Learned Architecture Reference:** [.ai-memory/memory/learned/18-cross-repository-sync-rules.md](../../../memory/learned/18-cross-repository-sync-rules.md)  
 
 ---
 

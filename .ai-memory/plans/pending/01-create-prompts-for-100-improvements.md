@@ -72,7 +72,7 @@ flowchart TD
 |:---|:---|:---|:---:|:---|
 | `Task-01` | Spec Authoring & Master Plan Initialization | Lead Orchestrator | `ACTIVE` | `02-spec/21-app/01-create-prompts-for-100-improvements/*`, `.ai-memory/plans/pending/01-create-prompts-for-100-improvements.md`, `.ai-memory/plans/subtasks/01-create-prompts-for-100-improvements/*` |
 | `Task-02` | Canonical 100 Improvements Prompts Suite | Worker 01 | `PENDING` | `01-prompts/30-improvements/01-find-100-improvements-in-ui-level.md`, `01-prompts/30-improvements/02-find-100-improvements-in-code-base.md`, `01-prompts/30-improvements/03-find-100-improvements-in-whole-system.md`, `01-prompts/30-improvements/readme.md` |
-| `Task-03` | Antigravity & Cursor Agent Skills Suite | Worker 02 | `PENDING` | `.agents/skills/find-100-improvements-in-ui-level/skill.md`, `.agents/skills/find-100-improvements-in-code-base/skill.md`, `.agents/skills/find-100-improvements-in-whole-system/skill.md`, `.cursor/skills/find-100-improvements-in-ui-level/skill.md`, `.cursor/skills/find-100-improvements-in-code-base/skill.md`, `.cursor/skills/find-100-improvements-in-whole-system/skill.md` |
+| `Task-03` | Antigravity & Cursor Agent Skills Suite | Worker 02 | `PENDING` | .agents/skills/find-100-improvements-in-ui-level/skill.md, .agents/skills/find-100-improvements-in-code-base/skill.md, .agents/skills/find-100-improvements-in-whole-system/skill.md, `.cursor/skills/find-100-improvements-in-ui-level/skill.md`, `.cursor/skills/find-100-improvements-in-code-base/skill.md`, `.cursor/skills/find-100-improvements-in-whole-system/skill.md` |
 | `Task-04` | Catalog Registration, Fleet Sync & Push | Worker 03 / Lead | `PENDING` | `01-prompts/readme.md`, `.ai-memory/prompts.md` |
 
 ---

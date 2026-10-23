@@ -1,7 +1,7 @@
 # Subtask 06: Dual-Machine SSH Fleet Configuration & Connectivity Verification
 
 > **Canonical Plan:** [.ai-memory/plans/sequence-and-backup-testing.md](../../sequence-and-backup-testing.md)  
-> **Normative Spec:** [02-spec/21-app/sequence-and-backup-testing/03-ssh-fleet-and-instance-email-telemetry-spec.md](../../../../02-spec/21-app/sequence-and-backup-testing/03-ssh-fleet-and-instance-email-telemetry-spec.md)  
+> **Normative Spec:** `02-spec/21-app/sequence-and-backup-testing/03-ssh-fleet-and-instance-email-telemetry-spec.md`  
 > **Status:** `[DONE]`  
 > **Assigned Agent:** Spec Author Subagent 3  
 

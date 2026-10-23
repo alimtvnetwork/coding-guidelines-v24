@@ -53,7 +53,7 @@ Despite its code-level excellence, the specification library faces an operationa
    - `Checklist` (mirrors acceptance criteria as `- [ ]` checkboxes)
 
 2. **Automated Mechanical Heading Linter:**
-   - `linter-scripts/check-spec-ticket-headings.py` validating that every ticket contains all 10 headings in exact order.
+   - linter-scripts/check-spec-ticket-headings.py validating that every ticket contains all 10 headings in exact order.
 
 3. **Curated 3-Step Reading Path:**
    - `16-blind-agent-reading-path.md` instructing blind agents to read ONLY:

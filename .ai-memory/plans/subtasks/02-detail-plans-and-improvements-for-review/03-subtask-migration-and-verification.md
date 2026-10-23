@@ -55,7 +55,7 @@ Orchestrate the end-to-end master catalog updates, linter quality checks, fleet-
 - [ ] Verify Task-02 deliverable exists and is non-empty:
   - `01-prompts/30-improvements/04-detail-plans-and-improvements-for-review.md`
 - [ ] Verify Task-03 deliverables exist and are symmetrical:
-  - `.agents/skills/detail-plans-and-improvements-for-review/skill.md`
+  - .agents/skills/detail-plans-and-improvements-for-review/skill.md
   - `.cursor/skills/detail-plans-and-improvements-for-review/skill.md`
 - [ ] Verify that Task-01 application specifications exist in `02-spec/21-app/02-detail-plans-and-improvements-for-review/`:
   - `01-architecture-spec.md`

@@ -178,16 +178,16 @@ Update all 10 `skill.md` files in `.agents/skills/` to embed the exact prompt fo
 
 | Subtask | Skill Folder | Target Prompt | Key Skill Link |
 | :---: | :--- | :--- | :--- |
-| **4.1** | `.agents/skills/letterly-mobile/skill.md` | `01-mobile-letterly.md` | `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)` |
-| **4.2** | `.agents/skills/letterly-desktop/skill.md` | `02-desktop-letterly.md` | `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)` |
-| **4.3** | `.agents/skills/letterly-execute-n-steps/skill.md` | `03-execute-n-steps-letterly.md` | `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)` + verification |
-| **4.4** | `.agents/skills/letterly-plan/skill.md` | `04-plan-letterly.md` | `[plan-spec-steps-v2](file;.agents/skills/plan-spec-steps-v2)` |
-| **4.5** | `.agents/skills/letterly-release/skill.md` | `05-release-letterly.md` | `[minor-bump](file;.agents/skills/minor-bump)` |
-| **4.6** | `.agents/skills/letterly-cicd-fix-release/skill.md` | `06-cicd-fix-release-letterly.md` | `[ci-cd-fix-gitmap-release](file;.agents/skills/ci-cd-fix-gitmap-release)` |
-| **4.7** | `.agents/skills/letterly-mobile-cicd-fix/skill.md` | `07-mobile-cicd-fix-letterly.md` | `[ci-cd-fix-gitmap-release](file;.agents/skills/ci-cd-fix-gitmap-release)` |
-| **4.8** | `.agents/skills/letterly-run/skill.md` | `08-run-letterly.md` | `[run](file;.agents/skills/run)` |
-| **4.9** | `.agents/skills/letterly-execute-with-verification/skill.md` | `09-execute-with-verification-letterly.md` | `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)` AND `[ai-verification](file;.agents/skills/ai-verification)` |
-| **4.10** | `.agents/skills/letterly-execute-with-release/skill.md` | `10-execute-with-release-letterly.md` | `[minor-bump](file;.agents/skills/minor-bump)` |
+| **4.1** | .agents/skills/letterly-mobile/skill.md | `01-mobile-letterly.md` | `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)` |
+| **4.2** | .agents/skills/letterly-desktop/skill.md | `02-desktop-letterly.md` | `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)` |
+| **4.3** | .agents/skills/letterly-execute-n-steps/skill.md | `03-execute-n-steps-letterly.md` | `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)` + verification |
+| **4.4** | .agents/skills/letterly-plan/skill.md | `04-plan-letterly.md` | `[plan-spec-steps-v2](file;.agents/skills/plan-spec-steps-v2)` |
+| **4.5** | .agents/skills/letterly-release/skill.md | `05-release-letterly.md` | `[minor-bump](file;.agents/skills/minor-bump)` |
+| **4.6** | .agents/skills/letterly-cicd-fix-release/skill.md | `06-cicd-fix-release-letterly.md` | `[ci-cd-fix-gitmap-release](file;.agents/skills/ci-cd-fix-gitmap-release)` |
+| **4.7** | .agents/skills/letterly-mobile-cicd-fix/skill.md | `07-mobile-cicd-fix-letterly.md` | `[ci-cd-fix-gitmap-release](file;.agents/skills/ci-cd-fix-gitmap-release)` |
+| **4.8** | .agents/skills/letterly-run/skill.md | `08-run-letterly.md` | `[run](file;.agents/skills/run)` |
+| **4.9** | .agents/skills/letterly-execute-with-verification/skill.md | `09-execute-with-verification-letterly.md` | `[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)` AND `[ai-verification](file;.agents/skills/ai-verification)` |
+| **4.10** | .agents/skills/letterly-execute-with-release/skill.md | `10-execute-with-release-letterly.md` | `[minor-bump](file;.agents/skills/minor-bump)` |
 
 ---
 

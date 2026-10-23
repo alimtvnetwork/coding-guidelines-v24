@@ -53,7 +53,7 @@ scope: fleet finish for spec `02-spec/21-app/03-execute-n-steps-letterly-prompt-
 ### 3. Commit/push sweep — end state
 
 - alim-seo-writing, cat-my-v12, coding-guidelines-v24, go-email-reader, repo-secrets, story-telling-v1: CLEAN (0 dirty).
-- Antigravity-Manager: 2 files remain dirty — `scripts/setup-supabase.ps1` (M) + `scripts/supabase-setup.ps1` (D): another task's in-flight rename (AGM task 190). NOT this task's changes; left untouched per disjoint-box rule.
+- Antigravity-Manager: 2 files remain dirty — scripts/setup-supabase.ps1 (M) + scripts/supabase-setup.ps1 (D): another task's in-flight rename (AGM task 190). NOT this task's changes; left untouched per disjoint-box rule.
 - gitmap-v28: 4 files remain dirty — `cli/store/migrate_v15repo.go`, `cli/store/scan_folder.go`, `cli/store/vscode_project.go`, `cli/store/zipgroup.go`: gitmap-v28 track's in-flight Go work. Left untouched, same reason.
 - repo-cache: 2 untracked state dirs (`.heatmap/`, `01-gitmap/`) — gitmap state, never committed (standing rule).
 - No `.gitmap/` state or secrets committed anywhere; repo-secrets contents never read.

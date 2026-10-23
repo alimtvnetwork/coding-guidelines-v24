@@ -106,4 +106,4 @@ gitmap agy rp get-running-and-up-next
 ## 5. Subtask Completion Sign-Off
 
 - **Criteria Met:** Architecture specification authored and committed, three-tier ranking documented, IPC strip payload specified, verification steps documented, strict relative paths enforced.
-- **Related Spec:** [Architecture & Tree View Spec](02-spec/21-app/sequence-and-backup-testing/01-architecture-and-tree-view-spec.md)
+- **Related Spec:** `02-spec/21-app/sequence-and-backup-testing/01-architecture-and-tree-view-spec.md`

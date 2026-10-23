@@ -1,6 +1,6 @@
 # Subtask 03: Fix Heading Spacing, Duplicate Principle Numbering & Stale Links
 
-> **Parent Spec:** [`02-spec/21-app/07-coding-guideline-actionable-checklist-and-acceptance/01-architecture-spec.md`](../../../../02-spec/21-app/07-coding-guideline-actionable-checklist-and-acceptance/01-architecture-spec.md)  
+> **Parent Spec:** `02-spec/21-app/07-coding-guideline-actionable-checklist-and-acceptance/01-architecture-spec.md`  
 > **Status:** `COMPLETED`  
 > **Traceability ID:** `Task-03`  
 > **Target Files (Strict Disjoint Bounding Box):**
@@ -44,7 +44,7 @@ Ensure strict markdown heading spacing (MD-H001 compliance) across cross-languag
 
 3. **Link Validation:**
    - All 38 relative markdown links in `02-spec/02-coding-guidelines/01-cross-language/97-acceptance-criteria.md` resolve to valid existing files.
-   - Changelog reference cleanly links to root [`changelog.md`](../../../changelog.md) with exit 0.
+   - Changelog reference cleanly links to root [`changelog.md`](../../../../changelog.md) with exit 0.
    - All 9 relative markdown links in `02-spec/02-coding-guidelines/06-ai-optimization/97-acceptance-criteria.md` resolve cleanly.
 
 4. **Guideline Autofixer (`03-ai-scripts/05-guideline-autofixer.py`):**

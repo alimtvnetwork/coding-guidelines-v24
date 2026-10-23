@@ -43,7 +43,7 @@ This subtask delivers `02-spec/21-app/05-improvements-folder-prompts/02-componen
      - Strict 8-Pillar quality gates during implementation turns.
      - Separated end-to-end testing gate at Phase 3.
 5. **Symmetrical Companion Skills Architecture:**
-   - Full specification for Antigravity skills (`.agents/skills/check-pending-improvements/skill.md` and `.agents/skills/implement-next-10-improvements/skill.md`) and Cursor skills (`.cursor/skills/check-pending-improvements/skill.md` and `.cursor/skills/implement-next-10-improvements/skill.md`) with platform-compliant link syntaxes (`[skill](file;.agents/skills/skill)` vs `[skill](file;.cursor/skills/skill)`).
+   - Full specification for Antigravity skills (`.agents/skills/check-pending-improvements/skill.md` and `.agents/skills/implement-next-10-improvements/skill.md`) and Cursor skills (`.cursor/skills/check-pending-improvements/skill.md` and `.cursor/skills/implement-next-10-improvements/skill.md`) with platform-compliant link syntaxes (`[skill](file;.agents/skills/<name>)` vs `[skill](file;.cursor/skills/<name>)`).
 6. **3 Concrete Production Operational Examples:**
    - Example 1: Real-time Check Pending Output Dashboard.
    - Example 2: Fast-forwarding code transformation with before/after diffs adhering to the 8 pillars.

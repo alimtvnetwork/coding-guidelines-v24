@@ -52,7 +52,7 @@ flowchart TD
 |:---|:---|:---|:---:|:---|
 | `Task-01` | Spec Authoring & Master Plan Initialization | Lead Orchestrator | `ACTIVE` | `02-spec/21-app/02-detail-plans-and-improvements-for-review/*`, `.ai-memory/plans/pending/02-detail-plans-and-improvements-for-review.md`, `.ai-memory/plans/subtasks/02-detail-plans-and-improvements-for-review/*` |
 | `Task-02` | Canonical Detail Plans & Improvements Prompt | Worker 01 | `PENDING` | `01-prompts/30-improvements/04-detail-plans-and-improvements-for-review.md`, `01-prompts/30-improvements/readme.md` |
-| `Task-03` | Antigravity & Cursor Skills Suite | Worker 02 | `PENDING` | `.agents/skills/detail-plans-and-improvements-for-review/skill.md`, `.cursor/skills/detail-plans-and-improvements-for-review/skill.md` |
+| `Task-03` | Antigravity & Cursor Skills Suite | Worker 02 | `PENDING` | .agents/skills/detail-plans-and-improvements-for-review/skill.md, `.cursor/skills/detail-plans-and-improvements-for-review/skill.md` |
 | `Task-04` | Catalog Registration, Fleet Sync & Push | Worker 03 / Lead | `PENDING` | `01-prompts/readme.md`, `.ai-memory/prompts.md`, `.ai-memory/plans/readme.md`, `02-spec/21-app/readme.md` |
 
 ---

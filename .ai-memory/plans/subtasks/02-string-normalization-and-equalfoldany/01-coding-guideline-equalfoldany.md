@@ -1,6 +1,6 @@
 # Subtask 01: Author Cross-Language Coding Guideline for String Normalization & EqualFoldAny
 
-> **Parent Spec:** [`02-spec/21-app/02-string-normalization-and-equalfoldany/01-architecture-spec.md`](../../../../02-spec/21-app/02-string-normalization-and-equalfoldany/01-architecture-spec.md)  
+> **Parent Spec:** `02-spec/21-app/02-string-normalization-and-equalfoldany/01-architecture-spec.md`  
 > **Status:** `PENDING`  
 > **Traceability ID:** `Task-02-Subtask-01`  
 > **Target Files:**

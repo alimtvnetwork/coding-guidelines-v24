@@ -22,7 +22,7 @@ This subtask delivers `02-spec/21-app/04-next-100-ideas-for-improvements/02-comp
    - Developer Ergonomics & Tooling (`IDEA-004`: High-Speed Interactive CLI Macro Recording & Parameterized Replay Engine).
    - Autonomous AI Agent Optimization (`IDEA-033`: Lockless SQLite Agent Task Ring Buffer with WAL Checkpointing).
    - Performance, Caching & Resource Utilization (`IDEA-051`: Zero-Allocation Case-Insensitive String Normalization & Multi-Match Primitives).
-6. **Symmetric Companion Skills Architecture:** Complete specifications for `.agents/skills/next-100-ideas-for-improvements/skill.md` (Antigravity) and `.cursor/skills/next-100-ideas-for-improvements/skill.md` (Cursor) with mandatory IDE skill link syntax (`[skill](file;.agents/skills/skill)` vs `[skill](file;.cursor/skills/skill)`).
+6. **Symmetric Companion Skills Architecture:** Complete specifications for `.agents/skills/next-100-ideas-for-improvements/skill.md` (Antigravity) and `.cursor/skills/next-100-ideas-for-improvements/skill.md` (Cursor) with mandatory IDE skill link syntax (`[skill](file;.agents/skills/<name>)` vs `[skill](file;.cursor/skills/<name>)`).
 7. **Plan Enqueueing & Backlog Invariants:** Specification of decoupled discovery and execution workflows, detailing master plan enqueueing into `.ai-memory/plans/pending/XX-next-100-ideas-for-improvements.md` and cluster subtask decomposition in `.ai-memory/plans/subtasks/XX-next-100-ideas-for-improvements/`.
 8. **Binary Verification Matrix:** Deterministic verification commands and pass criteria.
 
@@ -48,7 +48,7 @@ This subtask delivers `02-spec/21-app/04-next-100-ideas-for-improvements/02-comp
 - [x] Formulate the 8-field Idea Specification Schema with mathematical models and structural field definitions.
 - [x] Enumerate all 100 ideas (`IDEA-001` to `IDEA-100`) across all 10 clusters with complete descriptions and zero placeholders.
 - [x] Author 3 production-grade specification cards across developer tooling, AI agent concurrency, and string performance optimization.
-- [x] Specify companion Antigravity and Cursor skill files with platform-compliant link syntax (`[skill](file;.agents/skills/skill)` vs `[skill](file;.cursor/skills/skill)`).
+- [x] Specify companion Antigravity and Cursor skill files with platform-compliant link syntax (`[skill](file;.agents/skills/<name>)` vs `[skill](file;.cursor/skills/<name>)`).
 - [x] Define plan enqueueing and subtask decomposition rules for `.ai-memory/plans/pending/` and `.ai-memory/plans/subtasks/`.
 - [x] Author and persist `02-spec/21-app/04-next-100-ideas-for-improvements/02-component-spec.md`.
 - [x] Author and persist `.ai-memory/plans/subtasks/04-next-100-ideas-for-improvements/02-subtask-component-and-examples.md`.

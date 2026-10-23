@@ -85,4 +85,4 @@ Must declare five labeled items:
 1. File exists at `02-spec/01-spec-authoring-guide/15-executable-spec-ticket.md`.
 2. All 10 headings appear in exact order.
 3. Total non-blank line count is <= 300.
-4. Linter `linter-scripts/check-spec-ticket-headings.py` passes with exit code 0.
+4. Linter linter-scripts/check-spec-ticket-headings.py passes with exit code 0.
