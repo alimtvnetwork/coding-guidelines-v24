@@ -434,3 +434,9 @@ The endpoints below are the network addresses Muse sessions have requested acces
 Hostname grants approved alongside the IPs: `github.com` (ports 22, 80, 443, including `**.github.com`) and `nodesource.com` (ports 80, 443, including `**.nodesource.com`).
 
 ---
+
+---
+
+## Hard Scope Lock — Never Clone the Whole Account (user rule, 2026-10-24)
+
+Cloning is limited to repositories named in the master prompt (`01-prompts/27-muse-prompts/01-muse-master-prompt.md`) — the 9 defaults, plus a secondary repository only when the user approves that specific repository by name. **Never** clone the user's full GitHub account inventory (600+ repositories) and **never** offer a "clone all" option. A full account URL inventory is reference-only, never a clone list. Any other repository is cloned only when the user names that specific repository in that specific request.
