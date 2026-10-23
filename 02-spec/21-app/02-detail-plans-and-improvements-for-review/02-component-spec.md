@@ -698,8 +698,8 @@ Source prompt: `01-prompts/30-improvements/04-detail-plans-and-improvements-for-
 ```
 
 ### 5.4 IDE Skill Link Syntax Invariants
-- Antigravity Prompts: `[detail-plans-and-improvements-for-review](file;.agents/skills/detail-plans-and-improvements-for-review)`
-- Cursor Prompts: `[detail-plans-and-improvements-for-review](file;.cursor/skills/detail-plans-and-improvements-for-review)`
+- Antigravity Prompts: `detail-plans-and-improvements-for-review` via `file;.agents/skills/detail-plans-and-improvements-for-review`
+- Cursor Prompts: `detail-plans-and-improvements-for-review` via `file;.cursor/skills/detail-plans-and-improvements-for-review`
 - Slash Command Link: `[/plan](slashCommand;plan)`
 - **TOTAL BAN:** Never append `/skill.md` or use absolute file paths in IDE interactive links.
 
