@@ -11,7 +11,7 @@
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "6ead299b41004f0ccad8599e0732cce51267d775",
+  "LastCommitSha": "ed9be2379d996986f3a3de51c356cdb3319b03ee",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -61,15 +61,15 @@
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "6ead299b41004f0ccad8599e0732cce51267d775",
-    "shortSha": "6ead299",
+    "sha": "ed9be2379d996986f3a3de51c356cdb3319b03ee",
+    "shortSha": "ed9be23",
     "branch": "main"
   },
   "stats": {
-    "totalFiles": 715,
-    "totalLines": 175878,
+    "totalFiles": 716,
+    "totalLines": 175901,
     "totalFolders": 24,
-    "totalBytes": 6995871,
+    "totalBytes": 6997158,
     "rootFiles": 6
   },
   "folders": [
@@ -96,8 +96,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": null,
       "fileCount": 205,
-      "lineCount": 44756,
-      "byteCount": 1733772
+      "lineCount": 44752,
+      "byteCount": 1732358
     },
     {
       "path": "03-error-manage",
@@ -110,7 +110,7 @@
       "ambiguity": "None",
       "fileCount": 103,
       "lineCount": 19143,
-      "byteCount": 726048
+      "byteCount": 726006
     },
     {
       "path": "04-database-conventions",
@@ -123,7 +123,7 @@
       "ambiguity": "None",
       "fileCount": 8,
       "lineCount": 2849,
-      "byteCount": 110158
+      "byteCount": 110130
     },
     {
       "path": "05-split-db-architecture",
@@ -162,7 +162,7 @@
       "ambiguity": "The website builder is file 26 only. Slide types `usp-strike` and `bullets` have no component. A black slide catalog is not in this folder.",
       "fileCount": 67,
       "lineCount": 13553,
-      "byteCount": 652748
+      "byteCount": 652690
     },
     {
       "path": "08-docs-viewer-ui",
@@ -227,7 +227,7 @@
       "ambiguity": "None",
       "fileCount": 43,
       "lineCount": 8381,
-      "byteCount": 271584
+      "byteCount": 271556
     },
     {
       "path": "13-generic-cli",
@@ -253,7 +253,7 @@
       "ambiguity": "None",
       "fileCount": 40,
       "lineCount": 8764,
-      "byteCount": 284685
+      "byteCount": 284610
     },
     {
       "path": "15-distribution-and-runner",
@@ -292,7 +292,7 @@
       "ambiguity": "None",
       "fileCount": 35,
       "lineCount": 16829,
-      "byteCount": 621265
+      "byteCount": 621205
     },
     {
       "path": "18-wp-plugin-how-to",
@@ -318,7 +318,7 @@
       "ambiguity": null,
       "fileCount": 33,
       "lineCount": 7127,
-      "byteCount": 412027
+      "byteCount": 412006
     },
     {
       "path": "21-app",
@@ -329,9 +329,9 @@
       "status": null,
       "aiConfidence": null,
       "ambiguity": null,
-      "fileCount": 26,
-      "lineCount": 8991,
-      "byteCount": 585962
+      "fileCount": 27,
+      "lineCount": 9018,
+      "byteCount": 589003
     },
     {
       "path": "22-app-issues",
@@ -383,7 +383,7 @@
       "ambiguity": "The two prompt notes below are history. They are not a design score.",
       "fileCount": 3,
       "lineCount": 257,
-      "byteCount": 21023
+      "byteCount": 20995
     }
   ],
   "prompts": [
