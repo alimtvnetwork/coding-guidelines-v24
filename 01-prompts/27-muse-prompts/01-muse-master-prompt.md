@@ -32,7 +32,7 @@ COMMIT_STYLE               = atomic-push
 > **Top-Instruction Priority Mandate (Above Precedence / Preamble Precedence):**
 > Whatever directives, constraints, checklists, or user instructions are given ABOVE this prompt (including in the user preamble, header blocks, or incoming user request above) are HIGHEST PRIORITY and MUST BE FOLLOWED as strictly NON-NEGOTIABLE. They supersede and strictly override any conflicting general advice, default conventions, or lower-level guidelines below. The agent MUST inspect and follow the instructions above with absolute precedence.
 
-[/goal](slashCommand;goal) Autonomously execute the 9-Step Onboarding Ritual in strict linear sequence with mandatory step-by-step reporting (verify/install GitMap via Linux/macOS curl or Windows PowerShell irm, update gitmap first, verify GitHub CLI authentication via fast-path bypass or pick ONE: browser login or SSH keygen with a hard gate, clone the 9 default repos starting with `coding-guidelines-v24`, seed 6 side chats and 3 vault/infra repos, discover secondary repos via `02-repos.md` with explicit user approval gate, pull all repos via `gitmap pa` ensuring conflict-free trees, read master prompt and custom skills without fenced code blocks around formatters, sync 7-day memory via `gitmap llm train muse --days 7`, connect email via `go-email-reader` under standing SMTP pre-approval, scan workspace into `gitmap.db`, check heatmap status, and emit the exact 9-item status report), then transition to the V6 Autonomous Execution Engine: Turn 1 confirmed task breakdown FIRST in visible chat, RUNNING + ETA declaration, 5-minute status pings (prohibiting `LISTING-WITHOUT-STARTING`), SQLite task DB init (`gitmap agent task init`), pull first (`gitmap pull` / `git pull`), heatmap preflight & action logging (`gitmap agent heatmap`, `gitmap heatmap log`), mandatory subagents (`invoke_subagent`, A=3, H=2, dynamic respawn, disjoint file boxes, Worker Git Ban), pre-commit secrets gate (`check-forbidden-strings.py` and `gitmap aum search` -> `gitmap rs`), large-file 15 MB 7-Zip split gate (`7z a -v3m -mx=0`), atomic commit via GitMap hyphen format (`gitmap cpf "<module> - <summary>"`), immediate push, and CI telemetry (`gitmap pe -t`).
+[/goal](slashCommand;goal) Autonomously execute the 9-Step Onboarding Ritual in strict linear sequence with mandatory step-by-step reporting (verify/install GitMap via Linux/macOS curl or Windows PowerShell irm, update gitmap first, verify GitHub CLI authentication via fast-path bypass or pick ONE: browser login or SSH keygen with a hard gate, clone the 9 default repos starting with `coding-guidelines-v24`, seed 6 side chats and 3 vault/infra repos, discover secondary repos via `02-repos.md` with explicit user approval gate, pull all repos via `gitmap pa` ensuring conflict-free trees, read master prompt and custom skills without fenced code blocks around formatters, sync 7-day memory via `gitmap llm train muse --days 7`, connect email via `go-email-reader` following the Step 7 vault, password, permission-gate and acceptance-evidence procedure, scan workspace into `gitmap.db`, check heatmap status, and emit the exact 9-item status report), then transition to the V6 Autonomous Execution Engine: Turn 1 confirmed task breakdown FIRST in visible chat, RUNNING + ETA declaration, 5-minute status pings (prohibiting `LISTING-WITHOUT-STARTING`), SQLite task DB init (`gitmap agent task init`), pull first (`gitmap pull` / `git pull`), heatmap preflight & action logging (`gitmap agent heatmap`, `gitmap heatmap log`), mandatory subagents (`invoke_subagent`, A=3, H=2, dynamic respawn, disjoint file boxes, Worker Git Ban), pre-commit secrets gate (`check-forbidden-strings.py` and `gitmap aum search` -> `gitmap rs`), large-file 15 MB 7-Zip split gate (`7z a -v3m -mx=0`), atomic commit via GitMap hyphen format (`gitmap cpf "<module> - <summary>"`), immediate push, and CI telemetry (`gitmap pe -t`).
 
 [/learn](slashCommand;learn) Enforce the Top-Instruction Priority Mandate: whatever directives are provided ABOVE this prompt outrank everything below. During onboarding, obey the strict step-by-step reporting rule: after EVERY step, REPORT BACK what you did plus the verification output; never skip a report, never silently advance. During task execution, Turn 1 MUST showcase the confirmed task breakdown in visible chat before any background execution. Listing without starting is a named protocol violation (`LISTING-WITHOUT-STARTING`). Inspect active file leases and write contention before editing via `gitmap agent heatmap`. Operating contract lives in memory checklist; active tasks live in the SQLite task manager (`gitmap agent task`) and ledger. Repositories are sacred: NEVER delete a repo. Never run test suites locally: verify via CI (`gitmap pe -t`).
 
@@ -49,13 +49,13 @@ COMMIT_STYLE               = atomic-push
 - [ ] `/goal` **Step 4: Pull All Handpicked Repositories:** Run `cd ~/workspace/repos && gitmap pa`. Verify clean, conflict-free working trees, and REPORT pull summary.
 - [ ] `/learn` **Step 5: Read Master Prompt, Custom Skills & Ingest Operating Contract:** Read `01-muse-master-prompt.md` and custom skills (`.agents/skills/muse-master-prompt/`, `.agents/skills/gitmap/`). Ingest TURBO-01..05, GUARD-01..09, obey execution contract for steps 6–9, enforce total ban on fenced code blocks around prompt formatters, and REPORT restating contract.
 - [ ] `/learn` **Step 6: Memory Synchronization & Vault Training:** Read `repo-cache/12-muse-ai/README.md`, run `gitmap llm train muse --days 7`, ingest DECISION TRACE and SINCE LAST READ, read sequenced digest files (`01-overview.md` through `05-conventions.md`), and REPORT.
-- [ ] `/goal` **Step 7: Connect Email via go-email-reader:** Verify configuration in `repo-secrets/11-go-email-reader/`. Enforce password-only prompt rule (never ask for host/port/user if defined, only prompt for missing password), standing SMTP pre-approval, configure default sender and notifier, log to `04-conversation/`, and REPORT.
+- [ ] `/goal` **Step 7: Connect Email via go-email-reader:** Verify `repo-secrets` is actually cloned on disk, read sender + notifier ONLY from `11-go-email-reader/01-email-setup.json` and `02-default-notifier.json` (never GitHub Actions secrets, no `config.json` exists), install/verify the CLI, configure default sender and notifier, ask ONLY for the missing password (it is never in any repo; it goes only into the CLI's RSA-encrypted local store, never into a repo or memory), check the `email_mailbox` / `email_smtp` Deny→Ask permission gate, and mark DONE only on the Step 7 acceptance evidence (`IMAP OK` + `SMTP OK`, a successful read, and a test notify sent with the operator's go-ahead). Config verification alone is NOT connected. REPORT with that evidence.
 - [ ] `/goal` **Step 8: Scan Everything into GitMap:** Run `gitmap scan ~/workspace/repos` after cloning to index all repositories, branches, and trees into `gitmap.db`, check `gitmap heatmap status`, and REPORT scan summary.
 - [ ] `/goal` **Step 9: Final Report Block with Exact 9 Items:** Deliver structured completion report with exactly 9 items including OPEN items from digest (`04-ongoing-projects.md` / `01-overview.md`).
 - [ ] `/learn` **Post-Onboarding Guidelines & Formatting:** Enforce booleans (`is*`/`has*`, no `== true`, no mixed polarity), early returns/guard clauses, `*appfault.AppError`, lowercase filenames, strict relative Git paths, large-file 15 MB 7-Zip multi-volume split (`7z a -v3m -mx=0`), and title convention (`# <title>: high priority instruction, non-negotiable task`, `## slug: <task-slug>`).
 - [ ] `/goal` **V6 Task Execution Engine:** Turn 1 confirmed task breakdown FIRST in visible chat (`Task-01`, `Task-02`, ... each with `Understood: [YES]`), RUNNING + ETA declaration, 5-minute status pings (prohibiting `LISTING-WITHOUT-STARTING`), SQLite task DB init (`gitmap agent task init`), pull first (`gitmap pull` / `git pull`), heatmap preflight & action logging (`gitmap agent heatmap`, `gitmap heatmap log`), mandatory multi-agent dispatch (`invoke_subagent`, A=3, H=2, dynamic respawn, disjoint file boxes, Worker Git Ban).
 - [ ] `/goal` **Verification, Secrets Gate, Atomic Push & CI Telemetry:** Targeted file checks only (zero build/test ban), pre-commit secrets gate (`check-forbidden-strings.py` and `gitmap aum search` -> `gitmap rs`), atomic commit via GitMap hyphen format (`gitmap cpf "<module> - <summary>"`), immediate push, and CI telemetry (`gitmap pe -t`).
-- [ ] `/learn` **Muse Memory IO Re-Sync:** When user says `Muse memory IO read`, run `gitmap llm train muse --days 7`, diff against watermark, read sequenced updates, recreate chats from `12-muse-ai/chat-seeds/*.md`, and maintain standing SMTP pre-approval.
+- [ ] `/learn` **Muse Memory IO Re-Sync:** When user says `Muse memory IO read`, run `gitmap llm train muse --days 7`, diff against watermark, read sequenced updates, recreate chats from `12-muse-ai/chat-seeds/*.md`, and re-verify the Step 7 email connection evidence (`go-email-reader test` = IMAP OK + SMTP OK; if it no longer passes, re-run Step 7 instead of assuming the connection survived).
 
 ---
 
@@ -354,25 +354,102 @@ If any step fails, halt immediately, surface the diagnostic context under CODE R
 
 ### Step 7: Connect Email via `go-email-reader`
 
-1. **Credential Verification in `repo-secrets`:**
-   Inspect configuration at `repo-secrets/11-go-email-reader/`.
+> [!CAUTION]
+> **Step 7 failure record (2026-10-24, verified live):** A full master-prompt run finished
+> without email ever being connected. Root causes, all confirmed by a later manual
+> connection that succeeded end-to-end: (1) the settings were looked up in the wrong
+> store — GitHub repo/Actions secrets — instead of the vault files below; (2) the
+> `repo-secrets` clone was left in flight and never verified on disk; (3) the email
+> step was downgraded to config verification only, with no account added and no
+> connection test; (4) the password was expected in a repo, where by design it never
+> exists, and nobody asked the operator for it; (5) Muse's direct-network-protocol
+> permissions for mailbox and SMTP traffic were set to Deny and intercepted the
+> connection before authentication, and no step checked for that; (6) a file that
+> does not exist (`config.json`) was named as the sender source. The procedure below
+> closes every one of those gaps. **Config verification alone is NOT a connection.**
 
-2. **Password-Only Prompt Rule:**
-   - NEVER prompt the user for email address, server hostname, IMAP/SMTP port, SSL settings, or general configuration if already defined in `repo-secrets/11-go-email-reader/`.
-   - If credentials are fully present: connect silently without prompting.
-   - If credentials are missing: ONLY prompt for the missing password/token, write it into `repo-secrets/11-go-email-reader/` via `gitmap rs`, and proceed.
+1. **Prerequisite — Vault Repo Actually On Disk:**
+   - Verify `repo-secrets` is cloned at `~/workspace/repos/repo-secrets` and that
+     `11-go-email-reader/` exists on disk. A clone that is queued, in flight, or
+     only planned does NOT count. If missing, clone
+     `https://github.com/alimtvnetwork/repo-secrets.git` and re-verify the folder
+     exists before continuing.
+   - Read the settings ONLY from the vault — NEVER substitute a GitHub
+     repo/Actions secrets check for these files; that is a different store:
+     - `11-go-email-reader/01-email-setup.json` — sender accounts and their exact
+       IMAP/SMTP hosts, ports, and TLS modes.
+     - `11-go-email-reader/02-default-notifier.json` — the default notifier address.
+     - `11-go-email-reader/03-notification-flow.md` and `04-cli-examples.md` — the
+       notification flow and command forms.
+   - There is NO `config.json` in that folder. Never invent a settings filename;
+     if a named file is absent, list the folder and report what is actually there.
 
-3. **Standing SMTP Pre-Approval:**
-   The operator grants **permanent standing pre-approval** for all outbound email operations executed by `go-email-reader` (`send`, `notify`, `forward`).
-   - The agent is **STRICTLY FORBIDDEN** from pausing execution to ask *"Should I send this email?"*.
-   - Outbound emails are sent automatically within task scope.
-   - Every sent message and incoming thread is logged under `04-conversation/` in `go-email-reader`.
+2. **Install & Verify the CLI First:**
+   - Run `go-email-reader help`, `go-email-reader list`, and
+     `go-email-reader notifier get`. If the binary is missing, install the latest
+     GitHub release of `go-email-reader` for the current platform and verify its
+     checksum before running it (do NOT assume a Go toolchain exists to build
+     from source — on a fresh VM it may be absent; the release binary is the
+     default path). Re-run the three checks and report their output.
 
-4. **Default Sender & Notifier Setup:**
-   Configure default sender profile from `repo-secrets/11-go-email-reader/config.json` and verify notifier channel for task/CI alerts.
+3. **Password-Only Prompt Rule (Corrected):**
+   - NEVER prompt the user for email address, server hostname, IMAP/SMTP port, or
+     TLS settings when they are defined in `01-email-setup.json`.
+   - Passwords are NEVER stored in any repo file — that is the vault's iron rule.
+     A password will therefore ALWAYS be missing from `repo-secrets`; that is
+     expected, not an error, and never a reason to report "no credentials".
+   - If no account is stored locally yet, ask the operator ONLY for the missing
+     password, through a secure/masked entry. NEVER write the password into
+     `repo-secrets` or any other repo, into memory files, logs, or
+     `04-conversation/` — in any form, encrypted with a repo tool or not.
+   - The password goes ONLY into `go-email-reader add`, which stores it
+     RSA-encrypted in the CLI's own local store (`~/.config/go-email-reader/`).
+     That local encrypted store is the one and only credential home.
 
-5. **Step 7 Report:**
-   Output Step 7 Report verifying email connectivity, standing pre-approval, and conversation logging.
+4. **Configure Default Sender & Notifier:**
+   - Add the account from `01-email-setup.json` with its exact servers, e.g.
+     `go-email-reader add --email <sender> --alias <alias> --imap-host <host>
+     --imap-port <port> --smtp-host <host> --smtp-port <port>
+     --smtp-tlsmode <mode> --default`.
+   - Set the notifier: `go-email-reader notifier set --email <address from
+     02-default-notifier.json>`.
+   - Verify with `go-email-reader list` (sender present and marked default) and
+     `go-email-reader notifier get` (exact address echoed).
+
+5. **Permission Gate — Check BEFORE Blaming Credentials:**
+   - If `test` (below) fails at dial/TLS, before any authentication result, the
+     connection is being intercepted, not rejected. Direct mailbox (IMAP/POP3)
+     and SMTP traffic is governed by Muse permissions: **Settings → Permissions
+     → Direct network protocols** — `email_mailbox` and `email_smtp`.
+   - If either is set to **Deny**, STOP and report Step 7 as **BLOCKED** naming
+     the exact switches the operator must change (**Deny → Ask** for both).
+     Never report the step as connected, configured, or done while this gate
+     is closed, and never retry in a loop against it.
+
+6. **Sending Approval (Corrected):**
+   - Nothing in this prompt overrides the platform's own approval rules for
+     sending mail. There is no standing auto-send: every outbound send through
+     `go-email-reader` (`send`, `notify`, `forward`) follows the approval the
+     platform requires at send time, and the Step 7 test notification in
+     particular is sent ONLY after the operator's explicit go-ahead in that
+     session, with its exact recipients, subject, and body shown first.
+   - Log that a message was sent (command, recipients, subject, timestamp)
+     under `04-conversation/` in `go-email-reader` — never the password, and
+     never credential material of any kind.
+
+7. **Acceptance Gate — Hard Definition of "Connected":**
+   Step 7 may be reported DONE only when ALL of the following evidence exists
+   in the Step 7 Report:
+   - `go-email-reader test --email <sender>` prints `IMAP OK` **and** `SMTP OK`.
+   - `go-email-reader read --email <sender> --limit 3` returns real messages.
+   - A test notification (`go-email-reader notify --subject <test subject>
+     --body <test body>`) sent with the operator's go-ahead (see 6) reports the
+     notifier address as notified, and receipt is confirmed where the operator
+     can confirm it.
+   - If any item is missing or failed, report **PARTIAL** or **BLOCKED** with
+     the exact stage that failed. Downgrading this step to config verification
+     only, or reporting it done on settings files alone, is a protocol
+     violation (`STEP-7-CONFIG-ONLY`).
 
 ---
 
@@ -427,9 +504,10 @@ If any step fails, halt immediately, surface the diagnostic context under CODE R
    - Digest Ingested: `12-muse-ai/01-overview.md` through `05-conventions.md`.
    - Key Decisions: [Summary of core decisions loaded].
 
-7. **Email Connectivity & Standing Approval:**
-   - Engine: `go-email-reader` connected via `repo-secrets/11-go-email-reader/`.
-   - Standing SMTP Pre-Approval: Active (auto-send pre-approved).
+7. **Email Connectivity (Evidence, Not Assertion):**
+   - Engine: `go-email-reader` connected via `repo-secrets/11-go-email-reader/01-email-setup.json` + `02-default-notifier.json`.
+   - Evidence: `test` = IMAP OK + SMTP OK · read of latest messages succeeded · test notify delivered to the default notifier with the operator's go-ahead.
+   - If any evidence line cannot be shown, this item MUST read PARTIAL or BLOCKED with the exact failed stage — never "connected" on config alone.
 
 8. **GitMap Fleet Scan Index:**
    - Workspace indexed at `~/workspace/repos`. [N] repos tracked in `gitmap.db`.
@@ -643,7 +721,7 @@ When the user says **`Muse memory IO read`** (in ANY chat):
 3. **Read Sequenced Files:** Read updated files in `12-muse-ai/` (`01-overview.md` → `05-conventions.md`).
 4. **Summarize Changes:** Report updates with real numbers and commits.
 5. **Recreate Chats:** Rebuild chats from `12-muse-ai/chat-seeds/*.md`.
-6. **Standing SMTP Pre-Approval:** User pre-approves ALL `go-email-reader` sending (`send`, `notify`, `forward`). Never seek per-send approval.
+6. **Email Connection Re-Verification:** Re-run `go-email-reader test` for the default sender. Sends through `go-email-reader` always follow the platform's approval at send time — no standing auto-send — and if the test no longer returns IMAP OK + SMTP OK, re-run the full Step 7 procedure (vault on disk, password only in the CLI's encrypted local store, `email_mailbox` / `email_smtp` permission gate) instead of reporting email as connected.
 
 ---
 
@@ -658,7 +736,7 @@ When the user says **`Muse memory IO read`** (in ANY chat):
 - [ ] **V-07** Fleet pulled with `gitmap pa` and verified conflict-free.
 - [ ] **V-08** Master prompt & custom skills read; TURBO-01..05 & GUARD-01..09 ingested; fenced block ban active.
 - [ ] **V-09** Memory sync (`gitmap llm train muse --days 7`) and sequenced digest files ingested.
-- [ ] **V-10** Email configured via `go-email-reader` with password-only rule and standing SMTP pre-approval.
+- [ ] **V-10** Email CONNECTED via `go-email-reader` (not merely configured): vault verified on disk, sender + notifier read from `01-email-setup.json` / `02-default-notifier.json`, password held only in the CLI's RSA-encrypted local store, `email_mailbox` / `email_smtp` permission gate open, `test` = IMAP OK + SMTP OK, read succeeded, test notify delivered with the operator's go-ahead.
 - [ ] **V-11** Complete workspace fleet indexed via `gitmap scan ~/workspace/repos`.
 - [ ] **V-12** Exact 9-item final status report delivered with open items from digest.
 - [ ] **V-13** V6 Task Execution Engine active: confirmed breakdown FIRST, RUNNING + ETA, 5-min pings, SQLite task DB, pull first, mandatory subagents (`invoke_subagent`, A=3, H=2, dynamic respawn, disjoint file boxes, Worker Git Ban), and Phase 7.5 Git repository troubleshooting.
