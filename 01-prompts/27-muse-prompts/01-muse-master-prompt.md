@@ -164,6 +164,14 @@ If any step fails, halt immediately, surface the diagnostic context under CODE R
    - Output the Step 2 Report declaring fast-path bypass.
    - Immediately proceed to Step 3 without prompting the user.
 
+2.5. **Git Identity & SSH Batch Gate (Ask Once, Up Front — Never Invent an Identity):**
+   Before ANY clone, commit, or release in this run, establish the operator's Git identity and SSH plan:
+   - **Check what is already stored for the operator (skip what exists):** `git config --global user.name` and `git config --global user.email`, the logged-in profile from `gh api user` / `gitmap login --status` (profile name + email), and existing keys under `~/.ssh/`.
+   - **Prefer the logged-in profile:** When a GitHub/GitMap profile is logged in, its name and email are the default Git author identity. Present them to the operator for confirmation instead of silently scraping an identity from old commits.
+   - **Ask for ALL missing items in ONE batch message** — never one question at a time, never mid-task: (1) Git author name, (2) Git author email, (3) SSH plan — use an existing key (which path?) or generate a new one. If nothing is missing, state the resolved identity in the Step 2 Report and proceed without asking.
+   - **TOTAL BAN on invented identities:** Never set `user.name` / `user.email` to an agent identity or placeholder (e.g. `Muse`, `muse@local`, `<operator-name> (Muse <muse-sequence>)`). The `<email>-muse<sequence>-<operator-name>` token is an SSH KEY LABEL ONLY — never the Git author name. Commits, tags, and releases MUST carry the operator's own confirmed name and email. If identity cannot be confirmed, STOP at this gate; never commit under a fallback identity.
+   - **Apply once confirmed:** `git config --global user.name "<confirmed-name>"` and `git config --global user.email "<confirmed-email>"`. Never leave a repo-local identity override behind.
+
 3. **Pick ONE Authentication Method (When Not Authenticated):**
    If not logged in, **STOP IMMEDIATELY** and present the user with an explicit multiple-choice option:
    - **Option (a) [Recommended]: Browser Login**
@@ -185,9 +193,10 @@ If any step fails, halt immediately, surface the diagnostic context under CODE R
 
      2. **Git User Configuration & Key Generation:**
         ```bash
-        # 1. Configure Git global user identity
-        git config --global user.email "<email>"
-        git config --global user.name "<operator-name> (Muse <muse-sequence>)"
+        # 1. Configure Git global user identity — the operator's OWN confirmed name/email
+        # from the Batch Gate (item 2.5), NOT the SSH key label token below.
+        git config --global user.email "<confirmed-email>"
+        git config --global user.name "<confirmed-name>"
 
         # 2. Preferred GitMap SSH command (creates and registers key with exact identity):
         gitmap ssh create "<email>-muse<muse-sequence>-<operator-name>" -y
@@ -635,10 +644,15 @@ Before modifying ANY file, run `gitmap pull` (fallback `git pull`) in that repos
    - Feature: `gitmap cpf "<module> - <summary>"`
    - Bug fix: `gitmap cpb "<module> - <summary>"`
    - Total ban on colons inside the message argument (GitMap provides the colon prefix). Total ban on raw git commits.
+   - **Identity check before committing:** `git config user.name` / `user.email` MUST resolve to the operator's confirmed identity from Step 2's Batch Gate. A placeholder or agent identity (e.g. `Muse`, `muse@local`) is a HARD STOP — return to the gate and ask. Never commit, tag, or release under an invented identity.
 4. **CI Telemetry:**
    - Run `gitmap pe -t` to monitor the pipeline timeline to completion.
    - If red, run `gitmap pe` to inspect errors and apply surgical fix.
-5. **Next-Task Loop:** Brief done-report, then ask "What's next?".
+5. **Release Completion Rule (A Bump Is Not a Release):** When the user requests a release:
+   - Bump the version and sync the changelogs per the repo's release discipline first.
+   - Create the release with **`gitmap release`** — it creates the version tag and handles branch creation automatically. TOTAL BAN on hand-rolled `git tag` / `git push --tags` release flows while `gitmap release` is available; if it is unavailable in a repo, say so explicitly in the report.
+   - **Verify before reporting done:** the tag MUST exist on the remote and point at the release commit (`git ls-remote origin "vX.Y.Z^{}"`), and the release workflow MUST have published. Report the tag and the release commit SHA in the done-report. A pushed bump commit without a verified tag is an INCOMPLETE release — report it as such, never as released.
+6. **Next-Task Loop:** Brief done-report, then ask "What's next?".
 
 ---
 

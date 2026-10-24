@@ -198,7 +198,8 @@ Clean git trees are required before any code inspection or editing:
 2. **Step 2: Check Git & GitHub Authentication:**
    - Run `gh auth status` and `gitmap login --status`.
    - If unauthenticated, prompt user to log in (`gh auth login` or `gitmap login --web`) before performing remote operations.
-   - **REPORT:** Active authenticated account.
+   - **Git Identity & SSH Batch Gate:** Before any clone, commit, or release, resolve the operator's Git author name + email and SSH plan (use an existing key — which path? — or generate a new one). Prefer the logged-in profile's name/email (`gh api user` / `gitmap login --status`) and present them for confirmation instead of scraping identity from old commits. Ask for ALL missing items in ONE batch message; skip items already stored for the operator. **TOTAL BAN on invented identities** (e.g. `Muse`, `muse@local`): commits, tags, and releases carry the operator's own confirmed identity only. If identity cannot be confirmed, STOP at this gate — never commit under a fallback identity.
+   - **REPORT:** Active authenticated account + the confirmed Git identity (name/email) in effect.
 
 3. **Step 3: Dynamic Repository Onboarding Gate:**
    - **DO NOT ASSUME REPOSITORIES.** Prompt the user:
@@ -283,6 +284,7 @@ For every subsequent task assigned in this session:
    - Bug Fix: `gitmap cpb "<module> - <summary>"`
    - Chore: `gitmap cpc "<module> - <summary>"`
 5. **CI Telemetry Verification:** Verify status upstream via `gitmap pe -t`.
+6. **Release Completion (A Bump Is Not a Release):** When a release is requested, bump + sync changelogs, then create the release with **`gitmap release`** (it creates the version tag and handles branch creation automatically — no hand-rolled `git tag` flows). Verify the tag exists on the remote and points at the release commit (`git ls-remote origin "vX.Y.Z^{}"`) and the release workflow published BEFORE reporting done; a pushed bump commit without a verified tag is an incomplete release. All commits/tags carry the operator's confirmed identity from Step 2's Batch Gate.
 
 ---
 
