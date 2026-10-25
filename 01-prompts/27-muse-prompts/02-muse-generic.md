@@ -271,6 +271,8 @@ For every subsequent task assigned in this session:
    - [ ] Comment ALL your changes (brief WHY comment at each change plus a descriptive message).
    - [ ] Commit FAST — git is a quick draft: all modified files together, pushed immediately. No verifying every step, no perfect-commit chasing, no one-commit-at-a-time.
    - [ ] Verify ONCE at the end of the tunnel: build, verify code, find the actual logic — a reverse-check at the end, or when the user says "verify the CI/CD". With many agents working, on-the-fly verification of everything wastes time and resources.
+   - [ ] Mark doubts STRICTLY for future AI review: any code with a doubt gets an explicit comment at that exact spot stating what is doubtful and what must be verified, so it can be verified easily later.
+   - [ ] Log doubtful issues in gitmap agent with line numbers: record each doubtful spot via `gitmap heatmap log` with the file path, the line number (in the code comment and in the log's expected text), and what needs verification — so tools or any AI can re-check it again later.
    - [ ] Prompt/skill update scope: master-prompt and generic-prompt updates apply to the coding-guidelines prompts and their skills ONLY. NEVER sync prompt/skill updates across other repositories — the user has other tools for that.
 5. **CI Telemetry Verification (end of the tunnel only):** Verify status upstream via `gitmap pe -t` ONCE at the end of the tunnel — not after every commit.
 
