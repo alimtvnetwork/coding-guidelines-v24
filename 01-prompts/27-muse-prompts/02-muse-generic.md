@@ -274,6 +274,7 @@ For every subsequent task assigned in this session:
    - [ ] Mark doubts STRICTLY for future AI review: any code with a doubt gets an explicit comment at that exact spot stating what is doubtful and what must be verified, so it can be verified easily later.
    - [ ] Log doubtful issues in gitmap agent with line numbers: record each doubtful spot via `gitmap heatmap log` with the file path, the line number (in the code comment and in the log's expected text), and what needs verification — so tools or any AI can re-check it again later.
    - [ ] Prompt/skill update scope: master-prompt and generic-prompt updates apply to the coding-guidelines prompts and their skills ONLY. NEVER sync prompt/skill updates across other repositories — the user has other tools for that.
+   - Date & time standard (user rule, 2026-10-25): date format is ALWAYS DD-MMM-YY (e.g. 25-Oct-25). Time format is ALWAYS 24-hour. Time is SAVED everywhere as UTC. GMT+8 is SHOWN only when the user wants to see a date/time; otherwise keep UTC. Branch names use the DATE only, never the time. Where time is irrelevant, do NOT mention time at all.
 5. **CI Telemetry Verification (end of the tunnel only):** Verify status upstream via `gitmap pe -t` ONCE at the end of the tunnel — not after every commit.
 
 ---
