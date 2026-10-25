@@ -154,10 +154,11 @@ WAVES = ceil(subtasks / (A x H))
    - Targeted checks only; zero full test suites or heavy builds during routine execution (R1).
    - Pre-commit secrets gate: `check-forbidden-strings.py` and `gitmap aum search` regex. Offload via `gitmap rs`.
    - Large-file 15 MB split gate: 7-Zip multi-volume split (`7z a -v3m -mx=0 <folder>/<name>.7z <file>` → `.7z.001`, `.7z.002`, …).
-   - Commit and push atomically via GitMap using hyphen format (no colons in arguments):
+   - Commit FAST via GitMap using hyphen format (no colons in arguments) — git is a quick draft: all modified files together, pushed immediately, no verifying every step:
      - Feature: `gitmap cpf "<module> - <summary>"`
      - Bug Fix: `gitmap cpb "<module> - <summary>"`
-   - Verify with `gitmap pe -t` (CI telemetry).
+   - Commit mindset — MUST checklist: comment ALL changes (brief WHY); commit fast, all files together, no per-step verification, no perfect-commit chasing; verify ONCE at the end of the tunnel (`gitmap pe -t` CI telemetry) as a reverse-check.
+   - Prompt/skill update scope: master-prompt and generic-prompt updates apply to the coding-guidelines prompts and their skills ONLY — never sync across other repositories.
    - Report briefly and ask for the next task.
 
 ### 3. Muse Memory IO (Memory Re-sync Protocol)

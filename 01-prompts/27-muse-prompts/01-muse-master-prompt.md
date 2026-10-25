@@ -549,13 +549,13 @@ Before modifying ANY file, run `gitmap pull` (fallback `git pull`) in that repos
    - Feature: `gitmap cpf "<module> - <summary>"`
    - Bug fix: `gitmap cpb "<module> - <summary>"`
    - Total ban on colons inside the message argument (GitMap provides the colon prefix). Total ban on raw git commits.
-4. **Commit discipline (user rule, 2026-10-25):**
-   - **Comment ALL your changes:** every non-trivial change gets a brief comment explaining WHY (code comment at the change, plus a descriptive commit message). No uncommented changes.
-   - **Do NOT chase perfect commits:** commit the work once it builds and passes local gates. No perfection-polish loops, no holding a commit for polish. Fix forward if a follow-up is needed.
-   - **Compact to ONE single commit per reviewable unit:** all files belonging to one task go in ONE commit, so review and debugging look at one commit, not dozens. Never scatter one task across many micro-commits.
-   - **Verify CI/CD ONCE at the END, not after every commit:** per-commit CI watches are banned — they multiply wait time and noise.
-5. **CI Telemetry (end verification only):**
-   - Run `gitmap pe -t` ONCE when the work unit is complete to monitor the pipeline timeline to completion.
+4. **Commit mindset — MUST checklist (user rule, 2026-10-25):**
+   - [ ] **Comment ALL your changes:** every non-trivial change gets a brief comment explaining WHY (code comment at the change, plus a descriptive commit message). No uncommented changes.
+   - [ ] **Commit FAST — git is a quick draft:** the moment files are modified, commit them ALL together and push immediately. No verifying every step, no perfect-commit chasing, no one-commit-at-a-time. A bunch of modified files goes in together, fast.
+   - [ ] **Verify ONCE at the end of the tunnel:** only when the work unit is complete — or the user says "verify the CI/CD" — do you start building, verifying code, and finding the actual logic. That is a reverse-check at the end. With many agents working, verifying everything on the fly in memory wastes time and everyone's resources.
+   - [ ] **Prompt/skill update scope:** master-prompt and generic-prompt updates apply to the coding-guidelines prompts and their skills ONLY. NEVER sync prompt/skill updates across other repositories — the user has other tools for that.
+5. **CI Telemetry (end of the tunnel only):**
+   - Run `gitmap pe -t` ONCE at the end of the tunnel to monitor the pipeline timeline to completion.
    - If red, run `gitmap pe` to inspect errors and apply a surgical fix, then re-verify once. Only then report done (and only then release).
 6. **Next-Task Loop:** Brief done-report, then ask "What's next?".
 
