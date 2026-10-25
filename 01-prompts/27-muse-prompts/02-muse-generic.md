@@ -44,7 +44,7 @@ ${Input Text Verbatim}
 4. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well.
 5. Inspect active file leases & contention via `gitmap agent heatmap` before editing shared files; log all file exploration and modifications with rationale using `gitmap heatmap log`.
 6. Execute bounded subtasks in micro-batches of 5–8 files each, strictly preserving implicit positive booleans, error envelopes, and coding guidelines.
-7. Finish each completed subtask with an atomic GitMap commit using hyphen format (`gitmap cpf "<module> - <summary>"` / `gitmap cpb "<module> - <summary>"`).
+7. Finish each completed task with ONE single compact GitMap commit covering all its files, using hyphen format (`gitmap cpf "<module> - <summary>"` / `gitmap cpb "<module> - <summary>"`). Never scatter one task across micro-commits.
 8. Run retrospective AI verification prompt/script (01-prompts/25-ai-verification/01-retrospective-ai-verification.md / 03-ai-scripts/47-retrospective-ai-verification.py) or skill [ai-verification](file;.agents/skills/ai-verification) to audit specs, touched files, code quality, and CI/CD status upon task completion (`gitmap pe -t`).
 
 ## Must follow and spawn agent using
@@ -264,11 +264,12 @@ For every subsequent task assigned in this session:
    - Booleans: strictly implicit evaluations (`if isReady`), positive prefixes (`is*`, `has*`), no `== true`, no mixed polarity.
    - Never disable or comment out CI/CD checks or GitHub Actions.
    - Never force-push (`git push --force` is banned).
-4. **Atomic Commit & Push:** Finish each subtask with an atomic GitMap commit using hyphen format (no colons in arguments):
+4. **Compact Commit & Push (user rule, 2026-10-25):** Finish each completed task with ONE single compact GitMap commit covering all its files, using hyphen format (no colons in arguments):
    - Feature: `gitmap cpf "<module> - <summary>"`
    - Bug Fix: `gitmap cpb "<module> - <summary>"`
    - Chore: `gitmap cpc "<module> - <summary>"`
-5. **CI Telemetry Verification:** Verify status upstream via `gitmap pe -t`.
+   - Comment ALL your changes (brief WHY comment at each change plus a descriptive message). Do NOT chase perfect commits — commit once it builds and passes local gates, fix forward if needed. Never scatter one task across micro-commits.
+5. **CI Telemetry Verification (end only):** Verify status upstream via `gitmap pe -t` ONCE when the work unit is complete — not after every commit.
 
 ---
 
