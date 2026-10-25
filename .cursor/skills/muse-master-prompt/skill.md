@@ -157,7 +157,7 @@ WAVES = ceil(subtasks / (A x H))
    - Commit FAST via GitMap using hyphen format (no colons in arguments) — git is a quick draft: all modified files together, pushed immediately, no verifying every step:
      - Feature: `gitmap cpf "<module> - <summary>"`
      - Bug Fix: `gitmap cpb "<module> - <summary>"`
-   - Commit mindset — MUST checklist: comment ALL changes (brief WHY); commit fast, all files together, no per-step verification, no perfect-commit chasing; verify ONCE at the end of the tunnel (`gitmap pe -t` CI telemetry) as a reverse-check; mark doubts STRICTLY (explicit DOUBT comment at the spot + `gitmap heatmap log` entry with file + line number + what needs verification) so any AI can re-check later.
+   - Commit mindset — MUST checklist: comment ALL changes (brief WHY); commit fast, all files together, no per-step verification, no perfect-commit chasing; verify ONCE at the end of the tunnel (`gitmap pe -t` CI telemetry) as a reverse-check; mark doubts STRICTLY (explicit DOUBT comment at the spot + `gitmap heatmap log` entry with file + line number + what needs verification) so any AI can re-check later; date & time: DD-MMM-YY dates, 24-hour time, saved as UTC, GMT+8 shown only on user request; branch names by date only, no time, and where time is irrelevant do not mention time.
    - Prompt/skill update scope: master-prompt and generic-prompt updates apply to the coding-guidelines prompts and their skills ONLY — never sync across other repositories.
    - Report briefly and ask for the next task.
 
