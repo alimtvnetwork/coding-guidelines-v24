@@ -37,13 +37,9 @@ When authoring specifications in an application repository:
 
 | File / Folder | Title | Type | Status |
 | :--- | :--- | :--- | :--- |
-| [`.gitkeep`](.gitkeep) | Git Directory Anchor | System | Active |
 | [`readme.md`](readme.md) | Application Specification Container Standard & Index | Standard Index | Active |
-| [`25-coding-guidelines-and-folder-structure-instructions/`](25-coding-guidelines-and-folder-structure-instructions/) | Coding Guidelines & Folder Structure Instructions (v4 Archival, Spec 21 Sanitization, Multi-Repo Leak Cleanup) | Active Task Spec | Active |
-| [`01-create-prompts-for-100-improvements/`](01-create-prompts-for-100-improvements/) | Create Prompts for 100 Improvements (UI Level, Code Base, Whole System) | Task Spec | Active |
-| [`02-detail-plans-and-improvements-for-review/`](02-detail-plans-and-improvements-for-review/) | Detail Plans and Improvements for Review (Multi-Step Roadmaps & Review-First Gate) | Task Spec | Active |
-| [`03-rename-and-sync-100-improvements-prompts-and-skills/`](03-rename-and-sync-100-improvements-prompts-and-skills/) | Rename and Sync 100 Improvements Prompts and Skills (Suite Taxonomy Upgrade, Deprecation Purge Engine, 43-Repo Fleet Synchronization) | Active Task Spec | Active |
-| [`04-next-100-ideas-for-improvements/`](04-next-100-ideas-for-improvements/) | Next 100 Ideas for Improvements Prompt, Skills & Fleet Synchronization | Active Task Spec | Active |
-| [`05-improvements-folder-prompts/`](05-improvements-folder-prompts/) | Improvements Folder Prompts: Check Pending & Implement Next 10 Improvements Spec, Skills & Fleet Sync | Active Task Spec | Active |
-| [`06-cg-execute-golang-pointers-and-mutation-reduce/`](06-cg-execute-golang-pointers-and-mutation-reduce/) | Golang Pointer Reduction & Mutation Elimination Prompt, Companion Skills & Fleet Sync | Active Task Spec | Active |
 | [`03-execute-n-steps-letterly-prompt-formatter/`](03-execute-n-steps-letterly-prompt-formatter/) | Letterly Prompt Formatter — gold standard alignment, mobile one-liner, fleet sync, SQL repository pattern & enum actions (spec 04, 2026-10-23) | Active Task Spec | Active |
+| [`06-cg-execute-golang-pointers-and-mutation-reduce/`](06-cg-execute-golang-pointers-and-mutation-reduce/) | Golang Pointer Reduction & Mutation Elimination Prompt, Companion Skills & Fleet Sync | Active Task Spec | Active |
+| [`25-coding-guidelines-and-folder-structure-instructions/`](25-coding-guidelines-and-folder-structure-instructions/) | Coding Guidelines & Folder Structure Instructions (v4 Archival, Spec 21 Sanitization, Multi-Repo Leak Cleanup) | Active Task Spec | Active |
+| [`27-add-ips-to-muse-prompt-in-coding-guideline/`](27-add-ips-to-muse-prompt-in-coding-guideline/) | Add IPs to Muse Prompt in Coding Guideline | Active Task Spec | Active |
+| [`29-coding-guideline-and-folder-structure-improvement/`](29-coding-guideline-and-folder-structure-improvement/) | Coding Guideline & Folder Structure Improvement (What to Read Architecture, Spec 21 Cleanliness, Skills & Prompts Archival, Index Standardization) | Active Task Spec | Active |

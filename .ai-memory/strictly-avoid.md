@@ -668,6 +668,14 @@ Allowed work:
 
 **Why:** Unrequested CI/CD monitoring burns hundreds of tokens and wait cycles when the code has already been pushed cleanly.
 
+---
+
+## Redundant .gitkeep Prohibition
+
+- **Whenever a folder contains any tracked file, any `.gitkeep` file inside that folder MUST be removed immediately.**
+- Retain `.gitkeep` ONLY in truly empty placeholder directories that require Git tracking presence.
+
+
 
 
 

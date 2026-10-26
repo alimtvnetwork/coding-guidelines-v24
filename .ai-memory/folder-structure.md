@@ -2,15 +2,16 @@
 
 > **Target:** `.ai-memory/folder-structure.md`
 > **Authority:** Single Source of Truth for `.ai-memory/` Ecosystem & Repository Organization
-> **Version:** 4.0.0
+> **Version:** 5.0.0
+> **Last Updated:** 2026-10-27T00:00:00Z
 
-This document defines the authoritative canonical structure of the repository, including the `.ai-memory/` AI metadata layer and the `02-spec/` specification tree. All AI agents MUST strictly adhere to this architecture when reading, indexing, or writing files.
+This document defines the authoritative canonical structure of the repository, including the top-level repository tree, the `.ai-memory/` AI metadata layer, and the `02-spec/` specification tree. All AI agents MUST strictly adhere to this architecture when reading, indexing, or writing files.
 
 ---
 
 ## 1. The `XX-<slug>` Deterministic Prefixing System
 
-To maintain deterministic sorting and avoid ambiguity across operating systems, every file and directory within structured modules (`.ai-memory/plans/`, `01-prompts/`, `03-ai-scripts/`, `02-spec/`) MUST follow the two-digit zero-padded numeric prefix:
+To maintain deterministic sorting and avoid ambiguity across operating systems, every file and directory within structured modules (`01-prompts/`, `02-spec/`, `03-ai-scripts/`, `04-code/`, `05-changes-history/`, `06-archive/`, `.ai-memory/plans/`) MUST follow the two-digit zero-padded numeric prefix:
 
 - **Format:** `XX-<slug-name>.ext` or `XX-<slug-name>/`
 - **Prefix Range:** Starts at `01-` (or `00-` for root configuration indexes) and increments sequentially (`01-`, `02-`, ...).
@@ -19,96 +20,115 @@ To maintain deterministic sorting and avoid ambiguity across operating systems, 
 
 ---
 
-## 2. Complete `.ai-memory/` Directory Architecture
+## 2. Root Repository Architecture
+
+The repository layout consists of 6 top-level numbered categories, key AI integration environments, and application sources:
 
 ```
-.ai-memory/
-├── 01-overview.md                       # Comprehensive repository onboarding for AI agents
-├── 02-user-preferences                  # Explicit user preferences & communication style
-├── 03-strictly-avoid.md                 # Universal hard prohibitions & CODE RED constraints
-├── 04-suggestions.md                    # Pending architectural suggestions & enhancements
-├── 05-plan.md                           # Active high-level roadmap and milestone tracker
-├── 06-what-to-read.md                   # AI reading order and entrypoint router
+coding-guidelines/
+├── 01-prompts/                          # Master prompt library & categorized execution prompts
+│   ├── 01-general/                      # Conversational entry points and base system prompts
+│   ├── 02-core-workflow/                # Canonical autonomous workflows and execution protocols
+│   ├── 03-read-write/                   # Memory ingestion, persistence, and sync prompts
+│   ├── 04-coding-standards/             # Static analysis and guideline compliance prompts
+│   ├── 05-coding-guidelines/            # Cross-language refactoring and repair prompts
+│   ├── 06-testing-and-qa/               # Autonomous test runners and quality gates
+│   ├── 07-bug-fix/                      # 4-part RCA and diagnostic debugging prompts
+│   ├── 08-dry-code/                     # DRY analysis, utility extraction, and pattern unification
+│   ├── 09-commit-and-multi-agent/       # Commit hygiene and multi-agent coordination
+│   ├── 13-plan-audit/                   # Application specification and plan auditing prompts
+│   ├── 14-execute/                      # Execution loops (including V6 tree swarm engine)
+│   ├── 15-cg-execute/                   # Coding guideline batch refactoring executors
+│   ├── 17-ci-cd/                        # CI/CD repair and zero-storage workflow prompts
+│   ├── 18-release-management/           # SemVer release blueprints and version bumpers
+│   ├── 20-memory-consolidate/           # Institutional memory consolidation prompts
+│   ├── 22-letterly/                     # Letterly dictation formatters (mobile, desktop, muse)
+│   ├── 23-cursor-prompts/               # Cursor IDE mirrored instruction templates
+│   └── 27-muse-prompts/                 # Muse fleet orchestration and master prompts
 │
-├── ai-fix-scripts/                      # Persistent high-speed Python automation toolchain
-│   ├── readme.md                      # Master catalog, command syntax, and tag registry
+├── 02-spec/                             # Single Source of Truth for system specifications
+│   ├── 01-spec-authoring-guide/         # Specification formatting and authoring rules
+│   ├── 02-coding-guidelines/            # Cross-language standards and boolean principles
+│   ├── 03-error-manage/                 # Structured error handling (*appfault.AppError)
+│   ├── 04-database-conventions/         # Schema standards, naming, ORM, and REST APIs
+│   ├── 05-split-db-architecture/        # Split SQLite operational and configuration DB pattern
+│   ├── 06-seedable-config-architecture/ # Versioned seedable configuration systems
+│   ├── 07-design-system/                # Color palettes, typography, spacing, and UI tokens
+│   ├── 08-docs-viewer-ui/               # Documentation viewer interface specifications
+│   ├── 09-code-block-system/            # Syntax highlighting and interactive code block engine
+│   ├── 10-research/                     # Comparative benchmarks and technology evaluations
+│   ├── 11-powershell-integration/       # Cross-platform PowerShell automation standards
+│   ├── 12-cicd-pipeline-workflows/      # CI/CD pipeline automation and zero-storage workflows
+│   ├── 13-generic-cli/                  # Terminal UX, ANSI colors, flags, and help contracts
+│   ├── 14-update/                       # CLI self-update architecture and distribution
+│   ├── 15-distribution-and-runner/      # Cross-platform installer contracts and runners
+│   ├── 16-generic-release/              # Universal release pipeline blueprint and asset matrices
+│   ├── 17-consolidated-guidelines/      # AI-readable summaries of all major spec modules
+│   ├── 18-wp-plugin-how-to/             # WordPress plugin architecture and REST API patterns
+│   ├── 19-main-worker-service/          # Split-tier service architecture and proxy nodes
+│   ├── 21-app/                          # App-specific feature specifications and workflows
+│   ├── 22-app-issues/                   # App-specific bug analysis, root causes, and fixes
+│   ├── 23-app-db/                       # App-specific data models and migration strategies
+│   ├── 24-app-ui-design-system/         # App-specific UI tokens and layout patterns
+│   └── 25-spec-audits/                  # Specification scorecards and benchmark audits
+│
+├── 03-ai-scripts/                       # High-speed Python automation toolchain
+│   ├── readme.md                        # Master script catalog, usage syntax, and CLI flags
 │   ├── 02-shared-engine.py              # Central engine: constants, regex registry, locks, cache
 │   ├── 03-file-manipulator.py           # Case conversion, re-sequencing, and UTF-8 LF fixer
-│   ├── 04-newline-fixer.py              # Newline normalizer & trailing whitespace stripper
+│   ├── 04-newline-fixer.py              # Newline normalizer and trailing whitespace stripper
 │   ├── 05-guideline-autofixer.py        # Composite guideline runner (newlines + booleans)
 │   ├── 06-cicd-local-runner.py          # Parallel local CI runner for 18 quality gates
-│   ├── 07-relative-path-fixer.py        # Absolute filesystem path & file:/// URI sanitizer
-│   ├── 08-naming-autofixer.py           # Lowercase & boolean convention linter
-│   ├── 09-cli-help-auditor.py           # CLI help parser and command validator
-│   ├── 10-encoding-normalizer.py        # Multi-file UTF-8 LF and BOM cleaner
-│   ├── 11-fast-file-scanner.py          # High-speed file indexer & cache query engine
-│   ├── 12-fast-cached-grep.py           # Parallel regex grep leveraging pre-warmed cache
-│   ├── 13-file-size-guard.py            # Large binary blob (>2MB) threshold auditor
+│   ├── 07-relative-path-fixer.py        # Absolute filesystem path and URI sanitizer
+│   ├── 08-naming-autofixer.py           # Lowercase and boolean convention linter
 │   ├── 14-version-sync-checker.py       # Version parity guard across manifest files
-│   ├── 15-sequence-and-title-auditor.py # Sequence gap and H1 header alignment auditor
-│   ├── 16-installer-smoke-tester.py     # Shell/PowerShell installer smoke tester
-│   ├── 17-fast-file-reader.py           # AI fast file reader and folder explorer (<1ms)
-│   ├── 18-codebase-topology-discoverer.py # Polyglot topology routing and discovery
-│   ├── 19-artifact-remover.py           # Safe interactive artifact cleaner with git untracking
-│   └── 20-plan-consolidator.py          # Lovable plan consolidator and backup generator
+│   ├── 38-sync-prompts-skills-scripts.py# Canonical asset multi-repo sync engine
+│   └── 47-upgrade-cg-execute-to-v6.py   # Automated prompt and skill upgrade engine
 │
-├── plans/                               # Micro-task execution center
-│   ├── readme.md                      # Master registry of active and completed plans
-│   ├── pending/                         # High-level active parent plans (e.g., 01-auth.md)
-│   ├── subtasks/                        # Bounded micro-tasks grouped by parent slug
-│   │   └── XX-<parent-slug>/            # Sequential subtasks (01-step.md, 02-step.md)
-│   └── completed/                       # Archived completed parent plans & subtasks
+├── 04-code/                             # Reusable production source code & reference packages
+│   └── golang/                          # Enterprise Go packages (pkg/appfault, pkg/streamwriter, pkg/fileutil)
 │
-├── memory/                              # Institutional knowledge base (SINGULAR: memory/)
-│   ├── readme.md                      # Master memory table of contents & CODE RED rules
-│   ├── architecture/                    # System architecture decisions and split-DB patterns
-│   ├── constraints/                     # Non-negotiable technical constraints
-│   ├── done/                            # Historical milestone logs
-│   ├── features/                        # Feature-specific knowledge and requirements
-│   ├── issues/                          # Root cause analyses and bug postmortems
-│   ├── patterns/                        # Reusable design and coding patterns
-│   ├── processes/                       # Operational and maintenance procedures
-│   ├── project/                         # Project metadata and author attributions
-│   ├── standards/                       # Coding standards and enum specifications
-│   ├── style/                           # Code style and naming conventions
-│   ├── suggestions/                     # Granular suggestion trackers
-│   └── workflow/                        # Sprint and migration state trackers
+├── 05-changes-history/                  # Transaction logs and architectural revision records
+│   ├── 01-gitmap-ai-scripts-and-spec-sync/
+│   ├── 16-boolean-prefixes-id-standard-and-writer-context/
+│   ├── 25-regex-harvesting-dbengine-and-isdefined-standard/
+│   └── 26-write-prompts-git-audit-and-recent-tasks-register/
 │
-├── prompts/                             # AI Prompt Repository & Category Hierarchy
-│   ├── 01-prompts-category/             # Canonical source for categorized prompt modules
-│   │   ├── 01-general/                  # Base prompts and conversational behaviors
-│   │   ├── 02-core-workflow/            # Unified workflow prompts (v1 through v4)
-│   │   ├── 03-read-write/               # Memory read/write and Antigravity sync
-│   │   ├── 04-coding-standards/         # Coding guideline enforcement
-│   │   ├── 05-coding-guidelines/        # Guideline execution & autofix prompts
-│   │   ├── 06-testing-and-qa/           # Autonomous QA, unit tests, and smoke tests
-│   │   ├── 07-bug-fix/                  # Root cause analysis & structured bug fixing
-│   │   ├── 08-dry-code/                 # DRY architecture, caching, & lazy regex
-│   │   ├── 09-commit-and-multi-agent/   # Commit standards & multi-agent delegation
-│   │   ├── 13-plan-audit/               # Plan auditing and spec verification
-│   │   ├── 14-execute/                  # Task execution loops (batched, n-steps, writer)
-│   │   ├── 15-cg-execute/               # Coding guideline category execution rules
-│   │   ├── 17-ci-cd/                    # CI/CD pipeline diagnosis and runner scripts
-│   │   ├── 18-release-management/       # Semver version bumping and release blueprints
-│   │   ├── 20-memory-consolidate/       # Memory and completed plan consolidation
-│   │   └── 22-ai-fix-script-prompts/    # Specifications for individual AI scripts
-│   └── *.md                             # Synced flat prompts generated from categories
+├── 06-archive/                          # Superseded prompts, legacy plans, and deprecations
+│   ├── v1/                              # Legacy v1 prompts and workflows
+│   ├── v3/                              # Legacy v3 prompts and execution templates
+│   └── v4/                              # Archived v4 prompts and cg-execute modules
 │
-├── release/                             # Release automation & version bumping hub
-│   ├── release-method.md                # Authoritative version bump registry
-│   ├── bump_versions.py                 # Automated regex-based version mutator
-│   └── issues/                          # Release failure logs and diagnostics
+├── .ai-memory/                          # Institutional memory, roadmap, and state layer
+│   ├── what-to-read.md                  # Authoritative 5-Tier AI reading order
+│   ├── folder-structure.md              # Authoritative canonical folder structure specification
+│   ├── strictly-avoid.md                # Universal hard prohibitions & CODE RED constraints
+│   ├── coding-guidelines.md             # Baseline coding standards summary
+│   ├── suggestions.md                   # Pending architectural suggestions & enhancements
+│   ├── plans/                           # Micro-task execution center (pending, subtasks, completed)
+│   ├── memory/                          # Institutional knowledge base (learned, standards, constraints)
+│   ├── release/                         # Release automation, version mutators, and release notes
+│   ├── ambiguous-questions/             # Active and resolved ambiguity tracking
+│   ├── suggestions/                     # Granular suggestion proposals and history
+│   ├── cicd-issues/                     # CI/CD pipeline failure diagnostics and RCAs
+│   └── assets/                          # User-provided mockups, diagrams, and reference media
 │
-├── question-and-ambiguity/              # Ambiguity resolution & task counters
-│   ├── readme.md                        # Open and resolved ambiguity log
-│   └── task-counter.md                  # Task iteration metrics
+├── .agents/                             # Antigravity agent configuration and canonical skills
+│   ├── rules/                           # Behavioral rules and coding guidelines
+│   ├── scripts/                         # Exact mirror of 03-ai-scripts/ for Antigravity runners
+│   └── skills/                          # Reusable skill definitions (SKILL.md)
 │
-├── suggestions/                         # Detailed suggestion proposals
-│   ├── readme.md                      # Index of active suggestions
-│   └── completed/                       # Archived implemented proposals
+├── .cursor/                             # Cursor IDE rules, prompts, and mirror skills
+│   └── skills/                          # Cursor-compatible skill mirrors
 │
-├── cicd-issues/                         # CI pipeline failure diagnostics and RCAs
-└── assets/                              # User-provided mockups, diagrams, and media
+├── src/                                 # Documentation viewer React web application source
+│   ├── components/                      # UI primitives, layout components, and markdown renderers
+│   ├── hooks/                           # Custom React hooks (collapsible, search, dashboard)
+│   └── pages/                           # Application views (DocsViewer, Dashboard, LandingPage)
+│
+└── slides-app/                          # Interactive slide deck presentation application
+    ├── docs/                            # Visual baseline recipes and architecture guides
+    └── tests/                           # Visual regression and snapshot tests
 ```
 
 ---
@@ -118,7 +138,7 @@ To maintain deterministic sorting and avoid ambiguity across operating systems, 
 The `02-spec/` directory is organized into numbered tiers:
 
 - **Tiers 01–20 (Core Fundamentals):** Reusable standards, architecture blueprints, database conventions, and design systems.
-- **Tiers 21+ (App-Specific Modules):** Application business logic, features, and domain-specific schemas.
+- **Tiers 21+ (App-Specific Modules & Audits):** Application business logic, features, domain-specific schemas, and specification audits.
 
 | Tier | Module Directory | Focus Area |
 |:---:|---|---|
@@ -141,7 +161,12 @@ The `02-spec/` directory is organized into numbered tiers:
 | **17** | `02-spec/17-consolidated-guidelines/` | Single-file AI summaries of all major spec modules |
 | **18** | `02-spec/18-wp-plugin-how-to/` | WordPress plugin architecture and REST APIs |
 | **19** | `02-spec/19-main-worker-service/` | Split-tier worker service and proxy nodes |
-| **21+**| `02-spec/21-app/` ... `02-spec/24-app-ui-design-system/` | App-specific workflows, UI components, and domain DBs |
+| **20** | `02-spec/20-*` *(Reserved)* | Reserved for future core fundamentals |
+| **21** | `02-spec/21-app/` | App-specific workflows, features, and domain specifications |
+| **22** | `02-spec/22-app-issues/` | App bug analysis, root cause analyses, and fix documentation |
+| **23** | `02-spec/23-app-db/` | App-specific data models, table designs, and migration paths |
+| **24** | `02-spec/24-app-ui-design-system/` | App-specific UI components, theming tokens, and design patterns |
+| **25** | `02-spec/25-spec-audits/` | Specification audits, blind-AI readiness scorecards, and matrices |
 
 ---
 
@@ -149,6 +174,6 @@ The `02-spec/` directory is organized into numbered tiers:
 
 1. **Strict Relative Paths:** All internal markdown links, citations, and subtask paths MUST use relative paths starting from the repository root (e.g. `.ai-memory/plans/pending/01-task.md`, `02-spec/02-coding-guidelines/readme.md`). Absolute filesystem paths (`C:\...`, `/home/...`, `file:///...`) are strictly prohibited.
 2. **Strict Lowercase:** All generated files and directories MUST be lowercase.
-3. **Plurality Invariants:** Always `.ai-memory/memory/` (singular), `.ai-memory/plans/` (plural), `01-prompts/` (plural), `.ai-memory/suggestions/` (plural).
+3. **Plurality Invariants:** Always `.ai-memory/memory/` (singular), `.ai-memory/plans/` (plural), `01-prompts/` (plural), `.ai-memory/suggestions/` (plural), `03-ai-scripts/` (plural).
 4. **Mirror Parity:** Every script in `03-ai-scripts/` MUST have an exact mirror in `.agents/scripts/`.
 5. **Quality Gates:** Before concluding any engineering task, execute `python 03-ai-scripts/06-cicd-local-runner.py` to confirm all 18 quality checks pass.

@@ -52,6 +52,8 @@ Archiving these skills prevents prompt context bloat, eliminates conflicting ski
 | **37** | `raw-insults` | Tone Stub | Pure conversational tone modifier containing zero executable actions or tooling. | (Removed — Tone stubs eliminated) |
 | **38** | `consolidated-insults-v2` | Tone Stub | Pure conversational tone modifier containing zero executable actions or tooling. | (Removed — Tone stubs eliminated) |
 | **39** | `insult-code-fix` | Tone Stub | Pure conversational tone modifier containing zero executable actions or tooling. | (Removed — Tone stubs eliminated) |
+| **40** | `read-memory-latest` | Deprecated Wrapper | Superseded by enhanced memory retrieval with git commit ingestion in `read-memory-enhanced`. | [read-memory-enhanced](.agents/skills/read-memory-enhanced) |
+| **41** | `unified-ai-prompt-v4` | Legacy Orchestrator | Deprecated unified orchestrator prompt stub superseded by V6 multi-agent swarm architecture. | [execute-parent-task-with-n-steps-v6](.agents/skills/execute-parent-task-with-n-steps-v6) |
 
 ---
 

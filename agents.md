@@ -167,3 +167,9 @@ When synchronizing canonical assets (prompts, skills, shared specs, scripts) acr
     `gitmap heatmap update --id <id> --outcome "<outcome>" --met true`
   - **Phase 3 Verification Audit:** Run `gitmap heatmap tree --task <task>` and `gitmap heatmap status --task <task>` to verify 100% action closure.
   - **Companion Repo-Cache Telemetry:** `gitmap rc heatmap <status|tables|query|view|tree|live|sync>` for multi-AI synchronization.
+
+## 16. Redundant .gitkeep Prohibition
+
+- **Whenever a folder contains any tracked file, any `.gitkeep` file inside that folder MUST be removed immediately.**
+- Retain `.gitkeep` ONLY in truly empty placeholder directories that require Git tracking presence.
+
