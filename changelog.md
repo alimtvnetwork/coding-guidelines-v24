@@ -1,5 +1,19 @@
 # Changelog
 
+## [v6.87.0] - 2026-10-27
+
+### Added
+- **Master 39-Step Coding Guideline Orchestrator (`follow-cg-execute`):** Authored full 39-step ordered sequence across all coding guideline domains in `.agents/skills/follow-cg-execute/skill.md` and `.cursor/skills/follow-cg-execute/skill.md`, enforcing zero-build fast-forwarding micro-batches in steps 1–38 and terminal E2E verification in step 39.
+- **GitMap Cognitive Heatmap Query Shorthands:** Wired dedicated CLI aliases (`gitmap heatmap recent/latest`, `gitmap heatmap failed/unmet`, `gitmap heatmap hotfiles/hotspots`, `gitmap heatmap tasks/task-list`) and companion `rc heatmap` subcommands.
+- **GitMap Task Spec File & Folder Tracking:** Implemented `HeatmapParentTask` registration with `RootSpecFilePath` and `TaskFolder` in `store/heatmap_store.go` and wired into `gitmap task init`.
+
+### Changed
+- **PowerShell Completion Script Hardening:** Fixed Cobra completion generator in `cli/cmd/root_cobra_completion.go` where trailing `+ $Space` was attached to `{ continue }`, resolving `ScriptBlock op_Addition` syntax error and restoring permanent tab suggestions.
+- **Cross-Platform Process Termination (`gitmap kill`):** Promoted native `gitmap kill <pid|name|:port> [--force] [--tree]` (alias `terminate`) across all skills and guidelines, codifying total ban on raw `Stop-Process` and `taskkill`.
+- **Skills Inventory Consolidation:** Consolidated 13 redundant prompt wrappers into canonical parent skills (`release`, `logo-and-icon-design`, `react-ui-theming-design`, `prompts-and-skills-sync`, `check-pending-improvements`) and moved deprecated wrappers to `.agents/skills-archived/` and `.cursor/skills-archived/`.
+
+---
+
 ## [v6.86.0] - 2026-10-27
 
 ### Added
