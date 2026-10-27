@@ -1,6 +1,6 @@
 ---
 name: gitmap
-description: Autonomous developer companion and CLI for ultra-fast repository scanning, polyglot automation (AUM), cluster/SSH delegation, pipeline self-healing, and coding guideline enforcement.
+description: Autonomous developer companion and CLI for ultra-fast repository scanning, polyglot automation (AUM), pipeline self-healing, process management, and coding guideline enforcement.
 ---
 
 # GitMap Autonomous Engineering Skill
@@ -207,12 +207,8 @@ All AI agents operating within GitMap-managed repositories MUST strictly adhere 
 | `--urls` | `bool` | `false` | Outputs complete 8-document Authoritative Public Documentation Registry for LLM memory ingestion. |
 | `-j`, `--json` | `bool` | `false` | Emits structured machine-readable JSON curriculum and document metadata. |
 
-### 9. Multi-Repo, SSH & Toolchain Operations
+### 9. Multi-Repo & Toolchain Operations
 - `gitmap pae --json` — Multi-repo pull with compact JSON telemetry (use only when explicitly requested; ban routine polling).
-- `gitmap sc list` — Query servers-clients topology, active services, and background daemon tasks.
-- `gitmap sc ping` — Verify server-client connectivity with zero timeout lag.
-- `gitmap ssh health --all` — Probe port 22 liveness across all known remote hosts and SSH nodes.
-- `gitmap ssh identity --email <email> --seq <N> --operator <name>` — Formats canonical SSH comment token `<email>-muse<muse-sequence>-<operator-name>` and sets `git config` user identity.
 - `gitmap cargo status` — Inspect Rust and Cargo toolchain status.
 - `gitmap install cargo --check` — Validate Cargo and Rust toolchain installation.
 - `gitmap install cargo` — Install Rust toolchain if missing.
@@ -346,20 +342,11 @@ Autonomous subagents (Lead Orchestrators, Branch Coordinators, and Leaf Workers)
 > NEVER run inline Python sqlite3 snippets or execute raw database queries against `.ai-memory/temp-agents/<slug>/agent-task.db`.
 > All agent task lifecycle operations, status inspections, claiming, logging, and diagnostics MUST use compiled `gitmap agent` CLI commands (`task init`, `task status`, `task ls`, `subtask add`, `subtask ls`, `subtask claim`, `subtask complete`, `subtask fail`, `log`, `diagnose`, `crashed`, `temp-clear`).
 
-### 11. Fleet Telemetry & Running-Only Delegation
-- `gitmap nodes-running-only` (alias `gitmap nro`) — Lists strictly online/open nodes (`is_online: true`), filtering out offline noise.
-- `gitmap nro --json` (`-j`) — Emits clean JSON array of online cluster nodes.
-- `gitmap nro exec "<cmd>"` — Runs SSH execution strictly across online nodes without offline timeout delays.
-- `gitmap nro tasks [--json]` — Interrogates active and pending task queues on online nodes.
-- `gitmap nro resources [--json]` — Probes CPU & RAM benchmarks across online nodes.
-- `gitmap nro ping` — Pings reachable nodes with zero timeout lag.
-- `gitmap nro pull` / `gitmap nro cp` / `gitmap nro scan` — High-speed running-only fleet operations.
+### 11. System Diagnostics & Performance Telemetry
 - `gitmap os --json` — Structured machine and OS identity with kernel, build, and version telemetry.
 - `gitmap cpu` / `gitmap processor` — Live & 5s cached CPU utilization, architecture, and core counts.
 - `gitmap ram` — Live & 5s cached memory capacity, free/used MB, and visual utilization meter.
-- `gitmap disk` — Disk volume capacity, free space, and mount telemetry.
 - `gitmap network [--json]` — Network adapter configuration, IPs, MAC addresses, link speeds, and throughput metrics.
-- `gitmap nodes tasks [--json] [--open-only]` — Queries local and remote node task queues with `?` role placeholder.
 
 ### 12. File Contention Heatmap, Cognitive Telemetry & Agent Activity Observation
 - `gitmap heatmap` — **Heatmap Database Discovery Catalog**: Surveys all 3 tiers of heatmap databases (local root `<EffectiveDataDir>/heatmap.db`, per-repo split DBs `<EffectiveDataDir>/heatmap/<repo>/sql.db`, and repo-cache multi-AI DBs `repo-cache/.heatmap/<seq>-<ai>/`), maps registered repository aliases via `db.ListAliasesWithRepo()`, aggregates recent tasks across 2–5 repositories (minimum 5 tasks), and provides dynamic interactive AI suggestion pills.
@@ -739,25 +726,12 @@ gitmap lowercase
 gitmap lowercase-readme
 ```
 
-### 8. Multi-Repo, SSH & Toolchain Operations
-Managing remote topologies, SSH node pooling, and developer toolchains.
+### 8. Multi-Repo & Toolchain Operations
+Managing multi-repository workflows, toolchain installation, and environment preparation.
 
 ```bash
-
-# Servers-clients topology service list and status inspection
-gitmap sc list
-
-# Run background daemon task via server-client engine
-gitmap sc bash "python -m http.server 8080"
-
-# Verify server-client daemon connectivity and response latency
-gitmap sc ping
-
-# Check remote SSH fleet health and port 22 connectivity across all nodes
-gitmap ssh health --all
-
-# Register remote node with authentication vault
-gitmap ssh join user@192.168.1.50 --alias worker-node-1
+# Multi-repo pull with compact JSON telemetry
+gitmap pae --json
 
 # Inspect Rust and Cargo toolchain status
 gitmap cargo status
@@ -767,6 +741,9 @@ gitmap install cargo --check
 
 # Install missing toolchain or system runtime
 gitmap install cargo
+
+# Discover developer toolchains, profiles, and runtime packages
+gitmap install --list
 ```
 
 ### 9. Native Fleet Synchronization & SQLite Agent Task Engine
