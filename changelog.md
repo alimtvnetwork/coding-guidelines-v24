@@ -1,5 +1,20 @@
 # Changelog
 
+## [v6.88.0] - 2026-10-28
+
+### Added
+- **GitMap Clone Bare Slug Resolution Fallback:** Enhanced `ResolveRepoSlug` in `cli/cmdclone/gh_resolver.go` to automatically resolve bare repository names against the active GitHub profile or owner (`resolveActiveOrProfileOwner()`), constructing and verifying `https://github.com/<owner>/<repo-name>` via `probeRemoteGitURL` before falling back to local search.
+- **Show Log Non-Git Folder Resilience:** Replaced fatal runtime stack trace dumps (`[E9000:EXECUTION] not a git repository`) in `cli/cmdlogviewer/server.go` with clean diagnostic reporting and automatic detection and listing of child repositories.
+- **Show Log UI Web App Manifest & Authentic Branding:** Injected `<link rel="manifest" href="/manifest.json">` and `/manifest.json` endpoint with PNG and SVG icons so Chrome/Edge `--app` mode windows display the authentic GitMap logo instead of generic browser globe.
+- **Follow Coding Guidelines Continuous Learning Loop:** Enriched `.agents/skills/follow-coding-guidelines/skill.md` with explicit `[/learn](slashCommand;learn)` integration, grounded 12-rule audit checklist, and pre-commit self-audit matrix.
+
+### Changed
+- **GitMap Skills Uppercase Commit Module Cleanup:** Purged screaming uppercase module examples (`SKILLS`, `CLONER`, `DOCS`, `RELEASE`) in favor of Title Case / lowercase across `.agents/skills/gitmap/skill.md`, `.cursor/skills/gitmap/skill.md`, and in-engine CLI text `cli/cmd/llm/llm_skill.go`.
+- **GitMap Command Surface Sanitization:** Removed obsolete cluster commands (`cluster`, `sc`, `ssh`), OS dev clean, and VS Code repair examples from GitMap skills and LLM documentation.
+- **Skills Reduction Audit:** Completed exhaustive audit of all 108 skills in `02-spec/21-app/33-coding-guideline-corrections-and-gitmap-skill-updates/02-skills-reduction-matrix.md`, establishing a 29-skill reduction roadmap consolidating into `follow-cg-execute` and `find-100-improvements`.
+
+---
+
 ## [v6.87.0] - 2026-10-27
 
 ### Added
