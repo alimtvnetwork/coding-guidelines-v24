@@ -47,8 +47,7 @@ All AI agents operating within GitMap-managed repositories MUST strictly adhere 
 | ❌ Modifying shared files blindly without checking multi-agent contention | ✅ `gitmap heatmap discuss` or `gitmap agent heatmap` | Ranks write claims, active leases, and collision blast radius across agents (<5ms). Prevents file lock crashes and concurrent overwrites. |
 | ❌ Raw `cargo build`, `cargo test`, `cargo check` | ✅ `gitmap cargo build [--install]`, `gitmap cargo test`, `gitmap crg check` | Automatically enriches environment with discovered toolchain paths (`CARGO_HOME`, MSVC) and offers auto-install if missing. |
 | ❌ Hardcoded `$env:LIBCLANG_PATH = "..."` or manual LLVM registry searching | ✅ `gitmap aum locate llvm` + `gitmap env set LIBCLANG_PATH <path>` or `gitmap pwsh "$env:LIBCLANG_PATH=...; gitmap cargo test"` | Dynamically resolves LLVM/Clang bin directories in <15ms across machines without breaking portability. |
-| ❌ Raw `taskkill /F /PID <pid>`, `tasklist`, `kill -9` | ✅ `gitmap ports [port]`, `gitmap os user kill <user>`, `gitmap vscode repair --kill`, `gitmap pwsh "Stop-Process -Id <pid> -Force"` | Cross-platform, audit-logged process management that avoids spurious non-zero exit crashes and file locks. |
-| ❌ Raw Python folder sizing (`os.walk`, `sys.getsizeof`) or `Get-ChildItem -Recurse \| Measure-Object` | ✅ `gitmap disk [--json]`, `gitmap os storage`, `gitmap os dev-clean` | Native compiled Go drive and storage metrics (<1ms). Prevents terminal freezing and avoids spawning unnecessary Python runtimes. |
+| ❌ Raw `taskkill /F /PID <pid>`, `tasklist`, `kill -9` | ✅ `gitmap proc kill <pid> [--force]`, `gitmap ports [port]`, `gitmap pwsh "Stop-Process -Id <pid> -Force"` | Deterministic process termination with PID validation, caller self-protection guards, and graceful two-stage shutdown. |
 | ❌ Raw directory inspection of Tauri apps (`dir src-tauri`, `Get-ChildItem src-tauri`) | ✅ `gitmap lf src-tauri`, `gitmap aum search "<pattern>" src-tauri`, `gitmap pe -f tauri` | High-speed directory inventory and pipeline error filtering optimized for Tauri/Rust desktop projects. |
 
 ---
@@ -205,10 +204,8 @@ All AI agents operating within GitMap-managed repositories MUST strictly adhere 
 | `--urls` | `bool` | `false` | Outputs complete 8-document Authoritative Public Documentation Registry for LLM memory ingestion. |
 | `-j`, `--json` | `bool` | `false` | Emits structured machine-readable JSON curriculum and document metadata. |
 
-### 9. Multi-Repo, Cluster & Toolchain Operations
+### 9. Multi-Repo, SSH & Toolchain Operations
 - `gitmap pae --json` — Multi-repo pull with compact JSON telemetry (use only when explicitly requested; ban routine polling).
-- `gitmap cluster status` — Inspect multi-node cluster status, heartbeat connectivity, and worker nodes.
-- `gitmap cluster exec workers "<cmd>"` — Execute command in parallel across online worker cluster nodes.
 - `gitmap sc list` — Query servers-clients topology, active services, and background daemon tasks.
 - `gitmap sc ping` — Verify server-client connectivity with zero timeout lag.
 - `gitmap ssh health --all` — Probe port 22 liveness across all known remote hosts and SSH nodes.
@@ -502,16 +499,10 @@ gitmap heatmap rc query "SELECT RepoSlug, TotalActionsRecorded FROM HeatmapRepoR
 - `gitmap aum search "<pattern>" src-tauri [-e <ext>]` — Multi-core streaming live search scoped to Tauri Rust and frontend configuration.
 - `gitmap pe -f tauri` — CI/CD and runtime diagnostic log extractor filtered specifically for Tauri build errors.
 
-### 20. Process, Port & Developer Environment Health
-- `gitmap ports [port]` — Inspects listening network ports, PIDs, and process names.
-- `gitmap os user kill <user> [--force]` — Terminates all processes owned by the given OS user.
-- `gitmap vscode repair --kill` — Safely terminates hung VS Code / Antigravity processes locking workspace files.
+### 20. Process Termination & Network Port Diagnostics
+- `gitmap proc kill <pid> [--force]` — Native deterministic process termination with caller safety guards, protected IDE/shell checks, and graceful two-stage fallback.
+- `gitmap ports [port]` — Inspects listening network ports, bound PIDs, and process names.
 - `gitmap pwsh "Stop-Process -Id <pid> -Force"` — Deterministic PID termination via managed PowerShell wrapper.
-
-### 21. Hardware, Disk & Storage Telemetry
-- `gitmap disk [--json]` — Instant physical drive metrics, capacity, and available space.
-- `gitmap os storage` — Workspace drive utilization and system temporary folder diagnostics.
-- `gitmap os dev-clean [--dry-run]` — Cleans developer caches (Cargo, Go, npm, pip) across the system.
 
 ---
 
@@ -720,20 +711,20 @@ Disciplined atomic commit workflow enforcing hyphen-separated messages and remot
 gitmap commit "wip - draft initial types and interfaces"
 gitmap cm "wip - draft initial types and interfaces"
 
-# Feature commit (auto-prefixes 'Feature: SKILLS - ...', stages all, and pushes to remote)
-gitmap cpf "SKILLS - enrich gitmap skill with 12 real world categories"
+# Feature commit (auto-prefixes 'Feature: ', stages all, and pushes to remote)
+gitmap cpf "Skills - enrich gitmap skill with 12 real world categories"
 
-# Bugfix commit (auto-prefixes 'Bug: CLONER - ...', stages all, and pushes to remote)
-gitmap cbf "CLONER - correct concurrency flag parsing and worker limits"
+# Bugfix commit (auto-prefixes 'Bug: ', stages all, and pushes to remote)
+gitmap cbf "Cloner - correct concurrency flag parsing and worker limits"
 
-# Chore/Maintenance commit (auto-prefixes 'Chore: DOCS - ...', stages all, and pushes)
-gitmap cpc "DOCS - realign companion skills and remove help flags"
+# Chore/Maintenance commit (auto-prefixes 'Chore: ', stages all, and pushes)
+gitmap cpc "Docs - realign companion skills and remove help flags"
 
-# Release commit (auto-prefixes 'Release: RELEASE - ...', stages, and pushes)
-gitmap cpr "RELEASE - bump minor version and update changelog"
+# Release commit (auto-prefixes 'Release: ', stages, and pushes)
+gitmap cpr "v2.18.0 - bump minor version and update changelog"
 
 # Pull latest with rebase, stage all, commit, and push in one verified flow
-gitmap pcp "SKILLS - sync cross-platform runner templates"
+gitmap pcp "Skills - sync cross-platform runner templates"
 
 # Apply automated repository remediation (stash, discard, or auto-fix)
 gitmap fix all -y
@@ -744,15 +735,10 @@ gitmap lowercase
 gitmap lowercase-readme
 ```
 
-### 8. Multi-Repo, Cluster & Toolchain Operations
-Managing remote cluster topologies, SSH node pooling, and developer toolchains.
+### 8. Multi-Repo, SSH & Toolchain Operations
+Managing remote topologies, SSH node pooling, and developer toolchains.
 
 ```bash
-# Inspect cluster node status, heartbeat connectivity, and worker nodes
-gitmap cluster status
-
-# Execute command across all online cluster workers in parallel
-gitmap cluster exec workers "df -h / && free -m"
 
 # Servers-clients topology service list and status inspection
 gitmap sc list
@@ -1041,31 +1027,12 @@ gitmap ports
 gitmap ports 1420
 gitmap ports 8080
 
-# Cleanly terminate all processes owned by the specified OS user
-gitmap os user kill devuser
-gitmap os user kill devuser --force
-
-# Safely terminate hung VS Code / Antigravity editor processes holding file locks
-gitmap vscode repair --kill
+# Native process termination with safety guards (blocks self-kill and protected IDE/shell termination unless --force)
+gitmap proc kill 12345
+gitmap proc kill 12345 --force
 
 # Deterministic process termination by PID via GitMap managed PowerShell wrapper
 gitmap pwsh "Stop-Process -Id 12345 -Force"
-```
-
-### 18. Hardware, Disk & Storage Telemetry
-Sub-millisecond physical drive metrics, workspace storage diagnostics, and automated developer cache purging without ad-hoc Python loops.
-
-```bash
-# Instant drive metrics, total capacity, used space, and free space (<1ms)
-gitmap disk
-gitmap disk --json
-
-# Workspace drive status, current directory usage, and system temp directory allocation
-gitmap os storage
-
-# Safely purge developer caches (Cargo registry, Go build cache, npm store, pip cache)
-gitmap os dev-clean --dry-run
-gitmap os dev-clean
 ```
 
 ---
@@ -1085,7 +1052,6 @@ gitmap os dev-clean
 11. **Total Ban on Raw Web Fetchers & Single-Stream Downloads:** NEVER invoke `curl`, `wget`, `Invoke-WebRequest`, or custom HTTP scripts to read remote files. All remote URLs MUST be fetched via `gitmap url read <url>` (aliases: `gitmap url`, `gitmap get`), which provides dedicated Split-DB caching (`repodb/url_cache.db`), sub-millisecond retrieval (<0.5ms), unbuffered byte-faithful streaming via `output.Raw()`, and automatic 10-split segmented downloading (`aria2c` or native Go Range workers) for files $\ge 1\text{--}2\text{ MB}$.
 12. **Total Ban on Filesystem Grepping for Past Agent Decisions:** NEVER grep source files or guess past subagent actions. You MUST run `gitmap heatmap` or `gitmap rc heatmap --repo <alias>` to discover multi-tier SQLite heatmap databases, cross-referenced repository aliases, and recent tasks across 2–5 repositories with interactive suggestion pills.
 13. **Total Ban on Raw Cargo Invocations & Ad-Hoc Toolchain Variables:** NEVER run raw `cargo build`, `cargo test`, `cargo check`, or hardcode `$env:LIBCLANG_PATH` manually. You MUST use `gitmap cargo build [--install]`, `gitmap cargo test`, `gitmap crg check`, and dynamic resolution via `gitmap aum locate llvm` and `gitmap env set LIBCLANG_PATH <path>`.
-14. **Total Ban on Raw Process Termination:** NEVER execute raw `taskkill /F /PID <pid>`, `Stop-Process`, or `kill -9` directly. You MUST use `gitmap ports [port]`, `gitmap os user kill <user>`, `gitmap vscode repair --kill`, or managed wrapper `gitmap pwsh "Stop-Process -Id <pid> -Force"`.
-15. **Total Ban on Python Folder Sizing Scripts:** NEVER run `os.walk` or `sys.getsizeof` inline scripts to compute folder sizes. You MUST use native compiled `gitmap disk [--json]`, `gitmap os storage`, and `gitmap os dev-clean`.
-16. **Total Ban on Raw Tauri Directory Inspection:** NEVER inspect Tauri roots with raw shell `dir` or `Get-ChildItem`. You MUST use `gitmap lf src-tauri`, `gitmap aum search "<pattern>" src-tauri`, and `gitmap pe -f tauri`.
-17. **Total Ban on Raw Git Pull, Raw Git Commits & Misusing Commit Verbs:** NEVER execute raw `git pull` without trying `gitmap pull` first. NEVER execute raw `git commit`, `git commit -m`, `git add -A`, or raw `git push`. NEVER misuse commit verbs (e.g. NEVER use `cpf` for releases or chores). Use `gitmap cpr` for releases, `gitmap cpc` for chores, `gitmap cbf` for bug fixes, `gitmap cfr` for refactors, and `gitmap cpf` for features. NEVER nest conventional prefixes (like `chore(release):`, `feat(...)`, `fix(...)`) inside the GitMap argument as GitMap provides the prefix automatically. Use `<module> - summary` format with a hyphen and NO square brackets `[...]` or colons in the argument. Module must be Title Case or lowercase representing the subsystem; TOTAL BAN on `commit` / `commits` as a module name.
+14. **Total Ban on Raw Process Termination:** NEVER execute raw `taskkill /F /PID <pid>`, `Stop-Process`, or `kill -9` directly. You MUST use native compiled `gitmap proc kill <pid> [--force]`, `gitmap ports [port]`, or managed wrapper `gitmap pwsh "Stop-Process -Id <pid> -Force"`.
+15. **Total Ban on Raw Tauri Directory Inspection:** NEVER inspect Tauri roots with raw shell `dir` or `Get-ChildItem`. You MUST use `gitmap lf src-tauri`, `gitmap aum search "<pattern>" src-tauri`, and `gitmap pe -f tauri`.
+16. **Total Ban on Raw Git Pull, Raw Git Commits & Misusing Commit Verbs:** NEVER execute raw `git pull` without trying `gitmap pull` first. NEVER execute raw `git commit`, `git commit -m`, `git add -A`, or raw `git push`. NEVER misuse commit verbs (e.g. NEVER use `cpf` for releases or chores). Use `gitmap cpr` for releases, `gitmap cpc` for chores, `gitmap cbf` for bug fixes, `gitmap cfr` for refactors, and `gitmap cpf` for features. NEVER nest conventional prefixes (like `chore(release):`, `feat(...)`, `fix(...)`) inside the GitMap argument as GitMap provides the prefix automatically. Use `<module> - summary` format with a hyphen and NO square brackets `[...]` or colons in the argument. Module must be Title Case or lowercase representing the subsystem; TOTAL BAN on `commit` / `commits` as a module name.
