@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.86.0] - 2026-10-27
+
+### Added
+- Follow coding guidelines skill, gitmap skill sanitization, and skills inventory reduction
+
+---
+
 ## [v6.85.0] - 2026-10-27
 
 ### Added
