@@ -8,4 +8,4 @@
 4. **Bump Script Protection (IMMUTABLE):** NEVER overwrite version bump scripts or manifests (`bump*`, `bump_versions.py`, `bump-version.mjs`, `version.json`). Each repository maintains custom SemVer targets and release logic.
 5. **Memory & Plans Protection (TOTAL ISOLATION):** NEVER modify, sync, or mirror `.ai-memory/memory/` or `.ai-memory/plans/` in target repositories.
 6. **Zero Secrets Leakage:** NEVER synchronize `.env` files, tokens, or credentials across repositories. Secrets reside strictly in `repo-secrets` via `gitmap rs`.
-7. **Atomic Commit via GitMap Chore Verb:** Always commit synchronization updates via `gitmap cpc "sync - update prompts, skills, and shared specs"`. TOTAL BAN on raw `git commit`, `git add -A`, or misusing `gitmap cpf` for sync chores. Format with lowercase module and hyphen.
+7. **Atomic Commit via GitMap Chore Verb:** Always commit synchronization updates via `gitmap cpc "Sync - update prompts, skills, and shared specs"` (or `gitmap cpc "sync - ..."`). TOTAL BAN on raw `git commit`, `git add -A`, misusing `gitmap cpf` for sync chores, or using `commit` as a module name. Format with Title Case or lowercase module and hyphen.

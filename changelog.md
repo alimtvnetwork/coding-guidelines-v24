@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.85.0] - 2026-10-27
+
+### Added
+- subsystem module conventions and commit pseudo-module ban
+
+---
+
 ## [v6.84.0] - 2026-10-22
 
 ### Added

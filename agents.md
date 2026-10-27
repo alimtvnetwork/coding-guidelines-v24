@@ -103,12 +103,22 @@ To survive massive checklists and complex codebases, you MUST operate using thes
   - Retrospective AI verification is an audit and verification gate, NOT a planning step. Only `09-execute-with-verification-letterly.md` (and its mirrors) contains retrospective AI verification; standard `execute-n-steps` formatters MUST NOT mandate retrospective AI verification.
   - Execution with verification must embed both `execute-parent-task-with-n-steps-v6` and `ai-verification`.
 
-- **GitMap Commit Formatting:**
-  - In all GitMap commit commands (`gitmap cpf`, `gitmap cpb`, `gitmap cpc`, `gitmap cpr`), NEVER include colons inside the message argument. GitMap automatically provides `Feature: `, `Bug: `, or chore prefixes. Format messages strictly with hyphens:
+- **GitMap Commit Formatting & Subsystem Module Conventions:**
+  - In all GitMap commit commands (`gitmap cpf`, `gitmap cpb`, `gitmap cpc`, `gitmap cpr`), NEVER include colons inside the message argument. GitMap automatically provides `Feature: `, `Bug: `, `Chore: `, or `Release: ` prefixes. Format messages strictly with hyphens:
     - Feature: `gitmap cpf "<module> - <summary>"`
     - Bug Fix: `gitmap cpb "<module> - <summary>"`
     - Chore / Maintenance: `gitmap cpc "<module> - <summary>"`
     - Release: `gitmap cpr "<module> - <summary>"`
+
+  - **Subsystem Module Standard (Title Case or Lowercase Allowed):**
+    - The `<module>` token MUST represent a concrete functional subsystem or architectural component being modified (e.g. `Auth`, `Storage`, `Ui`, `Guidelines`, `Scanner`, `Cli`, `Sync`, `Prompt`).
+    - Title Case (e.g. `Auth`, `Storage`, `Ui`) is completely valid and accepted. Lowercase (e.g. `auth`, `storage`, `ui`) is also completely valid and accepted.
+    - Shout-cased / ALL-CAPS words (`AUTH`, `STORAGE`, `COMMIT`) should not be used.
+
+  - **TOTAL BAN ON 'commit' / 'commits' AS MODULE:**
+    - The word `commit` or `commits` MUST NEVER be used as a module name (e.g. NEVER run `gitmap cpc "commit - ..."` or `gitmap cpf "COMMIT - ..."`).
+    - Committing is already the version control action being performed by Git and GitMap; writing `commit` as the module produces meaningless tautological stuttering (`Chore: commit - ...`).
+    - If modifying commit-related tooling, code, or documentation, name the specific component (e.g. `Formatter`, `Provenance`, `Cli`, `Docs`) or omit the module prefix entirely (`gitmap cpc "clean constructor helpers and strip redundant tokens"`).
 
   - **GitMap Semantic & Flat Commit Suite:**
     - **Flat Commit Syntax:** `gitmap commit "<message>"` (alias: `gitmap cm "<message>"`).
