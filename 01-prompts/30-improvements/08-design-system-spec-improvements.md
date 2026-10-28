@@ -1,7 +1,8 @@
 # Design System Spec Improvements — Repeatable Prompt
 
-> **Prompt version:** 1.0.0
+> **Prompt version:** 1.1.0
 > **Updated:** 28-Oct-26
+> **Last id on file:** `DS-IMP-200`. The next run continues at `DS-IMP-201`.
 > **Category:** `01-prompts/30-improvements/`
 
 [/goal](slashCommand;goal) Add the next 100 design-system improvements so a weak AI can still produce a professional slide or a compact tree in one shot.

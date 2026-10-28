@@ -1,6 +1,7 @@
 # Benchmark: Previous Specs versus This Folder
 
 **Updated:** 28-Oct-26
+**Second pass:** `DS-IMP-101` through `DS-IMP-200` were appended. `DS-IMP-001` through `DS-IMP-100` were not rewritten.
 **Method:** read the files named below. No pixel diff was run. No build was run.
 
 ## What a weak model could do before
@@ -22,7 +23,7 @@
 | :--- | :--- | :--- |
 | One authority per job | `01-architecture-and-token-contract.md` | The model names the file before the hex |
 | Default deck | Decision table | `bright-gold-tech` and the six tokens |
-| 100 non-overlapping checks | `02-one-hundred-design-improvements.md` | Ids `DS-IMP-001` to `DS-IMP-100` |
+| 200 checks, first hundred kept | `02-one-hundred-design-improvements.md` | Ids `DS-IMP-001` to `DS-IMP-200`. Next append starts at 201 |
 | Generic tree | `03-tree-view-and-detail-panel.md` | 340px pane, four selection roles, leaf binding |
 | Shot list | `04-blind-ai-execution-checklist.md` | Boxes checked in order |
 | Repeat run | `01-prompts/30-improvements/08-design-system-spec-improvements.md` | Next pass appends ids, it does not rewrite 001 |
@@ -43,6 +44,19 @@ A model that has only this folder should answer these without guessing. The expe
 10. Empty tree: skeleton, not a sentence.
 11. Let's Mark: missing source, do not invent.
 12. Archived `create-slide-deck`: do not restore.
+
+## Second-pass probes
+
+These answers live in `DS-IMP-101` through `DS-IMP-200`. A weak model still answers probes 1 through 12 from the first pass.
+
+13. Scripted transition family: `Slide`, `Fade`, `Zoom`, `Flip`, `Rise`, at 0.45s. Not a sixth name.
+14. Swipe threshold: 50px, and the horizontal distance must beat the vertical distance.
+15. Center-stage title: `clamp(40px, 4.2vw, 72px)`, not the 128px cover size.
+16. Hot pricing tier scale: 1.03. Recommendation cards stay at 1.06. Those are different controls.
+17. Webcam sizes: file 24 and file 43 disagree. Follow the file you opened. Do not mix 120px with the `sm`–`xl` table.
+18. Digit `1`: camera stage-fill, unless the builder is open or the slide is a profile grid.
+19. Tree rename: F2 or a double-click on the title. A double-click on the row body opens the inspector.
+20. Let's Mark on this pass: still missing. Next id is `DS-IMP-201`.
 
 ## Not claimed
 

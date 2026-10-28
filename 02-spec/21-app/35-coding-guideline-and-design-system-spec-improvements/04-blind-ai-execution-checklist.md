@@ -1,6 +1,7 @@
 # Blind AI Execution Checklist
 
 **Updated:** 28-Oct-26
+**Second pass:** also pass `DS-IMP-101` through `DS-IMP-200` when the shot uses layouts, motion, webcam, quiz chrome, or tree rename.
 
 A weak model follows this list in order. It does not improvise a palette. It does not open a second token file "for inspiration."
 
@@ -36,6 +37,15 @@ A weak model follows this list in order. It does not improvise a palette. It doe
 - [ ] The right pane follows the leaf.
 - [ ] Empty tree is a skeleton. Empty selection is one sentence.
 - [ ] A branch longer than 50 is capped unless the scope is one root.
+
+## Second-pass shot
+
+- [ ] Scripted transitions stay inside `Slide`, `Fade`, `Zoom`, `Flip`, and `Rise` at 0.45s.
+- [ ] A center stage uses `clamp(40px, 4.2vw, 72px)`, not the 128px cover title.
+- [ ] Webcam sizes come from one file. File 24 and file 43 are not mixed.
+- [ ] Bare digit `1` follows `DS-IMP-198`.
+- [ ] Tree rename is F2 or a double-click on the title. A double-click on the row body opens the inspector.
+- [ ] `letsmarknow` is still missing. Do not invent it.
 
 ## Reject and redo
 
