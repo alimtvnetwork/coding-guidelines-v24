@@ -2,6 +2,7 @@
 
 **Updated:** 28-Oct-26
 **Second pass:** also pass `DS-IMP-101` through `DS-IMP-200` when the shot uses layouts, motion, webcam, quiz chrome, or tree rename.
+**Third pass:** also pass `DS-IMP-201` through `DS-IMP-300` when the shot is a website theme, an image, a logo, a bright-gold page type, or the tree detail pane.
 
 A weak model follows this list in order. It does not improvise a palette. It does not open a second token file "for inspiration."
 
@@ -46,6 +47,15 @@ A weak model follows this list in order. It does not improvise a palette. It doe
 - [ ] Bare digit `1` follows `DS-IMP-198`.
 - [ ] Tree rename is F2 or a double-click on the title. A double-click on the row body opens the inspector.
 - [ ] `letsmarknow` is still missing. Do not invent it.
+
+## Third-pass shot
+
+- [ ] The job names its product file before any hex. AI pink, Sweet Digs, and White Blue are not the slide stage.
+- [ ] AI Join is 48px. Sweet Digs Join is 42px.
+- [ ] A bright-gold `definition` title is 72px. A cover title stays 128px.
+- [ ] Image gold is `#FFAA00`. Slide gold is `#FFAE00`.
+- [ ] A logo uses one archetype and reads at 16px.
+- [ ] An empty tree selection has no send button. A branch with no leaf does.
 
 ## Reject and redo
 

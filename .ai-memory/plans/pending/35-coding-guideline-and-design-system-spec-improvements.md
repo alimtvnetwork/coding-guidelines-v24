@@ -1,7 +1,7 @@
 # Plan: Coding Guideline and Design System Spec Improvements
 
 **Slug:** `coding-guideline-and-design-system-spec-improvements`
-**Status:** Spec authored through `DS-IMP-200`. Slide and tree implementation stays review-first.
+**Status:** Spec authored through `DS-IMP-300`. Slide and tree implementation stays review-first.
 **Updated:** 28-Oct-26
 
 ## User Request (Verbatim)
@@ -35,4 +35,5 @@ Build a solid spec so any AI can follow the presentation design system, includin
 ## Follow-ups
 
 - A later approved turn may restyle `slides-app/src/styles/tokens.css` to the bright-gold contract.
-- Second pass appended `DS-IMP-101` through `DS-IMP-200`. `letsmarknow` and `letsmarknow-ui` were still empty. The next append starts at `DS-IMP-201`.
+- Second pass appended `DS-IMP-101` through `DS-IMP-200`.
+- Third pass appended `DS-IMP-201` through `DS-IMP-300`. `letsmarknow` and `letsmarknow-ui` were still empty. The next append starts at `DS-IMP-301`.

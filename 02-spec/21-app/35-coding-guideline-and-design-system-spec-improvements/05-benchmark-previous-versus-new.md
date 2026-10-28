@@ -2,6 +2,7 @@
 
 **Updated:** 28-Oct-26
 **Second pass:** `DS-IMP-101` through `DS-IMP-200` were appended. `DS-IMP-001` through `DS-IMP-100` were not rewritten.
+**Third pass:** `DS-IMP-201` through `DS-IMP-300` were appended. Earlier ids were not rewritten.
 **Method:** read the files named below. No pixel diff was run. No build was run.
 
 ## What a weak model could do before
@@ -23,7 +24,7 @@
 | :--- | :--- | :--- |
 | One authority per job | `01-architecture-and-token-contract.md` | The model names the file before the hex |
 | Default deck | Decision table | `bright-gold-tech` and the six tokens |
-| 200 checks, first hundred kept | `02-one-hundred-design-improvements.md` | Ids `DS-IMP-001` to `DS-IMP-200`. Next append starts at 201 |
+| 300 checks, earlier ids kept | `02-one-hundred-design-improvements.md` | Ids `DS-IMP-001` to `DS-IMP-300`. Next append starts at 301 |
 | Generic tree | `03-tree-view-and-detail-panel.md` | 340px pane, four selection roles, leaf binding |
 | Shot list | `04-blind-ai-execution-checklist.md` | Boxes checked in order |
 | Repeat run | `01-prompts/30-improvements/08-design-system-spec-improvements.md` | Next pass appends ids, it does not rewrite 001 |
@@ -56,7 +57,18 @@ These answers live in `DS-IMP-101` through `DS-IMP-200`. A weak model still answ
 17. Webcam sizes: file 24 and file 43 disagree. Follow the file you opened. Do not mix 120px with the `sm`–`xl` table.
 18. Digit `1`: camera stage-fill, unless the builder is open or the slide is a profile grid.
 19. Tree rename: F2 or a double-click on the title. A double-click on the row body opens the inspector.
-20. Let's Mark on this pass: still missing. Next id is `DS-IMP-201`.
+20. Let's Mark on the second pass: still missing. Next id was `DS-IMP-201`.
+
+## Third-pass probes
+
+21. AI Join control: height 48px and a 300ms editorial track. Sweet Digs Join stays 42px and 350ms. Do not copy one onto the other.
+22. Sweet Digs reduced motion: set animation, transition, and transform to `none`. Do not use the slide `0.01ms` trick in that file.
+23. Website featured pricing scale: 1.04. Slide hot tier stays 1.03. Recommendation cards stay 1.06.
+24. Definition page title: 72px, and only line two is accent. Cover stays 128px.
+25. Image badge gold is `#FFAA00` on canvas `#090D16`. Slide accent stays `#FFAE00` on `#08080C`.
+26. Logo: one archetype, reads at 16px, no black plate on bright-gold. Fill from `--pres-accent`.
+27. Tree detail: a selected branch with no leaf still offers send. An empty selection is one sentence and no send button. Detail-body double-click opens the inspector, not rename.
+28. Let's Mark on this pass: still missing. Next id is `DS-IMP-301`.
 
 ## Not claimed
 
