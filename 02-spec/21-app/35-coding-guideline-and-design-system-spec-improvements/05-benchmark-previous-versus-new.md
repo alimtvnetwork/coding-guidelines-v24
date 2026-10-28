@@ -1,0 +1,49 @@
+# Benchmark: Previous Specs versus This Folder
+
+**Updated:** 28-Oct-26
+**Method:** read the files named below. No pixel diff was run. No build was run.
+
+## What a weak model could do before
+
+| Gap | Evidence | Typical miss |
+| :--- | :--- | :--- |
+| Five color contracts | `02-spec/07-design-system/40-theme-switch.md`, `30-slide-palette-type-and-shell.md`, `27-slide-canvas-and-themes.md`, `tokens/design-tokens.json`, `slides-app/src/styles/tokens.css` | Gold slide painted with app blue `217 91% 60%` or amber `#F5A623` |
+| Theme count | File 27 lists 10 stage themes. File 40 lists 8 and renames `bright-gold` to `bright-gold-tech` | A ninth theme, or `vscode-dark` on the stage |
+| Hover distance | `08-motion-transitions.md` caps lift near `-2px`. `tokens/theme-palette.less` uses `-4px`. Bright-gold recommendation cards use `-8px` plus scale | Every card scales |
+| HSL wrapping | File 30 uses bare triplets. File 40 uses full colors | `hsl(hsl(...))` |
+| Empty app UI spec | `02-spec/24-app-ui-design-system/readme.md` is a draft stub | The model treats "no spec" as permission to invent |
+| Slide skills reduced | `.agents/skills-archived/create-slide-deck/` and `slides-deck-management/` | The model still follows the archived skill |
+| No tree contract in this repo | Behavior lived only in `antigravity-manager/src/components/instances/PromptTreeView/` | One selection color, rotating chevrons, pane bound to the root |
+| Let's Mark | `letsmarknow` and `letsmarknow-ui` had no UI source | Invented components |
+
+## What this folder forces
+
+| Check | Where | Pass looks like |
+| :--- | :--- | :--- |
+| One authority per job | `01-architecture-and-token-contract.md` | The model names the file before the hex |
+| Default deck | Decision table | `bright-gold-tech` and the six tokens |
+| 100 non-overlapping checks | `02-one-hundred-design-improvements.md` | Ids `DS-IMP-001` to `DS-IMP-100` |
+| Generic tree | `03-tree-view-and-detail-panel.md` | 340px pane, four selection roles, leaf binding |
+| Shot list | `04-blind-ai-execution-checklist.md` | Boxes checked in order |
+| Repeat run | `01-prompts/30-improvements/08-design-system-spec-improvements.md` | Next pass appends ids, it does not rewrite 001 |
+
+## Blind-model probe
+
+A model that has only this folder should answer these without guessing. The expected answer is in the architecture file or the tree file.
+
+1. Unnamed slide theme id: `bright-gold-tech`.
+2. Canvas hex: `#08080C`.
+3. Accent hex: `#FFAE00`.
+4. Cover size: 128px Ubuntu 700.
+5. Ordinary hover cap: 0.3s and about `-2px`.
+6. Reduced-motion duration: `0.01ms`.
+7. Tree default width: 340px.
+8. Collapsed tree: 40px rail.
+9. Detail binds to: the leaf, not the root.
+10. Empty tree: skeleton, not a sentence.
+11. Let's Mark: missing source, do not invent.
+12. Archived `create-slide-deck`: do not restore.
+
+## Not claimed
+
+This benchmark does not claim a rendered deck matches a screenshot. It claims a weak model now has a single decision table where it previously had five conflicting files.
