@@ -2,7 +2,7 @@
 
 **Version:** 1.0.0
 **Updated:** 2026-10-02
-**Status:** Pending
+**Status:** Completed
 **Verification date:** 2026-10-02
 
 This plan is the work. Implement it in order. Do not redesign it.
@@ -211,10 +211,10 @@ Revert the implementation commit. No data migration.
 
 ## Checklist
 
-- [ ] Task A file exists with the 10 headings in order
-- [ ] Checker exits 0 on that file and non-zero when `## Rollback` is removed from a temp copy
-- [ ] Task C file lists only the three read steps
-- [ ] Authoring readme links files 15 and 16
-- [ ] Required-files doc does not force a ticket on every module
-- [ ] Diff does not touch `version.json`, the design system, or the gstack checkout
-- [ ] Plans index moves this plan to Completed in the passing commit
+- [x] Task A file exists with the 10 headings in order
+- [x] Checker exits 0 on that file and non-zero when `## Rollback` is removed from a temp copy
+- [x] Task C file lists only the three read steps
+- [x] Authoring readme links files 15 and 16
+- [x] Required-files doc does not force a ticket on every module
+- [x] Diff does not touch `version.json`, the design system, or the gstack checkout
+- [x] Plans index moves this plan to Completed in the passing commit
