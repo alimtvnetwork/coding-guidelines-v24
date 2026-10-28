@@ -1,7 +1,7 @@
 # Plan: Coding Guideline and Design System Spec Improvements
 
 **Slug:** `coding-guideline-and-design-system-spec-improvements`
-**Status:** Spec authored through `DS-IMP-400`. Slide and tree implementation stays review-first.
+**Status:** Completed for the in-scope spec. Checks run through `DS-IMP-400`. Restyling `slides-app` stays a separate review-first follow-up and was not part of this plan's in-scope list.
 **Updated:** 28-Oct-26
 
 ## User Request (Verbatim)
