@@ -3,6 +3,7 @@
 **Updated:** 28-Oct-26
 **Second pass:** `DS-IMP-101` through `DS-IMP-200` were appended. `DS-IMP-001` through `DS-IMP-100` were not rewritten.
 **Third pass:** `DS-IMP-201` through `DS-IMP-300` were appended. Earlier ids were not rewritten.
+**Fourth pass:** `DS-IMP-301` through `DS-IMP-400` were appended. Earlier ids were not rewritten.
 **Method:** read the files named below. No pixel diff was run. No build was run.
 
 ## What a weak model could do before
@@ -24,7 +25,7 @@
 | :--- | :--- | :--- |
 | One authority per job | `01-architecture-and-token-contract.md` | The model names the file before the hex |
 | Default deck | Decision table | `bright-gold-tech` and the six tokens |
-| 300 checks, earlier ids kept | `02-one-hundred-design-improvements.md` | Ids `DS-IMP-001` to `DS-IMP-300`. Next append starts at 301 |
+| 400 checks, earlier ids kept | `02-one-hundred-design-improvements.md` | Ids `DS-IMP-001` to `DS-IMP-400`. Next append starts at 401 |
 | Generic tree | `03-tree-view-and-detail-panel.md` | 340px pane, four selection roles, leaf binding |
 | Shot list | `04-blind-ai-execution-checklist.md` | Boxes checked in order |
 | Repeat run | `01-prompts/30-improvements/08-design-system-spec-improvements.md` | Next pass appends ids, it does not rewrite 001 |
@@ -68,7 +69,18 @@ These answers live in `DS-IMP-101` through `DS-IMP-200`. A weak model still answ
 25. Image badge gold is `#FFAA00` on canvas `#090D16`. Slide accent stays `#FFAE00` on `#08080C`.
 26. Logo: one archetype, reads at 16px, no black plate on bright-gold. Fill from `--pres-accent`.
 27. Tree detail: a selected branch with no leaf still offers send. An empty selection is one sentence and no send button. Detail-body double-click opens the inspector, not rename.
-28. Let's Mark on this pass: still missing. Next id is `DS-IMP-301`.
+28. Let's Mark on the third pass: still missing. Next id was `DS-IMP-301`.
+
+## Fourth-pass probes
+
+29. Header heights: AI is 70px at z-index 100. Sweet Digs is 70px at z-index 50. File 10 is 72px. Do not average them.
+30. File-30 display-lg is 56px. The bright-gold cover stays 128px. Hiltrax display-xl is 96 to 104, not 128.
+31. Bright-gold spotlight: one 600px ellipse plus 2px dots on a 16px grid. Not the 48px line grid.
+32. Chart bars: five colors ending at `#F0B23A`. No sixth color.
+33. Light slide gold text drops to lightness 30 percent. Do not leave it at 48 percent.
+34. Tree click: one click selects the turn. A double-click opens the inspector.
+35. Theme-menu motion: opacity only, and reduced motion hides the overlay.
+36. Let's Mark on this pass: still missing. Next id is `DS-IMP-401`.
 
 ## Not claimed
 

@@ -13,7 +13,7 @@
 | Order | File | Job |
 | :--- | :--- | :--- |
 | 1 | [01-architecture-and-token-contract.md](01-architecture-and-token-contract.md) | Which file wins for slides, websites, and trees |
-| 2 | [02-one-hundred-design-improvements.md](02-one-hundred-design-improvements.md) | Checks `DS-IMP-001` through `DS-IMP-300`. The next run appends 301 onward |
+| 2 | [02-one-hundred-design-improvements.md](02-one-hundred-design-improvements.md) | Checks `DS-IMP-001` through `DS-IMP-400`. The next run appends 401 onward |
 | 3 | [03-tree-view-and-detail-panel.md](03-tree-view-and-detail-panel.md) | Generic compact tree and right panel |
 | 4 | [04-blind-ai-execution-checklist.md](04-blind-ai-execution-checklist.md) | Non-negotiable shot checklist |
 | 5 | [05-benchmark-previous-versus-new.md](05-benchmark-previous-versus-new.md) | What the old specs let a weak model get wrong |
