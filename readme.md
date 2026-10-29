@@ -2229,3 +2229,9 @@ This compiles all categorized prompts using `scripts/prompt-sync-config.json` an
 - [Milestone 02: Go AppFault Result Monad, Dynamic Conversions & Verification Systems](.ai-memory/plans/completed/02-appfault-result-monad-and-verification-systems.md)
 - [Milestone 03: File Utilities, PathInfo Objects, Constants & Modular Enums](.ai-memory/plans/completed/03-fileutil-pathinfo-and-enum-architecture.md)
 - [Milestone 04: Structured AppLogger, Rotating SQLite & Writer/Streamer Subsystem](.ai-memory/plans/completed/04-applogger-taxonomy-streaming-and-task-db.md)
+
+## Memory
+
+- .ai-memory/memory/readme.md
+- .ai-memory/memory/learned/01-recent-session-2026-10-29.md
+- .ai-memory/plans/readme.md
