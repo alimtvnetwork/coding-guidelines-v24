@@ -19,6 +19,7 @@ This directory contains deterministic prompt transformation templates specifical
 | **11** | [`11-git-pull-first-letterly-cursor.md`](11-git-pull-first-letterly-cursor.md) | Git Pull First | Formats input into pull-first execution directives ensuring gitmap pull runs before any work | `execute-parent-task-with-n-steps-v6` |
 | **12** | [`12-muse-long-update-letterly-cursor.md`](12-muse-long-update-letterly-cursor.md) | Muse Long Update | Formats input into Muse long-running overnight execution with gitmap update first, rate-limited gitmap pa / repo pull, autopilot ambiguity logging, pragmatic commits, and conditional CI release | `execute-parent-task-with-n-steps-v6` |
 | **13** | [`13-muse-sleepy-letterly-cursor.md`](13-muse-sleepy-letterly-cursor.md) | Muse Sleepy Mode | Formats input into "I am sleepy" autopilot execution with repo pull first, closest-choice ambiguity resolution, morning review log, no-build/no-test default, and pragmatic commits | `execute-parent-task-with-n-steps-v6` |
+| **14** | [`14-execute-recommit-time-restricted-letterly-cursor.md`](14-execute-recommit-time-restricted-letterly-cursor.md) | Recommit & Time-Restricted | Formats voice dictation with on-call time restrictions (< 08:00 AM weekdays, anytime weekends in target timezone), recommit instructions, autobot identity, and V7 Cursor execution engine | `execute-parent-task-with-n-steps-v7` |
 
 ## Core Invariants
 
