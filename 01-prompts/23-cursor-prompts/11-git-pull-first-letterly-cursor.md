@@ -39,7 +39,7 @@ ${Input Text Verbatim}
 
 ## Must follow and spawn agent using
 
-@[\2](\3)
+@[execute-parent-task-with-n-steps-v6](file;.cursor/skills/execute-parent-task-with-n-steps-v6)
 
 ## Additional Instructions
 

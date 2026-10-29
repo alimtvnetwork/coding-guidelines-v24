@@ -41,7 +41,7 @@ ${Input Text Verbatim}
 
 ## Must follow and spawn agent using
 
-@[\2](\3)
+@[run](file;.cursor/skills/run)
 
 ## Additional Instructions
 

@@ -45,7 +45,7 @@ ${Input Text Verbatim}
 
 ## Must follow and spawn agent using
 
-@[\2](\3)
+@[minor-bump](file;.cursor/skills/minor-bump)
 
 ## Additional Instructions
 

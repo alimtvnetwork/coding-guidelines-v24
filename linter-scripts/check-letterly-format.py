@@ -45,8 +45,12 @@ ADDITIONAL_HEADER = "## Additional Instructions"
 AGENT_LINKS = (
     "@[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)",
     "@[execute-parent-task-with-n-steps-v7](file;.agents/skills/execute-parent-task-with-n-steps-v7)",
+    "@[execute-parent-task-with-n-steps-v6](file;.cursor/skills/execute-parent-task-with-n-steps-v6)",
+    "@[execute-parent-task-with-n-steps-v7](file;.cursor/skills/execute-parent-task-with-n-steps-v7)",
     "[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)",
     "[execute-parent-task-with-n-steps-v7](file;.agents/skills/execute-parent-task-with-n-steps-v7)",
+    "[execute-parent-task-with-n-steps-v6](file;.cursor/skills/execute-parent-task-with-n-steps-v6)",
+    "[execute-parent-task-with-n-steps-v7](file;.cursor/skills/execute-parent-task-with-n-steps-v7)",
 )
 
 FIXED_ITEM_PREFIXES = [
