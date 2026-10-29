@@ -9,7 +9,7 @@
 
 ## 1. Context & Motivation
 
-During execution across desktop and mobile IDEs, standard markdown links (e.g. `[.agents/skills/my-skill/skill.md](.agents/skills/my-skill/skill.md)`) or shorthand mentions (e.g. `@[.agents/skills/my-skill]`) caused failures in native IDE skill parser detection.
+During execution across desktop and mobile IDEs, standard markdown links (e.g. `[.agents/skills/my-skill/skill.md](.agents/skills/my-skill/skill.md)`) or shorthand mentions (e.g. `@@[.agents/skills/my-skill]`) caused failures in native IDE skill parser detection.
 
 The IDE parser detects skills and renders clickable execution pills only when formatted using the `file;` URI scheme prefix:
 - Antigravity agents: `[<skill-name>](file;.agents/skills/<skill-name>)`

@@ -28,7 +28,7 @@ Okay. So if you look into this, this is actually running through the skill of ex
 
 Must follow and spawn agent using 
 
-@[.agents/skills/execute-parent-task-with-n-steps-v6]
+@@[.agents/skills/execute-parent-task-with-n-steps-v6]
 
 ## Additional Instructions
 
