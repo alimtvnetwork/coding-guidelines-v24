@@ -14,8 +14,8 @@
 - Initialize `.ai-memory/temp-agents/13-ai-verification-and-letterly-extensions/agent-task.db`.
 
 ### Subtask 2: Normalize Existing Letterly Prompts & Skills to Native Trigger Syntax
-- Update all 7 prompts in `01-prompts/22-letterly/` to use `@@[.agents/skills/<name>]`.
-- Update all 7 prompts in `01-prompts/22-letterly/cursor/` to use `@@[.cursor/skills/<name>]`.
+- Update all 7 prompts in `01-prompts/22-letterly/` to use `@[<name>](file;.agents/skills/<name>)`.
+- Update all 7 prompts in `01-prompts/22-letterly/cursor/` to use `@[<name>](file;.cursor/skills/<name>)`.
 - Update all 7 companion skills in `.agents/skills/letterly-*` and `.cursor/skills/letterly-*`.
 
 ### Subtask 3: Implement Letterly Lifecycle Extensions (`run`, `execute-with-verification`, `execute-with-release`)
