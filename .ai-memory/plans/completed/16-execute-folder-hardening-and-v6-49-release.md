@@ -1,6 +1,6 @@
 # Plan 16: Minor Release v6.49.0, then Harden the Execute Folder Prompts
 
-- **Status:** IMPLEMENTED (S1 to S6 done). It stays pending until the follow-ups in section 8 are done.
+- **Status:** Completed on 30-Oct-26. S1 to S6 were already done. Follow-ups 1 to 5 are done. Follow-up 6 stays on plan 15.
 - **Created:** 2026-10-01
 - **Builds on:** [15-execute-parent-task-v4-antigravity.md](15-execute-parent-task-v4-antigravity.md) (the V3 audit, defects D1 to D14, and the V4 fixes reused here)
 - **Folder in scope:** `01-prompts/14-execute/` and the `.agents/skills/` copies of its prompts
@@ -114,9 +114,9 @@ Each template replaces one exact sentence. Nothing else in the prompts changes.
 
 ## 8. Follow-ups
 
-1. Apply T2 to T6 to the non-execute skills listed in section 4.
-2. Change `03-ai-scripts/29-release-orchestrator.py` to stage the release files by path.
-3. Rename `08-excute-parent-old.md` and update its index entries and pointer skills.
-4. Make the version bump regenerate the bundle installers (see `.ai-memory/release/issues/02-6.49.0-stale-installer-version-pins.md`).
-5. The routine gate rewrites the tracked `reports/spec-verification/coverage.md` on every run; decide whether that report should stay tracked (Hard Rule 1).
-6. Everything still open in plan 15 section 10 (live Antigravity run, alias skills, sibling-repo rollout).
+1. Done 30-Oct-26. `execute-coding-guideline-fix`, `ci-cd-fix`, and `temp-end-to-end-tests` (Antigravity and Cursor copies) now stage by explicit path. The other listed skills already ban `git add -A`.
+2. Done. `03-ai-scripts/29-release-orchestrator.py` has no `git add -A`.
+3. Done. `08-excute-parent-old.md` is only under `06-archive/`. The live execute folder no longer has that name.
+4. Done. `03-ai-scripts/37-bump-version.py` calls `scripts/generate-bundle-installers.mjs` after sync.
+5. Done. `reports/spec-verification/coverage.md` is generated. It is gitignored and removed from the index.
+6. Still open on plan 15. A live Antigravity session is not run from this workspace.

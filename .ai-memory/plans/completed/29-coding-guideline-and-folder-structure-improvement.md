@@ -2,7 +2,7 @@
 
 > **Plan File:** `.ai-memory/plans/pending/29-coding-guideline-and-folder-structure-improvement.md`  
 > **Slug:** `coding-guideline-and-folder-structure-improvement`  
-> **Status:** ACTIVE  
+> **Status:** Completed on 30-Oct-26. What-to-read is version 5.0.0. The named obsolete `02-spec/21-app` prompt folders are already gone. Later specs stay. `.gitkeep` stays only in empty folders. `syncbridge` exists. Archive folders are excluded from sync. The worker catalog is `02-spec/19-main-worker-service/100-improvement-possibilities.md`. No outside sync was run.  
 > **Budget:** 400 Steps | Concurrency: A = 3, H = 2 (Capacity: 6)  
 > **Spec Reference:** `02-spec/21-app/29-coding-guideline-and-folder-structure-improvement/`  
 

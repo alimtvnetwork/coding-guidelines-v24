@@ -86,6 +86,9 @@ antigravity_resume_task.json
 .antigravity-resume_task.json
 
 
+# Generated spec coverage. Hard Rule 1.
+reports/spec-verification/coverage.md
+
 # GitMap & Task Persistence
 .gitmap/backup/
 AGM_INSTANCE_STATUS.md

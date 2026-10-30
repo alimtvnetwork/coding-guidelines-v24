@@ -11,7 +11,7 @@ in cg execute add a prompt for golang pointers reduce and mutation reduce follow
 - **Prompt Sequence:** `39` (`01-prompts/15-cg-execute/39-golang-pointers-and-mutation-reduction.md`)
 - **Skill Name:** `cg-golang-pointers-and-mutation-reduction`
 - **Pattern:** `execute-parent-task-with-n-steps-v6` ($N = 400$, $A = 3$, $H = 2$, Capacity = 6)
-- **Status:** `PENDING`
+- **Status:** In-repo work is done (prompt 39, both skills, spec 06, catalog row). The 43-repository sync script also bumps and tags every connected repo, so it was not started from this pass.
 - **Spec Directory:** `02-spec/21-app/06-cg-execute-golang-pointers-and-mutation-reduce/`
 - **Subtasks Directory:** `.ai-memory/plans/subtasks/06-cg-execute-golang-pointers-and-mutation-reduce/`
 

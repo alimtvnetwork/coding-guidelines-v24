@@ -4,16 +4,17 @@ Master directory of architectural and execution plans.
 
 ## Pending Plans
 
-- [29-coding-guideline-and-folder-structure-improvement.md](pending/29-coding-guideline-and-folder-structure-improvement.md): Coding Guideline and Folder Structure Improvement — What to read overhaul, AI memory folder structure update, plans and 21-app cleanup, .gitkeep removal rules, applogger syncbridge, GitMap skills freshness & archival, prompt archival, index/overview to readme standardization, and multi-repo sync exclusion.
-- [06-cg-execute-golang-pointers-and-mutation-reduce.md](pending/06-cg-execute-golang-pointers-and-mutation-reduce.md): Prompt 39 and both skills are in this repo. The 43-repository sync is still open. Do not sync outside until that plan says so.
-- [13-slide-quiz-preview-and-presenter-chrome.md](pending/13-slide-quiz-preview-and-presenter-chrome.md): Quiz option-card chrome, default box/text shadows, botanical-light theme, presenter shortcuts, and center-stage layout (spec + file 42).
-- [02-slides-system-overhaul.md](pending/02-slides-system-overhaul.md): Full slides deck UI and system overhaul.
-- [09-update-prompts-and-release.md](pending/09-update-prompts-and-release.md): Update prompts and release lifecycle (deferred under WOR policy).
-- [11-code-red-refactor-remediation.md](pending/11-code-red-refactor-remediation.md): Remediate Code Red enum, boolean, and query wrapper violations across the codebase.
-- [15-execute-parent-task-v4-antigravity.md](pending/15-execute-parent-task-v4-antigravity.md): V4 Antigravity-native rewrite of the execute-parent-task-with-n-steps prompt, with the V3 audit, Approaches A to E, execute-folder options, and follow-ups (live Antigravity run pending).
-- [16-execute-folder-hardening-and-v6-49-release.md](pending/16-execute-folder-hardening-and-v6-49-release.md): Minor release v6.49.0, then the V4 fixes applied to execute prompts 01 to 09 and their Antigravity skill copies.
+- [06-cg-execute-golang-pointers-and-mutation-reduce.md](pending/06-cg-execute-golang-pointers-and-mutation-reduce.md): Prompt 39 and both skills are in this repo. The 43-repository sync also releases every connected repo, so it stays open.
+- [13-slide-quiz-preview-and-presenter-chrome.md](pending/13-slide-quiz-preview-and-presenter-chrome.md): Exam theme aliases and botanical-light are in the exam repo. Presenter HUD shortcuts stay open because that repo is not on this machine.
+- [09-update-prompts-and-release.md](pending/09-update-prompts-and-release.md): Update prompts and release lifecycle. Current version is 6.88.0. A new minor tag was not cut in this pass.
+- [15-execute-parent-task-v4-antigravity.md](pending/15-execute-parent-task-v4-antigravity.md): V4 is implemented. It stays pending until a live Antigravity session runs it.
+
 ## Completed Plans
 
+- [29-coding-guideline-and-folder-structure-improvement.md](completed/29-coding-guideline-and-folder-structure-improvement.md): What-to-read, gitkeep rule, syncbridge, archive exclusion, and the 100 worker improvements are already in the tree. Later app specs stay.
+- [16-execute-folder-hardening-and-v6-49-release.md](completed/16-execute-folder-hardening-and-v6-49-release.md): v6.49.0 shipped earlier. The bump script now regenerates installers, and the generated coverage report is untracked.
+- [11-code-red-refactor-remediation.md](completed/11-code-red-refactor-remediation.md): Application code has no inverted success checks. The audit is in learned memory 24.
+- [02-slides-system-overhaul.md](completed/02-slides-system-overhaul.md): The teaching deck is `slides-app`. The three-theme audit is published under the plan subtasks.
 - [25-coding-guidelines-and-folder-structure-instructions.md](completed/25-coding-guidelines-and-folder-structure-instructions.md): v4 archival and leak cleanup were already pushed. Later specs in `02-spec/21-app/` stay.
 - [24-coding-guideline-and-prompt-execution-improvement.md](completed/24-coding-guideline-and-prompt-execution-improvement.md): Credit-reduction line is gone. Slug form is `XX-<slug>`. GitMap skill already has command examples.
 - [19-unified-muse-master-prompt-v6.md](completed/19-unified-muse-master-prompt-v6.md): Already shipped as the 6.5.0 master. Generic, standalone, and universal prompts stay.

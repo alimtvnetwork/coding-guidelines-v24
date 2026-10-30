@@ -267,6 +267,25 @@ def run_repo_sync_if_available(dry_run=False):
         print(f"[!] Warning running npm run sync: {e}")
 
 
+def run_bundle_installers(dry_run=False):
+    """Regenerate bundle installers so version pins match the bump."""
+    script = REPO_ROOT / "scripts" / "generate-bundle-installers.mjs"
+
+    if not script.is_file():
+        print("[!] Bundle installer script is missing")
+
+        return
+
+    if dry_run:
+        print("[DRY RUN] Would run: node scripts/generate-bundle-installers.mjs")
+
+        return
+
+    node_bin = "node.exe" if sys.platform == "win32" else "node"
+    run_cmd([node_bin, str(script)], check=False)
+    print("[*] Regenerated bundle installers.")
+
+
 def execute_bump(tier="minor", explicit_version=None, scope=None, dry_run=False):
     """Main bump execution logic."""
     current_ver = read_canonical_version()
@@ -287,6 +306,7 @@ def execute_bump(tier="minor", explicit_version=None, scope=None, dry_run=False)
     update_readme_pins(current_ver, next_ver, dry_run=dry_run)
     update_changelogs(next_ver, bump_scope, today_str, dry_run=dry_run)
     run_repo_sync_if_available(dry_run=dry_run)
+    run_bundle_installers(dry_run=dry_run)
 
     print(f"[OK] Successfully bumped version to {next_ver}")
     return next_ver

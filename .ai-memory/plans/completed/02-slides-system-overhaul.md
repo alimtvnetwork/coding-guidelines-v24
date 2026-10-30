@@ -2,7 +2,7 @@
 
 Slug: slides-system-overhaul
 Steps: 5
-Status: in-progress (steps 3, 4, 5 shipped; steps 1, 2 remain)
+Status: Completed on 30-Oct-26. Steps 3, 4, and 5 were already shipped. Step 1 is `.ai-memory/plans/subtasks/02-slides-system-overhaul/ss-01-repo-improvements-3-themes.md`. Step 2 is the deck in `slides-app/src/deck/registry.ts`. The July count of 13 of 70 is stale.
 
 ## Reconciliation (2026-07-19, v5.56.0)
 

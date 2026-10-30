@@ -204,4 +204,4 @@ V4 sections, in order:
 3. Roll V4 out to the sibling repos with a V4 variant of `03-ai-scripts/42-sync-v3-prompts-and-skills.py`, only on an explicit command.
 4. Approach D (hooks), opt-in only.
 5. Options F1 to F4.
-6. Index drift found during onboarding: `.ai-memory/what-to-read.md` lists the version standard without its `04-` prefix and the open-questions folder under an old name (the real folder is `ambiguous-questions/`), and the pending plan `05-ai-adaptable-design-system.md` is missing from `.ai-memory/plans/readme.md`.
+6. Closed 30-Oct-26. `.ai-memory/what-to-read.md` uses the `04-` version standard and `ambiguous-questions/`. Plan 05 is in the completed list. Follow-ups 1 to 5 stay open. A live Antigravity session is not available in this workspace.
