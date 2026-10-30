@@ -3,6 +3,7 @@
 ## 1. Plan Overview
 - **Task Slug:** `25-coding-guidelines-and-folder-structure-instructions`
 - **Parent Goal:** Archive legacy `01-prompts/v4/`, sanitize `02-spec/21-app/` in `coding-guidelines`, and surgically purge leaked guideline/prompt files across downstream repositories while 100% preserving native application specs.
+- **Status:** Completed on 30-Oct-26. Phases 1 and 2 were already pushed. The old rule that `02-spec/21-app/` may hold only spec 25 is retired.
 - **Main Motto:** Improved work or less friction.
 - **Rules Invariants:**
   - Strictly relative Git paths only (`02-spec/...`, `.ai-memory/...`, `01-prompts/...`).
@@ -16,7 +17,7 @@ flowchart TD
     P2 --> S1["Subtask 01: v4 Archival & Skill Purge (DONE)"]
     P2 --> S2["Subtask 02: Spec 21 Sanitization & Realignment (DONE)"]
     P2 --> S3["Subtask 03: Multi-Repo Leak Cleanup (DONE)"]
-    S1 & S2 & S3 --> P3["Phase 3: Verification & Atomic Push (IN PROGRESS)"]
+    S1 & S2 & S3 --> P3["Phase 3: Verification & Atomic Push (COMPLETE)"]
 ```
 
 ## 2. Subtask Breakdown
@@ -53,7 +54,7 @@ flowchart TD
 ## 3. Verification & Completion Criteria
 - Zero files in `01-prompts/v4/`.
 - 56 files in `06-archive/v4/`.
-- `02-spec/21-app/` contains strictly `readme.md`, `.gitkeep`, and active spec `25-coding-guidelines-and-folder-structure-instructions/`.
+- Later specs in `02-spec/21-app/` stay. The old "only spec 25" rule is retired. Phase 1 and phase 2 were already done and pushed.
 - Linters pass (`python linter-scripts/check-prompts-loaded.py`, `python linter-scripts/check-forbidden-strings.py`).
 - No leaks in downstream repositories.
 - Atomic commit via `gitmap cpf`.

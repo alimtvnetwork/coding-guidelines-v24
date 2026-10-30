@@ -1,6 +1,6 @@
 # Plan: Guideline Prompt and Installer Upgrade
 
-**Status:** PENDING
+**Status:** Completed on 30-Oct-26. The coding-style checklist is already an AI prompt and states the one-parameter-per-line rule. `02-spec/03-error-manage/02-improvements.md` holds the 50 improvements. Installer subtask 02 was already checked. Release `6.29.0` was not cut. Later releases are v6.84.0 and v6.85.0.
 
 ## Acceptance Criteria
 
@@ -13,7 +13,7 @@
 
 ## Subtasks
 
-- 01-format-overview-prompt.md: Rewrite 00-overview.md (or index) as a powerful AI prompt and extract the method signature rule.
+- [x] 01-format-overview-prompt.md: `02-spec/02-coding-guidelines/03-coding-style-checklist.md` is the AI prompt. No `00-overview.md` exists.
 - [x] 02-upgrade-installer-scripts.md: Modify scripts/generate-bundle-installers.mjs to add deletion logic (based on manifest array), never touch root version, and output .ai-memory/install-summary.json. (✅ Done)
-- 03-generate-02-improvements.md: Audit 02-spec/03-error-manage and draft 50 architectural/functional improvements.
-- 04-release-6.29.0.md: Release script execution and readme sync.
+- [x] 03-generate-02-improvements.md: `02-spec/03-error-manage/02-improvements.md`.
+- [x] 04-release-6.29.0.md: Not cut. Superseded by v6.84.0 and v6.85.0.

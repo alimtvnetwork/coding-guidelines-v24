@@ -5,17 +5,20 @@ Master directory of architectural and execution plans.
 ## Pending Plans
 
 - [29-coding-guideline-and-folder-structure-improvement.md](pending/29-coding-guideline-and-folder-structure-improvement.md): Coding Guideline and Folder Structure Improvement — What to read overhaul, AI memory folder structure update, plans and 21-app cleanup, .gitkeep removal rules, applogger syncbridge, GitMap skills freshness & archival, prompt archival, index/overview to readme standardization, and multi-repo sync exclusion.
-- [06-cg-execute-golang-pointers-and-mutation-reduce.md](pending/06-cg-execute-golang-pointers-and-mutation-reduce.md): Golang pointer reduction and mutation elimination prompt (Prompt 39), companion skills across Antigravity and Cursor, master catalog updates, quality verification linters, and multi-repository synchronization across 43 connected repositories.
-- [24-coding-guideline-and-prompt-execution-improvement.md](pending/24-coding-guideline-and-prompt-execution-improvement.md): Coding Guideline & Prompt Execution Improvement — Motto Re-anchoring (improved work or less friction), Sequential Slug Mandate (XX-<slug>), Planning Decoupling from Execution Steps, and GitMap Skills Practical Examples Enrichment across 12 categories.
+- [06-cg-execute-golang-pointers-and-mutation-reduce.md](pending/06-cg-execute-golang-pointers-and-mutation-reduce.md): Prompt 39 and both skills are in this repo. The 43-repository sync is still open. Do not sync outside until that plan says so.
 - [13-slide-quiz-preview-and-presenter-chrome.md](pending/13-slide-quiz-preview-and-presenter-chrome.md): Quiz option-card chrome, default box/text shadows, botanical-light theme, presenter shortcuts, and center-stage layout (spec + file 42).
 - [02-slides-system-overhaul.md](pending/02-slides-system-overhaul.md): Full slides deck UI and system overhaul.
-- [04-guideline-prompt-and-installer-upgrade.md](pending/04-guideline-prompt-and-installer-upgrade.md): Guideline prompt and installer enhancements.
 - [09-update-prompts-and-release.md](pending/09-update-prompts-and-release.md): Update prompts and release lifecycle (deferred under WOR policy).
 - [11-code-red-refactor-remediation.md](pending/11-code-red-refactor-remediation.md): Remediate Code Red enum, boolean, and query wrapper violations across the codebase.
 - [15-execute-parent-task-v4-antigravity.md](pending/15-execute-parent-task-v4-antigravity.md): V4 Antigravity-native rewrite of the execute-parent-task-with-n-steps prompt, with the V3 audit, Approaches A to E, execute-folder options, and follow-ups (live Antigravity run pending).
 - [16-execute-folder-hardening-and-v6-49-release.md](pending/16-execute-folder-hardening-and-v6-49-release.md): Minor release v6.49.0, then the V4 fixes applied to execute prompts 01 to 09 and their Antigravity skill copies.
 ## Completed Plans
 
+- [25-coding-guidelines-and-folder-structure-instructions.md](completed/25-coding-guidelines-and-folder-structure-instructions.md): v4 archival and leak cleanup were already pushed. Later specs in `02-spec/21-app/` stay.
+- [24-coding-guideline-and-prompt-execution-improvement.md](completed/24-coding-guideline-and-prompt-execution-improvement.md): Credit-reduction line is gone. Slug form is `XX-<slug>`. GitMap skill already has command examples.
+- [19-unified-muse-master-prompt-v6.md](completed/19-unified-muse-master-prompt-v6.md): Already shipped as the 6.5.0 master. Generic, standalone, and universal prompts stay.
+- [18-muse-prompts-execute-in-a-step.md](completed/18-muse-prompts-execute-in-a-step.md): Execute prompt requires RUNNING or NOT RUNNING, an ETA, and a five-minute status.
+- [04-guideline-prompt-and-installer-upgrade.md](completed/04-guideline-prompt-and-installer-upgrade.md): Coding-style checklist, one-parameter-per-line rule, installer summary, and 50 error-manage improvements. Release 6.29.0 was not cut.
 - [35-coding-guideline-and-design-system-spec-improvements.md](completed/35-coding-guideline-and-design-system-spec-improvements.md): Design-system spec for one-shot slides and a generic compact tree. Checks `DS-IMP-001` through `DS-IMP-400`. Restyling `slides-app` stays review-first.
 - [34-sync-date-format-and-branch-pruning.md](completed/34-sync-date-format-and-branch-pruning.md): Sync dates use `dd-MMM-yy` 12-hour form, and backup branches older than 10 days are pruned.
 - [30-root-cause-analysis-and-fix.md](completed/30-root-cause-analysis-and-fix.md): Ban `commit` as a GitMap module name. Title Case and lowercase modules stay valid.

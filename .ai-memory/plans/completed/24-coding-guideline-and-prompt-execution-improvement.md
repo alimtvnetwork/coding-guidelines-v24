@@ -3,7 +3,7 @@
 ## Task Information
 - **Title:** Coding Guideline and Prompt Execution Improvement
 - **Slug:** `24-coding-guideline-and-prompt-execution-improvement` (Canonical Slug: `coding-guideline-and-prompt-execution-improvement`)
-- **Status:** ACTIVE
+- **Status:** Completed on 30-Oct-26. "reduce credit" is absent from `01-prompts`. The motto and `XX-<slug>` rule are in `AGENTS.md` and `01-prompts/22-letterly/02-desktop-letterly.md`. `.agents/skills/gitmap/skill.md` already shows command examples. `01-prompts/v4/` is archived, so that path was not edited.
 - **Target Files:**
   - `01-prompts/22-letterly/*.md`
   - `01-prompts/23-cursor-prompts/*.md`
@@ -45,6 +45,6 @@ Few of the serious issues in the coding guideline and especially in the latterly
 
 | Task ID | Title | Owner | Status | Owned Files |
 | :--- | :--- | :--- | :--- | :--- |
-| `Task-01` | Prompt Execution Standards & Credit Removal | Worker 01 | PENDING | `01-prompts/22-letterly/*`, `01-prompts/23-cursor-prompts/*`, `01-prompts/27-muse-prompts/02-muse-generic.md`, `linter-scripts/tests/test_check_letterly_format.py` |
-| `Task-02` | Slug Convention (`XX-<slug>`) & Planning Decoupling | Worker 02 | PENDING | `AGENTS.md`, `01-prompts/22-letterly/01-mobile-letterly.md`, `01-prompts/23-cursor-prompts/01-mobile-letterly-cursor.md`, `01-prompts/v4/14-execute/02-execute-parent-task-with-n-steps-v6.md`, `.agents/skills/execute-parent-task-with-n-steps-v6/skill.md` |
-| `Task-03` | GitMap Skills Examples & Companion Alignment | Worker 03 | PENDING | `.agents/skills/gitmap/skill.md`, `.agents/skills/gitmap-developer-hygiene-and-agy/skill.md`, `.agents/skills/gitmap-scanner-and-cloner/skill.md`, `.agents/skills/gitmap-split-db-engine/skill.md`, `.agents/skills/gitmap-ssh-cluster-fleet/skill.md` |
+| `Task-01` | Prompt Execution Standards & Credit Removal | Worker 01 | DONE | `01-prompts/22-letterly/*`, `01-prompts/23-cursor-prompts/*`, `01-prompts/27-muse-prompts/02-muse-generic.md`, `linter-scripts/tests/test_check_letterly_format.py` |
+| `Task-02` | Slug Convention (`XX-<slug>`) & Planning Decoupling | Worker 02 | DONE | `AGENTS.md`, `01-prompts/22-letterly/01-mobile-letterly.md`, `01-prompts/23-cursor-prompts/01-mobile-letterly-cursor.md`, `01-prompts/v4/14-execute/02-execute-parent-task-with-n-steps-v6.md`, `.agents/skills/execute-parent-task-with-n-steps-v6/skill.md` |
+| `Task-03` | GitMap Skills Examples & Companion Alignment | Worker 03 | DONE | `.agents/skills/gitmap/skill.md`, `.agents/skills/gitmap-developer-hygiene-and-agy/skill.md`, `.agents/skills/gitmap-scanner-and-cloner/skill.md`, `.agents/skills/gitmap-split-db-engine/skill.md`, `.agents/skills/gitmap-ssh-cluster-fleet/skill.md` |

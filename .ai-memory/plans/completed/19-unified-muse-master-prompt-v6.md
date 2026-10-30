@@ -1,7 +1,7 @@
 # Plan: Unified Muse Master Onboarding & Execution Prompt (V6 Architecture)
 
 **Version:** 1.0.0
-**Status:** Pending
+**Status:** Completed on 30-Oct-26. Superseded by `.ai-memory/plans/completed/21-unified-muse-master-prompt-v6.md`. The live master is `01-prompts/27-muse-prompts/01-muse-master-prompt.md` at version 6.5.0. Files `02`, `03`, and `04` in that folder are the later generic, standalone, and universal prompts. They stay.
 **Parent Plan:** `.ai-memory/plans/pending/19-unified-muse-master-prompt-v6.md`
 **Canonical Spec:** `02-spec/21-app/16-unified-muse-master-prompt-v6/`
 **Subtasks:** `.ai-memory/plans/subtasks/19-unified-muse-master-prompt-v6/`
