@@ -21,8 +21,9 @@ All AI agents operating within GitMap-managed repositories MUST strictly adhere 
 | Prohibited Legacy Tool / Pattern | GitMap Mandatory Command | Why GitMap is Required |
 | :--- | :--- | :--- |
 | ❌ `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`, `findstr` | ✅ `gitmap aum search "<pattern>" [dir] [--ext <ext>]` or `gitmap search "<pattern>"` | Multi-core streaming live search (<15ms) with binary null-byte probe, 500 KB file cap, and DH2D SQLite hot cache. Prevents buffer bloat and terminal freezing. |
-| ❌ `Get-ChildItem` (all variants: bare `Get-ChildItem`, `-Path`, `-Filter`, `-Recurse`, etc.), `dir`, `ls` (in shell), `find . -name "..."`, `dir /s /b` | ✅ `gitmap lf <dir>` or `gitmap list-files [dir]` or `gitmap find "<pattern>" [dir]` | Sub-millisecond directory listing and file glob discovery without shell traversal overhead. TOTAL BAN on PowerShell Get-ChildItem. |
-| ❌ Directory File Inventory: `Get-ChildItem -Path <dir>`, `dir <dir>`, `ls <dir>` | ✅ `gitmap lf <dir>` (e.g. `gitmap lf src-tauri/src/modules/repo_db`) or `gitmap find "*.*" <dir>` | Instant directory file listing and inventory without PowerShell object pipeline or shell traversal latency. TOTAL BAN on PowerShell Get-ChildItem. |
+| ❌ `Get-ChildItem` (all variants: `Get-ChildItem -Path <dir> -Recurse -Filter "*pat*"`, bare `Get-ChildItem`, `-Path`, `-Filter`, `-Recurse`, etc.), `dir`, `ls` (in shell), `find . -name "..."`, `dir /s /b` | ✅ `gitmap find "*<pattern>*" [dir]` or `gitmap find-files-any "<str>"` or `gitmap lf <dir>` | Sub-millisecond directory listing and file glob discovery (<15ms) without shell traversal overhead. TOTAL BAN on PowerShell Get-ChildItem. |
+| ❌ Directory File Inventory: `Get-ChildItem -Path <dir>`, `dir <dir>`, `ls <dir>` | ✅ `gitmap lf <dir>` (e.g. `gitmap lf src/components`) or `gitmap find "*.*" <dir>` | Instant directory file listing and inventory without PowerShell object pipeline or shell traversal latency. TOTAL BAN on PowerShell Get-ChildItem. |
+| ❌ Committing under personal/human author credentials (`MD ALIM UL KARIM`, personal emails, etc.) | ✅ `gitmap user change-user "gitmap automation bot - runs autonmously" "info@rgitmap.com" --global` (and `--project`) | System-wide single autonomous bot user invariant. Prevents misplaced human user attribution across all AI commits. |
 | ❌ Raw unbuffered `cat`, `type`, `Get-Content` on source files | ✅ `gitmap cat <filepath>` | Direct zero-disk stream of file contents directly into process stdout for resource-constrained CLI sessions. |
 | ❌ Raw ambient `python script.py` or `python -c "..."` | ✅ `gitmap py "<code-or-script>"` or `gitmap py -c "<expression>"` | Auto-resolves verified Python interpreter from `installation.db` cache (<15ms), avoiding environment discrepancies. |
 | ❌ `powershell -Command "..."` or `pwsh -Command "..."` | ✅ `gitmap pwsh "<cmd>"` or `gitmap ps -c "<cmd>"` | Cross-platform PowerShell execution with deterministic `-NoProfile`, UTF-8 encoding, and automatic fallback. |
@@ -51,6 +52,13 @@ All AI agents operating within GitMap-managed repositories MUST strictly adhere 
 - `gitmap login --status` — Displays current masked credential state and active user.
 - `gitmap token list` — Resolves active GitHub token and shows credential origin.
 - `gitmap logout` — Purges stored GitHub credentials from Git global configuration.
+
+### 1.1 System-Wide Git Identity & Autonomous Bot Invariant
+- `gitmap user change-user "gitmap automation bot - runs autonmously" "info@rgitmap.com" --global` — Enforces single autonomous bot identity machine-wide.
+- `gitmap user change-user "gitmap automation bot - runs autonmously" "info@rgitmap.com" --project` — Locks project repository to autonomous bot author.
+- `gitmap user info` — Displays active Git and global Git identity context (verifies bot is active).
+- `gitmap whoami` — Instant verification of active Git author identity.
+- Invariant: AI agents must NEVER commit under human developer credentials (`MD ALIM UL KARIM`, etc.). Step 0 of all runs must verify and lock this bot identity.
 
 ### 2. Workspace & Multi-Repository Status
 - `gitmap status` (alias `gitmap st`) — Comprehensive multi-repo status table across tracked workspace.

@@ -195,25 +195,34 @@ GitMap is your **PRIMARY** acceleration engine. Banned ALL variants of `Get-Chil
 | **Fleet Synchronization** | `gitmap sync [--workers 8] [--projects <json>]` | `gitmap sync` | Parallel Go sync engine across 43 repositories in <5s with 6-stage ceremony |
 
 ### 🔍 Code & Symbol Search Protocol (TOTAL BAN ON `rg`, `ripgrep`, `Select-String`, `git grep`, `Get-ChildItem`, `dir`, `ls`)
+- **Anti-Pattern vs. Mandatory Replacement:**
+  - ❌ `Get-ChildItem -Path "src\components" -Recurse -Filter "*Title*"` -> ✅ `gitmap find "*Title*" src/components` (or `gitmap find-files-any "Title"`)
+  - ❌ `Get-ChildItem -Path <dir>`, `dir <dir>`, `ls <dir>` -> ✅ `gitmap lf <dir>` (or `gitmap find "*.*" <dir>`)
+  - ❌ `Select-String -Path "..." -Pattern "..."`, `git grep "..."` -> ✅ `gitmap aum search "<pattern>" [dir] [-e <.ext>]`
+  - ❌ `cat <file>`, `Get-Content <file>` -> ✅ `gitmap cat <filepath>` or native `view_file` / `read_file`
+- **Why PowerShell Search is Banned:** Running PowerShell cmdlets like `Get-ChildItem` or `Select-String` instantiates heavyweight .NET object pipelines, incurs directory traversal disk churn, causes Windows CLI process hangs, and bypasses GitMap's sub-millisecond SQLite search caches.
 - **GitMap High-Speed Commands & Explicit Examples:**
-  - **Directory file inventory:** `gitmap lf <dir>` (e.g. `gitmap lf src-tauri/src/modules/repo_db`) or `gitmap find "*.*" <dir>`
+  - **Directory file inventory:** `gitmap lf <dir>` (e.g. `gitmap lf src/components`) or `gitmap find "*.*" <dir>`
   - **Live streaming code/symbol search:** `gitmap aum search "<pattern>" [dir] [-e <.ext>] [-r] [-i]` (e.g. `gitmap aum search "RunFleetPASCommand" cli -e .go`)
-  - **Finding files:** `gitmap find "<pattern>" [dir]` (e.g. `gitmap find "*.md" 02-spec`)
+  - **Finding files by glob/filter:** `gitmap find "<pattern>" [dir]` (e.g. `gitmap find "*Title*" src/components`, `gitmap find "*.md" 02-spec`)
+  - **Finding files by substring:** `gitmap find-files-any "<substring>"` (e.g. `gitmap find-files-any "Title"`)
   - **Stream file:** `gitmap cat <filepath>` (e.g. `gitmap cat 02-spec/21-app/readme.md`)
-- **TOTAL BAN (AUTO-REJECT FAILURE):** Banned ALL variants of `Get-ChildItem` (with or without flags/parameters), `dir`, `ls` in shell, `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`, and `findstr`. Running raw grep, ripgrep, or slow shell search pipelines wastes execution steps, causes Windows process hangs, and violates GitMap primacy. Search exclusively through `gitmap aum search`, `gitmap find`, `gitmap lf`, or `gitmap cat`.
+- **TOTAL BAN (AUTO-REJECT FAILURE):** Banned ALL variants of `Get-ChildItem` (with or without flags/parameters: `-Path`, `-Filter`, `-Recurse`, bare `Get-ChildItem`), `dir`, `ls` in shell, `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`, and `findstr`. Running raw grep, ripgrep, or slow shell search pipelines wastes execution steps, causes Windows process hangs, and violates GitMap primacy. Search exclusively through `gitmap aum search`, `gitmap find`, `gitmap lf`, or `gitmap cat`.
 
 ---
 
 ## 5. Step 0: Preflight, Platform Handshake & SQLite Task DB Initialization (Phase 1 Budget)
 
-1. **Platform Handshake & Git Identity Verification:**
+1. **Platform Handshake & Git Identity Verification (Machine-Wide Single-User Invariant):**
    - Confirm tools (`invoke_subagent`, `send_message`, `manage_subagents`, `ask_question`, `write_to_file`, `replace_file_content`, `run_command`).
-   - Run `gitmap whoami` or `gitmap user info` to inspect active Git authorship.
-   - Enforce Rule R8: Verify that global Git identity is set to `gitmap automation bot - runs autonmously <info@rgitmap.com>`:
-     `gitmap whoami`
-     If diverging, immediately correct global git config and gitmap profile:
-     `gitmap user config global --name "gitmap automation bot - runs autonmously" --email "info@rgitmap.com"`
-     `gitmap user switch autobot --global`
+   - Run `gitmap user info` to inspect active Git authorship across local and global scopes.
+   - Enforce Rule R8: Unconditionally lock both global and project Git identities to the single autonomous bot user:
+     ```bash
+     gitmap user change-user "gitmap automation bot - runs autonmously" "info@rgitmap.com" --global
+     gitmap user change-user "gitmap automation bot - runs autonmously" "info@rgitmap.com" --project
+     ```
+     Run `gitmap user info` to verify `Active Git` and `Global Git` both match `gitmap automation bot - runs autonmously <info@rgitmap.com>`.
+     TOTAL BAN ON HUMAN AUTHOR COMMITS: Committing under human developer credentials (`MD ALIM UL KARIM`, personal emails) in automated sessions is an immediate auto-reject failure.
 2. **Commands & Directory:** Confirm `gitmap --version` and `python --version` exit 0. Verify GitMap with harmless call (`gitmap lf readme.md`), not `--help`. `run_command` uses `Cwd` in workspace root, paths relative. Never cd to other drives or tool folders.
 3. **Working Tree Cleanliness:** Run `git status --porcelain`. Record modified files in ledger; never touch them. Confirm root `readme.md` is lowercase. Read `.ai-memory/what-to-read.md`, `strictly-avoid.md`, `coding-guidelines.md`.
 4. **Step 0 Heatmap & RC Preflight Checks & Automatic Creation (Mandatory Inspection):**
@@ -284,6 +293,7 @@ You must use `invoke_subagent` to delegate both planning discovery and spec auth
 > 3. **Valid TypeName Strings:** `TypeName` MUST strictly be `"research"` (read-only discovery) or `"self"` (read-write execution). Passing custom strings (e.g. `"TypeName": "Research 01"` or `"TypeName": "Worker 01"`) is an invalid schema and immediately crashes `invoke_subagent`. Put descriptive labels in `Role` only.
 > 4. **Worker Git Ban (Index Lock Prevention):** Subagents NEVER run git commands (`git add`, `git commit`, `git push`, `git status`, `git diff`, `git checkout`). In shared workspaces, worker git calls create `.git/index.lock` collisions that immediately crash parallel agents with exit code 128.
 > 5. **Clean Turn-Yielding:** When calling `invoke_subagent`, make it the final tool action of the turn. Emit the status line and IMMEDIATELY STOP CALLING TOOLS to allow platform reactive wakeup. Chaining additional tools or tight polling crashes the message queue.
+> 6. **Mandatory Subagent Negative Constraints Block (`[CRITICAL_SUBAGENT_CONSTRAINTS]`):** Subagents run in fresh, isolated context windows and DO NOT inherit the parent prompt's tool restrictions. Every prompt passed to `invoke_subagent` MUST prepend the mandatory `[CRITICAL_SUBAGENT_CONSTRAINTS]` header banning `Get-ChildItem` (all variants: `-Path`, `-Filter`, `-Recurse`, bare), `dir`, `ls`, `Select-String`, `findstr`, `grep`, `git grep`, `rg`, `ripgrep`, and worker git commands. Omitting this block causes LLMs to fall back to Windows PowerShell cmdlets (`Get-ChildItem -Path ... -Recurse -Filter "*..."`) and is a critical protocol violation.
 
 1. **Planning Step (A = 3 `research` Discovery Subagents):** Lead agent calls `invoke_subagent` to spawn 3 read-only discovery subagents (`TypeName: "research"`, `Role: "Research 01: Architecture & Blast Radius"`, `Role: "Research 02: Specs & Dependency Mapping"`, `Role: "Research 03: Repository Dependencies & Fleet Sync Targets"`). Their prompt MUST instruct them to research the codebase using GitMap high-speed search (`gitmap aum search "<symbol>" [dir] [-e <.ext>]`, `gitmap find`, `gitmap lf`, `gitmap cat`) — NEVER `rg`, `ripgrep`, PowerShell `Select-String`, or `git grep` — define symbol boundaries and caller dependencies, and return their structured findings to the lead in their final message.
    - *Master Plan Generation (Lead Agent):* The lead orchestrator receives all three discovery reports, synthesizes findings, and writes the unified Execution Plan (`.ai-memory/plans/pending/nn-<slug>.md`) and the Root Task JSON Manifest.
@@ -406,15 +416,28 @@ You must use `invoke_subagent` to delegate both planning discovery and spec auth
 Read-only discovery subagents spawn with zero prior chat context. The prompt envelope MUST inject complete instructions, strictly enforce GitMap search primacy, and impose an absolute ban on raw search tools:
 
 ```text
+[CRITICAL_SUBAGENT_CONSTRAINTS — MANDATORY NON-NEGOTIABLE]
+1. ZERO BARE SHELL FILE SEARCH / DISCOVERY (AUTO-REJECT FAILURE):
+   - You are STRICTLY FORBIDDEN from running Get-ChildItem (all variants: Get-ChildItem -Path <dir> -Recurse -Filter "*pat*", bare Get-ChildItem), dir, ls, Select-String, findstr, grep, git grep, rg, ripgrep.
+   - Finding files by glob/filter: gitmap find "*<pat>*" [dir] (e.g. gitmap find "*Title*" src/components)
+   - Finding files by substring: gitmap find-files-any "<substring>" (e.g. gitmap find-files-any "Title")
+   - Listing directory: gitmap lf <dir> (e.g. gitmap lf src/components)
+   - Code & regex search: gitmap aum search "<pattern>" [dir] [-e <.ext>]
+   - Reading files: gitmap cat <filepath> or native view_file / read_file
+2. WORKER GIT BAN: NEVER run git commands (git add, git commit, git push, git status, git diff, git checkout). Only the lead orchestrator commits at Phase 3.
+3. ZERO TEST/BUILD RUNS: Do not build or run full test suites.
+4. STRICT RELATIVE PATHS ONLY.
+
 You are Research <NN> for task nn-<slug>. You have no prior chat context; this brief is your complete specification.
 
 ### Boundaries & Crash Prevention:
 - Read-Only Mode: You possess read-only tools (`view_file`, `run_command`, web search). You DO NOT have `write_to_file` or `replace_file_content`. NEVER attempt to create or modify files. Commanding a research agent to write files crashes the subagent.
-- TOTAL BAN ON RAW SEARCH TOOLS: Banned ALL variants of `Get-ChildItem` (with or without flags/parameters), `dir`, `ls` in shell, `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`, and `findstr`. Spawning external search binaries hangs execution, causes OS lock collisions, and wastes steps.
+- TOTAL BAN ON RAW SEARCH TOOLS: Banned ALL variants of `Get-ChildItem` (with or without flags/parameters: `-Path`, `-Filter`, `-Recurse`, bare `Get-ChildItem`), `dir`, `ls` in shell, `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`, and `findstr`. Spawning external search binaries hangs execution, causes OS lock collisions, and wastes steps.
 - GitMap Search Primacy: Execute all code, symbol, directory, and pattern searches exclusively via GitMap commands:
-  - Directory file inventory: `gitmap lf <dir>` (e.g. `gitmap lf src-tauri/src/modules/repo_db`) or `gitmap find "*.*" <dir>`
+  - Directory file inventory: `gitmap lf <dir>` (e.g. `gitmap lf src/components`) or `gitmap find "*.*" <dir>`
   - Live streaming code/symbol search: `gitmap aum search "<pattern>" [dir] [-e <.ext>] [-r] [-i]`
-  - Finding files: `gitmap find "<pattern>" [dir]`
+  - Finding files: `gitmap find "<pattern>" [dir]` (e.g. `gitmap find "*Title*" src/components`)
+  - Substring finder: `gitmap find-files-any "<substring>"`
   - Stream file content: `gitmap cat <filepath>`
 - TOTAL BAN ON GIT COMMANDS: NEVER run `git add`, `git commit`, `git push`, `git status`, `git diff`, `git checkout`.
 - Strict Relative Git Paths: All paths cited in your report must be relative to the repository root; only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well (TOTAL BAN on absolute filesystem paths and `file:///` URIs).
@@ -441,6 +464,18 @@ Return your structured findings via send_message to the Lead Orchestrator with t
 Subagents spawn with clean context. The prompt envelope MUST inject complete instructions:
 
 ```text
+[CRITICAL_SUBAGENT_CONSTRAINTS — MANDATORY NON-NEGOTIABLE]
+1. ZERO BARE SHELL FILE SEARCH / DISCOVERY (AUTO-REJECT FAILURE):
+   - You are STRICTLY FORBIDDEN from running Get-ChildItem (all variants: Get-ChildItem -Path <dir> -Recurse -Filter "*pat*", bare Get-ChildItem), dir, ls, Select-String, findstr, grep, git grep, rg, ripgrep.
+   - Finding files by glob/filter: gitmap find "*<pat>*" [dir] (e.g. gitmap find "*Title*" src/components)
+   - Finding files by substring: gitmap find-files-any "<substring>" (e.g. gitmap find-files-any "Title")
+   - Listing directory: gitmap lf <dir> (e.g. gitmap lf src/components)
+   - Code & regex search: gitmap aum search "<pattern>" [dir] [-e <.ext>]
+   - Reading files: gitmap cat <filepath> or native view_file / read_file
+2. WORKER GIT BAN: NEVER run git commands (git add, git commit, git push, git status, git diff, git checkout). Only the lead orchestrator commits at Phase 3.
+3. ZERO TEST/BUILD RUNS: Do not build or run full test suites.
+4. STRICT RELATIVE PATHS ONLY.
+
 You are Worker <NN> for task nn-<slug>. You have no prior chat context; this brief is your complete specification.
 
 ### Boundaries & Crash Prevention:
@@ -448,11 +483,12 @@ You are Worker <NN> for task nn-<slug>. You have no prior chat context; this bri
 - TOTAL BAN ON GIT COMMANDS (LOCK COLLISION PREVENTION): NEVER run ANY git commands (`git add`, `git commit`, `git push`, `git status`, `git diff`, `git checkout`). In shared workspaces, worker git calls create `.git/index.lock` collisions that immediately crash parallel agents. Only the lead orchestrator runs git commands after workers complete.
 - TOTAL BAN ON COMMITS: Workers NEVER commit, stage, or push. Committing is exclusively reserved for the Lead Agent at Phase 3 via GitMap (`gitmap cpf "<module> - <summary>"` using hyphen `-`; no colon needed in GitMap cpf as colon is already provided).
 - Code & Symbol Search: Use GitMap exclusively:
-  * Directory file inventory: `gitmap lf <dir>` (e.g. `gitmap lf src-tauri/src/modules/repo_db`) or `gitmap find "*.*" <dir>`
+  * Directory file inventory: `gitmap lf <dir>` (e.g. `gitmap lf src/components`) or `gitmap find "*.*" <dir>`
   * Live streaming code/symbol search: `gitmap aum search "<pattern>" [dir] [-e <.ext>] [-r] [-i]`
-  * Finding files: `gitmap find "<pattern>" [dir]`
+  * Finding files: `gitmap find "<pattern>" [dir]` (e.g. `gitmap find "*Title*" src/components`)
+  * Substring finder: `gitmap find-files-any "<substring>"`
   * Stream file: `gitmap cat <filepath>`
-  TOTAL BAN: Banned ALL variants of `Get-ChildItem` (with or without flags/parameters), `dir`, `ls` in shell, `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`, and `findstr`.
+  TOTAL BAN: Banned ALL variants of `Get-ChildItem` (with or without flags/parameters: `-Path`, `-Filter`, `-Recurse`, bare `Get-ChildItem`), `dir`, `ls` in shell, `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`, and `findstr`.
 - After C tool calls, stop and report what you have.
 - A tool failing twice: reply "STATUS: BLOCKED" with exact error and stop. Never guess paths and never troubleshoot machine.
 - Workers that find a secret stop and report "BLOCKED: secret at <file>:<line>". They do not handle it themselves.
