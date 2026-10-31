@@ -112,13 +112,21 @@ All AI agents operating within GitMap-managed repositories MUST strictly adhere 
   * **Path-Scoped Code Search:** `gitmap aum search "HeatmapActionLog" src-tauri/src -e .rs` — Scoped search restricted to Rust source tree.
   * **Subtask Plan Inventory:** `gitmap lf .ai-memory/plans/subtasks` — Rapidly enumerates in-flight and pending subtask manifests.
 
-### 6. Autonomous CI/CD Self-Healing (Pipeline AI)
+### 6. Autonomous CI/CD Self-Healing (Pipeline AI) & Time Restriction Protocol
 - `gitmap pipeline-ai status --json` — Check workflow execution state, active branch, and ETA.
-- `gitmap pipeline-ai status -t <eta>` — Wait dynamically for pipeline completion without tight polling.
+- `gitmap pipeline-ai status -t <eta>` (or `gitmap pl-ai status -t <sec>`) — Wait dynamically for pipeline completion without tight polling.
 - `gitmap pipeline error-logs` (alias: `gitmap pe`) — Extract failing step logs to file for 4-part RCA.
 - `gitmap pe -t` — Telemetry mode extracting concise failure summaries.
 - `gitmap pe history-ai` — Analyze CI/CD pipeline history across branches and recent runs.
 - `gitmap pipeline purge` — Actions zero-storage purge maintaining 0.0 GB footprint.
+- **Adaptive Waiting / Sleep Protocol (Anti-Credit-Waste Mandate):**
+  - NEVER loop rapidly or busy-poll (`gh run view` in tight loops). This burns user credits and API token quota.
+  - When a pipeline is running, use `gitmap pipeline-ai status -t <etaSeconds>` to sleep for the estimated completion duration before querying again.
+  - Alternatively, schedule wait intervals or sleep based on the computed ETA:
+    - ETA > 120s: wait 20s–30s
+    - 60s < ETA <= 120s: wait 10s–20s
+    - ETA <= 60s: wait 5s–10s
+  - Local runner ETA wait: sleep 1 minute (60s) or dynamically sleep for remaining ETA from `.ai-memory/temp/runner-eta.json`.
 
 ### 7. Semantic & Flat Commit Suite
 
@@ -337,3 +345,5 @@ gitmap heatmap rc query "SELECT RepoSlug, TotalActionsRecorded FROM HeatmapRepoR
 8. **Zero Storage Ban:** Zero uploads to `actions/upload-artifact`. Maintain 0.0 GB Actions storage quota across all repositories.
 9. **Total Ban on Python SQLite Scripts:** NEVER run `python 03-ai-scripts/46-agent-sqlite-task-manager.py` or `python -c "import sqlite3..."`. For agent tasks, use native compiled `gitmap agent` subcommands exclusively. For inspecting, exploring, querying, mutating, or viewing SQLite databases (e.g. Antigravity DBs, split databases, application storage), use `gitmap db-read`, `gitmap db-add`, `gitmap db-edit`, `gitmap db-find`, `gitmap db-listing`, `gitmap db-view`, `gitmap db-rest`, `gitmap db-record-del`, `gitmap db-rm` (or aliases `dbr`, `dba`, `dbe`, `dbf`, `dbl`, `dbv`, `dbrs`, `dbrd`, `dbrm`).
 10. **Total Ban on Ad-Hoc Python Web Scrapers:** NEVER run `python -c "import urllib.request..."` or write ad-hoc Python scripts (`fetch_urls.py`, etc.) to scrape web pages, extract images, or download screenshot URLs (e.g., `prnt.sc`, `image.prntscr.com`, `i.imgur.com`). You MUST use native compiled `gitmap prnt <url1> [url2...] [--extract-only] [--json]` (alias `gitmap download-prnt`), which automatically handles User-Agent headers, multi-tier CDN resolution, and bidirectional Antigravity Brain synchronization. See `@[.agents/skills/gitmap]` for full command reference.
+11. **Time Restriction & Anti-Credit-Waste Dynamic Waiting Mandate:** Routine turns must NEVER query or loop rapidly (`gh run view` in tight loops) or waste steps on continuous polling. When CI/CD verification is explicitly asked, always query state using GitMap Pipeline-AI (`gitmap pipeline-ai status --json` or `gitmap pl-ai status -t <sec>`) and strictly sleep based on `etaSeconds` (ETA > 120s: wait 20–30s; 60s < ETA <= 120s: wait 10–20s; ETA <= 60s: wait 5–10s). For background local runners, sleep 60s or remaining ETA from `.ai-memory/temp/runner-eta.json`.
+12. **Mandatory Git Identity & Credential Governance:** The machine global Git identity and GitMap active user profile MUST be configured to Name: `GitMap automation` (with alias `AI automation`) and Email: `info@rgitmap.com`. Use `gitmap whoami` or `gitmap user info` during preflight to inspect active identity. If unconfigured or diverging, immediately remediate using `gitmap user config global --name "GitMap automation" --email "info@rgitmap.com"` and `gitmap user switch autobot --global`.
