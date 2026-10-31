@@ -408,13 +408,13 @@
   },
   "syncManifest": {
     "manifestVersion": "1.0.0",
-    "generatedAt": "2026-10-31T11:48:02Z",
+    "generatedAt": "2026-10-31T12:06:31Z",
     "sourceAuthority": "gitmap",
-    "assetCount": 1273,
+    "assetCount": 1275,
     "sectionHashes": {
       "prompts": "c7f309ae95d7c5be147fe80b4334d700bcf92a915eee9c0c872a5bbbf36e3e26",
       "scripts": "cf0a7c944ec2e592206ad807e33ccf8be3e61ae1013cf7b54cc0d23237bc08b3",
-      "skills": "d9167868f6f3841adb91930e6959e51c0e2d214a7fd007daffdad383b92aa8b1",
+      "skills": "698a3b459c53d2b48130b99159b2e9a7fa56b6a0c55453e7a52a1031465477c0",
       "specs": "589ac116eb5b326660307fa23f6e3dd2192de3d70c0f08fa020e7f8f55995e36"
     },
     "assets": {
@@ -474,6 +474,7 @@
       ".agents/skills/function-argument-reduction-and-params/skill.md": "dd3c46050b3e3b07ee4fbc8974c7673738933c4b256734b7aa5be5ad165ccf48",
       ".agents/skills/function-signatures-and-return-types/skill.md": "476229e4dd7ff54712478498e984dd998aab2ba00be6c9c59931eb906eef5394",
       ".agents/skills/git-reconcile-and-resolve-conflict/skill.md": "e06593293ef0d7f017410cbaa75628d6d7c0f81a115d0e1d92cf85f1ef202618",
+      ".agents/skills/gitmap-heatmap/skill.md": "70b4d39c50090d55e485a2e2fe30749a6dfebf2a542e1af19c7f7667d72cb05e",
       ".agents/skills/gitmap-macro-automation-engine/skill.md": "fe3414e89e806d36b2a39eae38009748851ce428c89c36289bd3d8107d27f017",
       ".agents/skills/gitmap-pipeline-and-diagnostics/skill.md": "70d98cf7b0d62cce3d171a4005ffbce2af8f50fe5303af74efecba04ab9de583",
       ".agents/skills/gitmap-pipeline-waiting-prompts/skill.md": "d5de98e9950f56b20d1e6350c9543974aafd7e1640d312d297f5d2b0b5185275",
@@ -584,6 +585,7 @@
       ".cursor/skills/git-reconcile-and-resolve-conflict/skill.md": "0fdf5a8505c1affc68d604ca6c92e81cdfad57f3d6339442cdc213affc59c178",
       ".cursor/skills/gitmap-automation-bot/skill.md": "a03a11af211236cc751c371a3a9a8353376149d0babf8150f0e75738a9cc12ac",
       ".cursor/skills/gitmap-developer-hygiene-and-agy/skill.md": "afe47bc5e84397a24d35c060a1aab5388b9cd76e09c5f489285e62aef121772e",
+      ".cursor/skills/gitmap-heatmap/skill.md": "3e88159af07e3d6323e6ece5f5e8b7b25444545adfc699bcd84a72b224a373b0",
       ".cursor/skills/gitmap-macro-automation-engine/skill.md": "90a32fff02c86a4df96faf5162900e0548dd1f66062eb61af58762324a64241e",
       ".cursor/skills/gitmap-pipeline-and-diagnostics/skill.md": "4f6fa077d433525f6fb4ad29aafd6462d68f2e1788c89271a3af1cfc4d21b5e5",
       ".cursor/skills/gitmap-pipeline-waiting-prompts/skill.md": "0c724d52ad3c3a795f969a8b9f2bedfeaabd284cb139328cca8b9b02eb36d7a9",
