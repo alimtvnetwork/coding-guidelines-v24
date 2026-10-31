@@ -408,13 +408,13 @@
   },
   "syncManifest": {
     "manifestVersion": "1.0.0",
-    "generatedAt": "2026-10-31T12:06:31Z",
+    "generatedAt": "2026-10-31T13:31:17Z",
     "sourceAuthority": "gitmap",
-    "assetCount": 1275,
+    "assetCount": 1277,
     "sectionHashes": {
       "prompts": "c7f309ae95d7c5be147fe80b4334d700bcf92a915eee9c0c872a5bbbf36e3e26",
-      "scripts": "cf0a7c944ec2e592206ad807e33ccf8be3e61ae1013cf7b54cc0d23237bc08b3",
-      "skills": "698a3b459c53d2b48130b99159b2e9a7fa56b6a0c55453e7a52a1031465477c0",
+      "scripts": "de2b3a5e0d72f5518e45125efdad0cf941fb48cc156066efc7412799d053b7c9",
+      "skills": "82534e0ab3cd34d2eafc0d5f1af3c6b9a5cc1b74694a6cf1ae473a1821721f30",
       "specs": "589ac116eb5b326660307fa23f6e3dd2192de3d70c0f08fa020e7f8f55995e36"
     },
     "assets": {
@@ -592,7 +592,7 @@
       ".cursor/skills/gitmap-scanner-and-cloner/skill.md": "7d106930d39889cca3c198f9f8ac4623b82dbaa1eaa82f2469f372cd9a949447",
       ".cursor/skills/gitmap-split-db-engine/skill.md": "0f2abbb5548714456ba2b8509b68b7f9853c1510301714354e2af4f838e92350",
       ".cursor/skills/gitmap-time-restriction/skill.md": "f0d46e1421b1835ba510ab93bae900f54edf48a78d3b6a650c873e9e9e989d10",
-      ".cursor/skills/gitmap/skill.md": "9b40b162622a1ac2e2f6faf9ea659c9f37d39eed8e7643a15aaa4760b6bc49f1",
+      ".cursor/skills/gitmap/skill.md": "8de073cc6d7ea28f0a5258cc6c857c4e52b851764994bb874bc2df6810142d4a",
       ".cursor/skills/go-appwriter-and-result/skill.md": "420c5a6065833cec2ef3e2011036dd0ae0340bd570bd6db48829f20e7612a272",
       ".cursor/skills/implement-next-10-improvements/skill.md": "de671d593798d2b81f7cd77fc012a850a15f7d9f659af7a50b1e9133556c21a3",
       ".cursor/skills/inventory-pending-tasks/skill.md": "0e2c2ee0ede7d45940b461ba8ca6d01e95ad5d99b9cf16812a5a752f459d496b",
@@ -1692,7 +1692,9 @@
       "03-ai-scripts/51-helptext-generator.py": "0f13540e3ecc0809b39960dad9a6cfbdc6a1e3ede9b573cf547cfbb7ff63bec5",
       "03-ai-scripts/51-verify-linux-cross-compile.py": "8abb9b32f1fee0e94fe4b1cc7e57e0f8474de3c3101402e42aed653a6fff4abe",
       "03-ai-scripts/52-file-size-check.py": "a1c0fd06bf98ce087d0815d65e6ff5df8965770e5523226bf67605d49c82cadf",
-      "03-ai-scripts/__pycache__/02-shared-engine.cpython-313.pyc": "35a37f8da408120f01cc3973be5146709b4e07614c1a6216aa08a51d694c9f13"
+      "03-ai-scripts/__pycache__/02-shared-engine.cpython-313.pyc": "35a37f8da408120f01cc3973be5146709b4e07614c1a6216aa08a51d694c9f13",
+      "03-ai-scripts/__pycache__/04-newline-fixer.cpython-313.pyc": "62dc5a618cb128b91771ac7d68643d122e04f809830d9f1237bf9da31e724893",
+      "03-ai-scripts/__pycache__/08-naming-autofixer.cpython-313.pyc": "cdbdc9a468cccbcdacb4ab228c4b774fdff3bafd3ca8ddda41fed4dfbac4e8b1"
     }
   },
   "updated": "2026-10-28",
