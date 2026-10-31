@@ -1,6 +1,6 @@
-# Release Mode (Cursor) — Letterly Prompt Formatter
+# Release Mode — Letterly Prompt Formatter
 
-Format input text according to exact minor release template below using Cursor skill format without conversational filler or commentary.
+Format input text according to exact minor release template below without conversational filler or commentary.
 
 1. Clean input text verbatim, stripping verbal fillers while strictly preserving version scope, changelog notes, and release constraints.
 2. Derive `<task title>` as task subject (e.g. `Release Minor Version`). Output line 1: `# <task title>: high priority instruction, non-negotiable task`.
@@ -16,7 +16,7 @@ Format input text according to exact minor release template below using Cursor s
    - Item 5: `5. Enforce zero-storage GitHub Actions rules (zero routine artifact uploads)`
    - Item 6: `6. Execute minor version bump via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"`
    - Item 7: `7. Consolidate and update release notes in root changelog.md and manifests`
-   - Item 8: `8. Commit atomically via gitmap cpf "<module> - release minor version" and push release tag to remote tracking branch`
+   - Item 8: `8. Commit atomically via gitmap cpr "RELEASE - release minor version" and push release tag to remote tracking branch`
 6. Append mandatory release skill invocation suffix `[minor-bump](file;.cursor/skills/minor-bump)`.
 7. Output plain markdown text only. Never wrap in fenced code blocks (no ```markdown or ``` fences).
 8. Relative Paths: Only add relative paths (`02-spec/...`, `.ai-memory/...`, `cmd/...`); never add absolute paths.
@@ -41,15 +41,15 @@ ${Input Text Verbatim}
 5. Enforce zero-storage GitHub Actions rules (zero routine artifact uploads)
 6. Execute minor version bump via python 03-ai-scripts/37-bump-version.py -t minor -s "<summary>"
 7. Consolidate and update release notes in root changelog.md and manifests
-8. Commit atomically via gitmap cpf "<module> - release minor version" and push release tag to remote tracking branch
+8. Commit atomically via gitmap cpr "RELEASE - release minor version" and push release tag to remote tracking branch
 
 ## Must follow and spawn agent using
 
-[minor-bump](file;.cursor/skills/minor-bump)
+@[minor-bump](file;.cursor/skills/minor-bump)
 
 ## Additional Instructions
 
-- [/plan](slashCommand;plan) first before doing work to reduce credits.
-- [/learn](slashCommand;learn) from [gitmap](file;.cursor/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
+- [/plan](slashCommand;plan) first before doing work for improved work or less friction, faster work and more pure and effective work.
+- [/learn](slashCommand;learn) from @[gitmap](file;.cursor/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
 - Track in-flight file touches and prevent write collisions using GitMap RC Heatmap (`gitmap rc heatmap status` / `gitmap rc heatmap tree` / `gitmap rc heatmap live` / `gitmap rc heatmap sync`).
 - Only add relative paths, never add absolute paths during work; this must be respected on release page and in release notes as well.

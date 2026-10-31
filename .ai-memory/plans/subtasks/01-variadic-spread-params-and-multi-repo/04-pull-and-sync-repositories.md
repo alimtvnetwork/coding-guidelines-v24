@@ -4,7 +4,7 @@
 > **Parent Task:** `01-variadic-spread-params-and-multi-repo`  
 > **Status:** READY FOR EXECUTION  
 > **Target Scripts:** `03-ai-scripts/38-sync-prompts-skills-scripts.py`, `03-ai-scripts/41-audit-all-repos.py`  
-> **Specification Reference:** [02-spec/21-app/01-variadic-spread-params-and-multi-repo/02-sync-and-multi-repo-spec.md](../../../02-spec/21-app/01-variadic-spread-params-and-multi-repo/02-sync-and-multi-repo-spec.md)  
+> **Specification Reference:** `02-spec/21-app/01-variadic-spread-params-and-multi-repo/02-sync-and-multi-repo-spec.md`  
 > **Prerequisite:** [Subtask 03: Multi-Repository Synchronization Script Protection Guards & Memory Safety](03-sync-script-protection.md)  
 
 ---

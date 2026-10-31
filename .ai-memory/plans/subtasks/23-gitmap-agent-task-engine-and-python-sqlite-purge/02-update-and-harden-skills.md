@@ -5,7 +5,7 @@
 
 ## Canonical Reference
 
-- Specification: [`02-spec/21-app/18-gitmap-agent-task-engine-and-python-sqlite-purge/01-overview-and-architecture.md`](../../../../02-spec/21-app/18-gitmap-agent-task-engine-and-python-sqlite-purge/01-overview-and-architecture.md)
+- Specification: `02-spec/21-app/18-gitmap-agent-task-engine-and-python-sqlite-purge/01-overview-and-architecture.md`
 
 ## Action Checklist
 

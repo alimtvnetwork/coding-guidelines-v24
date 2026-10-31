@@ -1,6 +1,6 @@
 # Subtask 01: Author Cross-Language Coding Guideline for Variadic & Spread Parameters
 
-> **Parent Spec:** [`02-spec/21-app/01-variadic-spread-params-and-multi-repo/01-architecture-spec.md`](../../../../02-spec/21-app/01-variadic-spread-params-and-multi-repo/01-architecture-spec.md)  
+> **Parent Spec:** `02-spec/21-app/01-variadic-spread-params-and-multi-repo/01-architecture-spec.md`  
 > **Status:** `PENDING`  
 > **Traceability ID:** `Task-01`  
 > **Target Files:**

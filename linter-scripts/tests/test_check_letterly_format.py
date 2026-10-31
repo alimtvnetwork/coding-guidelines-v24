@@ -49,7 +49,7 @@ Hi there. When you started with the SEO writing, before that there was only one 
 
 ## Additional Instructions
 
-- [/plan](slashCommand;plan) first before doing the work to reduce the credits.
+- [/plan](slashCommand;plan) first before doing work for improved work or less friction, faster work and more pure and effective work.
 - [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
 - Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.
 """

@@ -1,5 +1,55 @@
 # Changelog
 
+## [v6.88.0] - 2026-10-28
+
+### Added
+- **GitMap Clone Bare Slug Resolution Fallback:** Enhanced `ResolveRepoSlug` in `cli/cmdclone/gh_resolver.go` to automatically resolve bare repository names against the active GitHub profile or owner (`resolveActiveOrProfileOwner()`), constructing and verifying `https://github.com/<owner>/<repo-name>` via `probeRemoteGitURL` before falling back to local search.
+- **Show Log Non-Git Folder Resilience:** Replaced fatal runtime stack trace dumps (`[E9000:EXECUTION] not a git repository`) in `cli/cmdlogviewer/server.go` with clean diagnostic reporting and automatic detection and listing of child repositories.
+- **Show Log UI Web App Manifest & Authentic Branding:** Injected `<link rel="manifest" href="/manifest.json">` and `/manifest.json` endpoint with PNG and SVG icons so Chrome/Edge `--app` mode windows display the authentic GitMap logo instead of generic browser globe.
+- **Follow Coding Guidelines Continuous Learning Loop:** Enriched `.agents/skills/follow-coding-guidelines/skill.md` with explicit `[/learn](slashCommand;learn)` integration, grounded 12-rule audit checklist, and pre-commit self-audit matrix.
+
+### Changed
+- **GitMap Skills Uppercase Commit Module Cleanup:** Purged screaming uppercase module examples (`SKILLS`, `CLONER`, `DOCS`, `RELEASE`) in favor of Title Case / lowercase across `.agents/skills/gitmap/skill.md`, `.cursor/skills/gitmap/skill.md`, and in-engine CLI text `cli/cmd/llm/llm_skill.go`.
+- **GitMap Command Surface Sanitization:** Removed obsolete cluster commands (`cluster`, `sc`, `ssh`), OS dev clean, and VS Code repair examples from GitMap skills and LLM documentation.
+- **Skills Reduction Audit:** Completed exhaustive audit of all 108 skills in `02-spec/21-app/33-coding-guideline-corrections-and-gitmap-skill-updates/02-skills-reduction-matrix.md`, establishing a 29-skill reduction roadmap consolidating into `follow-cg-execute` and `find-100-improvements`.
+
+---
+
+## [v6.87.0] - 2026-10-27
+
+### Added
+- **Master 39-Step Coding Guideline Orchestrator (`follow-cg-execute`):** Authored full 39-step ordered sequence across all coding guideline domains in `.agents/skills/follow-cg-execute/skill.md` and `.cursor/skills/follow-cg-execute/skill.md`, enforcing zero-build fast-forwarding micro-batches in steps 1–38 and terminal E2E verification in step 39.
+- **GitMap Cognitive Heatmap Query Shorthands:** Wired dedicated CLI aliases (`gitmap heatmap recent/latest`, `gitmap heatmap failed/unmet`, `gitmap heatmap hotfiles/hotspots`, `gitmap heatmap tasks/task-list`) and companion `rc heatmap` subcommands.
+- **GitMap Task Spec File & Folder Tracking:** Implemented `HeatmapParentTask` registration with `RootSpecFilePath` and `TaskFolder` in `store/heatmap_store.go` and wired into `gitmap task init`.
+
+### Changed
+- **PowerShell Completion Script Hardening:** Fixed Cobra completion generator in `cli/cmd/root_cobra_completion.go` where trailing `+ $Space` was attached to `{ continue }`, resolving `ScriptBlock op_Addition` syntax error and restoring permanent tab suggestions.
+- **Cross-Platform Process Termination (`gitmap kill`):** Promoted native `gitmap kill <pid|name|:port> [--force] [--tree]` (alias `terminate`) across all skills and guidelines, codifying total ban on raw `Stop-Process` and `taskkill`.
+- **Skills Inventory Consolidation:** Consolidated 13 redundant prompt wrappers into canonical parent skills (`release`, `logo-and-icon-design`, `react-ui-theming-design`, `prompts-and-skills-sync`, `check-pending-improvements`) and moved deprecated wrappers to `.agents/skills-archived/` and `.cursor/skills-archived/`.
+
+---
+
+## [v6.86.0] - 2026-10-27
+
+### Added
+- Follow coding guidelines skill, gitmap skill sanitization, and skills inventory reduction
+
+---
+
+## [v6.85.0] - 2026-10-27
+
+### Added
+- subsystem module conventions and commit pseudo-module ban
+
+---
+
+## [v6.84.0] - 2026-10-22
+
+### Added
+- Routine release v6.84.0
+
+---
+
 ## [v6.83.0] - 2026-10-19
 
 ### Added

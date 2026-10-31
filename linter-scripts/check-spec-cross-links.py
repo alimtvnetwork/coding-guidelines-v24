@@ -24,7 +24,7 @@ from typing import Iterable
 MD_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)\s]+?)(?:\s+\"[^\"]*\")?\)")
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$", re.MULTILINE)
 EXTERNAL_PREFIXES = ("http://", "https://", "mailto:", "tel:", "ftp://", "#")
-SKIP_SCHEMES = ("mem://", "user-uploads://", "knowledge://", "slashCommand:")
+SKIP_SCHEMES = ("mem://", "user-uploads://", "knowledge://", "slashCommand:", "slashCommand;")
 # Same schemes may appear after a relative-path prefix like ``../mem://...``
 # when authors quote a memory URI in prose. Detect those as well.
 SKIP_SCHEME_SUBSTRINGS = tuple(SKIP_SCHEMES)
@@ -180,6 +180,15 @@ def check_link(source: Path, target: str, repo_root: Path) -> tuple[str, str] | 
         path_part, anchor = target.split("#", 1)
     else:
         path_part, anchor = target, ""
+    # IDE skill links (``file;.agents/skills/<name>``) resolve against the
+    # repo root, mirroring check-sequence-integrity.py: valid when the path
+    # itself or its ``skill.md`` exists.
+    if path_part.startswith("file;"):
+        ref = path_part[len("file;"):].strip()
+        resolved = (repo_root / ref).resolve()
+        if resolved.exists() or (resolved / "skill.md").exists():
+            return None
+        return ("missing-file", str(resolved))
     resolved = resolve_target(source, path_part if path_part else str(source.relative_to(repo_root)), repo_root)
     if not resolved.exists():
         return ("missing-file", str(resolved))

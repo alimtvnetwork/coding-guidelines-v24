@@ -2,8 +2,8 @@
 
 - **Status:** IMPLEMENTED (S1 to S6 done). The plan stays pending until V4 runs in a live Antigravity session (follow-up 1).
 - **Created:** 2026-10-01
-- **Source prompt (V3):** [01-prompts/14-execute/10-execute-parent-task-with-n-steps-v3.md](../../../01-prompts/14-execute/10-execute-parent-task-with-n-steps-v3.md)
-- **Target prompt (V4):** [01-prompts/14-execute/11-execute-parent-task-with-n-steps-v4.md](../../../01-prompts/14-execute/11-execute-parent-task-with-n-steps-v4.md)
+- **Source prompt (V3):** `01-prompts/14-execute/10-execute-parent-task-with-n-steps-v3.md`
+- **Target prompt (V4):** `01-prompts/14-execute/11-execute-parent-task-with-n-steps-v4.md`
 - **Chosen approach:** B, an Antigravity-native rewrite in one self-contained file (chosen by the user during plan review).
 - **Git scope:** one commit pushed to `main`. No release, no `version.json` edit, no sibling-repo rollout.
 - **Open questions:** [02-execute-v4-open-conventions.md](../../ambiguous-questions/01-new-ambiguity/02-execute-v4-open-conventions.md)
@@ -34,7 +34,7 @@ Extracted tasks:
 
 - **Coding guidelines:** the canonical `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`, its mirror [.ai-memory/coding-guidelines.md](../../coding-guidelines.md), [.ai-memory/strictly-avoid.md](../../strictly-avoid.md), `.cursorrules`, the workspace agent rules, and the 13 rule files in `.agents/rules/`.
 - **Execute prompts:** V3 line by line. V1 (`02-`), V2 (`06-`), the old variant (`08-`), and the below-steps variant (`09-`) compared section by section with V3. The pending-task, batched-loop, and instruction-writer prompts (`01-`, `03-`, `04-`, `05-`, `07-`) surveyed for shared conventions.
-- **Skills:** the three full copies of V3 (`.agents/skills/execute-parent-task-with-n-steps-v3/skill.md`, `.agents/skills/execute-parent-task-with-n-steps/skill.md`, `.agents/skills/parent-task-n-step-loop/skill.md`, 554 lines each), `.agents/skills/parent-task-in-below-steps/skill.md`, `.agents/skills/execute-parent-task/skill.md`, and the thin pointers in `.cursor/skills/`.
+- **Skills:** the three full copies of V3 (.agents/skills/execute-parent-task-with-n-steps-v3/skill.md, .agents/skills/execute-parent-task-with-n-steps/skill.md, .agents/skills/parent-task-n-step-loop/skill.md, 554 lines each), .agents/skills/parent-task-in-below-steps/skill.md, .agents/skills/execute-parent-task/skill.md, and the thin pointers in `.cursor/skills/`.
 - **Tools the prompts call:** `03-ai-scripts/05-guideline-autofixer.py`, `03-ai-scripts/02-shared-engine.py`, `03-ai-scripts/33-test-inventory-generator.py`, the discovery scripts `11`, `12`, `17`, and `18` in `03-ai-scripts/`, and the prompt linters in `linter-scripts/`.
 - **Antigravity 2.0 docs (checked 2026-09-30):** [Custom subagents](https://antigravity.google/docs/subagents/), [Hooks](https://www.antigravity.google/docs/hooks/), [I/O 2026 feature deep dive](https://antigravity.google/blog/google-io-2026-feature-deep-dive).
 
@@ -156,14 +156,14 @@ V4 sections, in order:
 
 ### S2: Author V4 (Task-03)
 
-- **Owned files:** [01-prompts/14-execute/11-execute-parent-task-with-n-steps-v4.md](../../../01-prompts/14-execute/11-execute-parent-task-with-n-steps-v4.md)
+- **Owned files:** `01-prompts/14-execute/11-execute-parent-task-with-n-steps-v4.md`
 - **Acceptance:** 300 lines or fewer; a fix for each of D1 to D14; none of the banned patterns (`"Model"`, `git add -A`, `go generate`, the autofixer without `--check-only`); none of the repo's forbidden phrases.
 - **Verification:** line count, `python linter-scripts/check-prompt-and-spec-paths.py`, `python linter-scripts/check-forbidden-strings.py`, and a banned-pattern search.
 - **Status:** DONE. Evidence: 263 lines; both linters exit 0. The banned-pattern search finds only R11's own rule text naming `file:///` URIs, and the autofixer's single use (V4 L226) carries `--check-only`. Each defect maps to a V4 fix, for example D1 at L137 to L138, D3 at L36 and L226, D9 at L39 and L170, D11 at L177, and D12 at L202 and L251.
 
 ### S3: Skill pointers (Task-03)
 
-- **Owned files:** `.agents/skills/execute-parent-task-with-n-steps-v4/skill.md`, `.cursor/skills/execute-parent-task-with-n-steps-v4/skill.md`
+- **Owned files:** .agents/skills/execute-parent-task-with-n-steps-v4/skill.md, `.cursor/skills/execute-parent-task-with-n-steps-v4/skill.md`
 - **Acceptance:** the frontmatter `name` matches the folder name; the body points to the V4 prompt and copies none of it.
 - **Verification:** `python linter-scripts/check-prompt-and-spec-paths.py` and `python linter-scripts/check-sequence-integrity.py` exit 0.
 - **Status:** DONE. Evidence: both files declare `name: execute-parent-task-with-n-steps-v4`, matching their folders; they are 17 and 20 lines of pointer text; both linters exit 0.
@@ -200,8 +200,8 @@ V4 sections, in order:
 ## 10. Follow-ups
 
 1. Run V4 in a live Antigravity session on a small real task, and record any tool-name or behavior mismatch in this plan (owner: user).
-2. After a successful run, point the unversioned alias skills (`.agents/skills/execute-parent-task-with-n-steps/skill.md` and its `.cursor/skills/` twin) at V4.
+2. After a successful run, point the unversioned alias skills (.agents/skills/execute-parent-task-with-n-steps/skill.md and its `.cursor/skills/` twin) at V4.
 3. Roll V4 out to the sibling repos with a V4 variant of `03-ai-scripts/42-sync-v3-prompts-and-skills.py`, only on an explicit command.
 4. Approach D (hooks), opt-in only.
 5. Options F1 to F4.
-6. Index drift found during onboarding: `.ai-memory/what-to-read.md` lists the version standard without its `04-` prefix and the open-questions folder under an old name (the real folder is `ambiguous-questions/`), and the pending plan `05-ai-adaptable-design-system.md` is missing from `.ai-memory/plans/readme.md`.
+6. Closed 30-Oct-26. `.ai-memory/what-to-read.md` uses the `04-` version standard and `ambiguous-questions/`. Plan 05 is in the completed list. Follow-ups 1 to 5 stay open. A live Antigravity session is not available in this workspace.

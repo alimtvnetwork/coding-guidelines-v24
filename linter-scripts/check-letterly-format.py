@@ -42,7 +42,16 @@ FENCE_RE = re.compile(r"^\s*```")
 ACTIONABLE_HEADER = "# Actionable Items Must Follow Non-Negotiable"
 MUST_FOLLOW_HEADER = "## Must follow and spawn agent using"
 ADDITIONAL_HEADER = "## Additional Instructions"
-AGENT_LINK = "[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)"
+AGENT_LINKS = (
+    "@[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)",
+    "@[execute-parent-task-with-n-steps-v7](file;.agents/skills/execute-parent-task-with-n-steps-v7)",
+    "@[execute-parent-task-with-n-steps-v6](file;.cursor/skills/execute-parent-task-with-n-steps-v6)",
+    "@[execute-parent-task-with-n-steps-v7](file;.cursor/skills/execute-parent-task-with-n-steps-v7)",
+    "[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)",
+    "[execute-parent-task-with-n-steps-v7](file;.agents/skills/execute-parent-task-with-n-steps-v7)",
+    "[execute-parent-task-with-n-steps-v6](file;.cursor/skills/execute-parent-task-with-n-steps-v6)",
+    "[execute-parent-task-with-n-steps-v7](file;.cursor/skills/execute-parent-task-with-n-steps-v7)",
+)
 
 FIXED_ITEM_PREFIXES = [
     "1. Git pull BEFORE starting any work — first try `gitmap pull",
@@ -223,8 +232,8 @@ def check_fixed_items(numbered, actionable_lineno):
 
 def check_suffix_and_instructions(text):
     violations = []
-    if AGENT_LINK not in text:
-        violations.append("missing mandatory agent-invocation suffix link (execute-parent-task-with-n-steps-v6)")
+    if not any(link in text for link in AGENT_LINKS):
+        violations.append("missing mandatory agent-invocation suffix link (execute-parent-task-with-n-steps-v6 or v7)")
     if "[/plan](slashCommand;plan)" not in text:
         violations.append("`## Additional Instructions` is missing the /plan directive")
     if "[/learn](slashCommand;learn)" not in text:

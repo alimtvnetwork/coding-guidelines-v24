@@ -1,133 +1,46 @@
-# App
+# Application Domain Specifications (`21-app`)
 
-> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 21 App.
-> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
-
-## 🎯 Actionable CI/CD & Agent Checklist
-
-- [ ] `/goal` Read and understand all numbered specifications under `21-app/`.
-- [ ] `/learn` Adhere strictly to `.ai-memory/folder-structure.md` and `.ai-memory/strictly-avoid.md`.
-- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
-- [ ] `/learn` Run all local verification linters via `python 03-ai-scripts/06-cicd-local-runner.py`.
-
-. **CRITICAL AI INSTRUCTION:** This `readme.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
-
-**Version:** 3.2.0
-**Updated:** 2026-04-16
-**AI Confidence:** Production-Ready
-**Ambiguity:** None
+> **/goal** Maintain clean architectural standards and boundaries for the application specification container (`02-spec/21-app/`).
+> **/learn** In downstream projects that build applications, `21-app/` contains product-level feature specifications. In the `coding-guidelines` meta-repository, this directory is strictly a reserved container template and MUST NOT contain meta-guidelines or prompt executions.
 
 ---
 
-## Overview
+## 🎯 Container Invariant & Boundary Rules
 
-App-specific specification content at the root spec level. This folder contains implementation specs, feature definitions, workflows, and architecture decisions for whatever project this repo ships — web app, Chrome extension, browser plugin, CLI tool, mobile app, WordPress plugin, desktop app, or any other deliverable.
+1. **Application Specifications Reserved Container:**
+   `02-spec/21-app/` serves as a reserved container for application-level domain specifications (e.g., photo-editor features in `cat-my`, CLI engines in `gitmap`, markdown editor modules in `letsmarknow`).
 
-Whatever the app is, **its product-level documentation lives here.** Foundational, cross-cutting guidelines (naming, error handling, design tokens, CI/CD, etc.) belong in the core fundamentals range (`01–20`).
+2. **Strict Meta-Repository Hygiene (`coding-guidelines`):**
+   - **NO Coding Guidelines in `21-app`:** Foundational coding guidelines belong strictly in `02-spec/02-coding-guidelines/`.
+   - **NO Prompts in `21-app`:** Autonomous execution prompts belong strictly in `01-prompts/15-cg-execute/` and related folders.
+   - **NO Skills in `21-app`:** AI agent skills belong strictly in `.agents/skills/`.
+   - In `coding-guidelines`, `02-spec/21-app/` remains empty (holding only `readme.md` and `.gitkeep`) except when an active task is undergoing specification authoring.
 
----
-
-## Placement Rule
-
-Any content that defines a specific application feature, workflow, screen, command, or implementation detail belongs here, regardless of the app's runtime (browser, Node, PHP, Go, native, extension manifest, etc.). Foundational, reusable principles belong in the core fundamentals range (`01–20`).
-
-Sibling folders for app-scoped concerns:
-
-- `22-app-issues/` — bug reports and root-cause analyses for this app
-- `23-app-db/` — database schema and queries for this app
-- `24-app-ui-design-system/` — UI components and design tokens for this app
+3. **Rule 11 Non-Negotiable Boundary (Spec 21 Exclusion):**
+   Under Rule 11 of `AGENTS.md`, `02-spec/21-app/` through `02-spec/25-app-spec-audit/` MUST NEVER be synchronized, copied, or touched across repositories. Downstream applications maintain their own independent, isolated product specifications.
 
 ---
 
-## Specification Authoring Standards for AI Prompts & Agents
+## Specification Authoring Standards for Application Repositories
 
-All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent execution prompts (e.g. `02-execute-parent-task-with-n-steps-v6.md`) MUST author product specifications directly inside this folder (`02-spec/21-app/`):
-
-1. **Pure Spec Authoring Isolation:** Spec creation must focus strictly on architecture, contracts, and requirements. No source code implementation or build execution occurs during the spec phase.
-2. **Authoring Structure Patterns:**
-   - **Focused Feature (Single File):** `02-spec/21-app/xx-<feature-slug>.md` (e.g. `02-spec/21-app/02-auth-session-management.md`).
-   - **Complex Feature (Segmented Subfolder):** `02-spec/21-app/xx-<feature-slug>/` for multi-module features exceeding 3 subtasks or involving UI, database, and backend contracts:
-     - `01-overview.md` — Architectural context, domain logic, and `## User Request (Verbatim)`.
-     - `02-data-contracts.md` — Types, schemas, API request/response structures, and database models.
-     - `03-workflow-and-state.md` — Control flows, state machine transitions, and business validation rules.
-     - `04-ui-ux-spec.md` — Visual layout, typography, design tokens, and embedded relative screenshot links (`assets/screenshots/...`).
-     - `05-acceptance-criteria.md` — Testable verification rules and quality gates.
-3. **Lossless Verbatim Capture:** Every spec authored MUST contain a dedicated `## User Request (Verbatim)` section preserving 100% of the user's prompt text, edge cases, and constraints without summarization or truncation.
-4. **Decoupled Task Planning (`.ai-memory/plans/`):** Actionable execution plans and lean subtasks are placed in `.ai-memory/plans/pending/xx-<slug>.md` and `.ai-memory/plans/subtasks/xx-<slug>/`, and MUST explicitly reference the canonical specification files here (`02-spec/21-app/...`).
-5. **Registry Update:** Every newly authored specification in `21-app/` must be registered below in the `## Contents` table.
+When authoring specifications in an application repository:
+1. **Pure Spec Authoring Isolation:** Spec creation must focus strictly on architecture, contracts, and requirements (NO-BUILD, NO-TEST, NO-CODE-CHANGES).
+2. **Directory Structure:**
+   - Single feature: `02-spec/21-app/xx-<feature-slug>.md`
+   - Modular feature: `02-spec/21-app/xx-<feature-slug>/` with `01-architecture-spec.md`, `02-component-spec.md`, `03-verification-spec.md`
+3. **Lossless Verbatim Capture:** Preserve 100% of user prompt directives under `## User Request (Verbatim)`.
+4. **Decoupled Task Planning:** Actionable plans live in `.ai-memory/plans/pending/xx-<slug>.md` and `.ai-memory/plans/subtasks/xx-<slug>/`.
 
 ---
 
-## Contents
+## Active Contents
 
 | File / Folder | Title | Type | Status |
-|:---|:---|:---|:---|
-| [`gitmap-update-and-cicd-check/`](gitmap-update-and-cicd-check/) | GitMap Update and CICD Check — CLI reinstall, fleet scan, CI-green sweep, minor releases (v6.571.0 / v6.79.0 / v4.227.0 / v1.2.0) | Application Spec | Active |
-| [`readme.md`](readme.md) | App Specifications Root Index & Standards | Standard Index | Active |
-| [`02-prompts-v1-v2-and-gitmap-benchmarks.md`](02-prompts-v1-v2-and-gitmap-benchmarks.md) | AI Prompts V1/V2 Architecture & GitMap Discovery Benchmarks | Application Spec | Active |
-| [`03-multi-repo-prompts-skills-sync-audit.md`](03-multi-repo-prompts-skills-sync-audit.md) | Multi-Repository Prompts V1/V2 & Skills Synchronization Audit | Application Spec | Active |
-| [`60-multi-repo-prompts-skills-sync-audit.md`](60-multi-repo-prompts-skills-sync-audit.md) | Multi-Repository Prompts V1/V2 & Skills Synchronization Audit (Canonical) | Application Spec | Active |
-| [`05-design-system-and-slide-engine.md`](05-design-system-and-slide-engine.md) | Design System, CSS3 Building Blocks & Slide Presentation Engine | Application Spec | Active |
-| [`06-ai-adaptable-design-system.md`](06-ai-adaptable-design-system.md) | AI-Adaptable Design System & Modern SaaS UI Architecture | Application Spec | Active |
-| [`12-modern-design-system-and-themes.md`](12-modern-design-system-and-themes.md) | Modern Design System, Theme Architecture & AI Training Guide | Application Spec | Active |
-| [`14-white-blue-theme-v3-prompt-and-multi-repo-sync.md`](14-white-blue-theme-v3-prompt-and-multi-repo-sync.md) | White Blue Theme Design System, Parent Task N-Steps V3 Prompt & Multi-Repo Sync | Application Spec | Active |
-| [`01-variadic-spread-params-and-multi-repo/`](01-variadic-spread-params-and-multi-repo/) | Variadic & Spread Parameter Architecture, Prompt 36, and Multi-Repo Sync Spec | Application Spec | Active |
-| [`02-string-normalization-and-equalfoldany/`](02-string-normalization-and-equalfoldany/) | String Normalization, EqualFoldAny Architecture, Prompt 37, and Skill | Application Spec | Active |
-| [`03-sync-other-codebase/`](03-sync-other-codebase/) | Multi-Repository Synchronization Engine, Prompt 01-sync-other-codebase, and Skill | Application Spec | Active |
-| [`04-coding-guidelines-actionable-checklists-and-acceptance-criteria/`](04-coding-guidelines-actionable-checklists-and-acceptance-criteria/) | Coding Guidelines Actionable Checklists & Acceptance Criteria Standard | Application Spec | Active |
-| [`07-coding-guideline-actionable-checklist-and-acceptance/`](07-coding-guideline-actionable-checklist-and-acceptance/) | Coding Guidelines Actionable Checklists & Acceptance Criteria Standard (V6 Multi-Agent) | Application Spec | Active |
-| [`08-ai-verification-and-letterly-extensions/`](08-ai-verification-and-letterly-extensions/) | Retrospective AI Verification, Letterly Extensions & Native Skill Triggers | Application Spec | Active |
-| [`09-multi-repo-sync-engine-and-prompt-upgrades/`](09-multi-repo-sync-engine-and-prompt-upgrades/) | Multi-Repository Synchronization Engine, V4 Archive & Letterly/Cursor Prompt Upgrades | Application Spec | Active |
-| [`10-gitmap-search-subagent-enforcement-and-sqlite-schema/`](10-gitmap-search-subagent-enforcement-and-sqlite-schema/) | GitMap Search Subagent Enforcement, Ripgrep Ban, and SQLite Task Schema Introspection | Application Spec | Active |
-| [`11-gitmap-training-and-letterly-golden-prompt-sync/`](11-gitmap-training-and-letterly-golden-prompt-sync/) | GitMap Training Engine, Golden Letterly Prompt Synchronization & Execute Archival | Application Spec | Active |
-| [`12-relative-paths-and-legacy-skills-purge/`](12-relative-paths-and-legacy-skills-purge/) | Relative Paths Mandate, Letterly Invariants & Legacy Execute Skills Purge | Application Spec | Active |
-| [`13-slide-quiz-preview-and-presenter-chrome/`](13-slide-quiz-preview-and-presenter-chrome/) | Quiz Preview Chrome, Default Shadow Pair, HUD Shortcuts & Center Stage | Application Spec | Active |
-| [`15-muse-prompts-execute-in-a-step/`](15-muse-prompts-execute-in-a-step/) | Muse Prompts Execute-in-a-Step Update: RUNNING+ETA Declaration, 5-Minute Pings, New Prompt & Letterly Template | Application Spec | Active |
-| [`16-unified-muse-master-prompt-v6/`](16-unified-muse-master-prompt-v6/) | Unified Muse Master Onboarding & Execution Prompt: SSH Auth, GitMap Fleet Scan, Clone & Pull-All, V6 Engine | Application Spec | Active |
-| [`17-multi-repo-skills-sync/`](17-multi-repo-skills-sync/) | Multi-Repository Skills Synchronization, Non-Destructive Fleet Deployment & 43-Repo Catalog | Application Spec | Active |
-| [`18-gitmap-agent-task-engine-and-python-sqlite-purge/`](18-gitmap-agent-task-engine-and-python-sqlite-purge/) | GitMap Agent Task Engine & Python SQLite Purge, Ad-Hoc Script Ban & Fleet Sync | Application Spec | Active |
-| [`19-single-muse-master-prompt-and-fleet-purge/`](19-single-muse-master-prompt-and-fleet-purge/) | Single Muse Master Prompt Consolidation, Legacy Prompt Deletion & Fleet Purge | Application Spec | Active |
-| [`20-ssh-identity-format-and-gitmap-skills-update/`](20-ssh-identity-format-and-gitmap-skills-update/) | SSH Key Identity Format, Git User Config, Interactive Variable Prompts & GitMap Skills | Application Spec | Active |
-| [`21-letterly-muse-ssh-heatmap-general-installer/`](21-letterly-muse-ssh-heatmap-general-installer/) | Letterly Pull-First Sequencing, Muse SSH Delivery Protocol, Heat Map Tracking & Dual Installers | Application Spec | Active |
-| [`22-mobile-letterly-tree-swarm-dynamic-join/`](22-mobile-letterly-tree-swarm-dynamic-join/) | Mobile Letterly Formatter Modernization, Tree Swarm Hierarchy & Dynamic Task Join | Application Spec | Active |
-| [`23-mobile-prompt-input-placement/`](23-mobile-prompt-input-placement/) | Mobile Prompt Input Placement & Letterly Format Modernization | Application Spec | Active |
-| [`gitmap-sync-and-agent-task-engine/`](gitmap-sync-and-agent-task-engine/) | GitMap Fleet Synchronization & Native SQLite Agent Task Engine | Application Spec | Active |
-| [`coding-guideline-skills-sync-and-prompt-updates/`](coding-guideline-skills-sync-and-prompt-updates/) | GitMap Skills Re-read, Prompts+Skills Sync Mechanism & Pull-First Prompt Versions | Application Spec | Active |
-| [`coding-guideline-and-skill-optimization/`](coding-guideline-and-skill-optimization/) | Icon Generation Modernization, Flat Commit Integration, Skill Archival & 400-Step Lifecycle | Application Spec | Active |
-| [`muse-prompt-and-git-repository-fix-instructions/`](muse-prompt-and-git-repository-fix-instructions/) | Muse Git Repository Fix & Repo-Cache Troubleshooting, 3-Agent Swarm Concurrency & V6 Extreme Understood Mandate | Application Spec | Active |
-| [`cg-execute-folder-synchronization-and-heatmap-integration/`](cg-execute-folder-synchronization-and-heatmap-integration/) | Coding Guidelines V6 Upgrade, Data Schema Verification & GitMap Heatmap Integration | Application Spec | Active |
-| [`letterly-prompts-heatmap-one-liner-integration/`](letterly-prompts-heatmap-one-liner-integration/) | Letterly Prompts Heatmap Telemetry One-Liner Integration & Dual Cursor Parity | Application Spec | Active |
-| [`cd-execute-prompt-and-skill-synchronization/`](cd-execute-prompt-and-skill-synchronization/) | CD Execute Prompt & Skill Synchronization: Map Dispatch & Handler Lookup, RCA & Step 0 Heatmap/RC Checks, V6 Suite Upgrade & Fleet Sync | Application Spec | Active |
-| [`mime-and-media-type-enum-architecture/`](mime-and-media-type-enum-architecture/) | MIME & Media Type Enum Architecture: Strongly-Typed Enum Standards, Blob/Clipboard/Header Refactoring, CG Execute Updates & Fleet Sync | Application Spec | Active |
-| [`execute-prompt-update-and-e2e-testing-prompt-creation/`](execute-prompt-update-and-e2e-testing-prompt-creation/) | In-Flight Build/Test Ban Invariants, Execute with E2E Prompt & Fleet Sync | Application Spec | Active |
-
----
-
-## Cross-References
-
-| Reference | Location |
-|-----------|----------|
-| App Issues | [../22-app-issues/readme.md](../22-app-issues/readme.md) |
-| Spec Authoring Guide | [../01-spec-authoring-guide/readme.md](../01-spec-authoring-guide/readme.md) |
-
----
-
-## Verification
-
-_Auto-generated section — see `02-spec/21-app/97-acceptance-criteria.md` for the full criteria index._
-
-### AC-APP-001: App-level conformance: Index
-
-**Given** Run the application's integration smoke suite.
-**When** Run the verification command shown below.
-**Then** Boot sequence completes; health endpoint returns 200; no unhandled promise rejections appear in the log.
-
-**Verification command:**
-
-```bash
-npm run test
-```
-
-**Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
-
-_Verification section last updated: 2026-08-30_
+| :--- | :--- | :--- | :--- |
+| [`readme.md`](readme.md) | Application Specification Container Standard & Index | Standard Index | Active |
+| [`03-execute-n-steps-letterly-prompt-formatter/`](03-execute-n-steps-letterly-prompt-formatter/) | Letterly Prompt Formatter — gold standard alignment, mobile one-liner, fleet sync, SQL repository pattern & enum actions (spec 04, 2026-10-23) | Active Task Spec | Active |
+| [`06-cg-execute-golang-pointers-and-mutation-reduce/`](06-cg-execute-golang-pointers-and-mutation-reduce/) | Golang Pointer Reduction & Mutation Elimination Prompt, Companion Skills & Fleet Sync | Active Task Spec | Active |
+| [`25-coding-guidelines-and-folder-structure-instructions/`](25-coding-guidelines-and-folder-structure-instructions/) | Coding Guidelines & Folder Structure Instructions (v4 Archival, Spec 21 Sanitization, Multi-Repo Leak Cleanup) | Active Task Spec | Active |
+| [`27-add-ips-to-muse-prompt-in-coding-guideline/`](27-add-ips-to-muse-prompt-in-coding-guideline/) | Add IPs to Muse Prompt in Coding Guideline | Active Task Spec | Active |
+| [`29-coding-guideline-and-folder-structure-improvement/`](29-coding-guideline-and-folder-structure-improvement/) | Coding Guideline & Folder Structure Improvement (What to Read Architecture, Spec 21 Cleanliness, Skills & Prompts Archival, Index Standardization) | Active Task Spec | Active |
+| [`35-coding-guideline-and-design-system-spec-improvements/`](35-coding-guideline-and-design-system-spec-improvements/) | Design-system token contract, 100 slide and tree checks, blind-AI checklist, and repeatable improvement prompt | Active Task Spec | Active |

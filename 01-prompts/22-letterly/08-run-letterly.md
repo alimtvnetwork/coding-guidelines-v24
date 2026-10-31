@@ -15,7 +15,7 @@ Format input text according to exact project run template below without conversa
    - Item 4: `4. If dependencies or compilers are missing, fall back to gitmap aum install or ./local-install.ps1, then auto-rerun`
    - Item 5: `5. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well`
    followed by discrete run parameters or service profiles from input as items 6..N.
-6. Append mandatory run skill invocation suffix `[run](file;.agents/skills/run)`.
+6. Append mandatory run skill invocation suffix `@[run](file;.agents/skills/run)`.
 7. Output plain markdown text only. Never wrap in fenced code blocks (no ```markdown or ``` fences).
 8. Relative Paths: Only add relative paths (`02-spec/...`, `.ai-memory/...`, `cmd/...`); never add absolute paths.
 
@@ -28,8 +28,8 @@ Output Format:
 ${Input Text Verbatim}
 
 ## task: <task title>
-## slug: <task-slug>
-
+## slug: <task-slug>  (should not contain `xx-` here. )
+ 
 # Actionable Items Must Follow Non-Negotiable
 
 1. Git pull BEFORE starting any work — first try `gitmap pull <repo path>` (or run `gitmap pull` in repository folder); if that fails, fall back to regular `git pull` and resolve any merge conflicts so the repository is completely up to date and clean before starting.
@@ -41,11 +41,11 @@ ${Input Text Verbatim}
 
 ## Must follow and spawn agent using
 
-[run](file;.agents/skills/run)
+@[run](file;.agents/skills/run)
 
 ## Additional Instructions
 
-- [/plan](slashCommand;plan) first before doing work to reduce credits.
-- [/learn](slashCommand;learn) from [gitmap](file;.agents/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
+- [/plan](slashCommand;plan) first before doing work for improved work or less friction, faster execution for AI and coding without errors and following Coding Guidelines.
+- [/learn](slashCommand;learn) from @[gitmap](file;.agents/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
 - Track in-flight file touches and prevent write collisions using GitMap RC Heatmap (`gitmap rc heatmap status` / `gitmap rc heatmap tree` / `gitmap rc heatmap live` / `gitmap rc heatmap sync`).
 - Only add relative paths, never add absolute paths during work; this must be respected on release page and in release notes as well.

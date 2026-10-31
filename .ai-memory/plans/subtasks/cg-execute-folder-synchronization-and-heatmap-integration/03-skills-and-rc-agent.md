@@ -10,8 +10,8 @@
 
 ## Canonical References
 
-- Architecture Specification: [`02-spec/21-app/cg-execute-folder-synchronization-and-heatmap-integration/01-architecture-spec.md`](../../../../02-spec/21-app/cg-execute-folder-synchronization-and-heatmap-integration/01-architecture-spec.md)
-- Implementation Specification: [`02-spec/21-app/cg-execute-folder-synchronization-and-heatmap-integration/02-implementation-spec.md`](../../../../02-spec/21-app/cg-execute-folder-synchronization-and-heatmap-integration/02-implementation-spec.md)
+- Architecture Specification: `02-spec/21-app/cg-execute-folder-synchronization-and-heatmap-integration/01-architecture-spec.md`
+- Implementation Specification: `02-spec/21-app/cg-execute-folder-synchronization-and-heatmap-integration/02-implementation-spec.md`
 - Database Naming Conventions: [`02-spec/04-database-conventions/02-naming-conventions.md`](../../../../02-spec/04-database-conventions/02-naming-conventions.md)
 - Split SQLite Architecture: [`02-spec/05-split-db-architecture/readme.md`](../../../../02-spec/05-split-db-architecture/readme.md)
 

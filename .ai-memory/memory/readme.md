@@ -134,3 +134,4 @@ Updated: 2026-04-27
 - [Session 2026-09-22 Screenshot & Base64 Ingestion Protocol](learned/17-screenshot-printscreen-base64-ingestion-protocol.md) — Standardized screenshot/print screen base64 conversion to filesystem image files and relative referencing across execute prompts, spec writing prompts, and UI skills.
 - [In-Flight Build/Test Ban Invariants & Dedicated E2E Engine](learned/22-build-test-ban-invariants-and-e2e-execution-engine.md) — Architectural invariants banning unrequested intermediate builds, local test suites, and remote CI/CD waiting in V6 prompts; dedicated E2E prompt architecture and fleet sync invariants.
 
+| [learned/01-recent-session-2026-10-29.md](learned/01-recent-session-2026-10-29.md) | 2026-10-29 warm-up gate session, gitmap IDE setup, and repo-cache heatmaps. |

@@ -1,6 +1,6 @@
 # Subtask 02: Author Native Antigravity Skill `sync-other-codebase` & Register Prompt `01-sync-other-codebase.md` in Catalogs
 
-> **Parent Spec:** [`02-spec/21-app/03-sync-other-codebase/02-prompt-and-skill-spec.md`](../../../../02-spec/21-app/03-sync-other-codebase/02-prompt-and-skill-spec.md)  
+> **Parent Spec:** `02-spec/21-app/03-sync-other-codebase/02-prompt-and-skill-spec.md`  
 > **Status:** `PENDING`  
 > **Traceability ID:** `Task-03-Subtask-02`  
 > **Target Files:**

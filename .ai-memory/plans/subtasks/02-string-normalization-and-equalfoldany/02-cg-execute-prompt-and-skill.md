@@ -1,6 +1,6 @@
 # Subtask 02: Author CG-Execute Prompt 37, Native Antigravity Skill & Catalog Integrations for String Normalization and EqualFoldAny
 
-> **Parent Spec:** [`02-spec/21-app/02-string-normalization-and-equalfoldany/02-prompt-and-skill-spec.md`](../../../../02-spec/21-app/02-string-normalization-and-equalfoldany/02-prompt-and-skill-spec.md)  
+> **Parent Spec:** `02-spec/21-app/02-string-normalization-and-equalfoldany/02-prompt-and-skill-spec.md`  
 > **Status:** `PENDING`  
 > **Traceability ID:** `Task-02`  
 > **Target Files:**

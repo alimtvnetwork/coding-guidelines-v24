@@ -33,12 +33,12 @@ Can you please confirm that you can sequence the proper tree view with the most 
 
 ## Must follow and spawn agent using
 
-@[.agents/skills/execute-parent-task-with-n-steps-v6]
+@[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)
 
 ## Additional Instructions
 
 - /plan first before doing the work to reduce the credits.
-- /learn from @[.agents/skills/gitmap] skill to leverage GitMap high-speed search, toolchain discovery, and caching.
+- /learn from @[gitmap](file;.agents/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
 - Only add the relative paths, never add the absolute path during your work; this should be respected on the release page and in release notes as well.
 ```
 

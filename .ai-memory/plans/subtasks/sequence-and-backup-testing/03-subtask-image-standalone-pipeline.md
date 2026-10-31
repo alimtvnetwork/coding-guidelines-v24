@@ -1,7 +1,7 @@
 # Subtask 03: Standalone Prompt Image Lifecycle Verification
 
 > **Canonical Plan:** [.ai-memory/plans/sequence-and-backup-testing.md](../../sequence-and-backup-testing.md)  
-> **Normative Spec:** [02-spec/21-app/sequence-and-backup-testing/02-image-standalone-pipeline-and-backup-restore-spec.md](../../../../02-spec/21-app/sequence-and-backup-testing/02-image-standalone-pipeline-and-backup-restore-spec.md)  
+> **Normative Spec:** `02-spec/21-app/sequence-and-backup-testing/02-image-standalone-pipeline-and-backup-restore-spec.md`  
 > **Status:** `[DONE]`  
 > **Assigned Agent:** Spec Author Subagent 2  
 

@@ -1,6 +1,6 @@
 # Plan 13 — Slide Quiz Preview & Presenter Chrome
 
-**Status:** In progress (spec authored)  
+**Status:** In progress. Spec and file 42 are done. Exam `src/styles/theme.css` now defines `--text-shadow-*`, keeps the legacy aliases, and adds embed theme `botanical-light` with primary `142 70% 30%`. `botanical-light` stays off the eight-theme switcher. The presentations repo is not on this machine, so the HUD shortcut port is still open.  
 **Canonical spec:** `02-spec/21-app/13-slide-quiz-preview-and-presenter-chrome/`  
 **Design tokens:** `02-spec/07-design-system/42-slide-quiz-preview-chrome-and-default-shadows.md`
 

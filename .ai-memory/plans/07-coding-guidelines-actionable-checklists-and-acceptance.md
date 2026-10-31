@@ -38,7 +38,7 @@ Can you please go into the coding guideline and see the coding guideline, how it
 
 Must follow and spawn agent using 
 
-@[.agents/skills/execute-parent-task-with-n-steps-v6]
+@[execute-parent-task-with-n-steps-v6](file;.agents/skills/execute-parent-task-with-n-steps-v6)
 
 ## Additional Instructions
 

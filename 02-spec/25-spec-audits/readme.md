@@ -24,7 +24,7 @@ Follow `02-spec/07-design-system/98-confidence-report.md`. A number that file do
 |---|---|---|
 | 01 | [01-v3-v4-v5-prompt-benchmark-audit.md](./01-v3-v4-v5-prompt-benchmark-audit.md) | Historical execute-prompt note. Not a design spec. |
 | 02 | [02-v3-v4-v5-v6-prompt-benchmark-audit.md](./02-v3-v4-v5-v6-prompt-benchmark-audit.md) | Historical execute-prompt note. Not a design spec. |
-| 99 | [99-consistency-report.md](./99-consistency-report.md) | This module. |
+| 99 | `99-consistency-report.md` | This module. |
 
 ---
 

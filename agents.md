@@ -93,19 +93,32 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 
 - **Execution Formatter Standards (Letterly & Cursor):**
   - Line 1 of generated execution prompts must begin directly with `# High Priority Instruction`.
+  - Header slug in Letterly execution prompt templates must be formatted as `## slug: <task-slug>`.
   - Slash command suggestions such as `[/plan](slashCommand;plan)` belong strictly under `## Additional Instructions` at the bottom of execution prompts, and are strictly prohibited on verification audit prompts.
-  - Item 1 of Actionable Items must explicitly mandate writing specs in `02-spec/21-app/<slug>/` and enqueueing plan tasks in `.ai-memory/plans/<slug>.md` (with subtasks in `.ai-memory/plans/subtasks/<slug>/`).
+  - The plan directive motto under `## Additional Instructions` must explicitly state: `[/plan](slashCommand;plan) first before doing work for improved work or less friction, faster work and more pure and effective work.`
+  - Item 1/2 of Actionable Items must explicitly mandate writing specs in `02-spec/21-app/XX-<slug>/` and enqueueing plan tasks in `.ai-memory/plans/pending/XX-<slug>.md` (with subtasks in `.ai-memory/plans/subtasks/XX-<slug>/`), where `XX` is the zero-padded sequential number of that folder (e.g. `xx is sequence 01, 02`).
+  - When writing about planning (Actionable Item 2 and Phase 1), there is NO NEED to include execute steps. Planning is strictly dedicated to architecture, specification, boundaries, and task decomposition (NO-BUILD, NO-TEST, NO-CODE-CHANGES). Execution steps belong strictly to subsequent phases.
   - Item 2 of Actionable Items must explicitly mandate searching codebase exclusively via GitMap (`gitmap aum search`, `gitmap find`, `gitmap cat`, `gitmap ps`) with a total ban on `rg`, `ripgrep`, `grep`, `git grep`, `Select-String`.
   - Item 3 of Actionable Items must explicitly mandate strictly relative Git paths (`02-spec/...`, `.ai-memory/...`, `cmd/...`): only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well.
   - Retrospective AI verification is an audit and verification gate, NOT a planning step. Only `09-execute-with-verification-letterly.md` (and its mirrors) contains retrospective AI verification; standard `execute-n-steps` formatters MUST NOT mandate retrospective AI verification.
   - Execution with verification must embed both `execute-parent-task-with-n-steps-v6` and `ai-verification`.
 
-- **GitMap Commit Formatting:**
-  - In all GitMap commit commands (`gitmap cpf`, `gitmap cpb`, `gitmap cpc`, `gitmap cpr`), NEVER include colons inside the message argument. GitMap automatically provides `Feature: `, `Bug: `, or chore prefixes. Format messages strictly with hyphens:
+- **GitMap Commit Formatting & Subsystem Module Conventions:**
+  - In all GitMap commit commands (`gitmap cpf`, `gitmap cpb`, `gitmap cpc`, `gitmap cpr`), NEVER include colons inside the message argument. GitMap automatically provides `Feature: `, `Bug: `, `Chore: `, or `Release: ` prefixes. Format messages strictly with hyphens:
     - Feature: `gitmap cpf "<module> - <summary>"`
     - Bug Fix: `gitmap cpb "<module> - <summary>"`
     - Chore / Maintenance: `gitmap cpc "<module> - <summary>"`
     - Release: `gitmap cpr "<module> - <summary>"`
+
+  - **Subsystem Module Standard (Title Case or Lowercase Allowed):**
+    - The `<module>` token MUST represent a concrete functional subsystem or architectural component being modified (e.g. `Auth`, `Storage`, `Ui`, `Guidelines`, `Scanner`, `Cli`, `Sync`, `Prompt`).
+    - Title Case (e.g. `Auth`, `Storage`, `Ui`) is completely valid and accepted. Lowercase (e.g. `auth`, `storage`, `ui`) is also completely valid and accepted.
+    - Shout-cased / ALL-CAPS words (`AUTH`, `STORAGE`, `COMMIT`) should not be used.
+
+  - **TOTAL BAN ON 'commit' / 'commits' AS MODULE:**
+    - The word `commit` or `commits` MUST NEVER be used as a module name (e.g. NEVER run `gitmap cpc "commit - ..."` or `gitmap cpf "COMMIT - ..."`).
+    - Committing is already the version control action being performed by Git and GitMap; writing `commit` as the module produces meaningless tautological stuttering (`Chore: commit - ...`).
+    - If modifying commit-related tooling, code, or documentation, name the specific component (e.g. `Formatter`, `Provenance`, `Cli`, `Docs`) or omit the module prefix entirely (`gitmap cpc "clean constructor helpers and strip redundant tokens"`).
 
   - **GitMap Semantic & Flat Commit Suite:**
     - **Flat Commit Syntax:** `gitmap commit "<message>"` (alias: `gitmap cm "<message>"`).
@@ -164,3 +177,9 @@ When synchronizing canonical assets (prompts, skills, shared specs, scripts) acr
     `gitmap heatmap update --id <id> --outcome "<outcome>" --met true`
   - **Phase 3 Verification Audit:** Run `gitmap heatmap tree --task <task>` and `gitmap heatmap status --task <task>` to verify 100% action closure.
   - **Companion Repo-Cache Telemetry:** `gitmap rc heatmap <status|tables|query|view|tree|live|sync>` for multi-AI synchronization.
+
+## 16. Redundant .gitkeep Prohibition
+
+- **Whenever a folder contains any tracked file, any `.gitkeep` file inside that folder MUST be removed immediately.**
+- Retain `.gitkeep` ONLY in truly empty placeholder directories that require Git tracking presence.
+

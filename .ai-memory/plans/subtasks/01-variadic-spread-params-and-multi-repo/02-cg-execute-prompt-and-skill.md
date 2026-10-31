@@ -1,6 +1,6 @@
 # Subtask 02: Author CG-Execute Prompt, Antigravity Skill, and Align Prompts 31 & 32 with V6 Parameter Headers
 
-> **Parent Spec:** [`02-spec/21-app/01-variadic-spread-params-and-multi-repo/01-architecture-spec.md`](../../../../02-spec/21-app/01-variadic-spread-params-and-multi-repo/01-architecture-spec.md)  
+> **Parent Spec:** `02-spec/21-app/01-variadic-spread-params-and-multi-repo/01-architecture-spec.md`  
 > **Status:** `PENDING`  
 > **Traceability ID:** `Task-02`  
 > **Target Files:**

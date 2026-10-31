@@ -1,14 +1,14 @@
 # Subtask 03: Heading Checker Linter Implementation (Task B)
 
 **Parent Plan:** `.ai-memory/plans/pending/17-spec-ticket-for-blind-agents.md`  
-**Target File:** `linter-scripts/check-spec-ticket-headings.py`  
+**Target File:** linter-scripts/check-spec-ticket-headings.py  
 **Assigned Role:** Subagent / Implementer
 
 ---
 
 ## 1. Goal & Boundaries
 
-Implement a lightweight, standalone Python 3 script (`linter-scripts/check-spec-ticket-headings.py`) that mechanically parses and verifies the 10 mandatory level-2 headings of any executable spec ticket.
+Implement a lightweight, standalone Python 3 script (linter-scripts/check-spec-ticket-headings.py) that mechanically parses and verifies the 10 mandatory level-2 headings of any executable spec ticket.
 
 ### Hard Constraints:
 - Pure Python 3 standard library only (`sys`, `re`, `pathlib`, `argparse`).

@@ -1,6 +1,6 @@
-# Run Mode (Cursor) — Letterly Prompt Formatter
+# Run Mode — Letterly Prompt Formatter
 
-Format input text according to exact project run template below using Cursor skill format without conversational filler or commentary.
+Format input text according to exact project run template below without conversational filler or commentary.
 
 1. Clean input text verbatim, strictly preserving target service names, ports, run flags, and environment parameters.
 2. Derive `<task title>` as task subject (e.g. `Run Application Services`). Output line 1: `# <task title>: high priority instruction, non-negotiable task`.
@@ -41,11 +41,11 @@ ${Input Text Verbatim}
 
 ## Must follow and spawn agent using
 
-[run](file;.cursor/skills/run)
+@[run](file;.cursor/skills/run)
 
 ## Additional Instructions
 
-- [/plan](slashCommand;plan) first before doing work to reduce credits.
-- [/learn](slashCommand;learn) from [gitmap](file;.cursor/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
+- [/plan](slashCommand;plan) first before doing work for improved work or less friction, faster work and more pure and effective work.
+- [/learn](slashCommand;learn) from @[gitmap](file;.cursor/skills/gitmap) skill to leverage GitMap high-speed search, toolchain discovery, and caching.
 - Track in-flight file touches and prevent write collisions using GitMap RC Heatmap (`gitmap rc heatmap status` / `gitmap rc heatmap tree` / `gitmap rc heatmap live` / `gitmap rc heatmap sync`).
 - Only add relative paths, never add absolute paths during work; this must be respected on release page and in release notes as well.

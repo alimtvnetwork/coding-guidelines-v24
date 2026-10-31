@@ -22,11 +22,11 @@ This repository is a **specification-driven documentation and automation system*
 
 | Location | Purpose | Key Entrypoint |
 |---|---|---|
-| `02-spec/` | Formal cross-language specifications & standards | `02-02-spec/readme.md` |
+| `02-spec/` | Formal cross-language specifications & standards | `02-spec/readme.md` |
 | `03-ai-scripts/` | Reusable high-speed Python automation toolchain | `03-ai-scripts/readme.md` |
 | `.ai-memory/memory/` | Institutional knowledge base & CODE RED constraints | `.ai-memory/memory/readme.md` |
 | `.ai-memory/plans/` | Active roadmap, parent task specs & subtasks | `.ai-memory/plans/readme.md` |
-| `01-prompts/` | Prompt categories and compiled workflow prompts | `01-prompts/` |
+| `01-prompts/` | Prompt categories and compiled workflow prompts | `01-prompts/readme.md` |
 | `.ai-memory/folder-structure.md` | Canonical folder structure & sequence ID rules | `.ai-memory/folder-structure.md` |
 | `.ai-memory/strictly-avoid.md` | Universal hard prohibitions & negative constraints | `.ai-memory/strictly-avoid.md` |
 | `.ai-memory/suggestions.md` | Architecture suggestions & enhancement proposals | `.ai-memory/suggestions.md` |
@@ -40,7 +40,7 @@ Violations of these principles are blocking:
 1. **Never Swallow Errors:** Every error must be explicitly logged, handled, or wrapped in an application error envelope (`AppError`).
 2. **Zero Nesting (Flatten Conditionals):** Strictly avoid 4+ level nested `if` pyramids. Use shallow guard clauses and fast substring pre-filters.
 3. **Implicit Positive Booleans:** NEVER compare booleans explicitly against `true` (`if is_ready:` mandatory; `if is_ready == True:` forbidden).
-4. **Mandatory Boolean Prefixes:** All boolean variables, fields, and functions MUST use positive prefixes (`is_`, `has_`, `can_`, `should_`).
+4. **Mandatory Boolean Prefixes:** All boolean variables, fields, and functions MUST use affirmative `is*` and `has*` prefixes only (`is_`, `has_`; `can_`, `should_`, `was_` are banned).
 5. **Strict Relative Git Paths:** All links, markdown paths, and references must be relative to the repository root. Absolute paths (`C:\...`, `/home/...`, `file:///...`) are strictly prohibited.
 6. **Strict Lowercase File Naming:** All files, scripts, and documentation must use lowercase naming (`readme.md`, `02-shared-engine.py`).
 7. **Quality Gate Verification:** Before completing any work session, run `python 03-ai-scripts/06-cicd-local-runner.py` to confirm all 18 quality checks pass.
@@ -51,7 +51,7 @@ Violations of these principles are blocking:
 
 1. `.ai-memory/readme.md` → Understand repository scope and directory navigation.
 2. `.ai-memory/strictly-avoid.md` → Load hard prohibitions and negative constraints.
-3. `.ai-memory/02-user-preferences` → Align with user communication preferences.
+3. `.ai-memory/user-preferences/` → Align with user communication preferences.
 4. `.ai-memory/memory/readme.md` → Survey institutional knowledge and architectural decisions.
 5. `.ai-memory/plans/readme.md` → Review active plans and current task bounds.
 

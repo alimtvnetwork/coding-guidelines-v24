@@ -1137,9 +1137,7 @@ def main() -> int:
     args = parser.parse_args()
 
     target_path = args.positional_path or args.path or "src"
-
     report = ValidationReport()
-
     extensions = ("*.go", "*.ts", "*.tsx", "*.js", "*.jsx", "*.php", "*.rs")
 
     for ext in extensions:
@@ -1191,7 +1189,6 @@ def print_report(report: ValidationReport):
 
     # Group by file
     by_file = defaultdict(list)
-
     for v in report.violations:
         by_file[v.file].append(v)
 

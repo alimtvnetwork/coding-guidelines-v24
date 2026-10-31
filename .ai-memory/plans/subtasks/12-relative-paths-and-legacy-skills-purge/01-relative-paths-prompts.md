@@ -1,7 +1,7 @@
 # Subtask [01]: Inject Strict Relative Git Paths Mandate into Letterly & Cursor Prompts
 
 Traceability ID: Task-03
-Spec Reference: [02-spec/21-app/12-relative-paths-and-legacy-skills-purge/01-architecture-spec.md](../../../../02-spec/21-app/12-relative-paths-and-legacy-skills-purge/01-architecture-spec.md)
+Spec Reference: `02-spec/21-app/12-relative-paths-and-legacy-skills-purge/01-architecture-spec.md`
 Target Files:
 - `AGENTS.md`
 - `01-prompts/22-letterly/01-mobile-letterly.md` through `10-execute-with-release-letterly.md`

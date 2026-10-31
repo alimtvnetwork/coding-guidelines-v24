@@ -37,8 +37,9 @@ _EXTERNAL_PREFIXES = (
     "http://", "https://", "mailto:", "tel:", "ftp://", "ftps://", "javascript:",
     # Lovable memory pseudo-protocol — referenced from prose, never resolved on disk.
     "mem://",
-    # Antigravity slash command URI protocol
-    "slashCommand:",
+    # Antigravity slash command URI protocol (`_is_external` lowercases the
+    # target before comparing, so these entries are lowercase).
+    "slashcommand:", "slashcommand;",
 )
 # Heuristic: targets that look like inline code identifiers (no path separator,
 # no extension, no hash) are almost always prose patterns like `[err](err)`
@@ -80,6 +81,8 @@ def extract_links(text: str) -> list[LinkRef]:
         for m in _LINK_RE.finditer(raw):
             target = m.group(2).strip()
             if _is_external(target):
+                continue
+            if target.startswith("file;") and _is_template_file_ref(target):
                 continue
             path_part, anchor = _split_anchor(target)
             if _looks_like_inline_identifier(path_part, anchor):
@@ -146,6 +149,8 @@ def _resolve(
 ) -> str | None:
     if link.target_path == "":
         return _check_anchor_self(link, self_slugs)
+    if link.target_path.startswith("file;"):
+        return _resolve_file_ref(link, source)
     target = (source.parent / link.target_path).resolve()
     if not target.exists():
         return f"Broken link: target file not found: '{link.target_path}'"
@@ -158,6 +163,36 @@ def _resolve(
     if link.anchor not in target_slugs:
         return f"Broken anchor: '#{link.anchor}' not found in '{link.target_path}'"
     return None
+
+
+def _is_template_file_ref(target: str) -> bool:
+    """True for IDE `file;` links whose ref is a spec template placeholder.
+
+    The letterly spec templates write `[skill](file;.agents/skills/<name>)`
+    (also `<skill-name>`, `...`, and the bare generic noun `skill`) as
+    fill-in examples — they name no real file and are out of scope, the
+    same way check-sequence-integrity.py treats placeholder tokens.
+    """
+    ref = target[len("file;"):]
+    return any(tok in ref for tok in ("<", ">", "...", "{", "}")) or ref.endswith("/skill")
+
+
+def _resolve_file_ref(link: LinkRef, source: Path) -> str | None:
+    """Resolve an IDE `file;` workspace link against repo ancestors.
+
+    `file;.agents/skills/<name>` is workspace-root relative, unlike an
+    ordinary relative link. Walk up from the citing file to the repo
+    boundary (the ancestor containing `.git`); the ref resolves when the
+    path itself or its `skill.md` exists at some level.
+    """
+    ref = link.target_path[len("file;"):].strip()
+    for ancestor in (source.parent, *source.parents):
+        candidate = ancestor / ref
+        if candidate.exists() or (candidate / "skill.md").exists():
+            return None
+        if (ancestor / ".git").exists():
+            break
+    return f"Broken link: target file not found: '{link.target_path}'"
 
 
 def _check_anchor_self(link: LinkRef, self_slugs: set[str]) -> str | None:
