@@ -56,7 +56,7 @@ AGENT_LINKS = (
 FIXED_ITEM_PREFIXES = [
     "1. Git pull BEFORE starting any work — first try `gitmap pull",
     "2. Write spec under 02-spec/21-app/",
-    "3. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat, gitmap ps, gitmap py, gitmap llm train); TOTAL BAN on rg, ripgrep, grep, git grep, Select-String",
+    "3. Search codebase exclusively via GitMap (gitmap aum search, gitmap find, gitmap cat",
     "4. Strictly use relative Git paths (02-spec/..., .ai-memory/..., cmd/...); only add the relative paths, never add the absolute path during your work, and ensure this is respected on the release page and in release notes as well",
     "5. Use `gitmap` AI agents to enter data",
     "6. Task completion includes committing and pushing to Git",
